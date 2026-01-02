@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and Push Image
         run: |
-          cd apps/one.ailoo.cl
+          cd one.ailoo.cl
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/one-ailoo:${{ github.sha }} .
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/one-ailoo:${{ github.sha }}
 
