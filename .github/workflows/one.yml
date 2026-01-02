@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main  # Make sure this matches your branch name (main or master)
+    paths:
+      - 'one.ailoo.cl/**' # Only trigger if this service changes      
   workflow_dispatch: # This allows you to also run it manually for testing
 
 jobs:
@@ -28,7 +30,8 @@ jobs:
       - name: Build and Push Image
         run: |
           cd one.ailoo.cl
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/one-ailoo:${{ github.sha }} .
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/one-ailoo:${{ github.sha }} . \
+          -f one.ailoo.cl/Dockerfile ./one.ailoo.cl
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/one-ailoo:${{ github.sha }}
 
       - name: Deploy to Container App
