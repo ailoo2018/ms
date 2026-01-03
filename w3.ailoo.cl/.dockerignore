@@ -10,3 +10,4 @@ dist
 .output
 coverage
 *.md
+logs
