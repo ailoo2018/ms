@@ -1,0 +1,9 @@
+{
+  "name": "ailoo-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "w3.ailoo.cl"
+
+  ]
+}
