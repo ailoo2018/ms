@@ -1,11 +1,13 @@
 const { pool } = require("../db");
 
+
+
 module.exports.findWidget = async function(id, domainId) {
 
   const connection = await pool.getConnection();
 
   try {
-    const [rows, fields] = await connection.execute(
+    const [rows ] = await connection.execute(
         `
             select *
             from webcontentconfiguration wcc
