@@ -1,12 +1,12 @@
 name: Build and Deploy w3 to Azure
-
 on:
   push:
     branches:
-      - main  # Make sure this matches your branch name (main or master)
+      - main
     paths:
-      - 'w3.ailoo.cl/**' # Only trigger if this service changes      
-  workflow_dispatch: # This allows you to also run it manually for testing
+      - 'w3.ailoo.cl/**'
+      - 'packages/shared-libs/**'  # Also trigger if shared library changes
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -14,25 +14,24 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
+      
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+      
       - name: ACR Login
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.ACR_LOGIN_SERVER }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-
+      
       - name: Build and Push Image
         run: |
-          cd w3.ailoo.cl
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/w3-ailoo:${{ github.sha }} . 
+          docker build -f w3.ailoo.cl/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/w3-ailoo:${{ github.sha }} .
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/w3-ailoo:${{ github.sha }}
-
+      
       - name: Deploy to Container App
         uses: azure/container-apps-deploy-action@v1
         with:
