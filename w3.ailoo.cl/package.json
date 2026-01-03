@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ailoo/shared-libs": "*",
     "express": "^5.2.1",
-    "@ailoo/shared-libs": "*"
+    "mysql2": "^3.16.0"
   }
 }
