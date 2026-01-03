@@ -1,0 +1,13 @@
+{
+  "name": "@ailoo/shared-libs",
+  "version": "1.0.0",
+  "description": "ShareLibs for Node",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "exports": {
+    "./logger": "./logger.js"
+  }
+}
