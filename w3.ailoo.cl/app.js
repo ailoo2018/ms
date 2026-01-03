@@ -6,6 +6,7 @@ require("./routes/wcc-routes");
 
 app.get('/', (req, res) => {
   res.json({
+    msg: "Welcome to the WcC App",
     DB_HOST: process.env.DB_HOST,
     DB_USER: process.env.DB_USER,
     DB_PORT: process.env.DB_PORT,
