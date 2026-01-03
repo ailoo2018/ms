@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
     DB_USER: process.env.DB_USER,
     DB_PORT: process.env.DB_PORT,
     DB_DATABASE: process.env.DB_DATABASE,
+    CMS_URL: process.env.CMS_URL,
   });
 });
 
