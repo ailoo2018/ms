@@ -22,7 +22,12 @@ app.use((err, req, res, next) => {
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World! DB_HOST ' + process.env.DB_HOST);
+  res.json({
+    DB_HOST: process.env.DB_HOST,
+    DB_USER: process.env.DB_USER,
+    DB_PORT: process.env.DB_PORT,
+    DB_DATABASE: process.env.DB_DATABASE,
+  });
 });
 
 
