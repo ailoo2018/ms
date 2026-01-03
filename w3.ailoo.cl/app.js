@@ -5,7 +5,7 @@ const PORT = 3000;
 
 app.get('/', (req, res) => {
   logger.info('App started on port: ' + PORT);
-  res.send('Hello World! w3.ailoo.cl v3.3.3.3.5 ');
+  res.send('Hello World! w3.ailoo.cl v3.3.3.3.5 ' + logger);
 });
 
 app.listen(PORT, () => {
