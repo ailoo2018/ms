@@ -28,6 +28,21 @@ function getNuxtComponent(w){
     return "FeaturedProducts"
   }
 
+  if(w.name === "Html_CategoriesMtcrd"){
+    return "HomeCategories"
+  }
+
+  if(w.name === "Html_BrandsBlock"){
+    return "BrandsBlock"
+  }
+
+  if(w.name === "Html_ProductListWithBanner"){
+    return "FeaturedProductsWithBanner"
+  }
+  if(w.name === "Html_Comunidad"){
+    return "Community"
+  }
+
 
   return "Dummy"
 }

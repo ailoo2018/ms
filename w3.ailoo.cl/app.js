@@ -36,4 +36,5 @@ app.use((err, req, res, next) => {
 
 app.listen(app.get("port"), () => {
   console.log(`Server is running on http://localhost:${app.get("port")}`);
+  console.log(`Env: ${process.env.NODE_ENV}`);
 });
