@@ -3,6 +3,8 @@ const { app } = require("./server");
 const logger = require("@ailoo/shared-libs/logger")
 
 require("./routes/wcc-routes");
+require("./routes/friendlyurl-routes");
+require("./routes/events-routes");
 
 app.get('/', (req, res) => {
   res.json({
@@ -37,4 +39,5 @@ app.use((err, req, res, next) => {
 app.listen(app.get("port"), () => {
   console.log(`Server is running on http://localhost:${app.get("port")}`);
   console.log(`Env: ${process.env.NODE_ENV}`);
+  console.log(`Env: ${process.env.ELASTICSEARCH}`);
 });

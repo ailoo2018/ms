@@ -42,6 +42,9 @@ function getNuxtComponent(w){
   if(w.name === "Html_Comunidad"){
     return "Community"
   }
+  if(w.name === "EventsWidget"){
+    return "LatestEvents"
+  }
 
 
   return "Dummy"
