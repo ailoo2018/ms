@@ -46,6 +46,13 @@ function getNuxtComponent(w){
     return "LatestEvents"
   }
 
+  if(w.name === "Seo"){
+    return "Seo"
+  }
+  if(w.name === "YoutubeLatest"){
+    return "YoutubeLatest"
+  }
+
 
   return "Dummy"
 }
