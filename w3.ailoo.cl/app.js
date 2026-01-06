@@ -5,8 +5,10 @@ const logger = require("@ailoo/shared-libs/logger")
 require("./routes/wcc-routes");
 require("./routes/friendlyurl-routes");
 require("./routes/events-routes");
+require("./routes/products-search-routes");
 
 app.get('/', (req, res) => {
+  logger.info("here")
   res.json({
     msg: "Welcome to the WcC App",
     DB_HOST: process.env.DB_HOST,

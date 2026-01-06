@@ -4,6 +4,8 @@
   "workspaces": [
     "packages/*",
     "w3.ailoo.cl"
-
-  ]
+  ],
+  "dependencies": {
+    "@ailoo/shared-libs": "^1.0.0"
+  }
 }

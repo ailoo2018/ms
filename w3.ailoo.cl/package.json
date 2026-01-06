@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ailoo/shared-libs": "*",
+    "@ailoo/shared-libs": "^1.0.0",
     "@elastic/elasticsearch": "^8.17.0",
     "body-parser": "^2.2.1",
     "cors": "^2.8.5",

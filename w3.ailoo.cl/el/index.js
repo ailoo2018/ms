@@ -12,6 +12,14 @@ function getElClient() {
 		return client;
 }
 
+function getProductCollectionsIndexName(domainId){
+
+	if(process.env.NODE_ENV === 'test'){
+		return "test-product-collection"
+	}
+
+	return "product-collection";
+}
 
 function getIndexName(domainId){
 
