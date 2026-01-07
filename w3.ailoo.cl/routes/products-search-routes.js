@@ -121,17 +121,6 @@ const aggs = {
       "size": 100
     }
   },
-  "properties_count": {
-    "terms": {
-      "field": "properties.id.keyword",
-      "order": [
-        {
-          "_key": "asc"
-        }
-      ],
-      "size": 300
-    }
-  },
   "colors_count": {
     "aggs": {
       "colors_count": {
@@ -162,7 +151,6 @@ const aggs = {
   }
 };
 
-
 const ignore =
     [
       "a", "para", "como", "de", "con", "por", "hasta", "y"
@@ -190,7 +178,7 @@ function normalizeToken2(keyStr) {
 
 app.get("/:domainId/products/search", async (req, res, next) => {
 
-  try{
+  try {
     const domainId = parseInt(req.params.domainId);
     const {categoryId, brandId, collectionId, sword, limit, offset} = req.query;
 
@@ -201,7 +189,7 @@ app.get("/:domainId/products/search", async (req, res, next) => {
       brands: [],
       tags: [],
       limit: limit ? limit : null,
-      offset: offset ? offset: null,
+      offset: offset ? offset : null,
     }
 
     if (categoryId && categoryId.length > 0)
@@ -214,7 +202,7 @@ app.get("/:domainId/products/search", async (req, res, next) => {
 
     res.json(sRs)
 
-  }catch(e){
+  } catch (e) {
     next(e)
   }
 })
@@ -234,6 +222,7 @@ app.post("/:domainId/products/search", async (req, res, next) => {
       sword: rq.sword ? rq.sword : null,
       collectionId: rq.collectionId ? rq.collectionId : null,
       categories: [],
+      colors: [],
       brands: [],
       sizes: [],
       tags: [],
@@ -258,6 +247,8 @@ app.post("/:domainId/products/search", async (req, res, next) => {
       criteria.sizes = rq.sizes;
     if (rq.models)
       criteria.models = rq.models;
+    if (rq.colors)
+      criteria.colors = rq.colors;
 
 
     const sRs = await search(criteria, domainId)
@@ -348,6 +339,18 @@ function buildQueryByCriteria(criteria, domainId) {
       }
     })
   }
+  if (criteria.colors && criteria.colors.length > 0) {
+    query.bool.must.push(                {
+      "nested": {
+        "path": "images",
+        "query": {
+          "terms": {
+            "images.colorTagsIds": criteria.colors
+          }
+        }
+      }
+    })
+  }
 
   return query
 }
@@ -372,12 +375,14 @@ async function search(criteria, domainId) {
     index: getIndexName(domainId),
     aggs: aggs,
     query: query,
-    from: 0,
+    from: offset,
     size: limit,
     sort: sort,
     _source: {
-      excludes: ["categories", "parentCategories", "features", "sword", "properties", "propertiesMap", "productItems", "motorcycles", "model", "tags",
-        "priceComponents", "discounts", "salesTaxes", "googleProductCategory", "departments", "mercadoLibre", "summary"
+      excludes: [
+        "categories", "parentCategories", "features", "sword", "properties", "propertiesMap", "productItems",
+        "motorcycles", "model", "tags", "priceComponents", "discounts", "salesTaxes", "googleProductCategory",
+        "departments", "mercadoLibre", "summary"
       ]
     }
 
@@ -410,7 +415,7 @@ async function search(criteria, domainId) {
   const filters = []
   for (var aggName in response.aggregations) {
 
-    if (!aggName.includes("_count") ) {
+    if (!aggName.includes("_count")) {
       continue;
     }
 
@@ -418,22 +423,23 @@ async function search(criteria, domainId) {
       const filterByTags = processTags(response.aggregations[aggName])
       filterByTags.forEach(tag => filters.push(tag))
 
-    }
-    else if(aggName.includes("categories_count")) {
-      filters.push( processCategories(response.aggregations[aggName]) )
+    } else if (aggName.includes("categories_count")) {
+      filters.push(processCategories(response.aggregations[aggName]))
 
-    }  else if(aggName.includes("sizes_count")) {
-      filters.push( processSizes(response.aggregations[aggName]) )
+    } else if (aggName.includes("sizes_count")) {
+      filters.push(processSizes(response.aggregations[aggName]))
 
-    }
-    else if(aggName.includes("models_count")) {
-      filters.push( processModels(response.aggregations[aggName]) )
+    } else if (aggName.includes("colors_count")) {
+      filters.push(processColors(response.aggregations[aggName]))
 
-    }else {
+    } else if (aggName.includes("models_count")) {
+      filters.push(processModels(response.aggregations[aggName]))
+
+    } else {
       const ret = processNormalAggs(response.aggregations[aggName], aggName);
 
 
-      if(ret && ret.buckets.length > 0)
+      if (ret && ret.buckets.length > 0)
         filters.push(ret)
 
     }
@@ -450,7 +456,7 @@ async function search(criteria, domainId) {
 }
 
 function processNormalAggs(aggs, aggName) {
-  if(!aggs.buckets) {
+  if (!aggs.buckets) {
     return null
   }
   let elBuckets = aggs.buckets
@@ -462,10 +468,10 @@ function processNormalAggs(aggs, aggName) {
     let name = b.key;
     let total = b.doc_count;
     if (b.thits) {
-        data = b.thits.hits.hits[0]._source.brand
+      data = b.thits.hits.hits[0]._source.brand
 
-        if (data.name)
-          name = data.name
+      if (data.name)
+        name = data.name
     }
 
 
@@ -481,7 +487,7 @@ function processNormalAggs(aggs, aggName) {
   return {
     name: getFacetGroupName(aggName.replace("_count", "")),
     type: aggName.replace("_count", ""),
-    buckets: filteredBuckets.sort((a, b) => (a.name+"").localeCompare(b.name+""))
+    buckets: filteredBuckets.sort((a, b) => (a.name + "").localeCompare(b.name + ""))
   };
 }
 
@@ -493,7 +499,7 @@ function processSizes(aggs) {
     try {
       const arr = b.key.split("|")
 
-      if(filteredBuckets.some(fb => fb.name.toLowerCase() === arr[0].toLowerCase())) {
+      if (filteredBuckets.some(fb => fb.name.toLowerCase() === arr[0].toLowerCase())) {
         continue
       }
 
@@ -504,11 +510,57 @@ function processSizes(aggs) {
         total: b.doc_count,
         data: {}
       })
-    }catch(err){
+    } catch (err) {
       logger.error("unable to process size " + JSON.stringify(b))
     }
   }
-  return { name: "Tallas", type: "sizes", buckets: filteredBuckets.sort((a, b) => (a.orderWeight > b.orderWeight ? 1 : -1)) };
+  return {
+    name: "Tallas",
+    type: "sizes",
+    buckets: filteredBuckets.sort((a, b) => (a.orderWeight > b.orderWeight ? 1 : -1))
+  };
+
+}
+
+
+const colorMap = new Map([
+  [1, {code: "black", description: "Negro", tagCategoryId: 1, hex: "#000000"}],
+  [2, {code: "brown", description: "Cafe", tagCategoryId: 1, hex: "#a52a2a"}],
+  [3, {code: "white", description: "Blanco", tagCategoryId: 1, hex: "#ffffff"}],
+  [4, {code: "red", description: "Rojo", tagCategoryId: 1, hex: "#ff0000"}],
+  [5, {code: "silver", description: "Plateado", tagCategoryId: 1, hex: "#c0c0c0"}],
+  [6, {code: "blue", description: "Azul", tagCategoryId: 1, hex: "#0000ff"}],
+  [7, {code: "gray", description: "Gris", tagCategoryId: 1, hex: "#808080"}],
+  [8, {code: "yellow", description: "Amarillo", tagCategoryId: 1, hex: "#ffff00"}],
+  [9, {code: "green", description: "Verde", tagCategoryId: 1, hex: "#00ff00"}],
+  [10, {code: "pink", description: "Rosado", tagCategoryId: 1, hex: "#ffc0cb"}],
+  [11, {code: "orange", description: "Naranjo", tagCategoryId: 1, hex: "#ffa500"}],
+  [12, {code: "gold", description: "Dorado", tagCategoryId: 1, hex: "#ffd700"}],
+  [13, {code: "purple", description: "Purpura", tagCategoryId: 1, hex: "#800080"}],
+  [2058, {code: "sky_blue", description: "Celeste", tagCategoryId: 1, hex: "#ADD8E6"}]
+]);
+
+function processColors(aggs) {
+  let elBuckets = aggs.colors_count.buckets
+  let filteredBuckets = []
+  for (var b of elBuckets) {
+
+    try {
+      const color = colorMap.get(b.key)
+
+
+      filteredBuckets.push({
+        id: b.key,
+        name: color.description,
+        code: color.code,
+        hex: color.hex,
+        total: b.doc_count,
+      })
+    } catch (err) {
+      logger.error("unable to process size " + JSON.stringify(b))
+    }
+  }
+  return {name: "Colores", type: "colors", buckets: filteredBuckets};
 
 }
 
@@ -522,22 +574,21 @@ function processModels(aggs) {
       var brand = b.thits.hits.hits[0]._source.brand
 
 
-
       filteredBuckets.push({
         id: model.id,
-        name: brand.name + " " + model.name ,
+        name: brand.name + " " + model.name,
         total: b.doc_count,
         data: {}
       })
-    }catch(err){
+    } catch (err) {
       logger.error("unable to process size " + JSON.stringify(b))
     }
   }
-  return { name: "Modelos", type: "models", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name)  ) };
+  return {name: "Modelos", type: "models", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))};
 
 }
 
-function processCategories(aggs){
+function processCategories(aggs) {
   let elBuckets = aggs.categories_count.buckets
   let filteredBuckets = []
   for (var b of elBuckets) {
@@ -551,7 +602,7 @@ function processCategories(aggs){
       data: {}
     })
   }
-  return { name: "Categorías", type: "categories", buckets: filteredBuckets };
+  return {name: "Categorías", type: "categories", buckets: filteredBuckets};
 
 }
 
