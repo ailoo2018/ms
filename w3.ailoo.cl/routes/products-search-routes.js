@@ -2,6 +2,7 @@ const {app} = require("../server");
 const {getElClient, getProductCollectionsIndexName, getIndexName} = require("../el");
 const {buildQueryByCollectionId} = require("../el/collections");
 const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
+const logger = require("@ailoo/shared-libs/logger")
 
 const aggs = {
   "brands_count": {
@@ -62,7 +63,7 @@ const aggs = {
   },
   "sizes_count": {
     "terms": {
-      "field": "availableSizes.id.keyword",
+      "field": "availableSizes.key.keyword",
       "size": 200
     }
   },
@@ -187,6 +188,38 @@ function normalizeToken2(keyStr) {
 
 }
 
+app.get("/:domainId/products/search", async (req, res, next) => {
+
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const {categoryId, brandId, collectionId, sword, limit, offset} = req.query;
+
+    const criteria = {
+      sword: rq.sword ? rq.sword : null,
+      collectionId: rq.collectionId ? rq.collectionId : null,
+      categories: [],
+      brands: [],
+      tags: [],
+      limit: limit ? limit : null,
+      offset: offset ? offset: null,
+    }
+
+    if (categoryId && categoryId.length > 0)
+      criteria.categories.push(parseInt(categoryId));
+
+    if (brandId && brandId.length > 0)
+      criteria.brands.push(parseInt(brandId));
+
+    const sRs = await search(criteria, domainId)
+
+    res.json(sRs)
+
+  }catch(e){
+    next(e)
+  }
+})
+
+
 app.post("/:domainId/products/search", async (req, res, next) => {
   try {
     // var {categoryId, brandId, collectionId, sword, limit, offset} = req.query;
@@ -202,6 +235,7 @@ app.post("/:domainId/products/search", async (req, res, next) => {
       collectionId: rq.collectionId ? rq.collectionId : null,
       categories: [],
       brands: [],
+      sizes: [],
       tags: [],
       limit: limit,
       offset: offset,
@@ -220,6 +254,10 @@ app.post("/:domainId/products/search", async (req, res, next) => {
 
     if (rq.tags)
       criteria.tags = rq.tags;
+    if (rq.sizes)
+      criteria.sizes = rq.sizes;
+    if (rq.models)
+      criteria.models = rq.models;
 
 
     const sRs = await search(criteria, domainId)
@@ -289,10 +327,24 @@ function buildQueryByCriteria(criteria, domainId) {
       }
     })
   }
+  if (criteria.models && criteria.models.length > 0) {
+    query.bool.must.push({
+      terms: {
+        "model.id": criteria.models,
+      }
+    })
+  }
   if (criteria.tags && criteria.tags.length > 0) {
     query.bool.must.push({
       terms: {
         "tags.id": criteria.tags,
+      }
+    })
+  }
+  if (criteria.sizes && criteria.sizes.length > 0) {
+    query.bool.must.push({
+      terms: {
+        "availableSizes.name.keyword": criteria.sizes,
       }
     })
   }
@@ -370,6 +422,13 @@ async function search(criteria, domainId) {
     else if(aggName.includes("categories_count")) {
       filters.push( processCategories(response.aggregations[aggName]) )
 
+    }  else if(aggName.includes("sizes_count")) {
+      filters.push( processSizes(response.aggregations[aggName]) )
+
+    }
+    else if(aggName.includes("models_count")) {
+      filters.push( processModels(response.aggregations[aggName]) )
+
     }else {
       const ret = processNormalAggs(response.aggregations[aggName], aggName);
 
@@ -426,6 +485,57 @@ function processNormalAggs(aggs, aggName) {
   };
 }
 
+function processSizes(aggs) {
+  let elBuckets = aggs.buckets
+  let filteredBuckets = []
+  for (var b of elBuckets) {
+
+    try {
+      const arr = b.key.split("|")
+
+      if(filteredBuckets.some(fb => fb.name.toLowerCase() === arr[0].toLowerCase())) {
+        continue
+      }
+
+      filteredBuckets.push({
+        id: arr[0],
+        name: arr[0],
+        orderWeight: parseInt(arr[1]),
+        total: b.doc_count,
+        data: {}
+      })
+    }catch(err){
+      logger.error("unable to process size " + JSON.stringify(b))
+    }
+  }
+  return { name: "Tallas", type: "sizes", buckets: filteredBuckets.sort((a, b) => (a.orderWeight > b.orderWeight ? 1 : -1)) };
+
+}
+
+function processModels(aggs) {
+  let elBuckets = aggs.buckets
+  let filteredBuckets = []
+  for (var b of elBuckets) {
+
+    try {
+      var model = b.thits.hits.hits[0]._source.model
+      var brand = b.thits.hits.hits[0]._source.brand
+
+
+
+      filteredBuckets.push({
+        id: model.id,
+        name: brand.name + " " + model.name ,
+        total: b.doc_count,
+        data: {}
+      })
+    }catch(err){
+      logger.error("unable to process size " + JSON.stringify(b))
+    }
+  }
+  return { name: "Modelos", type: "models", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name)  ) };
+
+}
 
 function processCategories(aggs){
   let elBuckets = aggs.categories_count.buckets
