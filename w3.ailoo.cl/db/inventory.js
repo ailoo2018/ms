@@ -1,0 +1,32 @@
+const {pool} = require("./index");
+
+
+module.exports.productStock = async function(id, domainId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows ] = await connection.execute(
+        `
+            select pit.Id as productItemId,
+                   Quantity as quantity
+            from InventoryItem ii
+                     join Facility f on f.Id = ii.FacilityId
+                     join ProductItem pit on pit.Id = ii.ProductItemId
+            where f.Type in (0, 2)
+              and pit.ProductId = ?
+              and f.DomainId = ?
+            group by pit.Id;
+`, [ id, domainId ]);
+
+
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}
+
