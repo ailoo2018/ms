@@ -13,7 +13,9 @@ module.exports.productStock = async function(id, domainId) {
             from InventoryItem ii
                      join Facility f on f.Id = ii.FacilityId
                      join ProductItem pit on pit.Id = ii.ProductItemId
-            where f.Type in (0, 2)
+            where f.Type in (0, 2, 4, 7)
+              and f.IsAvailableForInternet = 1
+              and pit.Deleted = 0
               and pit.ProductId = ?
               and f.DomainId = ?
             group by pit.Id;

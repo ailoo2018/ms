@@ -1,0 +1,85 @@
+const {app} = require("../server");
+const {CartItemType} = require("../models/cart-models");
+const {getElClient} = require("./index");
+
+let INDEX = "shopping-cart";
+if (process.env.NODE_ENV === "test") {
+  INDEX = "test-shopping-cart";
+}
+
+
+async function updateCart(existingCart) {
+  const result = await getElClient().update({
+    index: INDEX,
+    id: existingCart.id,
+    doc: existingCart,
+    refresh: true
+  });
+
+  return result;
+}
+
+async function findCart(id) {
+  if (id == null)
+    return null;
+  const result = await getElClient().get({
+    index: INDEX,
+    id: id
+  })
+  if (!result.body && !result.body._source) {
+    return null;
+  }
+
+  var cart = result.body._source;
+  cart.id = result.body._id;
+
+  return cart;
+}
+
+async function findCartByWuid(wuid) {
+  const response = await getElClient().search({
+    index: INDEX,
+    body: {
+      query: {
+        term: {
+          "wuid.keyword": wuid
+        }
+      }
+    },
+  });
+
+  // if more than 1 response return first cart and delete others
+  let cart = null;
+  if (response.hits.hits.length === 0)
+    return null
+
+  if (response.hits.hits.length > 0) {
+    cart = response.hits.hits[0]._source
+    cart.id = response.hits.hits[0]._id
+  }
+  if (response.hits.hits.length > 1) {
+    var delHits = response.hits.hits.slice(1)
+    for (var dh of delHits) {
+      await getElClient().delete({
+        index: INDEX, // Name of the index
+        id: dh._id,       // ID of the document to delete
+        refresh: 'wait_for',
+      })
+    }
+  }
+
+  return cart;
+}
+
+async function addCart(cart) {
+  const result = await getElClient().index({
+    index: INDEX,
+    body: cart,
+    refresh: true
+  });
+
+
+  return result._id;
+}
+
+module.exports = {updateCart, findCart, findCartByWuid, addCart};

@@ -24,8 +24,6 @@ app.get("/:domainId/products/:productId",   async (req, res, next) => {
 
       if(prodItem) {
         prodItem.quantityInStock = parseInt( s.quantity )
-      }else{
-        prodItem.quantityInStock = 0
       }
     }
 

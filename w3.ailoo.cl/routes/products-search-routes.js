@@ -175,6 +175,36 @@ function normalizeToken2(keyStr) {
   return keyStr.trim();
 
 }
+app.get("/:domainId/products/collections/:collectionId", async (req, res, next) => {
+
+  try {
+    const domainId = parseInt(req.params.domainId);
+    let { collectionId, limit } = req.params;
+
+    if(limit)
+      limit = parseInt(limit);
+    if(!limit)
+      limit = 20
+
+    const criteria = {
+      collectionId: collectionId,
+      categories: [],
+      brands: [],
+      tags: [],
+      limit: limit,
+      offset: 0,
+    }
+
+
+    const sRs = await search(criteria, domainId)
+
+    res.json(sRs)
+
+  } catch (e) {
+    next(e)
+  }
+})
+
 
 app.get("/:domainId/products/search", async (req, res, next) => {
 
@@ -358,18 +388,21 @@ function buildQueryByCriteria(criteria, domainId) {
 
 async function search(criteria, domainId) {
 
-  let query;
-
-  if (criteria.collectionId && criteria.collectionId !== "") {
-    ({query: query, limit: limit, sort: sort} = await buildQueryByCollectionId(criteira.collectionId, domainId));
-  } else {
-    query = buildQueryByCriteria(criteria, domainId);
-  }
-
-  let limit = criteria.limit ? parseInt(criteria.limit) : 60;
-  let offset = criteria.offset ? parseInt(criteria.offset) : 0;
+  let query
+  let limit
 
   let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
+  if (criteria.collectionId && criteria.collectionId !== "") {
+    ({query: query, limit: limit, sort: sort} = await buildQueryByCollectionId(criteria.collectionId, domainId));
+  } else {
+    query = buildQueryByCriteria(criteria, domainId);
+    limit = criteria.limit ? parseInt(criteria.limit) : 60;
+  }
+
+
+  let offset = criteria.offset ? parseInt(criteria.offset) : 0;
+
+
 
   const response = await getElClient().search({
     index: getIndexName(domainId),
@@ -399,6 +432,10 @@ async function search(criteria, domainId) {
       "600": imgHelper.getUrl(p.image, 600, domainId),
       "800": imgHelper.getUrl(p.image, 800, domainId),
 
+    }
+    p.price = {
+      discount: 0,
+      price: p.minPrice,
     }
 
     if (p.image) {

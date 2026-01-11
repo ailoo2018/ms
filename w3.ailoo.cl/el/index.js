@@ -12,6 +12,9 @@ function getElClient() {
 		return client;
 }
 
+
+
+
 function getProductCollectionsIndexName(domainId){
 
 	if(process.env.NODE_ENV === 'test'){
@@ -40,5 +43,5 @@ function getDiscountIndexName(){
 
 
 module.exports = {
-	getElClient, getIndexName, getDiscountIndexName
+	getElClient, getIndexName, getDiscountIndexName, getProductCollectionsIndexName
 };
