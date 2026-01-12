@@ -8,7 +8,7 @@ const adminClient = {
 
   paymentValidated: async (orderId, authcode, domainId) =>
   {
-    const url = new URL(`${domainId}/InternetOrders/PaymentValidated.rails`, ADMIN_URL);
+    const url = new URL(`/InternetOrders/PaymentValidated.rails`, ADMIN_URL);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -26,9 +26,12 @@ const adminClient = {
       }),
     });
 
-    if (!response.ok) throw new Error(`ADMIN Error: ${response.status}`);
-      return response.json();
+    if (!response.ok)
+      throw new Error(`ADMIN Error: ${response.status}`);
+
+    return response.json();
   }
+
 
 }
 

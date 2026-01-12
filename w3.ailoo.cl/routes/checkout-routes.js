@@ -349,8 +349,8 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     const order = await drizzleDb.query.saleOrder.findFirst({
       where: (saleOrder, { eq }) =>
           and(
-            eq(saleOrder.id, rq.orderId),
-            eq(saleOrder.domainId, rq.domainId),
+            eq(saleOrder.id, parseInt(rq.orderId)),
+            eq(saleOrder.domainId, domainId),
           ),
 
       with: {
@@ -367,7 +367,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
       await tx
           .update(saleOrder)
           .set({
-            authCode: rq.data.authCode, // Ensure property name matches your req
+            authCode: rq.data.authorization_code, // Ensure property name matches your req
           })
           .where(
               and(
@@ -386,9 +386,9 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     })
 
     try{
-      await adminClient.paymentValidated(rq.orderId, rq.data.authCode )
+      await adminClient.paymentValidated(rq.orderId, rq.data.authorization_code, domainId )
     }catch(e){
-      logger.error("Unable to notify payment  validated to admin: " + errors.message)
+      logger.error("Unable to notify payment  validated to admin: " + e.message)
     }
 
 
