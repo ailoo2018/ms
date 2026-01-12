@@ -4,6 +4,10 @@ const SaleType = Object.freeze({
    Internet: 3,
 })
 
+const OrderItemType = Object.freeze({
+  Product: 0,
+})
+
 const PriceComponentType =
     {
       BASE_PRICE: 0,
@@ -96,5 +100,6 @@ module.exports = {
   PriceComponentType,
   Price,
   Money,
-  SaleType
+  SaleType,
+  OrderItemType
 }
