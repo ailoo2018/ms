@@ -388,7 +388,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     try{
       await adminClient.paymentValidated(rq.orderId, rq.data.authCode )
     }catch(e){
-      logger.error("Unable to notify payment validated to admin: " + errors.message)
+      logger.error("Unable to notify payment  validated to admin: " + errors.message)
     }
 
 
