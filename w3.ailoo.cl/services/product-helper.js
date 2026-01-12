@@ -47,7 +47,7 @@ const getPriceByProductItem = async (productItemsIds, saleTypeId, domainId) => {
   })
 
   if(ret.status !== 200){
-    throw new Error(ret.statusText + " url: " + url)
+    throw new Error(ret.statusText + " url: " + url + " query: " + JSON.stringify({ productItemsIds, saleTypeId }))
   }
 
   return await ret.json()
