@@ -121,6 +121,13 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
 
     const cart = await CartRepos.findCartByWuid(req.params.wuid)
+    if(!cart){
+      return res.status(404).json({
+        message: "Cart not found",
+        error: 'cart not found',
+      });
+    }
+
     cart.oldPrice = 0
     cart.shipping = { cost: 0}
     cart.financing = { installments: 1}

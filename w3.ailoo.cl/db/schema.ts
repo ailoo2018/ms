@@ -207,6 +207,45 @@ const partyRelations = relations(party, ({ many }) => ({
     orders: many(saleOrder),
 }));
 
+
+const orderJournal = motomundiSchema.table("orderjournal", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    description: text("Description"),
+    userId: int("UserId"),
+    state: int("State"),
+    orderId: int("OrderId"),
+    creationDate: datetime("CreationDate"),
+    imageId: varchar("ImageId", { length: 50 }),
+}, (table) => ({
+    userIdx: index("FK_ORDJRN_USER_idx").on(table.userId),
+    orderIdx: index("FK_ORDJRN_ORDER_idx").on(table.orderId),
+
+    // Foreign Key Constraints
+    fkOrder: foreignKey({
+        columns: [table.orderId],
+        foreignColumns: [saleOrder.id],
+        name: "FK_ORDJRN_ORDER"
+    }).onDelete("cascade"),
+
+    fkUser: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [user.id],
+        name: "FK_ORDJRN_USER"
+    }),
+}));
+
+// --- RELATIONS ---
+const orderJournalRelations = relations(orderJournal, ({ one }) => ({
+    order: one(saleOrder, {
+        fields: [orderJournal.orderId],
+        references: [saleOrder.id],
+    }),
+    user: one(user, {
+        fields: [orderJournal.userId],
+        references: [user.id],
+    }),
+}));
+
 // --- EXPORTS ---
 
 module.exports = {
@@ -221,5 +260,7 @@ module.exports = {
     saleOrderRelations,
     saleOrderItemRelations,
     postalAddressRelations,
-    partyRelations
+    partyRelations,
+    orderJournal,
+    orderJournalRelations
 };

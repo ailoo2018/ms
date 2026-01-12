@@ -31,7 +31,13 @@ function getProductImage(product, pit){
 const getPriceByProductItem = async (productItemsIds, saleTypeId, domainId) => {
 
   const baseUrl = process.env.PRODUCTS_MS_URL
-  const ret =await fetch(`${baseUrl}/${domainId}/product-items/search`, {
+
+  if(!baseUrl){
+    throw new Error('No baseUrl provided')
+  }
+
+  const url = `${baseUrl}/${domainId}/product-items/search`
+  const ret =await fetch(url, {
     method: 'POST',
     headers: {
       "Accept": "application/json",
@@ -41,7 +47,7 @@ const getPriceByProductItem = async (productItemsIds, saleTypeId, domainId) => {
   })
 
   if(ret.status !== 200){
-    throw new Error(ret.statusText)
+    throw new Error(ret.statusText + " url: " + url)
   }
 
   return await ret.json()

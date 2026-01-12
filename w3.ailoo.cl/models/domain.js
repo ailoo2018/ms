@@ -1,11 +1,31 @@
 const SaleType = Object.freeze({
   Store: 1,
-   Distribution: 2,
-   Internet: 3,
+  Distribution: 2,
+  Internet: 3,
 })
 
 const OrderItemType = Object.freeze({
   Product: 0,
+})
+
+const OrderState = Object.freeze({
+  Desconocido: 0,
+  Ingresado: 1,
+  Pagado: 2,
+  Enviado: 3, // es InRoute, producto fue retirado por courrier y va en camino hacia el cliente
+  Anulado: 4,
+  PendientePago: 5,
+  Abierto: 6,
+  Rechazado: 7, //se trato de entregar producto donde cliente pero no se pudo
+  ListoParaRetiro: 8, // solo se usa para pickup en tienda (NO ES LO MISMO QUE LISTO PARA ENVIAR
+  Retirado: 9, // NO SE USA M�S, USAR ENTREGADO
+  Entregado: 10,
+  PaymentError: 11,
+  ListoParaEnviar: 12, // OC ya esta preparado y se solicita a empresa de transporte recoger
+  Comment: 13,
+  DerivadoSAC: 14,
+  EnProceso: 15 // edson usa este estado para los pedidos que se van a demorar un poco m�s de usual (solicitar retiro a proveedor o tiendas de region)
+
 })
 
 const PriceComponentType =
@@ -95,11 +115,11 @@ class Price {
 }
 
 
-
 module.exports = {
   PriceComponentType,
   Price,
   Money,
   SaleType,
-  OrderItemType
+  OrderItemType,
+  OrderState,
 }

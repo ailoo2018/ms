@@ -1,14 +1,24 @@
 const contactsClient = require( "../services/contactsClient.js");
 
-const {contactMechanism, postalAddress, saleOrder, saleOrderItem, party} = require("../db/schema.ts");
+const {
+  contactMechanism,
+  postalAddress,
+  saleOrder,
+  saleOrderItem,
+  party,
+  orderJournal
+} = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
-const { OrderItemType, SaleType } = require("../models/domain");
+const { OrderItemType, SaleType, OrderState} = require("../models/domain");
 const { getPriceByProductItem } = require("../services/product-helper");
 const { and, eq } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const { app } = require("../server");
 const { db: drizzleDb, db} = require("../db/drizzle");
 const productRepos = require("../el/products");
+
+const adminClient = require("../services/adminClient");
+const {errors} = require("@elastic/elasticsearch");
 
 var retShippingMethods = {
   "destination": {
@@ -336,7 +346,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
     const rq = req.body
 
-    const result = await drizzleDb.query.saleOrder.findFirst({
+    const order = await drizzleDb.query.saleOrder.findFirst({
       where: (saleOrder, { eq }) =>
           and(
             eq(saleOrder.id, rq.orderId),
@@ -348,8 +358,45 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
       },
     });
 
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
 
-    res.json(result)
+
+    await drizzleDb.transaction(async (tx) => {
+      await tx
+          .update(saleOrder)
+          .set({
+            authCode: rq.data.authCode, // Ensure property name matches your req
+          })
+          .where(
+              and(
+                  eq(saleOrder.id, rq.orderId),
+                  eq(saleOrder.domainId, domainId)
+              )
+          );
+
+/*      await tx.insert(orderJournal).values({
+        orderId: rq.orderId,
+        description: `Order paid successfully. AuthCode: ${rq.data.authCode}`,
+        state: OrderState.Pagado,
+        creationDate: new Date(),
+        userId: null,
+      });*/
+    })
+
+    try{
+      await adminClient.paymentValidated(rq.orderId, rq.data.authCode )
+    }catch(e){
+      logger.error("Unable to notify payment validated to admin: " + errors.message)
+    }
+
+
+    res.json({
+      success: true,
+      orderId: rq.orderId,
+      newState: OrderState.Pagado
+    });
 
   }catch(e){
     next(e)
