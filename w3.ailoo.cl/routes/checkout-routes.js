@@ -9,18 +9,19 @@ const {
   orderJournal
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
-const { OrderItemType, SaleType, OrderState} = require("../models/domain");
+const { OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../models/domain");
 const { getPriceByProductItem } = require("../services/product-helper");
 const { and, eq } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const { app } = require("../server");
 const { db: drizzleDb, db} = require("../db/drizzle");
 const productRepos = require("../el/products");
-
+const ordersService = require("../services/ordersService");
 const adminClient = require("../services/adminClient");
 const {errors} = require("@elastic/elasticsearch");
-
-var retShippingMethods = {
+const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
+const {confirmWebPay} = require("../payments/confirm.webpay");
+const retShippingMethods = {
   "destination": {
     "comuna": {
       "id": 316
@@ -209,8 +210,11 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
       const pitMap = await getProductItemsMap(rq.items, domainId)
 
+      let orderTotal = 0
       for (var item of rq.items) {
-        if (item.type === OrderItemType.Product) {
+
+        // cart item type product
+        if (item.type === 0) {
 
           const pitSm = (pitMap).get(item.id)
           if(pitSm == null) {
@@ -232,6 +236,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
           }
 
           itemsToInsert.push(itemToInsert);
+          orderTotal += item.quantity * item.price
         }
 
       }
@@ -239,14 +244,14 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
       await tx.insert(saleOrderItem).values(itemsToInsert);
 
-      return {orderId: orderResult.insertId, addressId: sharedId};
+      return {id: orderResult.insertId, total: orderTotal,  orderId: orderResult.insertId, addressId: sharedId};
 
     })
 
 
     // save order to db
 
-    res.json({orderId: result.orderId, addressId: result.addressId})
+    res.json({id: result.orderId, total: result.total, addressId: result.addressId})
   } catch (err) {
     next(err);
   }
@@ -340,35 +345,44 @@ app.get("/:domainId/checkout/click-collect", async (req, res, next) => {
 
 })
 
-
 app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 
   try{
     const domainId = parseInt(req.params.domainId);
     const rq = req.body
+    let authcode
+    let orderTotal = 0
 
-    const order = await drizzleDb.query.saleOrder.findFirst({
-      where: (saleOrder, { eq }) =>
-          and(
-            eq(saleOrder.id, parseInt(rq.orderId)),
-            eq(saleOrder.domainId, domainId),
-          ),
 
-      with: {
-        items: true,
-      },
-    });
 
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
+    let confirmRs
+    let gatewayResponse = null;
+    if(rq.paymentMethodType === PaymentMethodType.MercadoPago){
+      confirmRs = await confirmMercadoPagoPayment(rq.paymentId, domainId)
+
+    }else if(rq.paymentMethodType === PaymentMethodType.Webpay){
+      confirmRs = await confirmWebPay(rq.token, domainId)
+
+    }else{
+      return res.status(500).json({ success: false, error: "Tipo de pago no soportado: " + rq.paymentMethodType})
     }
+
+    if(!confirmRs || !confirmRs.success)
+      return res.status(500).json({ success: false, error:  confirmRs.message });
+    else {
+      authcode = confirmRs.authcode
+      orderTotal = confirmRs.orderTotal
+      gatewayResponse = confirmRs.gatewayResponse
+    }
+
+
 
 
     await drizzleDb.transaction(async (tx) => {
       await tx
           .update(saleOrder)
           .set({
-            authCode: rq.data.authorization_code, // Ensure property name matches your req
+            authCode: authcode, // Ensure property name matches your req
           })
           .where(
               and(
@@ -387,7 +401,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     })
 
     try{
-      await adminClient.paymentValidated(rq.orderId, rq.data.authorization_code, domainId )
+      await adminClient.paymentValidated(rq.orderId, authcode, domainId )
     }catch(e){
       logger.error("Unable to notify payment  validated to admin: " + e.message)
     }
@@ -396,11 +410,20 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     res.json({
       success: true,
       orderId: rq.orderId,
-      newState: OrderState.Pagado
+      orderTotal: orderTotal,
+      paymentDate: new Date(),
+      newState: OrderState.Pagado,
+      authorization: authcode,
+      gatewayResponse ,
     });
 
   }catch(e){
-    next(e)
+    res.json({
+      success: false,
+      error: e.message,
+      message: e.message,
+    });
+
   }
 
 

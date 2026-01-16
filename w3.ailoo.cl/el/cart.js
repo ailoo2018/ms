@@ -8,6 +8,22 @@ if (process.env.NODE_ENV === "test") {
 }
 
 
+async function updateCartUserId(cartId, userId){
+
+  await getElClient().update({
+    index: INDEX,
+    id: cartId,
+    // 'doc' allows you to send only the fields you want to change
+    body: {
+      doc: {
+        userId: userId
+      }
+    },
+    // Optional: Wait for the change to be searchable
+    refresh: true
+  });
+}
+
 async function updateCart(existingCart) {
   const result = await getElClient().update({
     index: INDEX,
@@ -82,4 +98,10 @@ async function addCart(cart) {
   return result._id;
 }
 
-module.exports = {updateCart, findCart, findCartByWuid, addCart};
+module.exports = {
+  updateCart,
+  findCart,
+  findCartByWuid,
+  addCart,
+  updateCartUserId
+};

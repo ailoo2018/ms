@@ -1,4 +1,4 @@
-
+const logger = require("@ailoo/shared-libs/logger");
 const ADMIN_URL = process.env.ADMIN_URL
 const AILOO_ACCESS_TOKEN = process.env.AILOO_ACCESS_TOKEN
 const AILOO_FACILITY_ID = 479 // bodega online
@@ -9,6 +9,8 @@ const adminClient = {
   paymentValidated: async (orderId, authcode, domainId) =>
   {
     const url = new URL(`/InternetOrders/PaymentValidated.rails`, ADMIN_URL);
+
+    logger.info("Validate payment in admin: " + ADMIN_URL + `/InternetOrders/PaymentValidated.rails` + AILOO_ACCESS_TOKEN);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -26,10 +28,17 @@ const adminClient = {
       }),
     });
 
-    if (!response.ok)
-      throw new Error(`ADMIN Error: ${response.status}`);
+    if (!response.ok){
+      const errorHtml = await response.text();
 
-    return response.json();
+      logger.error(`Error al llamar PaymentValidation. Status: ${response.status}`);
+      logger.error(`Server Response Body: ${errorHtml}`); // This logs the HTML
+
+      throw new Error(`ADMIN Error: ${response.status}`);    }
+
+    var res = await response.json();
+    console.log("Result PaymentValidation: " + JSON.stringify(res));
+    return res
   }
 
 

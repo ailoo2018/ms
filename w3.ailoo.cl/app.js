@@ -2,6 +2,8 @@ require("@ailoo/shared-libs/config")
 const { app } = require("./server");
 const logger = require("@ailoo/shared-libs/logger")
 
+require("./routes/auth-routes");
+require("./routes/account-routes");
 require("./routes/wcc-routes");
 require("./routes/friendlyurl-routes");
 require("./routes/events-routes");
@@ -21,10 +23,10 @@ app.get('/', (req, res) => {
     DB_PORT: process.env.DB_PORT,
     DB_DATABASE: process.env.DB_DATABASE,
     CMS_URL: process.env.CMS_URL,
+  //  AILOO_TOKEN: process.env.AILOO_ACCESS_TOKEN,
+    ADMIN_URL: process.env.ADMIN_URL,
   });
 });
-
-
 
 
 app.use((err, req, res, next) => {

@@ -1,7 +1,14 @@
 const {db} = require("../db/drizzle")
 const {app} = require("../server");
-
-
+const { db: drizzleDb} = require("../db/drizzle");
+const {
+  contactMechanism,
+  postalAddress,
+  saleOrder,
+  saleOrderItem,
+  party,
+  orderJournal
+} = require("../db/schema.ts");
 
 app.get("/:domainId/orders/:orderId", async (req, res, next) => {
 

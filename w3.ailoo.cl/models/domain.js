@@ -5,7 +5,11 @@ const SaleType = Object.freeze({
 })
 
 const OrderItemType = Object.freeze({
-  Product: 0,
+  Product: 1,
+  Shipping: 2,
+  Discount: 3,
+  Other: 4,
+  Coupon: 5
 })
 
 const OrderState = Object.freeze({
@@ -115,6 +119,11 @@ class Price {
 }
 
 
+const PaymentMethodType = Object.freeze({
+  MercadoPago: 15,
+  Webpay: 8,
+})
+
 module.exports = {
   PriceComponentType,
   Price,
@@ -122,4 +131,5 @@ module.exports = {
   SaleType,
   OrderItemType,
   OrderState,
+  PaymentMethodType,
 }

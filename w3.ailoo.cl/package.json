@@ -19,6 +19,9 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
-    "mysql2": "^3.16.0"
+    "jsonwebtoken": "^9.0.3",
+    "mercadopago": "^2.11.0",
+    "mysql2": "^3.16.0",
+    "transbank-sdk": "^6.1.1"
   }
 }

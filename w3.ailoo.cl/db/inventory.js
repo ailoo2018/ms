@@ -9,7 +9,7 @@ module.exports.productStock = async function(id, domainId) {
     const [rows ] = await connection.execute(
         `
             select pit.Id as productItemId,
-                   Quantity as quantity
+                   sum(if(Quantity < 0, 0, Quantity)) as quantity
             from InventoryItem ii
                      join Facility f on f.Id = ii.FacilityId
                      join ProductItem pit on pit.Id = ii.ProductItemId
