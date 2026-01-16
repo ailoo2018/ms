@@ -108,7 +108,6 @@ app.get("/:domainId/auth/google",   async (req, res, next) => {
     }
 
 
-
     const userInfoRs = await fetch("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token.access_token)
     const userInfo = await userInfoRs.json()
 
