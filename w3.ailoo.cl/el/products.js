@@ -1,4 +1,4 @@
-const {getElClient, getIndexName} = require("./index");
+const {getElClient, getIndexName} = require("../connections/el");
 
 const productRepos = {
   findProduct: async (productId, domainId)=>{

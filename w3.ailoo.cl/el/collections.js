@@ -1,4 +1,4 @@
-const {getElClient, getProductCollectionsIndexName} = require("../el");
+const {getElClient, getProductCollectionsIndexName} = require("../connections/el");
 
 const EntityType = Object.freeze({
   Unknown: 0,

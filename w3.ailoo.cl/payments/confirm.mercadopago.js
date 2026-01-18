@@ -1,7 +1,6 @@
 const ordersService = require("../services/ordersService");
 const { MercadoPagoConfig, Payment } = require( 'mercadopago' )
 const {db: drizzleDb} = require("../db/drizzle");
-const logger = require("../../packages/shared-libs/logger");
 const { and, eq } = require("drizzle-orm");
 
 async function confirmMercadoPagoPayment(paymentId, domainId) {

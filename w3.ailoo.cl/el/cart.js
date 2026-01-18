@@ -1,6 +1,6 @@
 const {app} = require("../server");
 const {CartItemType} = require("../models/cart-models");
-const {getElClient} = require("./index");
+const {getElClient} = require("../connections/el");
 
 let INDEX = "shopping-cart";
 if (process.env.NODE_ENV === "test") {

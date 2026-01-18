@@ -1,4 +1,4 @@
-const {pool} = require("./index");
+const {pool} = require("../connections/mysql");
 
 
 module.exports.productStock = async function(id, domainId) {

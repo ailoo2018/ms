@@ -14,6 +14,7 @@
     "@ailoo/shared-libs": "^1.0.0",
     "@elastic/elasticsearch": "^8.17.0",
     "@prisma/client": "^7.2.0",
+    "awilix": "^12.0.5",
     "body-parser": "^2.2.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

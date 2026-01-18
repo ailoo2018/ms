@@ -3,17 +3,31 @@
   "version": "1.0.0",
   "description": "ShareLibs for Node",
   "private": true,
+  "type": "commonjs",
   "dependencies": {
-    "dotenv": "^17.2.3",
+    "@elastic/elasticsearch": "^8.17.0",
+    "async-mutex": "^0.5.0",
+    "awilix": "^12.0.5",
     "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "mysql2": "^3.16.1",
+    "redis": "^5.10.0",
     "sharp": "^0.34.3",
+    "uuid": "^13.0.0",
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "exports": {
-    "./logger": "./logger.js",
-    "./config": "./config.js",
+    "./logger": "./utils/logger.js",
+    "./config": "./utils/config.js",
     "./helpers/ProductImageHelper": "./helpers/ProductImageHelper.js",
-    "./helpers/LinkHelper": "./helpers/LinkHelper.js"
+    "./helpers/LinkHelper": "./helpers/LinkHelper.js",
+    "./utils": "./utils/utils.js",
+    "./price": "./products/price.js",
+    "./ProductsService": "./services/ProductsService.js",
+    "./ProductCategoryService": "./services/ProductCategoryService.js",
+    "./DiscountRuleService": "./services/DiscountRuleService.js",
+    "./CartService": "./services/CartService.js",
+    "./ProductCategoryDb": "./repos/ProductCategoryDb.js"
   }
 }

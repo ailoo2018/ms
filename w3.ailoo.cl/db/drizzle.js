@@ -1,4 +1,4 @@
-const { pool } = require("./index.js");
+const { pool } = require("../connections/mysql");
 const { drizzle } = require("drizzle-orm/mysql2");
 
 // Import the schema using require

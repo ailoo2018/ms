@@ -1,5 +1,5 @@
 const {app} = require("../server");
-const {getElClient} = require("../el");
+const {getElClient} = require("../connections/el");
 
 
 function getIndexName(domainId){

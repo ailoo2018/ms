@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { pool } = require("../connections/mysql");
 
 module.exports.listPartyPostalAddresses = async partyId => {
 

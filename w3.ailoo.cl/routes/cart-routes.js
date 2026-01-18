@@ -1,6 +1,6 @@
 const {app} = require("../server");
 const cmsClient = require("../services/cmsClient");
-const {getElClient} = require("../el");
+const {getElClient} = require("../connections/el");
 const {CartItemType} = require("../models/cart-models");
 const CartRepos = require("../el/cart");
 const {findProductByProductItem} = require("../el/products");

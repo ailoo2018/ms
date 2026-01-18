@@ -3,7 +3,7 @@ const {promises: fs} = require("fs");
 const fs1 = require("fs");
 const axios = require('axios');
 const { randomUUID } = require('crypto');
-const logger = require("../logger");
+const logger = require("../utils/logger");
 const sharp = require("sharp");
 const {FormatUtils} = require("../utils/utils");
 
