@@ -11,6 +11,7 @@ const {getPrice} = require("@ailoo/shared-libs/price");
 const {SaleType} = require("../models/domain");
 const container = require("../container");
 const {getProductSalesRules, isApplicableSalesRule} = require("../services/product-helper");
+const {getElClient, getIndexName} = require("../connections/el");
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -97,7 +98,8 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
         if (prods.length > 0) {
           prods.sort(() => Math.random() - 0.5);
-          packProducts.push(prods[0]);
+          var packProduct = await productService.findProductWithInventory(prods[0].id, domainId);
+          packProducts.push(packProduct);
         }
       }
 
@@ -1122,3 +1124,99 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
   }
 
 })
+
+
+
+app.get("/:domainId/recommend", async (req, res, next) => {
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const productId = parseInt(req.query.productId)
+    const count = parseInt(req.query.count)
+
+    var prodSm = await productService.findProduct(productId, domainId);
+
+    var directCategory = null;
+
+    let query = {
+
+      bool: {
+        must: [
+          {
+            query_string: {
+              query: "isAvailableForInternet:true AND universalQuantity:>0 AND minPrice:>0"
+            }
+          }
+        ],
+        should: []
+      }
+    };
+    if(prodSm.categories){
+      directCategory = prodSm.categories.find(c=> c.isDirectCategory === true)
+    }
+
+    if(directCategory){
+      query.bool.should.push({ terms: {
+          "categories.id" : [ directCategory.id ]
+        }})
+    }
+
+    if(prodSm.tags && prodSm.tags.length > 0){
+      query.bool.should.push({ terms: {
+          "tags.id" : prodSm.tags.map(t => t.id)
+        }})
+
+    }
+
+    query.bool.should.push({ range: {
+        "minPrice" : {
+          gte: prodSm.minPrice * .75,
+          lte: prodSm.minPrice * 1.25
+        }
+      }})
+
+
+    const body = await getElClient().search({
+      index: getIndexName(domainId),
+      body: {
+        query: query,
+        from: 0,
+        size: count ? count : 10,
+        _source: {
+          excludes: ['categories', 'properites', 'productItems',
+            'propertiesMap', 'sword', 'properties', 'departments', 'features', 'tireSpecs']
+        }
+
+      }
+    })
+
+    var imgHelper = new ProductImageHelper()
+
+    var products = body.hits.hits.map(h => {
+      const p = h._source
+      p.url = createLink(p)
+      p.coverImages = {
+        "150": imgHelper.getUrl(p.image, 150, domainId),
+        "300": imgHelper.getUrl(p.image, 300, domainId),
+        "600": imgHelper.getUrl(p.image, 600, domainId),
+        "800": imgHelper.getUrl(p.image, 800, domainId),
+
+      }
+
+      if(p.image){
+        p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
+      }
+
+      return p
+    })
+
+    res.json(products)
+
+
+  }catch(e){
+    next(e);
+  }
+})
+
+function createLink(p){
+  return `/motocicleta/${p.linkName}`
+}

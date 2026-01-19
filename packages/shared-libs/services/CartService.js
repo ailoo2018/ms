@@ -1,6 +1,7 @@
 const {AppliesToEnum} = require("../models");
 const {v4: uuidv4} = require('uuid');
 const prodDirectCategory = require("../../../w3.ailoo.cl/services/categoryTreeService");
+const {SaleType} = require("../../../w3.ailoo.cl/models/domain");
 
 /**
  * Returns the item with the lowest price from a list of applicable items.
@@ -29,8 +30,9 @@ function GetTotalOfApplicableItems(applicableItems) {
 class CartService {
 
 
-  constructor({productCategoryService}) {
+  constructor({productCategoryService, discountRuleService}) {
     this.productCategoryService = productCategoryService
+    this.discountRuleService = discountRuleService
   }
 
   async applies(productRuleDto, item, domainId, discountRule) {
@@ -114,7 +116,6 @@ class CartService {
       return {applies: false, qty: 0};
     }
   }
-
 
   async getDiscounts(rq, discountRule, domainId) {
     const discounts = [];
@@ -282,6 +283,10 @@ class CartService {
     return discounts;
   }
 
+  async analyze(saleContext, discountRuleId, domainId){
+    const discountRule = await this.discountRuleService.findDiscount(discountRuleId, domainId)
+    return await this.getDiscounts(saleContext, discountRule, domainId)
+  }
 
 }
 

@@ -7,6 +7,9 @@ const baseUrl = process.env.PRODUCTS_MS_URL
 function getProductItemDescription(product, pit){
   let desc = product.name;
 
+  if(product.fullName)
+    desc = product.fullName;
+
   if(pit.colorId > 0){
     const color = product.features.find(f => f.id === pit.colorId)
     desc += " " + color.name

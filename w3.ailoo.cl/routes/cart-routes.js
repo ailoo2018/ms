@@ -4,15 +4,20 @@ const {getElClient} = require("../connections/el");
 const {CartItemType} = require("../models/cart-models");
 const CartRepos = require("../el/cart");
 const {findProductByProductItem} = require("../el/products");
-const ProductService = require( '../services/product-helper' );
+const ProductService = require('../services/product-helper');
 const {SaleType} = require("../models/domain");
+const container = require("../container");
+const {getProductImage} = require("../services/product-helper");
 
+
+const productService = container.resolve('productsService');
+const cartService = container.resolve('cartService');
 
 
 app.get("/:domainId/cart/remove-item", async (req, res, next) => {
 
-  try{
-    const { wuid, itemId, type} = req.query
+  try {
+    const {wuid, itemId, type} = req.query
     const id = parseInt(itemId)
     const cart = await CartRepos.findCartByWuid(wuid)
     cart.items = cart.items.filter(item => item.id !== id && item.type !== type)
@@ -22,7 +27,7 @@ app.get("/:domainId/cart/remove-item", async (req, res, next) => {
     res.json(cart)
 
 
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 
@@ -37,9 +42,9 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
 
     let cartItem
-    if(rq.type === CartItemType.Product) {
-      const product = await findProductByProductItem(rq.productItemId, domainId)
-      if(!product) {
+    if (rq.type === CartItemType.Product) {
+      const product = await productService.findProductByProductItem(rq.productItemId, domainId)
+      if (!product) {
         return res.status(404).json({error: 'Product not found'});
       }
 
@@ -48,6 +53,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
       cartItem = {
         id: productItem.id,
         packId: 0,
+        name: ProductService.getProductItemDescription(product, productItem),
         product: {
           productItemId: productItem.id,
           image: prodImage ? prodImage.image : null,
@@ -57,51 +63,53 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
         type: CartItemType.Product,
       }
 
+    } else if (rq.type === CartItemType.Discount) {
+      cartItem = {
+        id: rq.packId,
+        packId: rq.packId,
+        type: CartItemType.Pack,
+        name: rq.name,
+        product: null,
+        packContents: rq.packContents.map(pc => {
+          return {
+            quantity: pc.quantity,
+            product: {
+              id: pc.productId,
+              productItemId: pc.productItemId,
+            }
+          }
+        })
+      }
     }
 
-
     var cart = rq;
-    if (rq.id != null && rq.id != "") {
 
-      const existingCart = await CartRepos.findCart(rq.id)
-      if(!existingCart) {
-        return res.status(404).json({error: "Cart not found or could not be updated"});
-      }
-
-      existingCart.items.push(cartItem);
+    const existingCart = await CartRepos.findCartByWuid(rq.wuid)
+    if (existingCart) {
+      if (!existingCart.items)
+        existingCart.items = []
+      existingCart.items.push(cartItem)
       await CartRepos.updateCart(existingCart);
-
-      res.json(existingCart);
+      cart = existingCart;
     } else {
 
-      const existingCart = await CartRepos.findCartByWuid(rq.wuid)
-      if(existingCart){
-        if(!existingCart.items)
-          existingCart.items = []
-        existingCart.items.push(cartItem)
-        await CartRepos.updateCart(existingCart);
-        cart = existingCart;
-      }else {
+      const newCart = {
+        "id": null,
+        "wuid": rq.wuid,
+        "notificationsCount": 0,
+        "lastNotified": "0001-01-01T00:00:00",
+        "webSiteId": 0,
+        "createDate": new Date(),
+        "modifiedDate": new Date(),
+        "currency": rq.currency ? rq.currency : "CLP",
+        "userId": rq.userId ? rq.userId : 0,
+        "domainId": domainId,
+        items: [cartItem]
+      };
 
-        const newCart ={
-          "id": null,
-          "wuid": rq.wuid,
-          "notificationsCount": 0,
-          "lastNotified": "0001-01-01T00:00:00",
-          "webSiteId": 0,
-          "createDate": new Date(),
-          "modifiedDate": new Date(),
-          "currency": rq.currency ? rq.currency : "CLP",
-          "userId": rq.userId ? rq.userId : 0,
-          "domainId": domainId,
-          items: [ cartItem ]
-        };
-
-        const newCartId = await CartRepos.addCart(newCart)
-        newCart.id = newCartId;
-        cart = newCart;
-      }
-
+      const newCartId = await CartRepos.addCart(newCart)
+      newCart.id = newCartId;
+      cart = newCart;
     }
 
 
@@ -111,17 +119,16 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
     next(err);
   }
 
-  res.json({});
+
 });
 
 
-
 app.get("/:domainId/cart/:wuid", async (req, res, next) => {
-  try{
+  try {
     const domainId = parseInt(req.params.domainId);
 
     const cart = await CartRepos.findCartByWuid(req.params.wuid)
-    if(!cart){
+    if (!cart) {
       return res.status(404).json({
         message: "Cart not found",
         error: 'cart not found',
@@ -129,19 +136,21 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
     }
 
     cart.oldPrice = 0
-    cart.shipping = { cost: 0}
-    cart.financing = { installments: 1}
-    cart.itemsQuantity = 0
+    cart.shipping = {cost: 0}
+    cart.financing = {installments: 1}
+    cart.totalItems = 0
 
     let total = 0
-    for(const cartItem of cart.items) {
+    for (const cartItem of cart.items) {
 
-      if(cartItem.type == CartItemType.Product) {
+      if (cartItem.type == CartItemType.Product) {
         const product = await findProductByProductItem(cartItem.id, domainId)
         const productItem = product.productItems.find(pit => pit.id === cartItem.id);
         const img = ProductService.getProductImage(product, productItem)
-        if(img)
+        if (img)
           cartItem.image = img.image
+
+        cart.totalItems += cartItem.quantity
 
         const color = product.features.find(f => f.id === productItem.colorId)
         cartItem.color = color ? color : null
@@ -150,13 +159,80 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
         cartItem.size = size ? size : null
         cartItem.description = product.name
 
-        const pits = await ProductService.getPriceByProductItem([ productItem.id ], SaleType.Internet, domainId )
+        const pits = await ProductService.getPriceByProductItem([productItem.id], SaleType.Internet, domainId)
 
         cartItem.price = pits.productItems[0].price
         cartItem.oldPrice = pits.productItems[0].basePrice
         cartItem.discount = pits.productItems[0].discount
 
         total += cartItem.price
+      } else if (cartItem.type == CartItemType.Pack)
+      {
+        if(!cartItem.quantity)
+          cartItem.quantity = 1
+
+        const pitIds = cartItem.packContents.map(pc => {
+          return pc.product.productItemId
+        })
+        const products = await productService.findProductsByProductItems(pitIds, domainId)
+
+
+        const saleContext = {saleTypeId: SaleType.Internet, items: []};
+
+        let total = 0
+        for (var packProduct of cartItem.packContents) {
+          const product = products.find(p => p.productItems.some(pit => pit.id === packProduct.product.productItemId))
+          const productItem = product.productItems.find(pit => pit.id === packProduct.product.productItemId)
+          packProduct.product.name = product.fullName
+
+          cart.totalItems += packProduct.quantity
+
+          const price = await productService.getPrice(product, productItem, SaleType.Internet)
+          packProduct.product.price = 0
+          packProduct.price = 0
+          if (price.getFinalPrice) {
+            packProduct.product.price = price.getFinalPrice().amount
+            packProduct.price = price.getFinalPrice().amount
+            packProduct.oldPrice = packProduct.price
+            packProduct.discount = 0
+          }
+          packProduct.color = productService.getColor(product, productItem)
+          packProduct.size = productService.getSize(product, productItem)
+          packProduct.image = ProductService.getProductImage(product, productItem).image
+
+          total += packProduct.price
+          saleContext.items.push({
+                uid: "" + productItem.id,
+                quantity: 1,
+                price: packProduct.price,
+                productId: product.id,
+                type: "PRODUCT",
+                product: product
+              }
+          );
+        }
+
+        const oldPrice = total
+        const discounts = await cartService.analyze(saleContext, cartItem.packId, domainId)
+        cartItem.discounts = discounts
+        if (discounts.length > 0 && discounts[0].appliesTo) {
+          total += discounts[0].price
+
+          for (const appliesTo of discounts[0].appliesTo) {
+
+            for (var packProduct of cartItem.packContents) {
+              if (packProduct.product.productItemId + "" === appliesTo.uid) {
+                packProduct.discount = discounts[0].price
+
+              }
+            }
+
+          }
+        }
+
+        cartItem.price = total
+        cartItem.oldPrice = oldPrice
+        cartItem.discount = oldPrice - total
       }
 
       cart.shipping = {
@@ -164,8 +240,9 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
       }
 
-      cart.netTotal =  total / 1.19
-      cart.iva =  total - cart.netTotal
+      total = cart.items.reduce((sum, it) => sum + it.price, 0)
+      cart.netTotal = total  / 1.19
+      cart.iva = total - cart.netTotal
       cart.total = total
       cart.financing = {
         installments: 12,
@@ -176,7 +253,7 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
     }
 
     res.json(cart)
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 })

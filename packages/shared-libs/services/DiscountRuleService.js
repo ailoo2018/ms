@@ -11,6 +11,30 @@ class DiscountRuleService {
 		this.db = db;
 	}
 
+	async findDiscount(id, domainId){
+		const connection = await this.db.getConnection();
+		const now = new Date();
+		try {
+			const [rows] = await connection.execute(`select * from Discount where Id = ? and DomainId = ? order by Id desc`, [id, domainId]);
+
+			if (rows == null || rows.length == 0)
+				return null;
+
+			var row = rows[0]
+
+			var config = row.Config && row.Config.length > 0 ? JSON.parse(row.Config) : null
+			if(config == null )
+				return null
+
+			config.id = row.Id
+			config.name = row.Name
+			config.validFrom = row.ValidFrom
+			config.vallidThru = row.ValidThru
+			return config;
+		} finally {
+			await connection.release();
+		}
+	}
 
 	async getActiveDiscounts(domainId) {
 		const connection = await this.db.getConnection();
