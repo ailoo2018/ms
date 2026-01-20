@@ -43,12 +43,9 @@ async function buildQueryByCollectionId(collectionId, domainId) {
           domainId: domainId,
         },
       },
-      {
-        range: {
-          quantityInStock: {gt: 0}
-        }
-      }
+
   )
+  /*{    range: {      quantityInStock: {gt: 0}    }  }*/
 
   if (c.brands && c.brands.length > 0) {
     must.push({
@@ -138,12 +135,18 @@ async function buildQueryByCollectionId(collectionId, domainId) {
     const orderBy = c.orderBy[0]
 
     const ob = {}
-    ob[orderBy.field] = {
+
+    let field = orderBy.field
+    if(field.startsWith("name"))
+      field = "fullName.keyword"
+    if(orderBy.field.includes(":asc")){
+      orderBy.isAscending = true
+    }
+
+    ob[field] = {
       "order": orderBy.isAscending ? "asc": "desc",
     }
-    sort.push({
-      "unitsSold": {"order": "desc"}
-    })
+    sort = ob
 
   }else if(c.sort && c.sort.length > 0) {
     if (c.sort === "bestsellers") {
@@ -156,7 +159,7 @@ async function buildQueryByCollectionId(collectionId, domainId) {
   }
 
 
-  return {query, limit: 10, sort, collection: c};
+  return {query, limit:  10, sort, collection: c};
 }
 
 module.exports = {buildQueryByCollectionId}

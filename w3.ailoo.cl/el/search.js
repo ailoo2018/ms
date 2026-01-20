@@ -503,6 +503,8 @@ async function search(criteria, domainId) {
   let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
   if (criteria.collectionId && criteria.collectionId !== "") {
     ({query: query, limit: limit, sort: sort} = await buildQueryByCollectionId(criteria.collectionId, domainId));
+    if(criteria.limit > 0)
+      limit = criteria.limit
   } else {
     query = buildQueryByCriteria(criteria, domainId);
     limit = criteria.limit ? parseInt(criteria.limit) : 60;

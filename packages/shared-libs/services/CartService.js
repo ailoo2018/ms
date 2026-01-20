@@ -285,6 +285,8 @@ class CartService {
 
   async analyze(saleContext, discountRuleId, domainId){
     const discountRule = await this.discountRuleService.findDiscount(discountRuleId, domainId)
+    if(!discountRule)
+      return []
     return await this.getDiscounts(saleContext, discountRule, domainId)
   }
 

@@ -30,7 +30,10 @@ function getProductItemDescription(product, pit) {
 }
 
 function getProductImage(product, pit) {
-  let img = product.image
+  let img = null
+
+  if(product.images.length > 0)
+    img = product.images[0];
   if (pit.colorId > 0) {
     img = product.images.find(img => img.colorId === pit.colorId)
 

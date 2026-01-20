@@ -5,7 +5,7 @@ const {CartItemType} = require("../models/cart-models");
 const CartRepos = require("../el/cart");
 const {findProductByProductItem} = require("../el/products");
 const ProductService = require('../services/product-helper');
-const {SaleType} = require("../models/domain");
+const {SaleType, ProductType} = require("../models/domain");
 const container = require("../container");
 const {getProductImage} = require("../services/product-helper");
 
@@ -20,7 +20,7 @@ app.get("/:domainId/cart/remove-item", async (req, res, next) => {
     const {wuid, itemId, type} = req.query
     const id = parseInt(itemId)
     const cart = await CartRepos.findCartByWuid(wuid)
-    cart.items = cart.items.filter(item => item.id !== id && item.type !== type)
+    cart.items = cart.items.filter(ite => ite).filter(item => item.id !== id && item.type !== type)
 
     await CartRepos.updateCart(cart)
 
@@ -43,27 +43,77 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
     let cartItem
     if (rq.type === CartItemType.Product) {
-      const product = await productService.findProductByProductItem(rq.productItemId, domainId)
+
+      let product = await productService.findProductByProductItem(rq.productItemId, domainId)
+
       if (!product) {
         return res.status(404).json({error: 'Product not found'});
       }
 
       const productItem = product.productItems.find(pit => pit.id = rq.productItemId)
       const prodImage = ProductService.getProductImage(product, productItem)
-      cartItem = {
-        id: productItem.id,
-        packId: 0,
-        name: ProductService.getProductItemDescription(product, productItem),
-        product: {
-          productItemId: productItem.id,
-          image: prodImage ? prodImage.image : null,
+
+      if (product.productType === ProductType.Simple) {
+
+
+        cartItem = {
+          id: productItem.id,
+          packId: 0,
           name: ProductService.getProductItemDescription(product, productItem),
-        },
-        quantity: rq.quantity,
-        type: CartItemType.Product,
+          product: {
+            productItemId: productItem.id,
+            image: prodImage ? prodImage.image : null,
+            name: ProductService.getProductItemDescription(product, productItem),
+            type: product.productType,
+          },
+          quantity: rq.quantity,
+          type: CartItemType.Product,
+        }
+      } else {
+
+        cartItem = {
+          id: productItem.id,
+          packId: 0,
+          name: ProductService.getProductItemDescription(product, productItem),
+          product: {
+            productItemId: productItem.id,
+            image: prodImage ? prodImage.image : null,
+            name: ProductService.getProductItemDescription(product, productItem),
+            type: product.productType,
+          },
+          quantity: rq.quantity,
+          type: CartItemType.Product,
+          packContents: []
+        }
+
+        for (var packItem of rq.packContents) {
+
+          var packProduct = await productService.findProductByProductItem(packItem.productItemId, domainId)
+          const packPit = packProduct.productItems.find(pit => pit.id = packItem.productItemId)
+          if (packPit == null) {
+            return res.status(404).json({error: 'ProductItem not found: ' + packItem.productItemId});
+          }
+
+          const packItemImage = ProductService.getProductImage(packProduct, packPit)
+
+          cartItem.packContents.push({
+            "packId": 0,
+            "product": {
+              "productItemId": packPit.id,
+              "image": packItemImage ? packItemImage.image : null,
+              "name": packProduct.name,
+              "id": packProduct.id,
+            },
+            "quantity": 1,
+            "name": packProduct.fullName,
+            "id": packPit.id,
+            "type": 0
+          })
+        }
       }
 
-    } else if (rq.type === CartItemType.Discount) {
+    }
+    else if (rq.type === CartItemType.Pack) {
       cartItem = {
         id: rq.packId,
         packId: rq.packId,
@@ -80,6 +130,8 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
           }
         })
       }
+    }else{
+      res.status(404).json({error: 'Cart Item type not found: ' + rq.type});
     }
 
     var cart = rq;
@@ -118,8 +170,6 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
-
 });
 
 
@@ -142,8 +192,10 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
     let total = 0
     for (const cartItem of cart.items) {
+        if(!cartItem)
+          continue
 
-      if (cartItem.type == CartItemType.Product) {
+      if (cartItem.type == CartItemType.Product && (!cartItem.packContents || cartItem.packContents.length == 0)) {
         const product = await findProductByProductItem(cartItem.id, domainId)
         const productItem = product.productItems.find(pit => pit.id === cartItem.id);
         const img = ProductService.getProductImage(product, productItem)
@@ -166,9 +218,9 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
         cartItem.discount = pits.productItems[0].discount
 
         total += cartItem.price
-      } else if (cartItem.type == CartItemType.Pack)
-      {
-        if(!cartItem.quantity)
+      }
+      else if (cartItem.packContents && cartItem.packContents.length > 0) {
+        if (!cartItem.quantity)
           cartItem.quantity = 1
 
         const pitIds = cartItem.packContents.map(pc => {
@@ -213,20 +265,22 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
         }
 
         const oldPrice = total
-        const discounts = await cartService.analyze(saleContext, cartItem.packId, domainId)
-        cartItem.discounts = discounts
-        if (discounts.length > 0 && discounts[0].appliesTo) {
-          total += discounts[0].price
+        if(cartItem.packId > 0) {
+          const discounts = await cartService.analyze(saleContext, cartItem.packId, domainId)
+          // cartItem.discounts = discounts
+          if (discounts.length > 0 && discounts[0].appliesTo) {
+            total += discounts[0].price
 
-          for (const appliesTo of discounts[0].appliesTo) {
+            for (const appliesTo of discounts[0].appliesTo) {
 
-            for (var packProduct of cartItem.packContents) {
-              if (packProduct.product.productItemId + "" === appliesTo.uid) {
-                packProduct.discount = discounts[0].price
+              for (var packProduct of cartItem.packContents) {
+                if (packProduct.product.productItemId + "" === appliesTo.uid) {
+                  packProduct.discount = discounts[0].price
 
+                }
               }
-            }
 
+            }
           }
         }
 
@@ -240,8 +294,8 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
       }
 
-      total = cart.items.reduce((sum, it) => sum + it.price, 0)
-      cart.netTotal = total  / 1.19
+      total = cart.items.filter(item => item).reduce((sum, it) => sum + it.price ?? 0, 0)
+      cart.netTotal = total / 1.19
       cart.iva = total - cart.netTotal
       cart.total = total
       cart.financing = {
@@ -251,6 +305,8 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
 
     }
+
+    cart.items = cart.items.filter(item => item)
 
     res.json(cart)
   } catch (err) {
