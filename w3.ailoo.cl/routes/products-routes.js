@@ -6,15 +6,15 @@ const {productStock} = require("../db/inventory");
 const {productDescription} = require("../db/product");
 // const productService = require("../services/product-helper");
 const {search} = require("../el/search");
-const {FormatUtils} = require("@ailoo/shared-libs/utils");
-const {getPrice} = require("@ailoo/shared-libs/price");
-const {SaleType} = require("../models/domain");
-const container = require("../container");
-const {getProductSalesRules, isApplicableSalesRule} = require("../services/product-helper");
-const {getElClient, getIndexName} = require("../connections/el");
 
+const {SaleType, ProductType} = require("../models/domain");
+
+const {getProductSalesRules, isApplicableSalesRule, findProduct} = require("../services/product-helper");
+const {getElClient, getIndexName} = require("../connections/el");
+const container = require("../container");
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
+
 
 
 app.get("/:domainId/products/:productId", async (req, res, next) => {
@@ -23,10 +23,7 @@ app.get("/:domainId/products/:productId", async (req, res, next) => {
 
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
-
-
-    const p = await productService.findProductWithInventory(productId, domainId)
-    p.description = await productDescription(productId);
+    const p = await findProduct(productId, domainId);
 
 
     res.json(p);

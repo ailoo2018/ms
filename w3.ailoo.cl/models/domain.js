@@ -48,6 +48,17 @@ const PriceComponentType =
 
     };
 
+const ProductType = Object.freeze({
+  Simple: 0,
+  Composite: 1
+})
+
+
+const ProductFeatureType = Object.freeze({
+  Size: 0,
+  Color: 1
+})
+
 
 class Money {
   constructor(amount, currency) {
@@ -132,4 +143,6 @@ module.exports = {
   OrderItemType,
   OrderState,
   PaymentMethodType,
+  ProductType,
+  ProductFeatureType,
 }

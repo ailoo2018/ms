@@ -50,3 +50,4 @@ app.listen(app.get("port"), () => {
   console.log(`Env: ${process.env.NODE_ENV}`);
   console.log(`Env: ${process.env.ELASTICSEARCH}`);
 });
+module.exports = app;

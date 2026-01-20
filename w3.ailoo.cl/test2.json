@@ -1,0 +1,170 @@
+{
+  "discounts": [],
+  "videos": [],
+  "motorbikeVersion": [],
+  "id": 3212224,
+  "directCategories": [
+    42755
+  ],
+  "directCategoryisAvailableForInternet": true,
+  "name": "Fluid Haul - Azul/Blanco",
+  "brand": {
+    "linkName": "Alpinestars",
+    "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
+    "id": 130,
+    "name": "Alpinestars",
+    "showNameInWeb": true,
+    "featured": true,
+    "isAvailableForInternet": true
+  },
+  "tags": [
+    {
+      "categoryId": 746,
+      "categoryName": "Estilo Piloto",
+      "categoryOrderWeight": 0,
+      "id": 13672,
+      "name": "Motocross / Enduro",
+      "type": "attribute",
+      "useInFilter": true,
+      "filter": "13672|Motocross / Enduro|True|attribute|0|Estilo Piloto"
+    }
+  ],
+  "maxPrice": 159800,
+  "minPrice": 159800,
+  "unitsSold": 0,
+  "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
+  "rating": 0,
+  "availableInStore": false,
+  "hasDiscount": false,
+  "isNew": false,
+  "isReserved": false,
+  "model": {
+    "id": 10489,
+    "name": "Fluid"
+  },
+  "fullName": "Alpinestars Fluid Haul - Azul/Blanco",
+  "linkName": "3212224-conjuntos-alpinestars-fluid-haul---azul-blanco",
+  "createDate": "2025-03-07T10:16:30",
+  "domainId": 1,
+  "tireSpecs": [],
+  "motorcycles": [],
+  "isAvailableForInternet": true,
+  "universalQuantity": 1,
+  "discountAmount": 0,
+  "priceComponents": [
+    {
+      "isCalculated": false,
+      "id": 9933246,
+      "brandId": 0,
+      "categoryId": 0,
+      "country": "CL",
+      "fromQuantity": 0,
+      "thruQuantity": 0,
+      "tagId": 0,
+      "typeId": 0,
+      "saleTypeId": 0,
+      "productId": 3212224,
+      "productItemId": 0,
+      "amount": 159800,
+      "percent": 0,
+      "currency": "CLP",
+      "packId": 0,
+      "type": 0,
+      "price": {
+        "amount": 159800,
+        "unit": "CLP"
+      },
+      "isDiscount": false,
+      "ruleId": 0,
+      "isBasePrice": true
+    }
+  ],
+  "salesTaxes": [
+    {
+      "id": 7495341,
+      "name": "I.V.A. 19%",
+      "percentage": 19,
+      "code": 14
+    }
+  ],
+  "mercadoLibre": {},
+  "orderWeight": 0,
+  "googleProductCategory": 0,
+  "inventoryControl": 0,
+  "isTaxExempt": false,
+  "requiresLot": false,
+  "discountPercent": 0,
+  "preOrder": false,
+  "code": "",
+  "quantityInStock": 0,
+  "features": [
+    {
+      "id": 8,
+      "name": "Tamaño Unico",
+      "orderWeight": 0,
+      "type": 0
+    }
+  ],
+  "productItems": [
+    {
+      "codes": "",
+      "id": 3717453,
+      "barcode1": "",
+      "barcode2": "",
+      "colorId": 0,
+      "sizeId": 8,
+      "sword": " Conjuntos Ropa MX Motocicleta Alpinestars Fluid Haul Azul/Blanco Tamaño Unico Sin Tamaño",
+      "description": " Conjuntos Ropa MX Motocicleta Alpinestars Fluid Haul Azul/Blanco Tamaño Unico Sin Tamaño",
+      "productId": 3212224
+    }
+  ],
+  "availableSizes": [],
+  "images": [
+    {
+      "id": 1926803,
+      "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
+      "orderWeight": 0,
+      "colorId": 0,
+      "colorTagsIds": []
+    },
+    {
+      "id": 1926804,
+      "image": "52e341631e91491799095581818e8db0.jpg",
+      "orderWeight": 1,
+      "colorId": 0,
+      "colorTagsIds": []
+    }
+  ],
+  "parentCategories": [
+    {
+      "id": 42755,
+      "name": "Conjuntos",
+      "isDirectCategory": true
+    }
+  ],
+  "categories": [
+    {
+      "id": 42755,
+      "name": "Conjuntos",
+      "isDirectCategory": true
+    },
+    {
+      "id": 67,
+      "name": "Ropa MX",
+      "isDirectCategory": false
+    },
+    {
+      "id": 82141,
+      "name": "Motocicleta",
+      "isDirectCategory": false
+    }
+  ],
+  "summary": "",
+  "hasColor": false,
+  "hasSize": true,
+  "isSimpleProduct": true,
+  "requiresFeaturedSelect": true,
+  "productType": 1,
+  "motoOrderWeight": 0,
+  "description": "<div><font face=\"Verdana\" size=\"2\"><b>Alpinestars Fluid Haul</b></font></div><div><font face=\"Verdana\" size=\"2\"><br></font></div><font face=\"Verdana\" size=\"2\">Conjunto Jersey + Pantalón&nbsp;</font>"
+}
