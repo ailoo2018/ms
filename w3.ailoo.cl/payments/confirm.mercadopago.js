@@ -43,6 +43,7 @@ async function confirmMercadoPagoPayment(paymentId, domainId) {
   return {
     success: true,
     message: "Pago aprobado",
+    amount: paymentData.transaction_amount,
     orderId: paymentData.external_reference,
     authcode: paymentId,
     gatewayResponse: paymentData,

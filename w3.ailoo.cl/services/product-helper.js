@@ -5,6 +5,7 @@ const categoryTreeService = require("../services/categoryTreeService");
 const {ProductType, ProductFeatureType} = require("../models/domain");
 const baseUrl = process.env.PRODUCTS_MS_URL
 const container = require("../container");
+const domain = require("node:domain");
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -34,7 +35,7 @@ function getProductImage(product, pit) {
 
   if(product.images.length > 0)
     img = product.images[0];
-  if (pit.colorId > 0) {
+  if (pit && pit.colorId > 0) {
     img = product.images.find(img => img.colorId === pit.colorId)
 
   }
@@ -42,8 +43,7 @@ function getProductImage(product, pit) {
 }
 
 
-const getPriceByProductItem = async (productItemsIds, saleTypeId, domainId) => {
-
+const getPriceByProductItems = async (productItemsIds, saleTypeId, domainId) => {
 
   if (!baseUrl) {
     throw new Error('No baseUrl provided')
@@ -65,6 +65,14 @@ const getPriceByProductItem = async (productItemsIds, saleTypeId, domainId) => {
 
   return await ret.json()
 }
+
+const getPriceByProductItem = async (productItemId, saleTypeId, domainId) => {
+  const res = await getPriceByProductItems([productItemId], saleTypeId, domainId)
+  if(res && res.productItems && res.productItems.length > 0)
+    return res.productItems[0]
+  return null
+}
+
 
 async function isApplicableSalesRule(rule, prodSm, domainId) {
   if (prodSm == null)
@@ -160,6 +168,7 @@ async function findProduct(productId, domainId) {
 module.exports = {
   getProductItemDescription,
   getProductImage,
+  getPriceByProductItems,
   getPriceByProductItem,
   getSalesRules,
   getProductSalesRules,

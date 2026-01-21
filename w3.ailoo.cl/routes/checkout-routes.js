@@ -1,4 +1,4 @@
-const contactsClient = require( "../services/contactsClient.js");
+const contactsClient = require("../services/contactsClient.js");
 
 const {
   contactMechanism,
@@ -9,18 +9,19 @@ const {
   orderJournal
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
-const { OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../models/domain");
-const { getPriceByProductItem } = require("../services/product-helper");
-const { and, eq } = require("drizzle-orm");
+const {OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../models/domain");
+const {getPriceByProductItems} = require("../services/product-helper");
+const {and, eq, sql } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
-const { app } = require("../server");
-const { db: drizzleDb, db} = require("../db/drizzle");
+const {app} = require("../server");
+const {db: drizzleDb, db} = require("../db/drizzle");
 const productRepos = require("../el/products");
 const ordersService = require("../services/ordersService");
 const adminClient = require("../services/adminClient");
 const {errors} = require("@elastic/elasticsearch");
 const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
+const {CartItemType} = require("../models/cart-models");
 const retShippingMethods = {
   "destination": {
     "comuna": {
@@ -106,11 +107,15 @@ async function getPartyPartial(email, domainId) {
 }
 
 async function getProductItemsMap(items, domainId) {
-  const pits = await getPriceByProductItem(items.map(i=> i.id), SaleType.Internet, domainId)
+  const pits = await getPriceByProductItems(items
+          .filter(f => f.type === CartItemType.Product)
+          .map(i => i.product.productItemId)
+      , SaleType.Internet
+      , domainId)
 
   var map = new Map();
   pits.productItems.forEach(pit => {
-    if(!map.has(pit.productItemId)){
+    if (!map.has(pit.productItemId)) {
       map.set(pit.productItemId, pit);
     }
   })
@@ -121,12 +126,11 @@ async function getProductItemsMap(items, domainId) {
 
 app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
-  try{
-    const rq =  req.body
+  try {
+    const rq = req.body
     const domainId = parseInt(req.params.domainId);
 
     const result = await drizzleDb.transaction(async (tx) => {
-
 
       let user = null
       let userParty = null
@@ -168,9 +172,8 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
         await contactsClient.index(person.id, domainId);
       }
 
-
-        await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
-            person.email, domainId);
+      await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
+          person.email, domainId);
 
 
       const [cmResult] = await tx.insert(contactMechanism).values({});
@@ -206,7 +209,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
       const newOrderId = orderResult.insertId;
 
 
-      const itemsToInsert = []
+      //   const itemsToInsert = []
 
       const pitMap = await getProductItemsMap(rq.items, domainId)
 
@@ -214,42 +217,57 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
       for (var item of rq.items) {
 
         // cart item type product
-        if (item.type === 0) {
+        if (item.type === CartItemType.Product) {
 
-          const pitSm = (pitMap).get(item.id)
-          if(pitSm == null) {
-            throw new Error(`Product not found: ${item.id}`)
+          const pitSm = (pitMap).get(item.product.productItemId)
+          if (pitSm == null) {
+            throw new Error(`Product not found: ${item.product.productItemId}`)
           }
 
-          if(item.price !== pitSm.price){
-            throw new Error(`El precios de la variante ${item.id} se modifico: ${item.price} vs ${pitSm.price}`)
+          if (item.price !== pitSm.price) {
+            throw new Error(`El precios de la variante ${item.product.productItemId} se modifico: ${item.price} vs ${pitSm.price}`)
           }
 
           let itemToInsert = {
             orderId: newOrderId,
             productId: pitSm.productId,            // Based on your mapping 'id' is the ProductId
-            productItemId: item.id,
+            productItemId: item.product.productItemId,
             quantity: item.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
             unitPrice: item.price,
             unitCurrency: "CLP",           // Default as per your table schema
             type: OrderItemType.Product,
           }
 
-          itemsToInsert.push(itemToInsert);
+          const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
+          const orderItemId = orderItemResult.insertId;
+          if (item.packContents && item.packContents.length > 0) {
+            for (var packItem of item.packContents) {
+              const packItemDb = {
+                orderId: newOrderId,
+                productId: packItem.product.id,            // Based on your mapping 'id' is the ProductId
+                productItemId: item.product.productItemId,
+                quantity: packItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
+                unitPrice: 0,
+                unitCurrency: "CLP",           // Default as per your table schema
+                type: OrderItemType.Product,
+                orderItemId: orderItemId,
+              }
+              await tx.insert(saleOrderItem).values(packItemDb);
+            }
+          }
+
+//          itemsToInsert.push(itemToInsert);
           orderTotal += item.quantity * item.price
         }
 
       }
 
 
-      await tx.insert(saleOrderItem).values(itemsToInsert);
+      //     await tx.insert(saleOrderItem).values(itemsToInsert);
 
-      return {id: orderResult.insertId, total: orderTotal,  orderId: orderResult.insertId, addressId: sharedId};
+      return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: sharedId};
 
     })
-
-
-    // save order to db
 
     res.json({id: result.orderId, total: result.total, addressId: result.addressId})
   } catch (err) {
@@ -347,77 +365,77 @@ app.get("/:domainId/checkout/click-collect", async (req, res, next) => {
 
 app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 
-  try{
+  try {
     const domainId = parseInt(req.params.domainId);
     const rq = req.body
     let authcode
     let orderTotal = 0
-
-
-
     let confirmRs
     let gatewayResponse = null;
-    if(rq.paymentMethodType === PaymentMethodType.MercadoPago){
+    let orderId = 0
+    let amount = 0
+
+    if (rq.paymentMethodType === PaymentMethodType.MercadoPago) {
       confirmRs = await confirmMercadoPagoPayment(rq.paymentId, domainId)
 
-    }else if(rq.paymentMethodType === PaymentMethodType.Webpay){
+    } else if (rq.paymentMethodType === PaymentMethodType.Webpay) {
       confirmRs = await confirmWebPay(rq.token, domainId)
 
-    }else{
-      return res.status(500).json({ success: false, error: "Tipo de pago no soportado: " + rq.paymentMethodType})
+    } else {
+      return res.status(500).json({success: false, error: "Tipo de pago no soportado: " + rq.paymentMethodType})
     }
 
-    if(!confirmRs || !confirmRs.success)
-      return res.status(500).json({ success: false, error:  confirmRs.message });
+    if (!confirmRs || !confirmRs.success)
+      return res.status(500).json({success: false, error: confirmRs.message});
     else {
       authcode = confirmRs.authcode
       orderTotal = confirmRs.orderTotal
       gatewayResponse = confirmRs.gatewayResponse
+      orderId = confirmRs.orderId
+      amount = confirmRs.amount
     }
-
-
-
 
     await drizzleDb.transaction(async (tx) => {
       await tx
           .update(saleOrder)
           .set({
             authCode: authcode, // Ensure property name matches your req
+            state: OrderState.Pagado, // Ensure property name matches your req
           })
           .where(
               and(
-                  eq(saleOrder.id, rq.orderId),
+                  eq(saleOrder.id, orderId),
                   eq(saleOrder.domainId, domainId)
               )
           );
 
-/*      await tx.insert(orderJournal).values({
-        orderId: rq.orderId,
-        description: `Order paid successfully. AuthCode: ${rq.data.authCode}`,
+      await tx.insert(orderJournal).values({
+        orderId: orderId,
+        description: `Order paid successfully. AuthCode: ${authcode}`,
         state: OrderState.Pagado,
         creationDate: new Date(),
-        userId: null,
-      });*/
+        userId: sql`NULL`,
+      });
     })
 
-    try{
-      await adminClient.paymentValidated(rq.orderId, authcode, domainId )
-    }catch(e){
-      logger.error("Unable to notify payment  validated to admin: " + e.message)
+    try {
+      await adminClient.paymentValidated(rq.orderId, authcode, domainId)
+    } catch (e) {
+      logger.error("Unable to notify payment validated to admin: " + e.message)
     }
 
 
     res.json({
       success: true,
       orderId: rq.orderId,
-      orderTotal: orderTotal,
+      orderTotal: amount,
       paymentDate: new Date(),
       newState: OrderState.Pagado,
       authorization: authcode,
-      gatewayResponse ,
+      gatewayResponse,
     });
 
-  }catch(e){
+  } catch (e) {
     res.json({
       success: false,
       error: e.message,

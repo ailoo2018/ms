@@ -68,6 +68,7 @@ async function confirmWebPay(token, domainId) {
   return {
     success: true,
     message: "Pago aprobado",
+    amount: response.amount,
     orderId: order.id,
     authcode: response.authorization_code,
     gatewayResponse: response,

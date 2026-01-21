@@ -8,7 +8,7 @@ const ProductService = require('../services/product-helper');
 const {SaleType, ProductType} = require("../models/domain");
 const container = require("../container");
 const {getProductImage} = require("../services/product-helper");
-
+const {v4: uuidv4} = require('uuid');
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -17,14 +17,16 @@ const cartService = container.resolve('cartService');
 app.get("/:domainId/cart/remove-item", async (req, res, next) => {
 
   try {
+    const domainId = parseInt(req.params.domainId);
     const {wuid, itemId, type} = req.query
-    const id = parseInt(itemId)
+
     const cart = await CartRepos.findCartByWuid(wuid)
-    cart.items = cart.items.filter(ite => ite).filter(item => item.id !== id && item.type !== type)
+    cart.items = cart.items.filter(ite => ite).filter(item => item.id !== itemId   && item.type !== type)
 
     await CartRepos.updateCart(cart)
 
-    res.json(cart)
+    const newCart = await findCart(wuid, domainId);
+    res.json(newCart)
 
 
   } catch (err) {
@@ -57,7 +59,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
 
         cartItem = {
-          id: productItem.id,
+          id: uuidv4(),
           packId: 0,
           name: ProductService.getProductItemDescription(product, productItem),
           product: {
@@ -72,7 +74,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
       } else {
 
         cartItem = {
-          id: productItem.id,
+          id: uuidv4(),
           packId: 0,
           name: ProductService.getProductItemDescription(product, productItem),
           product: {
@@ -112,10 +114,9 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
         }
       }
 
-    }
-    else if (rq.type === CartItemType.Pack) {
+    } else if (rq.type === CartItemType.Pack) {
       cartItem = {
-        id: rq.packId,
+        id: uuidv4(),
         packId: rq.packId,
         type: CartItemType.Pack,
         name: rq.name,
@@ -130,7 +131,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
           }
         })
       }
-    }else{
+    } else {
       res.status(404).json({error: 'Cart Item type not found: ' + rq.type});
     }
 
@@ -173,140 +174,154 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 });
 
 
-app.get("/:domainId/cart/:wuid", async (req, res, next) => {
-  try {
-    const domainId = parseInt(req.params.domainId);
+async function findCart(wuid, domainId) {
+  const cart = await CartRepos.findCartByWuid(wuid)
 
-    const cart = await CartRepos.findCartByWuid(req.params.wuid)
-    if (!cart) {
-      return res.status(404).json({
-        message: "Cart not found",
-        error: 'cart not found',
-      });
-    }
-
-    cart.oldPrice = 0
-    cart.shipping = {cost: 0}
-    cart.financing = {installments: 1}
-    cart.totalItems = 0
-
-    let total = 0
-    for (const cartItem of cart.items) {
-        if(!cartItem)
-          continue
-
-      if (cartItem.type == CartItemType.Product && (!cartItem.packContents || cartItem.packContents.length == 0)) {
-        const product = await findProductByProductItem(cartItem.id, domainId)
-        const productItem = product.productItems.find(pit => pit.id === cartItem.id);
-        const img = ProductService.getProductImage(product, productItem)
-        if (img)
-          cartItem.image = img.image
-
-        cart.totalItems += cartItem.quantity
-
-        const color = product.features.find(f => f.id === productItem.colorId)
-        cartItem.color = color ? color : null
-
-        const size = product.features.find(f => f.id === productItem.sizeId)
-        cartItem.size = size ? size : null
-        cartItem.description = product.name
-
-        const pits = await ProductService.getPriceByProductItem([productItem.id], SaleType.Internet, domainId)
-
-        cartItem.price = pits.productItems[0].price
-        cartItem.oldPrice = pits.productItems[0].basePrice
-        cartItem.discount = pits.productItems[0].discount
-
-        total += cartItem.price
-      }
-      else if (cartItem.packContents && cartItem.packContents.length > 0) {
-        if (!cartItem.quantity)
-          cartItem.quantity = 1
-
-        const pitIds = cartItem.packContents.map(pc => {
-          return pc.product.productItemId
-        })
-        const products = await productService.findProductsByProductItems(pitIds, domainId)
+  if (!cart) {
+    return null
+  }
 
 
-        const saleContext = {saleTypeId: SaleType.Internet, items: []};
+  cart.oldPrice = 0
+  cart.shipping = {cost: 0}
+  cart.financing = {installments: 1}
+  cart.totalItems = 0
 
-        let total = 0
-        for (var packProduct of cartItem.packContents) {
-          const product = products.find(p => p.productItems.some(pit => pit.id === packProduct.product.productItemId))
-          const productItem = product.productItems.find(pit => pit.id === packProduct.product.productItemId)
-          packProduct.product.name = product.fullName
+  let total = 0
+  for (const cartItem of cart.items) {
+    if (!cartItem)
+      continue
 
-          cart.totalItems += packProduct.quantity
+    if (cartItem.type == CartItemType.Product && (!cartItem.packContents || cartItem.packContents.length == 0)) {
+      const product = await findProductByProductItem(cartItem.product.productItemId, domainId)
+      const productItem = product.productItems.find(pit => pit.id === cartItem.product.productItemId);
+      const img = ProductService.getProductImage(product, productItem)
+      if (img)
+        cartItem.image = img.image
 
-          const price = await productService.getPrice(product, productItem, SaleType.Internet)
-          packProduct.product.price = 0
-          packProduct.price = 0
-          if (price.getFinalPrice) {
-            packProduct.product.price = price.getFinalPrice().amount
-            packProduct.price = price.getFinalPrice().amount
-            packProduct.oldPrice = packProduct.price
-            packProduct.discount = 0
-          }
-          packProduct.color = productService.getColor(product, productItem)
-          packProduct.size = productService.getSize(product, productItem)
-          packProduct.image = ProductService.getProductImage(product, productItem).image
+      cart.totalItems += cartItem.quantity
 
-          total += packProduct.price
-          saleContext.items.push({
-                uid: "" + productItem.id,
-                quantity: 1,
-                price: packProduct.price,
-                productId: product.id,
-                type: "PRODUCT",
-                product: product
-              }
-          );
+      const color = product.features.find(f => f.id === productItem.colorId)
+      cartItem.color = color ? color : null
+
+      const size = product.features.find(f => f.id === productItem.sizeId)
+      cartItem.size = size ? size : null
+      cartItem.description = product.name
+
+      const pit = await ProductService.getPriceByProductItem(productItem.id, SaleType.Internet, domainId)
+
+      cartItem.price = pit.price
+      cartItem.oldPrice = pit.basePrice
+      cartItem.discount = pit.discount
+
+      total += cartItem.price
+    } else if (cartItem.packContents && cartItem.packContents.length > 0) {
+      if (!cartItem.quantity)
+        cartItem.quantity = 1
+
+      const pitIds = cartItem.packContents.map(pc => {
+        return pc.product.productItemId
+      })
+      const products = await productService.findProductsByProductItems(pitIds, domainId)
+
+
+      const saleContext = {saleTypeId: SaleType.Internet, items: []};
+
+      let total = 0
+      for (var packProduct of cartItem.packContents) {
+        const product = products.find(p => p.productItems.some(pit => pit.id === packProduct.product.productItemId))
+        const productItem = product.productItems.find(pit => pit.id === packProduct.product.productItemId)
+        packProduct.product.name = product.fullName
+
+        cart.totalItems += packProduct.quantity
+
+        const price = await productService.getPrice(product, productItem, SaleType.Internet)
+        packProduct.product.price = 0
+        packProduct.price = 0
+        if (price.getFinalPrice) {
+          packProduct.product.price = price.getFinalPrice().amount
+          packProduct.price = price.getFinalPrice().amount
+          packProduct.oldPrice = packProduct.price
+          packProduct.discount = 0
         }
+        packProduct.color = productService.getColor(product, productItem)
+        packProduct.size = productService.getSize(product, productItem)
+        packProduct.image = ProductService.getProductImage(product, productItem).image
 
-        const oldPrice = total
-        if(cartItem.packId > 0) {
-          const discounts = await cartService.analyze(saleContext, cartItem.packId, domainId)
-          // cartItem.discounts = discounts
-          if (discounts.length > 0 && discounts[0].appliesTo) {
-            total += discounts[0].price
-
-            for (const appliesTo of discounts[0].appliesTo) {
-
-              for (var packProduct of cartItem.packContents) {
-                if (packProduct.product.productItemId + "" === appliesTo.uid) {
-                  packProduct.discount = discounts[0].price
-
-                }
-              }
-
+        total += packProduct.price
+        saleContext.items.push({
+              uid: "" + productItem.id,
+              quantity: 1,
+              price: packProduct.price,
+              productId: product.id,
+              type: "PRODUCT",
+              product: product
             }
+        );
+      }
+
+      const oldPrice = total
+      if(cartItem.type === CartItemType.Product){
+        const pit = await ProductService.getPriceByProductItem(cartItem.product.productItemId, SaleType.Internet, domainId)
+        cartItem.price = pit.price
+        cartItem.oldPrice = pit.basePrice
+        cartItem.discount = pit.discount
+
+      } else if (cartItem.packId > 0) {
+        const discounts = await cartService.analyze(saleContext, cartItem.packId, domainId)
+        // cartItem.discounts = discounts
+        if (discounts.length > 0 && discounts[0].appliesTo) {
+          total += discounts[0].price
+
+          for (const appliesTo of discounts[0].appliesTo) {
+
+            for (var packProduct of cartItem.packContents) {
+              if (packProduct.product.productItemId + "" === appliesTo.uid) {
+                packProduct.discount = discounts[0].price
+              }
+            }
+
           }
         }
-
         cartItem.price = total
         cartItem.oldPrice = oldPrice
         cartItem.discount = oldPrice - total
       }
 
-      cart.shipping = {
-        cost: 0,
+    }
 
-      }
-
-      total = cart.items.filter(item => item).reduce((sum, it) => sum + it.price ?? 0, 0)
-      cart.netTotal = total / 1.19
-      cart.iva = total - cart.netTotal
-      cart.total = total
-      cart.financing = {
-        installments: 12,
-        cuota: cart.total / 12
-      }
-
+    cart.shipping = {
+      cost: 0,
 
     }
 
-    cart.items = cart.items.filter(item => item)
+    total = cart.items.filter(item => item).reduce((sum, it) => sum + it.price ?? 0, 0)
+    cart.netTotal = total / 1.19
+    cart.iva = total - cart.netTotal
+    cart.total = total
+    cart.financing = {
+      installments: 12,
+      cuota: cart.total / 12
+    }
+
+
+  }
+
+  cart.items = cart.items.filter(item => item)
+  return cart;
+}
+
+app.get("/:domainId/cart/:wuid", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const wuid = req.params.wuid;
+    const cart = await findCart(wuid, domainId);
+    if(!cart) {
+      res.status(404).json({
+        message: "Cart not found",
+        error: 'cart not found',
+      });
+    }
 
     res.json(cart)
   } catch (err) {
