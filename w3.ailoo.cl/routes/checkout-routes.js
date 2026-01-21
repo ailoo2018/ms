@@ -245,7 +245,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
               const packItemDb = {
                 orderId: newOrderId,
                 productId: packItem.product.id,            // Based on your mapping 'id' is the ProductId
-                productItemId: item.product.productItemId,
+                productItemId: packItem.product.productItemId,
                 quantity: packItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
                 unitPrice: 0,
                 unitCurrency: "CLP",           // Default as per your table schema
@@ -427,7 +427,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 
     res.json({
       success: true,
-      orderId: rq.orderId,
+      orderId: orderId,
       orderTotal: amount,
       paymentDate: new Date(),
       newState: OrderState.Pagado,
