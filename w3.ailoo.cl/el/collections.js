@@ -137,8 +137,12 @@ async function buildQueryByCollectionId(collectionId, domainId) {
     const ob = {}
 
     let field = orderBy.field
+
     if(field.startsWith("name"))
       field = "fullName.keyword"
+    else if(field.startsWith("bestsellers"))
+      field = "unitsSold"
+
     if(orderBy.field.includes(":asc")){
       orderBy.isAscending = true
     }
