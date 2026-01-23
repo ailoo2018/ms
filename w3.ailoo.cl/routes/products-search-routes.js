@@ -24,6 +24,7 @@ app.get("/:domainId/products/collections/:collectionId", async (req, res, next) 
       brands: [],
       tags: [],
       limit: limit,
+      bike: null,
       offset: 0,
     }
 
@@ -49,6 +50,7 @@ app.get("/:domainId/products/search", async (req, res, next) => {
       collectionId: rq.collectionId ? rq.collectionId : null,
       categories: [],
       brands: [],
+      bike: rq.bike,
       tags: [],
       limit: limit ? limit : null,
       offset: offset ? offset : null,
@@ -111,6 +113,8 @@ app.post("/:domainId/products/search", async (req, res, next) => {
       criteria.models = rq.models;
     if (rq.colors)
       criteria.colors = rq.colors;
+    if (rq.bike)
+      criteria.bike = rq.bike;
 
 
     const sRs = await search(criteria, domainId)

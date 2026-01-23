@@ -12,6 +12,7 @@ require("./routes/cart-routes");
 require("./routes/geo-routes");
 require("./routes/checkout-routes");
 require("./routes/orders-routes");
+require("./routes/motorcycles-routes");
 require("./routes/products-routes");
 require("./routes/products-search-routes");
 

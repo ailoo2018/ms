@@ -218,7 +218,6 @@ function buildQueryByCriteria(criteria, domainId) {
 
   }
 
-
   if (criteria.categories && criteria.categories.length > 0) {
     query.bool.must.push({
       terms: {
@@ -253,6 +252,25 @@ function buildQueryByCriteria(criteria, domainId) {
         "id": criteria.products,
       }
     })
+  }
+
+  if (criteria.bike) {
+    query.bool.must.push({
+          nested: {
+            path: "motorcycles",
+            query: {
+              bool: {
+                must: [
+                  {terms: {"motorcycles.manufacturerId": [criteria.bike.manufacturer, 0]}},
+                  {terms: {"motorcycles.modelId": [criteria.bike.model, 0]}},
+                  {terms: {"motorcycles.from": [criteria.bike.year, 0]}},
+                ]
+              }
+            }
+          }
+        }
+    )
+
   }
 
   if (criteria.sizes && criteria.sizes.length > 0) {
@@ -503,7 +521,7 @@ async function search(criteria, domainId) {
   let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
   if (criteria.collectionId && criteria.collectionId !== "") {
     ({query: query, limit: limit, sort: sort} = await buildQueryByCollectionId(criteria.collectionId, domainId));
-    if(criteria.limit > 0)
+    if (criteria.limit > 0)
       limit = criteria.limit
   } else {
     query = buildQueryByCriteria(criteria, domainId);
