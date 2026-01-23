@@ -1,5 +1,6 @@
-	const logger = require("../utils/logger");
+const logger = require("../utils/logger");
 const {Mutex} = require('async-mutex');
+const treeUtils = require('../utils/tree-utils');
 
 const mutex = new Mutex();
 
@@ -133,7 +134,10 @@ class ProductCategoryService {
 		}
 	}
 
-
+	async leafs(parentsIds, domainId){
+		const tree = await this.getCategoryTree(domainId)
+		return treeUtils.getAllLeafsFromParents(tree, parentsIds)
+	}
 
 
 }

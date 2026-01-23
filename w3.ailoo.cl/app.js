@@ -4,6 +4,7 @@ const logger = require("@ailoo/shared-libs/logger")
 
 require("./routes/auth-routes");
 require("./routes/account-routes");
+require("./routes/categories-routes");
 require("./routes/wcc-routes");
 require("./routes/friendlyurl-routes");
 require("./routes/events-routes");

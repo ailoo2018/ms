@@ -1,18 +1,5 @@
 
 
-function getDepartment()
-{
-    var department = "motocicleta";
-    if (AilooGlobal.Instance.Context != null
-        && AilooGlobal.Instance.Context.WebSite != null
-        && bici.Any(w => w == AilooGlobal.Instance.Context.WebSite.Id))
-    {
-        department = "bicicleta";
-    }
-
-    return department;
-}
-
 function formatLink(str) {
     if (str == null)
         return '';
@@ -41,4 +28,14 @@ module.exports.getUrl=function(product){
         return "/motocicleta/" + formatLink(product.linkName);
     }
     return formatLink(product.linkName);
+}
+
+module.exports.getCategoryUrl = function (category) {
+    let prefix = "/";
+
+    if (category.linkName && category.linkName.length > 0) {
+        return prefix + formatLink(category.linkName);
+    }
+
+    return prefix + formatLink(category.name);
 }
