@@ -86,7 +86,7 @@ class CartService {
       // 5. Tags Check (Nested Any)
       if (productRuleDto.tags?.length > 0) {
         const hasTag = productRuleDto.tags.some(tag =>
-            product.TagsIds.some(prodTagId => prodTagId === tag.id)
+            product.tags && product.tags.some(ptag => ptag.id === tag.id)
         );
         if (!hasTag) return {applies: false, qty: 0};
       }
@@ -287,7 +287,8 @@ class CartService {
     const discountRule = await this.discountRuleService.findDiscount(discountRuleId, domainId)
     if(!discountRule)
       return []
-    return await this.getDiscounts(saleContext, discountRule, domainId)
+    const discounts = await this.getDiscounts(saleContext, discountRule, domainId)
+    return { discounts, rule: discountRule };
   }
 
 }

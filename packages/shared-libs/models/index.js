@@ -78,7 +78,7 @@ class Price {
           const roundedAmount = Math.round(basePrice.price.amount * (1 - discount.percent / 100));
           return new Money(roundedAmount, basePrice.price.currency);
         } else {
-          const finalAmount = basePrice.price.amount - discount.price.amount;
+          const finalAmount = basePrice.price.amount - Math.round(discount.price.amount);
           return new Money(finalAmount, basePrice.price.currency);
         }
       } else {

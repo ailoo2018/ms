@@ -22,6 +22,7 @@ const {errors} = require("@elastic/elasticsearch");
 const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
 const {CartItemType} = require("../models/cart-models");
+const {findCart} = require("../services/cartService");
 const retShippingMethods = {
   "destination": {
     "comuna": {
@@ -130,10 +131,10 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
     const rq = req.body
     const domainId = parseInt(req.params.domainId);
 
+
     const result = await drizzleDb.transaction(async (tx) => {
 
       let user = null
-      let userParty = null
       let person = null;
 
       if (rq.userId > 0) {
@@ -207,66 +208,60 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
       });
 
       const newOrderId = orderResult.insertId;
-
-
-      //   const itemsToInsert = []
-
       const pitMap = await getProductItemsMap(rq.items, domainId)
 
       let orderTotal = 0
-      for (var item of rq.items) {
 
-        // cart item type product
+      const cart = await findCart(rq.wuid, domainId)
+      for (var item of cart.items) {
+
+
         if (item.type === CartItemType.Product) {
 
-          const pitSm = (pitMap).get(item.product.productItemId)
-          if (pitSm == null) {
-            throw new Error(`Product not found: ${item.product.productItemId}`)
-          }
+          validateRequestPrice(item, rq)
 
-          if (item.price !== pitSm.price) {
-            throw new Error(`El precios de la variante ${item.product.productItemId} se modifico: ${item.price} vs ${pitSm.price}`)
-          }
-
-          let itemToInsert = {
-            orderId: newOrderId,
-            productId: pitSm.productId,            // Based on your mapping 'id' is the ProductId
-            productItemId: item.product.productItemId,
-            quantity: item.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
-            unitPrice: item.price,
-            unitCurrency: "CLP",           // Default as per your table schema
-            type: OrderItemType.Product,
-          }
-
+          let itemToInsert =createProductSaleOrderItem(newOrderId, item)
           const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
           const orderItemId = orderItemResult.insertId;
           if (item.packContents && item.packContents.length > 0) {
             for (var packItem of item.packContents) {
-              const packItemDb = {
-                orderId: newOrderId,
-                productId: packItem.product.id,            // Based on your mapping 'id' is the ProductId
-                productItemId: packItem.product.productItemId,
-                quantity: packItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
-                unitPrice: 0,
-                unitCurrency: "CLP",           // Default as per your table schema
-                type: OrderItemType.Product,
-                orderItemId: orderItemId,
-              }
+              const packItemDb =createProductSaleOrderItem(newOrderId, packItem, orderItemId)
               await tx.insert(saleOrderItem).values(packItemDb);
             }
           }
 
-//          itemsToInsert.push(itemToInsert);
           orderTotal += item.quantity * item.price
         }
+        else if(item.type === CartItemType.Pack){
 
+          // validate price
+          validateRequestPrice(item, rq)
+
+
+          for (var packItem of item.packContents) {
+            const packItemDb = createProductSaleOrderItem(newOrderId, packItem)
+            await tx.insert(saleOrderItem).values(packItemDb);
+
+            orderTotal += packItem.quantity * packItem.price
+          }
+
+          // add discount of pack a separate line
+          if(item.packDiscount) {
+            orderTotal += item.packDiscount.price
+            await tx.insert(saleOrderItem).values({
+              orderId: newOrderId,
+              quantity: 1,
+              unitPrice: item.packDiscount.price,
+              unitCurrency: "CLP",
+              type: OrderItemType.Discount,
+              comment: item.packDiscount.name,
+            });
+          }
+
+        }
       }
 
-
-      //     await tx.insert(saleOrderItem).values(itemsToInsert);
-
       return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: sharedId};
-
     })
 
     res.json({id: result.orderId, total: result.total, addressId: result.addressId})
@@ -274,6 +269,30 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
     next(err);
   }
 })
+
+function validateRequestPrice(item, rq){
+  const rqItem = rq.items.find(ri => ri.id === item.id)
+  if(!rqItem)
+    throw Error(`Producto no esperado en carro compra: ${item.name}`)
+
+  if(rqItem.price !== rqItem.price) {
+    throw Error(`Precio se modifico para item ${rqItem.name}`)
+  }
+}
+
+function createProductSaleOrderItem(orderId, cartItem, orderItemId){
+  return {
+    orderId: orderId,
+    productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId
+    productItemId: cartItem.product.productItemId,
+    quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
+    unitPrice: cartItem.price,
+    unitCurrency: "CLP",           // Default as per your table schema
+    type: OrderItemType.Product,
+    orderItemId: orderItemId ? orderItemId : null,
+  }
+}
+
 
 app.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
   try {

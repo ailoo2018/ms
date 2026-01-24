@@ -1,15 +1,11 @@
-const productRepos = require("../el/products");
-const {productStock} = require("../db/inventory");
 const {productDescription} = require("../db/product");
 const categoryTreeService = require("../services/categoryTreeService");
 const {ProductType, ProductFeatureType} = require("../models/domain");
 const baseUrl = process.env.PRODUCTS_MS_URL
 const container = require("../container");
-const domain = require("node:domain");
-
+require("node:domain");
 const productService = container.resolve('productsService');
-const cartService = container.resolve('cartService');
-
+container.resolve('cartService');
 function getProductItemDescription(product, pit) {
   let desc = product.name;
 
