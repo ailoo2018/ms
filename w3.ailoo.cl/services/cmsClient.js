@@ -15,7 +15,21 @@ const cmsClient = {
     if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
     return response.json();
   },
+  search: async (query, domainId) => {
+    const url = new URL(`${domainId}/blog/search`, CMS_BASE_URL);
 
+    const response = await fetch(url, {
+      method: "POST",// 5-second timeout
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' // Usually required for POST bodies
+      },
+      body: JSON.stringify(query),
+    });
+
+    if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
+    return response.json();
+  },
 
   searchEvents: async (criteria, domainId) => {
     const url = CMS_BASE_URL + `/${domainId}/events/search`;
@@ -59,7 +73,64 @@ const cmsClient = {
       console.error("Fatal Fetch Error:", err.message);
       throw err;
     }
+  },
+
+  getNuxtComponent(w) {
+    if (w.name === "Html_CarruselMotocard") {
+      return "Swiper"
+    }
+    if (w.name === "Html_ClickAndCollect") {
+      return "ScrollingText"
+    }
+    if (w.name === "Html_BikeSearchBlock") {
+      return "BikeSearch"
+    }
+    if (w.name === "Html_AddedValuesMotocard") {
+      return "AddedValues"
+    }
+    if (w.name === "Html_SingleBanner") {
+      return "SingleBanner"
+    }
+
+    if (w.name === "HomeCategoriesLifeStyle") {
+      return "HomeCategories"
+    }
+    if (w.name === "Html_ProductListMotocard") {
+      return "FeaturedProducts"
+    }
+
+    if (w.name === "Html_CategoriesMtcrd") {
+      return "HomeCategories"
+    }
+
+    if (w.name === "Html_BrandsBlock") {
+      return "BrandsBlock"
+    }
+
+    if (w.name === "Html_ProductListWithBanner") {
+      return "FeaturedProductsWithBanner"
+    }
+    if (w.name === "Html_Comunidad") {
+      return "Community"
+    }
+    if (w.name === "EventsWidget") {
+      return "LatestEvents"
+    }
+
+    if (w.name === "Seo") {
+      return "Seo"
+    }
+    if (w.name === "Html") {
+      return "HtmlWidget"
+    }
+    if (w.name === "YoutubeLatest") {
+      return "YoutubeLatest"
+    }
+
+
+    return "Dummy"
   }
+
 
 };
 

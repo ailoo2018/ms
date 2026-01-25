@@ -1,7 +1,8 @@
 const {app, validateJWT} = require("../server");
 const {listPartyPostalAddresses} = require("../db/partyDb");
 const { db: drizzleDb} = require("../db/drizzle");
-const { and, eq } = require("drizzle-orm");
+const { and, eq, asc } = require("drizzle-orm");
+const {saleOrder} = require("../db/schema.ts");
 
 /**
  * Parses a full name into first name, paternal, and maternal surnames.
@@ -57,6 +58,59 @@ const parseFullName = (fullName) => {
   };
 };
 
+const OrderStateDesc = {
+  "0": "Desconocido",
+  "1": "Ingresado",
+  "2": "Pagado",
+  "3": "Enviado",
+  "4": "Anulado",
+  "5": "Pendiente Pago",
+  "6": "Abierto",
+  "7": "Rechazado",
+  "8": "Listo Para Retiro",
+  "9": "Retirado",
+  "10": "Entregado",
+  "11": "Error Pago",
+  "12": "Listo para enviar",
+  "13": "Comentario",
+  "14": "Derivado a SAC",
+  "15": "En proceso",
+}
+
+app.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
+  try{
+    const user = req.user;
+    const domainId = parseInt(req.params.domainId);
+    const results = await drizzleDb.query.saleOrder.findMany({
+      limit: 10,
+      offset: 0,
+      where: and(
+          eq( saleOrder.orderedBy, user.id ),
+          eq( saleOrder.domainId, domainId )
+      )
+      ,
+      orderBy: (saleOrder, { asc }) => [asc(saleOrder.id)],
+      with: {
+        items: true, // This matches the 'items' key in your saleOrderRelations
+      },
+    });
+
+    res.json({
+      orders: results.map(r => {
+        return {
+          id: r.id,
+          date: r.date,
+          total: 0,
+          statusId: r.state,
+          status: OrderStateDesc["" + r.state] ? OrderStateDesc["" + r.state] : "Desconocido",
+
+        }
+      })
+    })
+  }catch(err){
+    next(err);
+  }
+});
 app.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
 
   try {
