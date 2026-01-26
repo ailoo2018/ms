@@ -136,6 +136,46 @@ const party = motomundiSchema.table("party", {
     idxPartyRut: index("IDX_PARTY_RUT").on(table.domainId, table.rut),
 }));
 
+const facility = motomundiSchema.table("facility", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", { length: 255 }),
+    code: varchar("Code", { length: 45 }),
+    type: int("Type"),
+    deleted: smallint("Deleted").default(0),
+    domainId: int("DomainId"),
+    isAvailableForInternet: smallint("IsAvailableForInternet").default(0),
+    isHeadquarters: smallint("IsHeadquarters").default(0),
+    allowPickup: smallint("AllowPickup").default(0),
+    phone: varchar("Phone", { length: 45 }),
+    configuration: text("Configuration"),
+    parentId: int("ParentId"),
+    facilityDeliveryTimeId: int("FacilityDeliveryTimeId"),
+    linkedFacilityId: int("LinkedFacilityId"),
+}, (table) => ({
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
+    deliveryTimeIdx: index("FK_FACILITY_DELTIME_idx").on(table.facilityDeliveryTimeId),
+
+    // Foreign Key Constraint
+    // Note: Reference 'facilityDeliveryTime' table if you have it mapped
+    deliveryTimeFk: foreignKey({
+        columns: [table.facilityDeliveryTimeId],
+        foreignColumns: [table.id], // Placeholder: Replace with facilityDeliveryTime.id
+        name: "FK_FACILITY_DELTIME"
+    }).onDelete("set null"),
+}));
+
+const facilityContactMechanism = motomundiSchema.table("facilitycontactmechanism", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    contactMechanismId: int("ContactMechanismId"),
+    facilityId: int("FacilityId"),
+}, (table) => ({
+    // Adding indexes for performance (standard for join tables)
+    facilityIdx: index("facility_id_idx").on(table.facilityId),
+    contactMechanismIdx: index("contact_mechanism_id_idx").on(table.contactMechanismId),
+}));
+
+
+
 // --- User Table ---
 const user = motomundiSchema.table("user", {
     id: int("Id").primaryKey().autoincrement().notNull(),
@@ -234,6 +274,23 @@ const orderJournal = motomundiSchema.table("orderjournal", {
     }),
 }));
 
+const facilityImage = motomundiSchema.table("facilityimage", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    image: varchar("Image", { length: 45 }),
+    url: varchar("Url", { length: 255 }),
+    facilityId: int("FacilityId"),
+});
+
+
+
+// --- RELATIONS ---
+const facilityImageRelations = relations(facilityImage, ({ one }) => ({
+    facility: one(facility, {
+        fields: [facilityImage.facilityId],
+        references: [facility.id],
+    }),
+}));
+
 // --- RELATIONS ---
 const orderJournalRelations = relations(orderJournal, ({ one }) => ({
     order: one(saleOrder, {
@@ -246,6 +303,50 @@ const orderJournalRelations = relations(orderJournal, ({ one }) => ({
     }),
 }));
 
+const contactMechanismRelations = relations(contactMechanism, ({ one }) => ({
+    postalAddress: one(postalAddress, {
+        fields: [contactMechanism.id],
+        references: [postalAddress.postalAddressId],
+    }),
+}));
+
+// --- RELATIONS ---
+const facilityContactMechanismRelations = relations(facilityContactMechanism, ({ one }) => ({
+    facility: one(facility, {
+        fields: [facilityContactMechanism.facilityId],
+        references: [facility.id],
+    }),
+    contactMechanism: one(contactMechanism, {
+        fields: [facilityContactMechanism.contactMechanismId],
+        references: [contactMechanism.id],
+    }),
+}));
+
+// --- RELATIONS ---
+const facilityRelations = relations(facility, ({ one, many }) => ({
+    // Self-referencing relation (Parent Facility)
+    parent: one(facility, {
+        fields: [facility.parentId],
+        references: [facility.id],
+        relationName: "sub_facilities",
+    }),
+    // Images
+    images: many(facilityImage),
+    // Sub-facilities
+    children: many(facility, {
+        relationName: "sub_facilities",
+    }),
+    contacts: many(facilityContactMechanism),
+    // Linked Facility relation
+    linkedFacility: one(facility, {
+        fields: [facility.linkedFacilityId],
+        references: [facility.id],
+    }),
+}));
+
+
+// --- EXPORTS ---
+
 // --- EXPORTS ---
 
 module.exports = {
@@ -253,6 +354,12 @@ module.exports = {
     saleOrder,
     saleOrderItem,
     postalAddress,
+    facility,
+    facilityImage,
+    facilityImageRelations,
+    facilityContactMechanism,
+    facilityContactMechanismRelations,
+    facilityRelations,
     user,
     party,
     contactMechanism,
@@ -262,5 +369,6 @@ module.exports = {
     postalAddressRelations,
     partyRelations,
     orderJournal,
-    orderJournalRelations
+    orderJournalRelations,
+    contactMechanismRelations
 };

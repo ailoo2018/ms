@@ -70,6 +70,7 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
     next(error);
   }
 });
+
 app.get("/:domainId/auth/google",   async (req, res, next) => {
 
   try{
