@@ -12,7 +12,6 @@ const {db: redisDb} = require("../connections/rdb");
 
 const container = createContainer();
 
-
 container.register({
   productsService: asClass(ProductsService).singleton(),
   productCategoryService: asClass(ProductCategoryService).singleton(),
