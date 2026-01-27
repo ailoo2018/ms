@@ -2,14 +2,27 @@ const {app} = require("../server");
 const authService = require("../services/authService");
 const jwt = require("jsonwebtoken");
 const {db: drizzleDb} = require("../db/drizzle");
-const { and, eq } = require("drizzle-orm");
-const crypto = require( 'crypto' );
+const {and, eq} = require("drizzle-orm");
+const crypto = require('crypto');
+
+function doHash(val) {
+  const key = 'optive15';
+
+  // Create the HMAC instance using md5 and the key
+  const hmac = crypto.createHmac('md5', key);
+
+  // Update with the input value (ASCII encoding as per your C# code)
+  hmac.update(val, 'ascii');
+
+  // Digest the hash as a hex string and convert to uppercase
+  return hmac.digest('hex').toUpperCase();
+}
 
 app.get("/:domainId/auth/test", async (req, res, next) => {
-  try{
+  try {
     const ret = await authService.authenticate("Juan", "jcfuentes@lava.cl", "071882aa-5d83-4b54-b26c-0d9651c0e959", 1);
     res.json(ret);
-  }catch(error){
+  } catch (error) {
     next(error)
   }
 })
@@ -19,7 +32,7 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
 
     // 1. Use req.body instead of req.query for sensitive data
-    const { username, password } = req.body;
+    const {username, password} = req.body;
 
     // 2. Query the user
     const dbUser = await drizzleDb.query.user.findFirst({
@@ -36,7 +49,8 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
     if (!dbUser) {
       return res.status(401).json({
         code: 'USER_NOT_FOUND',
-        error: "Invalid credentials" });
+        error: "Invalid credentials"
+      });
     }
 
     // 3. Password Verification (MD5 Logic)
@@ -46,12 +60,13 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
     if (hashedPassword !== dbUser.password) {
       return res.status(401).json({
         code: 'WRONG_PASSWORD',
-        error: "Invalid credentials" });
+        error: "Invalid credentials"
+      });
     }
 
     const party = dbUser.person
     // 4. Return user (excluding the password field)
-    const { password: _, ...userWithoutPassword } = dbUser;
+    const {password: _, ...userWithoutPassword} = dbUser;
 
     res.json({
       userId: dbUser.id,
@@ -71,14 +86,69 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
   }
 });
 
-app.get("/:domainId/auth/google",   async (req, res, next) => {
+app.post("/:domainId/auth/hash-login", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const {hash, pid, wuid} = req.body;
 
-  try{
+    if (hash !== doHash(pid)) {
+      return res.status(401).json({error: "Invalid credentials", message: "Invalid credentials"});
+    }
+
+    const partyDb = await drizzleDb.query.party.findFirst({
+      where: (party, {eq}) => eq(party.id, pid)
+    })
+
+    // 2. Query the user
+    let dbUser = await drizzleDb.query.user.findFirst({
+      where: (user) => and(
+          eq(user.personId, pid),      // Use eq() for exact match on email/username
+      ),
+    });
+
+    if (!dbUser) {
+      const [result] = await drizzleDb.insert(user).values({
+        username: party.email,
+        password: "mx000006",
+        domainId: domainId,
+      })
+
+
+      dbUser = await drizzleDb.query.user.findFirst({
+        where: (user) => and(
+            eq(user.id, result.insertId),      // Use eq() for exact match on email/username
+        ),
+      });
+    }
+
+
+    res.json({
+      userId: dbUser.id,
+      username: dbUser.username,
+      partyId: partyDb.id,
+      partyName: partyDb.name,
+      accessToken: createToken({
+        id: dbUser.id,
+        username: dbUser.username,
+        partyId: partyDb.id,
+
+      })
+    });
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+app.get("/:domainId/auth/google", async (req, res, next) => {
+
+  try {
     const domainId = parseInt(req.params.domainId)
-    const { authCode, wuid} = req.query
+    const {authCode, wuid} = req.query
 
     var googleplus_client_id = "573119085091-10gjskn72s3dsfmncmmhppe6p8o3u1qj.apps.googleusercontent.com"
-    var googleplus_client_secret =  "ihdCgOisRfjZa07cdSlen6Eb"
+    var googleplus_client_secret = "ihdCgOisRfjZa07cdSlen6Eb"
 
     // 1. Create the data object
     const params = new URLSearchParams({
@@ -104,7 +174,7 @@ app.get("/:domainId/auth/google",   async (req, res, next) => {
     const token = await tokenRs.json()
 
 
-    if(token.error){
+    if (token.error) {
       throw new Error(token.error)
     }
 
@@ -113,10 +183,10 @@ app.get("/:domainId/auth/google",   async (req, res, next) => {
 
     console.log('Google Response:', userInfo)
 
-    const {user, party } = await authService.authenticate(userInfo.name, userInfo.email, wuid, domainId)
+    const {user, party} = await authService.authenticate(userInfo.name, userInfo.email, wuid, domainId)
 
 
-    res.json( {
+    res.json({
       userId: user.id,
       username: user.username,
       partyId: party.id,
@@ -129,7 +199,7 @@ app.get("/:domainId/auth/google",   async (req, res, next) => {
       })
 
     })
-  }catch(e){
+  } catch (e) {
     next(e)
   }
 
@@ -138,9 +208,9 @@ app.get("/:domainId/auth/google",   async (req, res, next) => {
 function createToken(pl) {
   const secretKey = process.env.JWT_SECRET;
   const iat = Math.floor(Date.now() / 1000)
-  const exp =  Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30)
+  const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30)
   // Create the token
-  const token = jwt.sign({...pl, iat, exp }, secretKey);
+  const token = jwt.sign({...pl, iat, exp}, secretKey);
 
   return token;
 }

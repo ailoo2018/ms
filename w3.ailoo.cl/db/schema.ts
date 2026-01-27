@@ -10,7 +10,8 @@ const {
     double,
     decimal,
     index,
-    foreignKey
+    foreignKey,
+    unique
 } = require("drizzle-orm/mysql-core");
 const { relations } = require("drizzle-orm");
 
@@ -211,7 +212,50 @@ const contactMechanism = motomundiSchema.table("contactmechanism", {
     id: int("Id").primaryKey().autoincrement().notNull(),
 });
 
+const review = motomundiSchema.table("review", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    rating: int("Rating"),
+    title: varchar("Title", { length: 255 }),
+    name: varchar("Name", { length: 255 }),
+    location: varchar("Location", { length: 255 }),
+    sizing: int("Sizing"),
+    sizingComment: varchar("SizingComment", { length: 255 }),
+    pros: varchar("Pros", { length: 255 }),
+    cons: varchar("Cons", { length: 255 }),
+    comments: text("Comments"),
+    date: datetime("Date"),
+    userId: int("UserId"),
+    productId: int("ProductId"),
+    // State is unsigned in your SQL
+    state: int("State", { unsigned: true }).notNull().default(0),
+    // tinyint(1) usually maps to boolean mode in Drizzle
+    isEvaluation: tinyint("IsEvaluation", { mode: 'number' }).notNull().default(0),
+    isDeleted: tinyint("IsDeleted", { mode: 'number' }).notNull().default(0),
+    domainId: int("DomainId").default(0),
+    likes: smallint("Likes"),
+    dislikes: smallint("Dislikes"),
+    model: text("Model"),
+    videoUrl: varchar("VideoUrl", { length: 200 }),
+    productItemId: int("ProductItemId"),
+}, (table) => ({
+    userIdx: index("UserId").on(table.userId),
+    productIdx: index("ProductId").on(table.productId),
+
+
+    fkReviewUser: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [user.id],
+        name: "FK_REVIEW_USER"
+    }),
+}));
+
 // --- RELATIONS ---
+const reviewRelations = relations(review, ({ one }) => ({
+    user: one(user, {
+        fields: [review.userId],
+        references: [user.id],
+    }),
+}));
 
 const userRelations = relations(user, ({ one }) => ({
     person: one(party, {
@@ -239,8 +283,23 @@ const saleOrderItemRelations = relations(saleOrderItem, ({ one }) => ({
     }),
 }));
 
-const postalAddressRelations = relations(postalAddress, ({ many }) => ({
+const postalAddressRelations = relations(postalAddress, ({ one, many }) => ({
     orders: many(saleOrder),
+    // Link to the Commune boundary
+    comuna: one(geographicBoundary, {
+        fields: [postalAddress.comunaId],
+        references: [geographicBoundary.id],
+    }),
+    // Link to the City boundary
+    city: one(geographicBoundary, {
+        fields: [postalAddress.cityId],
+        references: [geographicBoundary.id],
+    }),
+    // Link to the Country boundary
+    country: one(geographicBoundary, {
+        fields: [postalAddress.countryId],
+        references: [geographicBoundary.id],
+    }),
 }));
 
 const partyRelations = relations(party, ({ many }) => ({
@@ -282,6 +341,48 @@ const facilityImage = motomundiSchema.table("facilityimage", {
 });
 
 
+
+const geographicBoundary = motomundiSchema.table("geographicboundary", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", { length: 45 }),
+    code: varchar("Code", { length: 10 }),
+    type: varchar("Type", { length: 20 }), // e.g., 'COUNTRY', 'REGION', 'COMMUNE'
+    geocoding: text("Geocoding"),
+    latitude: double("Latitude"),
+    longitude: double("Longitude"),
+});
+
+// --- Junction/Association Table ---
+const geographicBoundaryAssociation = motomundiSchema.table("geographicboundaryassociation", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    belongToId: int("BelongToId"), // The Parent (e.g., Region)
+    containsId: int("ContainsId"), // The Child (e.g., Commune)
+}, (table) => ({
+    // Mirroring the UNIQUE KEY from your SQL
+    uniqueAssociation: unique("IDX_GBA_UNIQUE").on(table.containsId, table.belongToId),
+}));
+
+// --- RELATIONS ---
+const geographicBoundaryRelations = relations(geographicBoundary, ({ many }) => ({
+    // Boundaries that this one is part of (Parents)
+    parentAssociations: many(geographicBoundaryAssociation, { relationName: "child_to_parents" }),
+    // Boundaries that are inside this one (Children)
+    childAssociations: many(geographicBoundaryAssociation, { relationName: "parent_to_children" }),
+
+}));
+
+const geographicBoundaryAssociationRelations = relations(geographicBoundaryAssociation, ({ one }) => ({
+    parent: one(geographicBoundary, {
+        fields: [geographicBoundaryAssociation.belongToId],
+        references: [geographicBoundary.id],
+        relationName: "parent_to_children",
+    }),
+    child: one(geographicBoundary, {
+        fields: [geographicBoundaryAssociation.containsId],
+        references: [geographicBoundary.id],
+        relationName: "child_to_parents",
+    }),
+}));
 
 // --- RELATIONS ---
 const facilityImageRelations = relations(facilityImage, ({ one }) => ({
@@ -370,5 +471,11 @@ module.exports = {
     partyRelations,
     orderJournal,
     orderJournalRelations,
-    contactMechanismRelations
+    contactMechanismRelations,
+    review,
+    reviewRelations,
+    geographicBoundary,
+    geographicBoundaryAssociation,
+    geographicBoundaryAssociationRelations,
+    geographicBoundaryRelations
 };

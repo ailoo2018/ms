@@ -17,6 +17,21 @@ const cartService = container.resolve('cartService');
 
 
 
+app.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
+
+  try {
+
+    const domainId = parseInt(req.params.domainId);
+    const id = parseInt(req.params.id)
+
+    const p = await productService.findProductByProductItem(id, domainId);
+
+
+    res.json(p);
+  } catch (e) {
+    next(e)
+  }
+})
 app.get("/:domainId/products/:productId", async (req, res, next) => {
 
   try {

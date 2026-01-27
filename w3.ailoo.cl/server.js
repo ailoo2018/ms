@@ -2,9 +2,32 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require('jsonwebtoken');
-
+const multer = require('multer');
 
 const app = express();
+
+
+// Configure multer for MEMORY storage (files in buffer)
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type. Only JPEG, PNG and GIF are allowed.'), false);
+  }
+};
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // 2MB limit
+    files: 10 // Max 10 files
+  }
+});
+
 
 const validateJWT = (req, res, next) => {
 
@@ -36,6 +59,10 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({limit: '50mb', extended: true}));
 
+const reviewsUpload = upload.fields([
+  { name: 'images', maxCount: 10 }
+]);
 
 module.exports.app=app;
 module.exports.validateJWT=validateJWT;
+module.exports.reviewsUpload=reviewsUpload;
