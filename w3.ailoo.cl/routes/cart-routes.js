@@ -44,6 +44,35 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
     const domainId = parseInt(req.params.domainId);
 
+    let cart = null;
+
+    const existingCart = await CartRepos.findCartByWuid(rq.wuid)
+    if (existingCart) {
+      if (!existingCart.items)
+        existingCart.items = []
+      cart = existingCart;
+    } else {
+
+      const newCart = {
+        "id": null,
+        "wuid": rq.wuid,
+        "notificationsCount": 0,
+        "lastNotified": "0001-01-01T00:00:00",
+        "webSiteId": 0,
+        "createDate": new Date(),
+        "modifiedDate": new Date(),
+        "currency": rq.currency ? rq.currency : "CLP",
+        "userId": rq.userId ? rq.userId : 0,
+        "domainId": domainId,
+        items: []
+      };
+
+      const newCartId = await CartRepos.addCart(newCart)
+      newCart.id = newCartId;
+      cart = newCart;
+    }
+
+
     let cartItem
     if (rq.type === CartItemType.Product) {
 
@@ -58,20 +87,28 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
       if (product.productType === ProductType.Simple) {
 
+        var existingCartItem = cart.items.find(ci => ci.product && ci.product.productItemId === productItem.id)
 
-        cartItem = {
-          id: uuidv4(),
-          packId: 0,
-          name: ProductService.getProductItemDescription(product, productItem),
-          product: {
-            productItemId: productItem.id,
-            image: prodImage ? prodImage.image : null,
+        if(existingCartItem){
+          existingCartItem.quantity++
+        }else {
+          cartItem = {
+            id: uuidv4(),
+            packId: 0,
             name: ProductService.getProductItemDescription(product, productItem),
-            type: product.productType,
-          },
-          quantity: rq.quantity,
-          type: CartItemType.Product,
+            product: {
+              productItemId: productItem.id,
+              image: prodImage ? prodImage.image : null,
+              name: ProductService.getProductItemDescription(product, productItem),
+              type: product.productType,
+            },
+            quantity: rq.quantity,
+            type: CartItemType.Product,
+          }
+
+          cart.items.push(cartItem)
         }
+
       } else {
 
         cartItem = {
@@ -113,7 +150,10 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
             "type": 0
           })
         }
+
+        cart.items.push(cartItem)
       }
+
 
     } else if (rq.type === CartItemType.Pack) {
       cartItem = {
@@ -132,39 +172,17 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
           }
         })
       }
+
+      cart.items.push(cartItem)
     } else {
       res.status(404).json({error: 'Cart Item type not found: ' + rq.type});
     }
 
-    var cart = rq;
 
-    const existingCart = await CartRepos.findCartByWuid(rq.wuid)
-    if (existingCart) {
-      if (!existingCart.items)
-        existingCart.items = []
-      existingCart.items.push(cartItem)
-      await CartRepos.updateCart(existingCart);
-      cart = existingCart;
-    } else {
 
-      const newCart = {
-        "id": null,
-        "wuid": rq.wuid,
-        "notificationsCount": 0,
-        "lastNotified": "0001-01-01T00:00:00",
-        "webSiteId": 0,
-        "createDate": new Date(),
-        "modifiedDate": new Date(),
-        "currency": rq.currency ? rq.currency : "CLP",
-        "userId": rq.userId ? rq.userId : 0,
-        "domainId": domainId,
-        items: [cartItem]
-      };
 
-      const newCartId = await CartRepos.addCart(newCart)
-      newCart.id = newCartId;
-      cart = newCart;
-    }
+
+    await CartRepos.updateCart(cart);
 
 
     res.json(cart)
@@ -187,6 +205,37 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
         error: 'cart not found',
       });
     }
+
+    res.json(cart)
+  } catch (err) {
+    next(err);
+  }
+})
+
+
+app.post("/:domainId/cart/update-quantity", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const wuid = req.body.wuid;
+    const itemId = req.body.itemId;
+    const quantity = req.body.quantity;
+    const cart = await findCart(wuid, domainId);
+
+
+    if(!cart) {
+      res.status(404).json({
+        message: "Cart not found",
+        error: 'cart not found',
+      });
+    }
+
+    let cartItem = cart.items.find(item => item.id === itemId)
+    if(cartItem){
+      cartItem.quantity = parseInt(quantity);
+    }
+
+    await CartRepos.updateCart(cart)
+
 
     res.json(cart)
   } catch (err) {

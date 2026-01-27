@@ -4,6 +4,7 @@ const {findProductByProductItem} = require("../el/products");
 const ProductHelper = require("./product-helper");
 const {SaleType} = require("../models/domain");
 const container = require("../container");
+const LinkHelper = require("@ailoo/shared-libs/helpers/LinkHelper")
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -47,6 +48,11 @@ async function findCart(wuid, domainId) {
       cartItem.price = pit.price
       cartItem.oldPrice = pit.basePrice
       cartItem.discount = pit.discount
+
+      if(!cartItem.product){
+        cartItem.product = {}
+      }
+      cartItem.product.url = LinkHelper.getProductUrl(product)
 
       total += cartItem.price
     }

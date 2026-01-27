@@ -23,6 +23,12 @@ function formatLink(str) {
     return str.length > 255 ? str.substring(0, 254) : str;
 }
 
+function startsWithNumbersAndHyphen2(text) {
+    if (!text) return false;
+    return /^\d+-/.test(text);
+}
+
+
 module.exports.getUrl=function(product){
     if(product.domainId === 1){
         return "/motocicleta/" + formatLink(product.linkName);
@@ -39,3 +45,10 @@ module.exports.getCategoryUrl = function (category) {
 
     return prefix + formatLink(category.name);
 }
+
+module.exports.getProductUrl= function(product){
+    if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
+        return "/motocicleta/" + product.linkName
+    }
+
+    return "/motocicleta/" + product.id + "-" + product.linkName}
