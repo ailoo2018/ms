@@ -4,24 +4,6 @@ const { WebpayPlus, Options, IntegrationApiKeys, IntegrationCommerceCodes, Envir
 const { and, eq } = require("drizzle-orm");
 const ordersService = require("../services/ordersService");
 const logger = require("@ailoo/shared-libs/logger")
-/**
- * {
- *   "vci": "TSY",
- *   "amount": 1000,
- *   "status": "AUTHORIZED",
- *   "buy_order": "oc-189816}",
- *   "session_id": "session-1768246568905",
- *   "card_detail": {
- *     "card_number": "6623"
- *   },
- *   "accounting_date": "0112",
- *   "transaction_date": "2026-01-12T19:36:24.874Z",
- *   "authorization_code": "1213",
- *   "payment_type_code": "VN",
- *   "response_code": 0,
- *   "installments_number": 0
- * }
- */
 
 const TEST_COMMERCE_CODE='597055555532'
 
@@ -30,14 +12,20 @@ async function confirmWebPay(token, domainId) {
   console.log("confirmWebPay: " + token + " domainId: " + domainId + " env: " + process.env.NODE_ENV + " commerce: " + process.env.WEBPAY_COMMERCE_CODE)
   logger.info("confirmWebPay: " + token + " domainId: " + domainId)
 
-  const env = process.env.NODE_ENV === 'production' && process.env.WEBPAY_COMMERCE_CODE !== TEST_COMMERCE_CODE ? Environment.Production :  Environment.Integration
+  const isProduction = process.env.NODE_ENV === 'production' && process.env.WEBPAY_COMMERCE_CODE !== TEST_COMMERCE_CODE;
 
+  const env = isProduction ? Environment.Production : Environment.Integration;
+  const commerceCode = isProduction ? process.env.WEBPAY_COMMERCE_CODE : IntegrationCommerceCodes.WEBPAY_PLUS;
+  const apiKey = isProduction ? process.env.WEBPAY_API_KEY : IntegrationApiKeys.WEBPAY;
+
+  console.log(`Using Env: ${env} with Commerce Code: ${commerceCode}`);
   console.log(`env: ${env}`)
+
   const tx = new WebpayPlus.Transaction(new Options(
-      IntegrationCommerceCodes.WEBPAY_PLUS,
-      IntegrationApiKeys.WEBPAY,
-      env,
-  ))
+      commerceCode,
+      apiKey,
+      env
+  ));
 
   const response = await tx.commit(token)
 
