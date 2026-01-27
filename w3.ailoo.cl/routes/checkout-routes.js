@@ -455,6 +455,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     });
 
   } catch (e) {
+    console.error("error: " + e.message)
     res.json({
       success: false,
       error: e.message,
