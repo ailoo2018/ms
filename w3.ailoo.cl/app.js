@@ -17,6 +17,7 @@ require("./routes/products-routes");
 require("./routes/products-search-routes");
 require("./routes/blog-routes");
 require("./routes/stores-routes");
+require("./routes/reviews-routes");
 
 app.get('/', (req, res) => {
   logger.info("here")
