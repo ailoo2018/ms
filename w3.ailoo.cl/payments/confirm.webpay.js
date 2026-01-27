@@ -27,10 +27,12 @@ const TEST_COMMERCE_CODE='597055555532'
 
 async function confirmWebPay(token, domainId) {
 
-
+  console.log("confirmWebPay: " + token + " domainId: " + domainId)
   logger.info("confirmWebPay: " + token + " domainId: " + domainId)
 
   const env = process.env.NODE_ENV === 'production' && process.env.WEBPAY_COMMERCE_CODE !== TEST_COMMERCE_CODE ? Environment.Production :  Environment.Integration
+
+  console.log(`env: ${env}`)
   const tx = new WebpayPlus.Transaction(new Options(
       IntegrationCommerceCodes.WEBPAY_PLUS,
       IntegrationApiKeys.WEBPAY,
