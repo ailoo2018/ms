@@ -1,5 +1,5 @@
 const {app} = require("../server");
-const {productReviews, listReviews} = require("../db/reviews");
+const {productReviews, listReviews, reviewsStats} = require("../db/reviews");
 
 
 app.get("/:domainId/reviews/list", async (req, res, next) => {
@@ -46,17 +46,40 @@ app.get("/:domainId/reviews/list", async (req, res, next) => {
 app.get("/:domainId/reviews/stats", async (req, res, next) => {
 
   try {
+    const domainId = parseInt(req.params.domainId);
+    const productId = parseInt(req.query.productId);
 
-    res.json({
+    let avgRating = 0
+
+    const rs = {
       "groups": [
-        {
+  /*      {
           "totalReviews": 1,
           "ratingGroup": 5
-        }
+        }*/
       ],
-      "totalReviews": 1,
+      "totalReviews": 0,
       "avgRating": 5.0
-    })
+    }
+    const reviews = await reviewsStats(productId, domainId)
+    for (var review of reviews)
+    {
+      rs.groups.push({
+        totalReviews: review.TotalReviews,
+        ratingGroup: review.RatingGroup
+      });
+
+      rs.totalReviews += review.TotalReviews;
+
+      avgRating += (review.RatingGroup * review.TotalReviews);
+    }
+
+    rs.avgRating = 0;
+    if (avgRating > 0)
+      rs.avgRating = avgRating / rs.totalReviews;
+
+
+    res.json(rs)
   } catch (e) {
     next(e)
   }

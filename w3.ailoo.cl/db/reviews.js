@@ -84,3 +84,36 @@ module.exports.listReviews = async function (rq, domainId) {
     await connection.release();
   }
 };
+
+
+module.exports.reviewsStats = async function (productId, domainId) {
+  const connection = await pool.getConnection();
+
+  try {
+
+    const sql = `
+ 
+select 
+    floor ( (r.Rating / 2) ) as RatingGroup, 
+    count(distinct r.Id) as TotalReviews
+from Review as r
+         join User u on r.UserId = u.Id
+         join product p on r.ProductId = p.Id
+         left outer join model m on p.ModelId = m.Id
+         left outer join Party pty on pty.Id = u.PersonId
+where r.DomainId = ?
+  and r.IsEvaluation = 1
+  and r.State = 2
+  and r.ProductId = ?
+group by  RatingGroup;`;
+
+    const [rows] = await connection.execute(sql, [domainId, productId]);
+    return rows;
+
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw error; // Re-throw so the API caller knows something went wrong
+  } finally {
+    await connection.release();
+  }
+};
