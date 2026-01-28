@@ -108,6 +108,8 @@ app.post("/:domainId/products/search", async (req, res, next) => {
     else if (rq.brands)
       criteria.brands = rq.brands;
 
+    if(rq.minDiscount)
+      criteria.minDiscount = parseInt(rq.minDiscount);
     if (rq.tags)
       criteria.tags = rq.tags;
     if (rq.sizes)

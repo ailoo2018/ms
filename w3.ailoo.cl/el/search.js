@@ -292,6 +292,15 @@ function buildQueryByCriteria(criteria, domainId) {
       }
     })
   }
+  if(criteria.minDiscount && criteria.minDiscount> 0) {
+    query.bool.must.push({
+      range: {
+        discountPercent : {
+          gte: criteria.minDiscount,
+        }
+      }
+    })
+  }
 
   return query
 }
