@@ -117,6 +117,20 @@ const cmsClient = {
       return "LatestEvents"
     }
 
+    if(w.name === "HomeCategoriesCafeRacer"){
+      return "CafeRacerCategories";
+    }
+    if(w.name === "OffRoadCategories"){
+      return "OffRoadCategories";
+    }
+
+    if(w.name === "Html_BrandsBlock_CafeRacer"){
+      return "CafeRacerBrandsBlock"
+    }
+    if(w.name === "Html_BrandsBlock_MX"){
+      return "BrandsBlockMx"
+    }
+
     if (w.name === "Seo") {
       return "Seo"
     }

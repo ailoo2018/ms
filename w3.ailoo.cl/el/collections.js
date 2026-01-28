@@ -142,6 +142,10 @@ async function buildQueryByCollectionId(collectionId, domainId) {
       field = "fullName.keyword"
     else if(field.startsWith("bestsellers"))
       field = "unitsSold"
+    else if(field.startsWith("newest")) {
+      field = "createDate"
+      orderBy.isAscending = false
+    }
 
     if(orderBy.field.includes(":asc")){
       orderBy.isAscending = true
