@@ -4,6 +4,7 @@ const {buildQueryByCollectionId} = require("../el/collections");
 const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
 const logger = require("@ailoo/shared-libs/logger")
 const {search} = require("../el/search");
+const container = require("../container");
 
 
 
@@ -38,6 +39,7 @@ app.get("/:domainId/products/collections/:collectionId", async (req, res, next) 
   }
 })
 
+const categoryService = container.resolve('productCategoryService');
 
 app.get("/:domainId/products/search", async (req, res, next) => {
 
@@ -63,6 +65,7 @@ app.get("/:domainId/products/search", async (req, res, next) => {
       criteria.brands.push(parseInt(brandId));
 
     const sRs = await search(criteria, domainId)
+
 
     res.json(sRs)
 
@@ -119,6 +122,19 @@ app.post("/:domainId/products/search", async (req, res, next) => {
 
     const sRs = await search(criteria, domainId)
 
+    if(!sRs.query)
+      sRs.query = {};
+
+    if(rq.categories && rq.categories.length > 0){
+      const catId = parseInt(rq.categories[0]);
+      const category = await categoryService.findCategory(catId, domainId)
+
+      sRs.query.category = { id: category.id, name: category.name, linkName: category.linkName };
+    }
+
+    if(rq.sword){
+      sRs.query.sword = rq.sword
+    }
 
     res.json(sRs)
   } catch (e) {

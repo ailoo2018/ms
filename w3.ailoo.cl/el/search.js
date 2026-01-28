@@ -518,9 +518,13 @@ async function search(criteria, domainId) {
   let query
   let limit
 
+  let searchDescription = ""
   let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
   if (criteria.collectionId && criteria.collectionId !== "") {
-    ({query: query, limit: limit, sort: sort} = await buildQueryByCollectionId(criteria.collectionId, domainId));
+    ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria.collectionId, domainId));
+    if(collection)
+      searchDescription = collection.name
+
     if (criteria.limit > 0)
       limit = criteria.limit
   } else {
@@ -618,6 +622,7 @@ async function search(criteria, domainId) {
 
   return {
     totalHits: totalItems,
+    query: { description: searchDescription},
     offset: offset,
     limit: limit,
     filters,
