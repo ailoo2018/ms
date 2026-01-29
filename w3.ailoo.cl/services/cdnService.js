@@ -1,6 +1,8 @@
 const FormData = require('form-data');
 const axios = require('axios');
 
+const railsAdminUrl = `${process.env.ADMIN_URL || 'http://admin'}/Product/UploadImage.rails`;
+
 async function uploadImagesAilooCDN(images, domainId) {
 
   const formData = new FormData();
@@ -18,8 +20,7 @@ async function uploadImagesAilooCDN(images, domainId) {
     console.log(`Appending ${fieldName}: ${image.originalName} (${image.size} bytes)`);
   });
 
-  // Construct the Rails admin URL
-  const railsAdminUrl = `${process.env.ADMIN_URL || 'http://admin'}/Product/UploadImage.rails`;
+
 
   console.log('Uploading to Rails admin:', railsAdminUrl);
 
@@ -60,7 +61,15 @@ async function uploadImagesAilooCDN(images, domainId) {
   }
 }
 
-
+async function createImages(imageId, sizes){
+  fetch(`${process.env.PROD_URL}/Product/CreateImages.rails`, {
+    method: 'POST',
+    body: {
+      imageId,
+      sizes
+    }
+  })
+}
 
 
 module.exports = { uploadImagesAilooCDN };

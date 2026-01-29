@@ -93,7 +93,7 @@ const cmsClient = {
     }
 
     if (w.name === "HomeCategoriesLifeStyle") {
-      return "HomeCategories"
+      return "LifestyleCategories"
     }
     if (w.name === "Html_ProductListMotocard") {
       return "FeaturedProducts"

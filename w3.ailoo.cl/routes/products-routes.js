@@ -32,6 +32,43 @@ app.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
     next(e)
   }
 })
+
+app.get("/:domainId/products/:productId/create-images", async (req, res, next) => {
+
+  try {
+    console.log("create product images")
+
+    const domainId = parseInt(req.params.domainId);
+    const productId = parseInt(req.params.productId)
+    const p = await findProduct(productId, domainId);
+
+    if(!p.images){
+      return res.json({})
+    }
+
+    for(var img of p.images) {
+      const imgRs = await fetch(`${process.env.PRODUCTS_MS_URL}/${domainId}/cdn/images/create` , {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' // Usually required for POST bodies
+        },
+        body: JSON.stringify({
+          imageId: img.image,
+          sizes: [ 150, 300, 600, 800 ]
+        })
+      })
+      const imgRsJs = await imgRs.json()
+      console.log("imgRs" + JSON.stringify(imgRsJs))
+    }
+
+
+    res.json({});
+  } catch (e) {
+    next(e)
+  }
+})
+
+
 app.get("/:domainId/products/:productId", async (req, res, next) => {
 
   try {
