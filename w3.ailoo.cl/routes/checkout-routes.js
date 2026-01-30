@@ -23,6 +23,8 @@ const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
 const {CartItemType} = require("../models/cart-models");
 const {findCart} = require("../services/cartService");
+const CartRepos = require("../el/cart");
+const {stockByStore} = require("../db/inventory");
 const retShippingMethods = {
   "destination": {
     "comuna": {
@@ -86,6 +88,79 @@ app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
   }
 
 })
+
+
+function addBusinessDays(date, days) {
+  if (days < 0) {
+    throw new Error("days cannot be negative");
+  }
+
+  if (days === 0) return new Date(date);
+
+  // Create a copy to avoid mutating the original date
+  let result = new Date(date);
+
+  // Sunday = 0, Monday = 1, ..., Saturday = 6
+  if (result.getDay() === 6) { // Saturday
+    result.setDate(result.getDate() + 2);
+    days -= 1;
+  } else if (result.getDay() === 0) { // Sunday
+    result.setDate(result.getDate() + 1);
+    days -= 1;
+  }
+
+  result.setDate(result.getDate() + Math.floor(days / 5) * 7);
+  const extraDays = days % 5;
+
+  if (result.getDay() + extraDays > 5) {
+    result.setDate(result.getDate() + extraDays + 2);
+  } else {
+    result.setDate(result.getDate() + extraDays);
+  }
+
+  return result;
+}
+
+
+
+app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const facilityId = parseInt(req.query.facilityId);
+    const wuid = req.query.wuid;
+
+    const cart = await findCart(wuid, domainId)
+
+    const pitIds = cart.items.map(i => i.product.productItemId);
+
+    const stocks = await stockByStore(facilityId, pitIds, domainId );
+
+    var avlDate = addBusinessDays(new Date(), 2);
+    var nextDate = new Date()
+    nextDate.setDate(avlDate.getDate() + 1);
+
+    let description = "";
+
+    if (avlDate.getMonth() === nextDate.getMonth()) {
+      description = `${avlDate.getDate()} y ${nextDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', { month: 'long' })}`;
+    } else {
+      description = `${avlDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', { month: 'long' })} y ${nextDate.getDate()} de ${nextDate.toLocaleDateString('es-CL', { month: 'long' })}`;
+    }
+
+
+    res.json({
+      "availableIn2Hours": false,
+      "avlFromDate": nextDate,
+      "avlToDate": avlDate,
+      "description": description,
+      "stocks": stocks
+    })
+  } catch (e) {
+    next(e)
+  }
+
+})
+
 
 
 async function getPartyPartial(email, domainId) {
@@ -442,6 +517,7 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     } catch (e) {
       logger.error("Unable to notify payment validated to admin: " + e.message)
     }
+
 
 
     res.json({

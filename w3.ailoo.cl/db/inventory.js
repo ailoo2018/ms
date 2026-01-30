@@ -32,3 +32,26 @@ module.exports.productStock = async function(id, domainId) {
 
 }
 
+module.exports.stockByStore = async function(facilityId, productItemIds, domainId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows ] = await connection.execute(
+     `   select ii.Id, ii.ProductItemId, ii.Quantity, f.Id as FacilityId, f.Name as FacilityName
+    from InventoryItem ii
+    join Facility f on ii.FacilityId = f.Id
+    where ii.FacilityId = ?
+    and ii.ProductItemId in (?)
+    and f.DomainId = ?
+    
+`, [ facilityId, productItemIds, domainId ]);
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}

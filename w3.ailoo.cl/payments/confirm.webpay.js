@@ -6,13 +6,13 @@ const ordersService = require("../services/ordersService");
 const logger = require("@ailoo/shared-libs/logger")
 
 const TEST_COMMERCE_CODE='597055555532'
+const isProduction = process.env.NODE_ENV === 'production' && process.env.WEBPAY_COMMERCE_CODE !== TEST_COMMERCE_CODE;
 
 async function confirmWebPay(token, domainId) {
 
   console.log("confirmWebPay: " + token + " domainId: " + domainId + " env: " + process.env.NODE_ENV + " commerce: " + process.env.WEBPAY_COMMERCE_CODE)
   logger.info("confirmWebPay: " + token + " domainId: " + domainId)
 
-  const isProduction = process.env.NODE_ENV === 'production' && process.env.WEBPAY_COMMERCE_CODE !== TEST_COMMERCE_CODE;
 
   const env = isProduction ? Environment.Production : Environment.Integration;
   const commerceCode = isProduction ? process.env.WEBPAY_COMMERCE_CODE : IntegrationCommerceCodes.WEBPAY_PLUS;

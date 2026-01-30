@@ -21,8 +21,28 @@ app.get("/:domainId/cart/remove-item", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
     const {wuid, itemId, type} = req.query
 
-    const cart = await CartRepos.findCartByWuid(wuid)
+      const cart = await CartRepos.findCartByWuid(wuid)
     cart.items = cart.items.filter(ite => ite).filter(item => item.id !== itemId   && item.type !== type)
+
+    await CartRepos.updateCart(cart)
+
+    const newCart = await findCart(wuid, domainId);
+    res.json(newCart)
+
+
+  } catch (err) {
+    next(err);
+  }
+
+})
+app.get("/:domainId/cart/empty", async (req, res, next) => {
+
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const {wuid} = req.query
+
+    const cart = await CartRepos.findCartByWuid(wuid)
+    cart.items = []
 
     await CartRepos.updateCart(cart)
 

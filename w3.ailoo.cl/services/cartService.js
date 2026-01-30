@@ -54,7 +54,7 @@ async function findCart(wuid, domainId) {
       }
       cartItem.product.url = LinkHelper.getProductUrl(product)
 
-      total += cartItem.price
+      total += (cartItem.price * cartItem.quantity)
     }
     else if (cartItem.packContents && cartItem.packContents.length > 0) {
       if (!cartItem.quantity)
@@ -90,7 +90,7 @@ async function findCart(wuid, domainId) {
         packProduct.size = productService.getSize(product, productItem)
         packProduct.image = ProductHelper.getProductImage(product, productItem).image
 
-        total += packProduct.price
+        total += packProduct.price * 1;
         saleContext.items.push({
               uid: "" + productItem.id,
               quantity: 1,
@@ -143,7 +143,7 @@ async function findCart(wuid, domainId) {
 
     }
 
-    total = cart.items.filter(item => item).reduce((sum, it) => sum + it.price ?? 0, 0)
+    total = cart.items.filter(item => item).reduce((sum, it) => sum + (it.price * it.quantity) ?? 0, 0)
     cart.netTotal = total / 1.19
     cart.iva = total - cart.netTotal
     cart.total = total
