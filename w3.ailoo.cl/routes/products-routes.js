@@ -2,7 +2,7 @@ const {app} = require("../server");
 const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
 const logger = require("@ailoo/shared-libs/logger")
 const productRepos = require("../el/products");
-const {productStock} = require("../db/inventory");
+const {productStock, stockAllStores} = require("../db/inventory");
 const {productDescription} = require("../db/product");
 // const productService = require("../services/product-helper");
 const {search} = require("../el/search");
@@ -15,6 +15,31 @@ const container = require("../container");
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
+
+app.get("/:domainId/products/stock", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const productItemId = parseInt(req.query.productItemId)
+
+    const stock = await stockAllStores(productItemId, domainId)
+
+    res.json({
+      "stores": stock.map(s => {
+        return {
+          "name": s.FacilityName,
+          "address": s.Address + ", " + s.ComunaName,
+          "stock": s.Quantity,
+          "pickup": "Recogelo en 2 horas"
+
+        }
+      })
+    });
+
+
+  } catch (e) {
+    next(e);
+  }
+})
 
 
 app.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
@@ -42,19 +67,19 @@ app.get("/:domainId/products/:productId/create-images", async (req, res, next) =
     const productId = parseInt(req.params.productId)
     const p = await findProduct(productId, domainId);
 
-    if(!p.images){
+    if (!p.images) {
       return res.json({})
     }
 
-    for(var img of p.images) {
-      const imgRs = await fetch(`${process.env.PRODUCTS_MS_URL}/${domainId}/cdn/images/create` , {
+    for (var img of p.images) {
+      const imgRs = await fetch(`${process.env.PRODUCTS_MS_URL}/${domainId}/cdn/images/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' // Usually required for POST bodies
         },
         body: JSON.stringify({
           imageId: img.image,
-          sizes: [ 150, 300, 600, 800 ]
+          sizes: [150, 300, 600, 800]
         })
       })
       const imgRsJs = await imgRs.json()
@@ -119,7 +144,6 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
 
 
-
     const product = await productService.findProductWithInventory(productId, domainId)
     let packRules = await getProductSalesRules(product, domainId)
 
@@ -152,7 +176,7 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
         }
       }
 
-      if(packProducts.length === 0) {
+      if (packProducts.length === 0) {
         continue;
       }
 
@@ -170,7 +194,6 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
       );
 
 
-
       for (const prod of packProducts) {
         asRq.items.push({
               uid: "" + prod.id,
@@ -182,7 +205,6 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
             }
         );
       }
-
 
 
       const pack = {
@@ -1175,9 +1197,8 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 })
 
 
-
 app.get("/:domainId/recommend", async (req, res, next) => {
-  try{
+  try {
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.query.productId)
     const count = parseInt(req.query.count)
@@ -1199,29 +1220,35 @@ app.get("/:domainId/recommend", async (req, res, next) => {
         should: []
       }
     };
-    if(prodSm.categories){
-      directCategory = prodSm.categories.find(c=> c.isDirectCategory === true)
+    if (prodSm.categories) {
+      directCategory = prodSm.categories.find(c => c.isDirectCategory === true)
     }
 
-    if(directCategory){
-      query.bool.should.push({ terms: {
-          "categories.id" : [ directCategory.id ]
-        }})
+    if (directCategory) {
+      query.bool.should.push({
+        terms: {
+          "categories.id": [directCategory.id]
+        }
+      })
     }
 
-    if(prodSm.tags && prodSm.tags.length > 0){
-      query.bool.should.push({ terms: {
-          "tags.id" : prodSm.tags.map(t => t.id)
-        }})
+    if (prodSm.tags && prodSm.tags.length > 0) {
+      query.bool.should.push({
+        terms: {
+          "tags.id": prodSm.tags.map(t => t.id)
+        }
+      })
 
     }
 
-    query.bool.should.push({ range: {
-        "minPrice" : {
+    query.bool.should.push({
+      range: {
+        "minPrice": {
           gte: prodSm.minPrice * .75,
           lte: prodSm.minPrice * 1.25
         }
-      }})
+      }
+    })
 
 
     const body = await getElClient().search({
@@ -1251,7 +1278,7 @@ app.get("/:domainId/recommend", async (req, res, next) => {
 
       }
 
-      if(p.image){
+      if (p.image) {
         p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
       }
 
@@ -1261,11 +1288,12 @@ app.get("/:domainId/recommend", async (req, res, next) => {
     res.json(products)
 
 
-  }catch(e){
+  } catch (e) {
     next(e);
   }
 })
 
-function createLink(p){
+
+function createLink(p) {
   return `/motocicleta/${p.linkName}`
 }

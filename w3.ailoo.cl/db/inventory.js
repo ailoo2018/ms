@@ -54,3 +54,42 @@ module.exports.stockByStore = async function (facilityId, productItemIds, domain
   }
 
 }
+
+module.exports.stockAllStores = async function (productItemId, domainId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+        `  select f.Id   as FacilityId,
+       f.Name as FacilityName,
+       ii.Id     InventoryItemId,
+       ii.ProductItemId,
+       sum(ifnull(ii.Quantity, 0)) as Quantity,
+       pa.Address,
+       pa.ComunaId,
+       gb.Name ComunaName
+from InventoryItem ii
+         join Facility f on ii.FacilityId = f.Id
+         join FacilityContactMechanism fcm on f.Id = fcm.FacilityId
+         join PostalAddress pa on fcm.ContactMechanismId = pa.PostalAddressId
+        join GeographicBoundary gb on gb.Id = pa.ComunaId
+       
+where f.AllowPickup = 1 and f.Type = 0
+  and ii.ProductItemId in (?)
+  and f.DomainId = ? group by f.Id;
+
+
+    
+`, [productItemId, domainId]);
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+
+    throw(error)
+  } finally {
+    await connection.release();
+  }
+
+}
