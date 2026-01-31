@@ -1,12 +1,12 @@
 const {pool} = require("../connections/mysql");
 
 
-module.exports.productStock = async function(id, domainId) {
+module.exports.productStock = async function (id, domainId) {
 
   const connection = await pool.getConnection();
 
   try {
-    const [rows ] = await connection.execute(
+    const [rows] = await connection.execute(
         `
             select pit.Id as productItemId,
                    sum(if(Quantity < 0, 0, Quantity)) as quantity
@@ -19,8 +19,7 @@ module.exports.productStock = async function(id, domainId) {
               and pit.ProductId = ?
               and f.DomainId = ?
             group by pit.Id;
-`, [ id, domainId ]);
-
+`, [id, domainId]);
 
 
     return rows;
@@ -32,20 +31,20 @@ module.exports.productStock = async function(id, domainId) {
 
 }
 
-module.exports.stockByStore = async function(facilityId, productItemIds, domainId) {
+module.exports.stockByStore = async function (facilityId, productItemIds, domainId) {
 
   const connection = await pool.getConnection();
 
   try {
-    const [rows ] = await connection.execute(
-     `   select ii.Id, ii.ProductItemId, ii.Quantity, f.Id as FacilityId, f.Name as FacilityName
+    const [rows] = await connection.execute(
+        `   select ii.Id, ii.ProductItemId, ii.Quantity, f.Id as FacilityId, f.Name as FacilityName
     from InventoryItem ii
     join Facility f on ii.FacilityId = f.Id
     where ii.FacilityId = ?
     and ii.ProductItemId in (?)
     and f.DomainId = ?
     
-`, [ facilityId, productItemIds, domainId ]);
+`, [facilityId, productItemIds, domainId]);
 
     return rows;
   } catch (error) {

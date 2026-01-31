@@ -15,15 +15,12 @@ const {and, eq, sql } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const {app} = require("../server");
 const {db: drizzleDb, db} = require("../db/drizzle");
-const productRepos = require("../el/products");
-const ordersService = require("../services/ordersService");
 const adminClient = require("../services/adminClient");
-const {errors} = require("@elastic/elasticsearch");
 const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
 const {CartItemType} = require("../models/cart-models");
 const {findCart} = require("../services/cartService");
-const CartRepos = require("../el/cart");
+
 const {stockByStore} = require("../db/inventory");
 const retShippingMethods = {
   "destination": {
@@ -58,7 +55,9 @@ const retShippingMethods = {
     }
   ]
 }
+const container = require("../container");
 
+const cartService = container.resolve("cartService");
 
 /**
  * TODO
@@ -66,8 +65,17 @@ const retShippingMethods = {
 app.get("/:domainId/shipping/methods", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
+    const wuid = req.query.wuid;
 
-    res.json(retShippingMethods)
+
+
+    const cart = await findCart(wuid, domainId)
+    if(!cart.destination)
+      throw new Error("Carro de compra aun not tiene destino no tiene destino")
+
+    const quotes = await cartService.listShippingQuotes(cart, cart.destination.comunaId, domainId);
+
+    res.json(quotes)
   } catch (e) {
     next(e)
   }

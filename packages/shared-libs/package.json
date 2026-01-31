@@ -4,6 +4,10 @@
   "description": "ShareLibs for Node",
   "private": true,
   "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
   "dependencies": {
     "@elastic/elasticsearch": "^8.17.0",
     "async-mutex": "^0.5.0",
@@ -17,7 +21,6 @@
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
-
   "exports": {
     "./logger": "./utils/logger.js",
     "./config": "./utils/config.js",
@@ -26,26 +29,23 @@
     "./utils": "./utils/utils.js",
     "./price": "./products/price.js",
     "./ProductsService": "./services/ProductsService.js",
+
     "./ProductCategoryService": "./services/ProductCategoryService.js",
     "./DiscountRuleService": "./services/DiscountRuleService.js",
-    "./CartService": "./services/CartService.js",
+    "./CartService": "./dist/services/CartService.js",
+    "./ShippingService": "./dist/services/ShippingService.js",
+    "./CartRepos": "./dist/repos/CartRepos.js",
     "./ProductCategoryDb": "./repos/ProductCategoryDb.js"
   },
-
-  "devDependencies": {
-    "jest": "^30.2.0",
-    "supertest": "^7.2.2"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "^uuid$": "<rootDir>/node_modules/uuid/dist/index.js"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(uuid|shared-libs)/)"
+  "compilerOptions": {
+    "types": [
+      "node"
     ]
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
   }
-
-
 
 }

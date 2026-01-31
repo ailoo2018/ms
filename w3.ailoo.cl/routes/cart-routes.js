@@ -15,6 +15,25 @@ const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
 
+app.get("/:domainId/cart/comuna", async (req, res, next) => {
+
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const wuid = req.query.wuid;
+    const comunaId = req.params.comunaId;
+
+    const cart = await findCart(wuid, domainId)
+    cart.destination = { comunaId: comunaId };
+
+    await cartService.update(cart);
+
+    res.json({})
+
+  }catch(e){
+    next(e)
+  }
+})
+
 app.get("/:domainId/cart/remove-item", async (req, res, next) => {
 
   try {
