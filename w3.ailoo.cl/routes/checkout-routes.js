@@ -10,9 +10,10 @@ const {
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
 const {OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../models/domain");
-const {getPriceByProductItems} = require("../services/product-helper");
+const {getPriceByProductItems, getProductItemDescription, getFeaturesDescription} = require("../services/product-helper");
 const {and, eq, sql } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
+const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
 const {app} = require("../server");
 const {db: drizzleDb, db} = require("../db/drizzle");
 const adminClient = require("../services/adminClient");
@@ -20,7 +21,8 @@ const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
 const {CartItemType} = require("../models/cart-models");
 const {findCart} = require("../services/cartService");
-
+const ejs = require('ejs');
+const path = require('path');
 const {stockByStore} = require("../db/inventory");
 const retShippingMethods = {
   "destination": {
@@ -56,12 +58,9 @@ const retShippingMethods = {
   ]
 }
 const container = require("../container");
-
 const cartService = container.resolve("cartService");
 
-/**
- * TODO
- */
+
 app.get("/:domainId/shipping/methods", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
@@ -82,7 +81,6 @@ app.get("/:domainId/shipping/methods", async (req, res, next) => {
 
 })
 
-
 /**
  * TODO
  */
@@ -96,40 +94,6 @@ app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
   }
 
 })
-
-
-function addBusinessDays(date, days) {
-  if (days < 0) {
-    throw new Error("days cannot be negative");
-  }
-
-  if (days === 0) return new Date(date);
-
-  // Create a copy to avoid mutating the original date
-  let result = new Date(date);
-
-  // Sunday = 0, Monday = 1, ..., Saturday = 6
-  if (result.getDay() === 6) { // Saturday
-    result.setDate(result.getDate() + 2);
-    days -= 1;
-  } else if (result.getDay() === 0) { // Sunday
-    result.setDate(result.getDate() + 1);
-    days -= 1;
-  }
-
-  result.setDate(result.getDate() + Math.floor(days / 5) * 7);
-  const extraDays = days % 5;
-
-  if (result.getDay() + extraDays > 5) {
-    result.setDate(result.getDate() + extraDays + 2);
-  } else {
-    result.setDate(result.getDate() + extraDays);
-  }
-
-  return result;
-}
-
-
 
 app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
   try {
@@ -168,45 +132,6 @@ app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
   }
 
 })
-
-
-
-async function getPartyPartial(email, domainId) {
-  const [result] = await drizzleDb
-      .select({
-        id: party.id,
-        name: party.name,
-        rut: party.rut
-      })
-      .from(party)
-      .where(
-          and(
-              eq(party.email, email),
-              eq(party.domainId, domainId)
-          )
-      )
-      .limit(1);
-
-  return result ?? null;
-}
-
-async function getProductItemsMap(items, domainId) {
-  const pits = await getPriceByProductItems(items
-          .filter(f => f.type === CartItemType.Product)
-          .map(i => i.product.productItemId)
-      , SaleType.Internet
-      , domainId)
-
-  var map = new Map();
-  pits.productItems.forEach(pit => {
-    if (!map.has(pit.productItemId)) {
-      map.set(pit.productItemId, pit);
-    }
-  })
-
-  return map;
-}
-
 
 app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
@@ -352,30 +277,6 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
     next(err);
   }
 })
-
-function validateRequestPrice(item, rq){
-  const rqItem = rq.items.find(ri => ri.id === item.id)
-  if(!rqItem)
-    throw Error(`Producto no esperado en carro compra: ${item.name}`)
-
-  if(rqItem.price !== rqItem.price) {
-    throw Error(`Precio se modifico para item ${rqItem.name}`)
-  }
-}
-
-function createProductSaleOrderItem(orderId, cartItem, orderItemId){
-  return {
-    orderId: orderId,
-    productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId
-    productItemId: cartItem.product.productItemId,
-    quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
-    unitPrice: cartItem.price,
-    unitCurrency: "CLP",           // Default as per your table schema
-    type: OrderItemType.Product,
-    orderItemId: orderItemId ? orderItemId : null,
-  }
-}
-
 
 app.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
   try {
@@ -550,3 +451,300 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 
 
 })
+
+
+const juice = require('juice');
+const sgMail = require('@sendgrid/mail');
+const parametersClient = require("../services/parametersClient");
+const fs = require('fs').promises;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
+async function orderConfirmationHtml(orderId, domainId) {
+
+  const order = await drizzleDb.query.saleOrder.findFirst({
+    where: (saleOrder, {eq}) =>
+        and(
+            eq(saleOrder.id, orderId),
+            eq(saleOrder.domainId, domainId),
+        ),
+    with: {
+      paymentMethod: true,
+      shipmentMethod: true,
+      items: true,
+      customer: {
+        columns: {
+          id: true,
+          name: true,
+        }
+      },
+      destinationFacility: {
+        columns: {
+          id: true,
+          name: true,
+        }
+      },
+      shippingAddress: {
+        with: {
+          comuna: {
+            id: true,
+            name: true,
+          }
+        }
+        // how can I also get comuna ej: with: comuna
+      }
+    },
+  });
+  const domainDb = await drizzleDb.query.domain.findFirst({
+    where: (domain, {eq}) => eq(domain.id, domainId),
+    with: {
+      ownerParty: {
+        columns: {
+          id: true,
+          name: true,
+        }
+      }
+    },
+  });
+
+  const pitIds = order.items.filter(it => it.productItemId > 0).map(it2 => it2.productItemId);
+
+  const productsService = container.resolve("productsService")
+  const products = await productsService.findProductsByProductItems(pitIds, domainId);
+  var imgHelper = new ProductImageHelper();
+  for (var item of order.items) {
+    if (!(item.productItemId > 0))
+      continue;
+
+    item.product = null
+
+    var itemProduct = products.find(p => p.productItems.some(pit => pit.id === item.productItemId));
+    if (itemProduct) {
+      item.product = itemProduct;
+      item.imageURL = imgHelper.getUrl(itemProduct.image, 300, domainId)
+
+      item.productItem = itemProduct.productItems.find(pit => pit.id === item.productItemId)
+      item.featureDescription = getFeaturesDescription(item.product, item.productItem);
+
+
+    }
+  }
+
+
+  const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
+  let logo = logoParam ? logoParam.value : {};
+
+  const emailData = {
+    order: {
+      number: order.id,
+      paymentMethod: order.paymentMethod,
+      date: order.orderDate,
+      receivedBy: {
+        name: order.customer ? order.customer.name : "",
+      },
+      shipmentMethod: order.shipmentMethod,
+      items: order.items,
+      shippedTo: order.shippingAddress ? {
+        name: order.shippingAddress.name,
+        rut: order.shippingAddress.rut,
+        phone: order.shippingAddress.phone,
+        email: order.shippingAddress.email,
+        address: order.shippingAddress.address,
+        comuna: {
+          id: order.shippingAddress.comuna.id,
+          name: order.shippingAddress.comuna.name,
+          parent: {
+            name: "Region Metropolitana"
+          }
+        }
+      } : null,
+      destination: {
+        name: "Casa",
+        phone: "123123",
+
+        postalAddress: {
+          address: "",
+          comuna: {
+            name: "",
+          },
+          latitude: "",
+          longitude: "",
+        }
+      },
+
+      paymentConfig: {
+        bankAccounts: [],
+      },
+      shippingCost: {
+        amount: 1000,
+      },
+      subtotal: 1000,
+      total: 1000,
+    },
+    OrderItemType: OrderItemType,
+    formatOrderDate: function (date) {
+      const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
+        'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = months[d.getMonth()];
+      const year = d.getFullYear();
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+
+      return `${day} ${month}. ${year} ${hours}:${minutes}`;
+    },
+    formatHelper: {
+      toTitleCase: (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
+      formatMoney: (amount) => `$${amount.toLocaleString()}`,
+      encodeUrl: (str) => encodeURIComponent(str)
+    },
+    domainHelper: {
+      getLogo: () => logo,
+      getSiteRoot: () => 'https://www.motomundi.cl'
+    },
+    domain: {id: 1, name: "MotoMundi", party: {name: "MotoMundi SPA"}},
+    isNeto: false,
+    tiempoDespacho: '3-5 días hábiles',
+    hash: "",
+    gmapKey: process.env.GOOGLE_MAPS_KEY || '',
+    webSite: {
+      templateInstance: {
+        getConfigValue: key => {
+          if(key === "facebook-url"){
+            return "https://www.facebook.com/motomundi.la"
+          }
+          if(key === "instagram-url"){
+            return "https://www.instagram.com/motomundi"
+          }
+          if(key === "youtube-url"){
+            return "https://www.youtube.com/motomunditv"
+          }
+          if(key === "tiktok-url"){
+            return "https://www.tiktok.com/motomundicl"
+          }
+          return "";
+        }
+      }
+    }
+  };
+
+
+  const templatePath = path.join(__dirname, '../templates/confirmation.ejs');
+  const template = await fs.readFile(templatePath, 'utf-8');
+  const html = ejs.render(template, emailData);
+  return  html;
+}
+
+app.get("/test-email", async (req, res, next) => {
+
+  const domainId = 1
+  const orderId = parseInt(req.query.orderId)
+  const html = await orderConfirmationHtml(orderId, domainId);
+
+  // Inline all CSS styles automatically
+  // const inlinedHtml =  juice(html);
+
+  const msg = {
+    to: "jcfuentes@ailoo.cl",
+    from: 'ventas@motomundi.cl',
+    subject: `Pedido ${orderId} - Confirmación`,
+    html: html
+  };
+
+//  const response = await sgMail.send(msg);
+  res.send(html);
+})
+
+
+function validateRequestPrice(item, rq){
+  const rqItem = rq.items.find(ri => ri.id === item.id)
+  if(!rqItem)
+    throw Error(`Producto no esperado en carro compra: ${item.name}`)
+
+  if(rqItem.price !== rqItem.price) {
+    throw Error(`Precio se modifico para item ${rqItem.name}`)
+  }
+}
+
+function createProductSaleOrderItem(orderId, cartItem, orderItemId){
+  return {
+    orderId: orderId,
+    productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId
+    productItemId: cartItem.product.productItemId,
+    quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
+    unitPrice: cartItem.price,
+    unitCurrency: "CLP",           // Default as per your table schema
+    type: OrderItemType.Product,
+    orderItemId: orderItemId ? orderItemId : null,
+  }
+}
+
+function addBusinessDays(date, days) {
+  if (days < 0) {
+    throw new Error("days cannot be negative");
+  }
+
+  if (days === 0) return new Date(date);
+
+  // Create a copy to avoid mutating the original date
+  let result = new Date(date);
+
+  // Sunday = 0, Monday = 1, ..., Saturday = 6
+  if (result.getDay() === 6) { // Saturday
+    result.setDate(result.getDate() + 2);
+    days -= 1;
+  } else if (result.getDay() === 0) { // Sunday
+    result.setDate(result.getDate() + 1);
+    days -= 1;
+  }
+
+  result.setDate(result.getDate() + Math.floor(days / 5) * 7);
+  const extraDays = days % 5;
+
+  if (result.getDay() + extraDays > 5) {
+    result.setDate(result.getDate() + extraDays + 2);
+  } else {
+    result.setDate(result.getDate() + extraDays);
+  }
+
+  return result;
+}
+
+async function getPartyPartial(email, domainId) {
+  const [result] = await drizzleDb
+      .select({
+        id: party.id,
+        name: party.name,
+        rut: party.rut
+      })
+      .from(party)
+      .where(
+          and(
+              eq(party.email, email),
+              eq(party.domainId, domainId)
+          )
+      )
+      .limit(1);
+
+  return result ?? null;
+}
+
+async function getProductItemsMap(items, domainId) {
+  const pits = await getPriceByProductItems(items
+          .filter(f => f.type === CartItemType.Product)
+          .map(i => i.product.productItemId)
+      , SaleType.Internet
+      , domainId)
+
+  var map = new Map();
+  pits.productItems.forEach(pit => {
+    if (!map.has(pit.productItemId)) {
+      map.set(pit.productItemId, pit);
+    }
+  })
+
+  return map;
+}
+

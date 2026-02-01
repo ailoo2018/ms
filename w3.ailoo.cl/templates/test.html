@@ -1,0 +1,963 @@
+<style type="text/css">
+  /* Reset & Base */
+  .email-wrapper {
+    width: 100% !important;
+    min-width: 100%;
+    box-sizing: border-box;
+    color: #484848;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .table-reset {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .w-100 { width: 100%; }
+  .d-table { display: table; }
+  .no-padding { padding: 0 !important; }
+  .no-margin { margin: 0; }
+  .align-center { text-align: center; }
+  .align-right { text-align: right; }
+
+  /* Layout Containers */
+  .container-main {
+    background: #fefefe;
+    width: 580px;
+    margin: 0 auto;
+    min-width: 580px !important;
+  }
+
+  .content-cell {
+    padding: 0 16px 16px 16px;
+    width: 564px;
+  }
+
+  /* Typography & Colors */
+  .text-base {
+    color: #484848;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .text-accent { color: #c74044; }
+  .text-muted { color: #8a8a8a; }
+  .text-white { color: #fefefe; }
+  .bg-gray { background-color: #ebebeb; }
+  .text-small { font-size: 12px; }
+  .text-uppercase { text-transform: uppercase; }
+
+  /* Components */
+  .logo-image {
+    outline: none;
+    text-decoration: none;
+    clear: both;
+    display: block;
+    width: auto;
+    max-height: 277px;
+    max-width: 350px !important;
+    height: auto;
+    margin: 40px auto 24px auto;
+  }
+
+  .header-title {
+    margin-bottom: 10px;
+    font-size: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #cccccc;
+  }
+
+  .alert-warning {
+    background-color: #ffe8b8;
+    color: #4d3400;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .section-divider {
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    margin: 2rem 0;
+    padding-top: 1rem;
+  }
+
+  .bank-logo {
+    outline: none;
+    text-decoration: none;
+    max-width: 100%;
+    clear: both;
+    display: block;
+    height: 48px;
+    width: auto;
+    max-height: 48px !important;
+  }
+
+  .bank-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    line-height: 1.3;
+    font-weight: bold;
+    color: #fefefe;
+    text-decoration: none;
+    display: inline-block;
+    border: 0 solid #c74044;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .btn-container {
+    color: #fefefe;
+    background: #c74044;
+    border-radius: 3px;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  /* Product Table */
+  .table-header-cell {
+    width: 370px;
+    padding-top: 16px;
+  }
+
+  .table-qty-cell {
+    width: 32px;
+    padding-top: 16px;
+  }
+
+  .table-price-cell {
+    width: 80px;
+    padding-top: 16px;
+  }
+
+  .product-row {
+    border-bottom: 1px solid #cccccc;
+  }
+
+  .product-img {
+    outline: none;
+    text-decoration: none;
+    clear: both;
+    display: block;
+    width: 50px;
+    height: 50px;
+    max-width: 50px !important;
+  }
+
+  .discount-img {
+    padding-left: 10px;
+    outline: none;
+    text-decoration: none;
+    clear: both;
+    display: block;
+    width: 30px;
+    height: 30px;
+    max-width: 30px !important;
+  }
+
+  /* Footer / Info */
+  .info-block {
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 32px;
+  }
+
+  .social-icon {
+    outline: none;
+    text-decoration: none;
+    width: auto;
+    max-width: 100%;
+    clear: both;
+    border: none;
+    display: inline-block;
+  }
+
+  .social-link {
+    color: #c74044;
+    text-decoration: none;
+    margin-left: 2px;
+  }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="email-wrapper">
+  <table class="container-main table-reset">
+    <tbody>
+    <tr class="table-reset">
+      <td class="text-base" style="word-wrap:break-word; border-collapse:collapse !important;">
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base align-center">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <img src="<%= domainHelper.GetLogo() %>" alt="<%= domain.Name %>" class="logo-image">
+                  </th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <h1 class="text-base text-accent text-uppercase header-title no-margin">
+                      Pedido <strong><%= order.Number %></strong><br> realizado correctamente
+                    </h1>
+                  </th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <p class="text-base no-margin" style="margin-bottom:10px">
+                      Hola, <strong><%= order.ReceivedBy.Name %></strong>:
+                    </p>
+
+                    <% if (order.ShippingMethod.Id == 9) { %>
+                    <p>
+                      Has solicitado retiro en tienda. Debido a que estamos preparando su pedido para retiro, <b>NO DEBES PASAR A RETIRAR</b> hasta que recibas nuestra confirmación.
+                    </p>
+                    <% } else { %>
+                    <p class="text-base no-margin" style="margin-bottom:10px">
+                      Gracias por elegir Motomundi, tu mundo sobre dos ruedas. Estamos emocionados de confirmar tu compra y ser parte de tu aventura sobre dos ruedas.
+                    </p>
+                    <% } %>
+
+                    <% if (order.PaymentMethod.Id == 4) { %>
+                    <p class="text-base alert-warning">
+                      Solo recordarte que has escogido <strong>Transferencia bancaria</strong>
+                      como método de pago y que el pedido se procesará una vez recibido el ingreso.
+                    </p>
+                    <div class="section-divider">
+                      <h2 class="text-base text-accent header-title no-margin" style="border:none; padding-bottom:0;">
+                        Datos Bancarios
+                      </h2>
+                      <p class="text-base no-margin" style="margin-bottom:1rem">
+                        Para que podamos localizar fácilmente tu transferencia es muy importante
+                        que en el campo <em>Remitente</em> u <em>Ordenante</em> indiques:
+                        <strong>Número de pedido, Nombre</strong> y <strong>Apellidos</strong>.
+                      </p>
+
+                      <table class="table-reset w-100 d-table">
+                        <tbody>
+                        <tr class="table-reset">
+                          <% paymentConfig.bankAccounts.forEach(function(acct) { %>
+                          <th class="text-base" style="width:274px; padding-bottom:16px;">
+                            <table class="table-reset w-100">
+                              <tbody>
+                              <tr class="table-reset">
+                                <th class="text-base no-margin">
+                                  <img src="<%= domainHelper.GetSiteRoot() %>/Content/images/banks/<%= acct.bankId %>.png" class="bank-logo" />
+                                  <h4 class="text-base text-accent text-uppercase no-margin" style="margin-bottom:10px; margin-top:1rem">
+                                    <%= acct.bankName %>
+                                  </h4>
+                                  <ul class="bank-list">
+                                    <li style="margin-bottom:.5rem">
+                                      <em class="text-muted text-small d-block">Beneficiario:</em>
+                                      <span><%= acct.nameOwner %></span>
+                                    </li>
+                                    <li style="margin-bottom:.5rem">
+                                      <em class="text-muted text-small d-block">Rut beneficiario:</em>
+                                      <%= acct.rutOwner %>
+                                    </li>
+                                    <li style="margin-bottom:.5rem">
+                                      <em class="text-muted text-small d-block">Numero Cuenta:</em>
+                                      <%= acct.accountType %> <%= acct.number %>
+                                    </li>
+                                    <li style="margin-bottom:.5rem">
+                                      <em class="text-muted text-small d-block">Email:</em>
+                                      <%= acct.email %>
+                                    </li>
+                                  </ul>
+                                </th>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </th>
+                          <% }); %>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p class="text-base no-margin" style="margin-bottom:10px">
+                      En cuanto salga de nuestro almacén te enviaremos un correo para que estés informado del estado del pedido.
+                    </p>
+                    <p class="text-base no-margin" style="margin-bottom:10px">
+                      ¡Gracias!
+                    </p>
+                    <% } %>
+                  </th>
+                  <th class="text-base w-0 no-padding"></th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <table class="table-reset bg-gray w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding align-center" style="width:564px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base align-center no-margin" style="margin-bottom:10px; padding-top:16px">
+                                  Consulta cómo está tu pedido en todo momento.
+                                </p>
+                                <center style="width:100%;">
+                                  <table align="center" class="table-reset align-center" style="width:auto; margin:0 0 16px 0;">
+                                    <tbody>
+                                    <tr class="table-reset">
+                                      <td class="text-base" style="word-wrap:break-word; border-collapse:collapse !important;">
+                                        <table class="table-reset w-100">
+                                          <tbody>
+                                          <tr class="table-reset">
+                                            <td class="btn-container">
+                                              <a href="<%= domainHelper.GetSiteRoot() %>/Account/OrderDetail.rails?orderId=<%= order.Id %>&hash=<%= hash %>" class="btn-primary" target="_blank">
+                                                Ir al estado del pedido
+                                              </a>
+                                            </td>
+                                          </tr>
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                    </tbody>
+                                  </table>
+                                </center>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                  <th class="text-base w-0 no-padding"></th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <p class="text-base no-margin" style="margin-bottom:10px; padding-top:8px">
+                      También te dejamos un resumen con la información más relevante:
+                    </p>
+                  </th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+
+                    <table class="table-reset bg-gray w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding" style="width:564px; padding-top:16px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <h3 class="text-base text-uppercase no-margin" style="padding-left:16px;">
+                                  Tu pedido
+                                </h3>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                    <table class="table-reset w-100 d-table product-row">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th valign="middle" class="text-base no-padding table-header-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin text-small text-uppercase">
+                                  Artículo
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="middle" class="text-base no-padding table-qty-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-center text-small text-uppercase">
+                                  Unidades
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="middle" class="text-base no-padding table-price-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right text-small text-uppercase">
+                                  <% if (typeof isNeto !== 'undefined' && isNeto) { %>
+                                  Precio Neto
+                                  <% } else { %>
+                                  Precio
+                                  <% } %>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                    <% order.Lines.forEach(function(item) { %>
+                    <% if (item.Type === "PRODUCT" || item.Type === "COUPON" || item.Type === "DISCOUNT") { %>
+                    <table class="table-reset w-100 d-table product-row">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th valign="middle" class="text-base no-padding" style="width:80.66667px; padding-top:16px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin align-center">
+                                <% if (item.Type === "COUPON" || item.Type === "DISCOUNT") { %>
+                                <img src="<%= domainHelper.GetSiteRoot() %>/Templates/MotoMundiMobile/content/images/checkout-discount.png" alt="<%= item.Product ? item.Product.FullName : 'Discount' %>" class="discount-img">
+                                <% } else { %>
+                                <img src="<%= domainHelper.GetSiteRoot() %><%= imageHelper.GetUrl(item.Product, item.ProductItem, 95) %>" alt="<%= item.Product.FullName %>" class="product-img">
+                                <% } %>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="middle" class="text-base no-padding" style="width:322.33333px; padding-top:16px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin">
+                                  <% if (item.Product) { %>
+                                  <%= item.Product.FullName %> <%= item.FeatureDescription %>
+                                  <% } else if (item.Type === "COUPON") { %>
+                                  Cupón <%= item.Coupon.Name %>
+                                  <% } else { %>
+                                  <%= item.Comment %>
+                                  <% } %>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="middle" class="text-base no-padding table-qty-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin text-muted align-center">
+                                  <%= item.Quantity %>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="middle" class="text-base no-padding table-price-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right" style="white-space:nowrap;">
+                                  <strong><%= formatHelper.FormatMoney(item.Subtotal) %></strong>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <% } %>
+                    <% }); %>
+
+                    <table class="table-reset w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding" style="width:467.33333px; padding-top:16px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right text-muted">
+                                  Gastos de envío
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="text-base no-padding table-price-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right text-muted" style="white-space:nowrap;">
+                                  <% if (order.ShippingCost.Amount == 0 && order.ShippingMethod.Id != 9) { %>
+                                  Gratis
+                                  <% } else if (order.ShippingMethod.Id == 9) { %>
+                                  Retiro <br />en tienda
+                                  <% } else { %>
+                                  <%= formatHelper.FormatMoney(order.ShippingCost) %>
+                                  <% } %>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                    <table class="table-reset text-uppercase w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding table-header-cell"></th>
+                        <th valign="bottom" class="text-base no-padding table-price-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right">
+                                  Total
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th valign="bottom" class="text-base no-padding table-price-cell">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin align-right" style="white-space:nowrap;">
+                                  <strong><%= formatHelper.FormatMoney(order.Total) %></strong>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                    <table class="table-reset w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="content-cell text-base">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <p class="text-base no-margin" style="padding-top:8px">
+                                <center>
+                                  <a href="https://youtu.be/ca8vPpLiiIQ" target="_blank">
+                                    <img style="width:100%;" src="https://www.motomundi.cl/Content/uploads/1/returns.jpg"/>
+                                  </a>
+                                </center>
+                                </p>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      </tbody>
+                    </table>
+
+                  </th>
+                  <th class="text-base w-0 no-padding"></th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <table class="table-reset info-block w-100 d-table">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding" style="width:274px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <ul style="list-style-type:none; margin-left:0; padding-left:0; margin-top:32px">
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Tipo de envío:</em><br>
+                                    <%= order.ShippingMethod.Description %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Fecha del pedido:</em><br>
+                                    <%= order.Date.toString() /* Ensure you have a date formatter if needed */ %>
+                                  </li>
+                                  <% if (order.ShippingMethod.Id != 9) { %>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Fecha de entrega aproximada:</em><br>
+                                    Nos tomará <strong>entre 1 a 5 días hábiles</strong> en <strong>preparar</strong> su pedido.
+                                    Este tiempo <strong>NO</strong> corresponde al tiempo de entrega. Para ver los tiempos de entrega
+                                    presione <a href="https://www.motomundi.cl/10228-plazos-de-entrega">aquí</a>.
+                                    A estos tiempos hay que sumar el tiempo de preparación.
+                                  </li>
+                                  <% } %>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Forma de Pago:</em><br>
+                                    <%= order.PaymentMethod.Name %>
+                                  </li>
+                                </ul>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+
+                        <th class="text-base no-padding" style="width:274px; padding-bottom:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <% if (order.ShippingMethod.Id == 9) { %>
+                                <h4 class="text-base text-accent text-uppercase no-margin" style="margin-bottom:10px;">
+                                  Persona quien Retira
+                                </h4>
+                                <ul style="list-style-type:none; margin-left:0; padding-left:0">
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Nombre:</em><br>
+                                    <%= order.ReceivedBy.Name %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Rut/Dni:</em><br>
+                                    <%= order.ShippedTo.Rut %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Teléfono:</em><br>
+                                    <a href="tel:<%= order.ShippedTo.Phone %>" target="_blank"><%= order.ShippedTo.Phone %></a>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Correo electrónico:</em><br>
+                                    <a href="mailto:<%= order.ShippedTo.Email %>" target="_blank"><%= order.ShippedTo.Email %></a>
+                                  </li>
+                                </ul>
+                                <% } else { %>
+                                <h4 class="text-base text-accent text-uppercase no-margin" style="margin-bottom:10px;">
+                                  Datos de Envío
+                                </h4>
+                                <ul style="list-style-type:none; margin-left:0; padding-left:0">
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Nombre:</em><br>
+                                    <%= order.ReceivedBy.Name %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Dirección:</em><br>
+                                    <a href="https://maps.google.com/?q=$<%= formatHelper.EncodeUrl(order.ShippedTo.Address) %>&entry=gmail&source=g">
+                                      <%= order.ShippedTo.Address %>
+                                    </a>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Comuna:</em><br>
+                                    <%= order.ShippedTo.Comuna.Name %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Región:</em><br>
+                                    <%= order.ShippedTo.Comuna.Parent.Name %>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">País:</em><br> Chile
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Teléfono:</em><br>
+                                    <a href="tel:<%= order.ShippedTo.Phone %>" target="_blank"><%= order.ShippedTo.Phone %></a>
+                                  </li>
+                                  <li style="margin-bottom:.7rem">
+                                    <em class="text-muted">Correo electrónico:</em><br>
+                                    <a href="mailto:<%= order.ShippedTo.Email %>" target="_blank"><%= order.ShippedTo.Email %></a>
+                                  </li>
+                                </ul>
+                                <% } %>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+
+                      <% if (gmapKey != "" && order.ShippingMethod.Id == 9) { %>
+                      <tr>
+                        <td colspan="2">
+                          <h4 class="text-base text-accent text-uppercase no-margin" style="margin-bottom:10px;">
+                            Tienda para Retiro
+                          </h4>
+                          <ul style="list-style-type:none; margin-left:0; padding-left:0">
+                            <li style="margin-bottom:.7rem">
+                              <b><%= domain.Name.toUpperCase() %> <%= order.Destination.Name %></b> <br />
+                              <a href="https://maps.google.com/?q=$<%= formatHelper.EncodeUrl(order.Destination.PostalAddress.Address) %>&entry=gmail&source=g">
+                                <%= order.Destination.PostalAddress.Address %>,
+                                <%= order.Destination.PostalAddress.Comuna.Name %>
+                              </a>
+                              <br />Tel: <%= order.Destination.Phone %>
+                            </li>
+                          </ul>
+                          <img style="width:100%;" width="100%" src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C<%= order.Destination.PostalAddress.Latitude %>,<%= order.Destination.PostalAddress.Longitude %>&key=<%= gmapKey %>" />
+                        </td>
+                      </tr>
+                      <% } %>
+                      </tbody>
+                    </table>
+                  </th>
+                  <th class="text-base w-0 no-padding"></th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table-reset w-100 d-table">
+          <tbody>
+          <tr class="table-reset">
+            <th class="content-cell text-base">
+              <table class="table-reset w-100">
+                <tbody>
+                <tr class="table-reset">
+                  <th class="text-base no-margin">
+                    <table class="table-reset w-100 d-table" style="border-top:1px solid #cccccc;">
+                      <tbody>
+                      <tr class="table-reset">
+                        <th class="text-base no-padding" style="width:564px; padding-top:16px;">
+                          <table class="table-reset w-100">
+                            <tbody>
+                            <tr class="table-reset">
+                              <th class="text-base no-margin">
+                                <table class="table-reset w-100 d-table">
+                                  <tbody>
+                                  <tr class="table-reset">
+                                    <th class="text-base no-padding" style="width:274px; padding-top:16px;">
+                                      <table class="table-reset w-100">
+                                        <tbody>
+                                        <tr class="table-reset">
+                                          <th class="text-base no-margin">
+                                            <a href="<%= domainHelper.GetSiteRoot() %>" class="social-link" target="_blank">
+                                              <img src="<%= domainHelper.GetLogo() %>" alt="<%= domain.Name %> logo" style="outline:none; text-decoration:none; max-width:100%; clear:both; display:block; border:none; width:auto; height:26px; max-height:26px">
+                                            </a>
+                                          </th>
+                                        </tr>
+                                        </tbody>
+                                      </table>
+                                    </th>
+                                    <th class="text-base no-padding" style="width:274px; padding-top:16px;">
+                                      <table class="table-reset w-100">
+                                        <tbody>
+                                        <tr class="table-reset">
+                                          <th class="text-base no-margin">
+                                            <p class="text-base no-margin text-muted text-small align-right">
+                                              <% if (webSite.TemplateInstance.GetConfigValue("facebook-url")) { %>
+                                              <a href='<%= webSite.TemplateInstance.GetConfigValue("facebook-url") %>' class="social-link" target="_blank">
+                                                <img src="https://www.motomundi.cl/content/assets/icons/facebook.png" alt="Facebook logo" class="social-icon">
+                                              </a>
+                                              <% } %>
+                                              <% if (webSite.TemplateInstance.GetConfigValue("twitter-url")) { %>
+                                              <a href='https://www.tiktok.com/@motomundicl' class="social-link" target="_blank">
+                                                <img src="https://www.motomundi.cl/content/assets/icons/tiktok.png" alt="TikTok logo" class="social-icon">
+                                              </a>
+                                              <% } %>
+                                              <% if (webSite.TemplateInstance.GetConfigValue("youtube-url")) { %>
+                                              <a href='<%= webSite.TemplateInstance.GetConfigValue("youtube-url") %>' class="social-link" target="_blank">
+                                                <img src="https://www.motomundi.cl/content/assets/icons/youtube.png" alt="Youtube logo" class="social-icon">
+                                              </a>
+                                              <% } %>
+                                              <% if (webSite.TemplateInstance.GetConfigValue("instagram-url")) { %>
+                                              <a href="<%= webSite.TemplateInstance.GetConfigValue("instagram-url") %>" class="social-link" target="_blank">
+                                              <img src="https://www.motomundi.cl/content/assets/icons/instagram.png" alt="Instagram logo" class="social-icon">
+                                              </a>
+                                              <% } %>
+                                            </p>
+                                          </th>
+                                        </tr>
+                                        </tbody>
+                                      </table>
+                                    </th>
+                                  </tr>
+                                  </tbody>
+                                </table>
+                              </th>
+                            </tr>
+
+                            <tr class="table-reset">
+                              <th class="text-base no-padding" style="width:564px; padding-top:16px;">
+                                <table class="table-reset w-100">
+                                  <tbody>
+                                  <tr class="table-reset">
+                                    <th class="text-base no-margin">
+                                      <p class="text-base no-margin align-center text-muted text-small" style="margin-bottom:10px;">
+                                        <small style="font-size:11px;color:#b0b0b0">
+                                          No respondas a este mensaje. Si necesitas ponerte en contacto con nostros, hazlo <a href="<%= domainHelper.GetSiteRoot() %>/contactenos" class="social-link" target="_blank">aquí</a>.
+                                        </small>
+                                      </p>
+                                      <p class="text-base no-margin align-center text-muted text-small" style="margin-bottom:10px;">
+                                        <small style="font-size:11px;color:#b0b0b0">
+                                          <span><%= formatHelper.ToTitleCase(domain.Name) %></span>.cl
+                                          es el nombre comercial de <span><%= formatHelper.ToTitleCase(domain.Party.Name) %></span>
+                                        </small>
+                                      </p>
+                                      <p class="text-base no-margin align-center text-muted text-small" style="margin-bottom:10px;">
+                                        <small style="font-size:11px;color:#b0b0b0">
+                                          Copyright 2016 © <span><%= formatHelper.ToTitleCase(domain.Name) %></span>. Todos los derechos reservados.
+                                        </small>
+                                      </p>
+                                      <p class="text-base no-margin align-center text-muted text-small" style="margin-bottom:10px;">
+                                        <small style="font-size:11px;color:#b0b0b0">
+                                          <a href="<%= domainHelper.GetSiteRoot() %>/aviso-legal" class="social-link" target="_blank">
+                                            Aviso Legal
+                                          </a>
+                                        </small>
+                                      </p>
+                                      <p style="text-align:center;">
+                                        <a href='https://www.ailoo.cl'><img style="padding-top: 3px;width: 100px;" src="https://www.ailoo.cl/Images/ailoo-white.png" /></a>
+                                        <br/>
+                                        <small style="font-size:11px;color:#b0b0b0">
+                                          <a class="text-base no-margin align-center text-muted text-small" style="text-decoration:none;" href='https://www.ailoo.cl'>Powered by www.ailoo.cl</a>
+                                        </small>
+                                      </p>
+                                    </th>
+                                  </tr>
+                                  </tbody>
+                                </table>
+                              </th>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="text-base w-0 no-padding"></th>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                </tr>
+                </tbody>
+              </table>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

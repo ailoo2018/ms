@@ -26,6 +26,24 @@ function getProductItemDescription(product, pit) {
 
 }
 
+function getFeaturesDescription(product, pit) {
+  let desc = "";
+
+
+  if (pit.colorId > 0) {
+    const color = product.features.find(f => f.id === pit.colorId)
+    desc += " " + color.name
+  }
+
+  if (pit.sizeId > 0) {
+    const size = product.features.find(f => f.id === pit.sizeId)
+    desc += " " + size.name
+  }
+
+  return desc;
+
+}
+
 function getProductImage(product, pit) {
   let img = null
 
@@ -168,7 +186,7 @@ module.exports = {
   getPriceByProductItem,
   getSalesRules,
   getProductSalesRules,
-
+  getFeaturesDescription,
   isApplicableSalesRule,
   findProduct
 }

@@ -1,0 +1,303 @@
+<div style="width:100%!important;min-width:100%;box-sizing:border-box;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;background:#fefefe;width:580px;margin:0 auto;Margin:0 auto;text-align:inherit;min-width:580px!important">
+        <tbody>
+        <tr style="padding:0;vertical-align:top;text-align:left">
+            <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+
+                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <img src="<%= domainHelper.getLogo() %>" alt="<%= domain.name %>" style="outline:none;text-decoration:none;clear:both;display:block;width:auto;max-height:277px;max-width:350px!important;height:auto;margin:40px auto 24px auto">
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <h1 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;font-size:20px;text-transform:uppercase;padding-bottom:20px;border-bottom:1px solid #cccccc">
+                                            Pedido <strong><%= order.number %></strong><br> realizado correctamente
+                                        </h1>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                            Hola, <strong><%= order.receivedBy.name %></strong>:
+                                        </p>
+
+                                        <% if (order.shipmentMethod.id == 9) { %>
+                                            <p>
+                                                Has solicitado retiro en tienda. Debido a que estamos preparando su pedido para retiro, <b>NO DEBES PASAR A RETIRAR</b> hasta que recibas nuestra confirmación.
+                                            </p>
+                                        <% } else { %>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                                Gracias por elegir Motomundi, tu mundo sobre dos ruedas. Estamos emocionados de confirmar tu compra y ser parte de tu aventura sobre dos ruedas.
+                                            </p>
+                                        <% } %>
+
+                                        <% if (order.paymentMethod.id == 4) { %>
+                                            <p style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;background-color:#ffe8b8;color:#4d3400;padding:1rem;text-align:center;margin-top:20px">
+                                                Solo recordarte que has escogido <strong>Transferencia bancaria</strong> como método de pago y que el pedido se procesará una vez recibido el ingreso.
+                                            </p>
+                                            <div style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;margin:2rem 0;padding-top:1rem">
+                                                <h2 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;font-size:20px">Datos Bancarios</h2>
+                                                <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;Margin-bottom:10px;margin-bottom:1rem">
+                                                    Para que podamos localizar fácilmente tu transferencia es muy importante que en el campo <em>Remitente</em> u <em>Ordenante</em> indiques: <strong>Número de pedido, Nombre</strong> y <strong>Apellidos</strong>.
+                                                </p>
+                                                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                                    <tbody>
+                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                        <% paymentConfig.bankAccounts.forEach(function(acct) { %>
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-left:0!important;padding-right:0!important">
+                                                                <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                    <tbody>
+                                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                        <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                            <img src="<%= domainHelper.getSiteRoot() %>/Content/images/banks/<%= acct.bankId %>.png" style="outline:none;text-decoration:none;max-width:100%;clear:both;display:block;height:48px;width:auto;max-height:48px!important" />
+                                                                            <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px;margin-top:1rem">
+                                                                                <%= acct.bankName %>
+                                                                            </h4>
+                                                                            <ul style="list-style-type:none;margin-left:0;padding-left:0;font-size:14px">
+                                                                                <li style="margin-bottom:.5rem"><em style="color:#8a8a8a;font-size:12px;display:block">Beneficiario:</em><span><%= acct.nameOwner %></span></li>
+                                                                                <li style="margin-bottom:.5rem"><em style="color:#8a8a8a;font-size:12px;display:block">Rut beneficiario:</em><%= acct.rutOwner %></li>
+                                                                                <li style="margin-bottom:.5rem"><em style="color:#8a8a8a;font-size:12px;display:block">Numero Cuenta:</em><%= acct.accountType %> <%= acct.number %></li>
+                                                                                <li style="margin-bottom:.5rem"><em style="color:#8a8a8a;font-size:12px;display:block">Email:</em> <%= acct.email %></li>
+                                                                            </ul>
+                                                                        </th>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </th>
+                                                        <% }); %>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                                En cuanto salga de nuestro almacén te enviaremos un correo para que estés informado del estado del pedido.
+                                            </p>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">¡Gracias!</p>
+                                        <% } %>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <div style="background-color:#ebebeb; padding: 16px;">
+                                            <p style="text-align:center; margin-bottom:16px">Consulta cómo está tu pedido en todo momento.</p>
+                                            <center>
+                                                <table align="center" style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;float:none;text-align:center;width:auto;margin-bottom:0">
+                                                    <tr style="background:#c74044; border-radius:3px">
+                                                        <td style="padding:5px 10px">
+                                                            <a href="<%= domainHelper.getSiteRoot() %>/Account/OrderDetail.rails?orderId=<%= order.id %>&hash=<%= hash %>" style="color:#fefefe; text-decoration:none; font-weight:bold; font-size:12px" target="_blank">
+                                                                Ir al estado del pedido
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </center>
+                                        </div>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-bottom:1px solid #cccccc;width:100%;padding:16px">
+                    <thead>
+                    <tr>
+                        <th style="font-size:10px; text-transform:uppercase">Artículo</th>
+                        <th style="font-size:10px; text-transform:uppercase; text-align:center">Unidades</th>
+                        <th style="font-size:10px; text-transform:uppercase; text-align:right">
+                            <%= locals.isNeto ? 'Precio Neto' : 'Precio' %>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+
+                <% order.items.forEach(function(item) { %>
+                    <% if(item.type === "PRODUCT" || item.type === "COUPON" || item.type === "DISCOUNT") { %>
+                        <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-bottom:1px solid #cccccc;width:100%">
+                            <tbody>
+                            <tr>
+                                <td style="width:80px; padding:16px 0">
+                                    <% if(item.type === "COUPON" || item.type === "DISCOUNT") { %>
+                                        <img src="<%= domainHelper.getSiteRoot() %>/Templates/MotoMundiMobile/content/images/checkout-discount.png" alt="<%= item.product ? item.product.fullName : '' %>" style="width:30px;height:30px">
+                                    <% } else { %>
+                                        <img src="<%= domainHelper.getSiteRoot() %><%= imageHelper.getUrl(item.product, item.productItem, 95) %>" alt="<%= item.product.fullName %>" style="width:50px;height:50px">
+                                    <% } %>
+                                </td>
+                                <td style="padding:16px 0">
+                                    <p style="font-size:16px; margin:0">
+                                        <% if(item.product) { %>
+                                            <%= item.product.fullName %> <%= item.featureDescription %>
+                                        <% } else if(item.type === "COUPON") { %>
+                                            Cupón <%= item.coupon.name %>
+                                        <% } else { %>
+                                            <%= item.comment %>
+                                        <% } %>
+                                    </p>
+                                </td>
+                                <td style="width:32px; text-align:center; color:#8a8a8a">
+                                    <%= item.quantity %>
+                                </td>
+                                <td style="width:80px; text-align:right; font-weight:bold">
+                                    <%= formatHelper.formatMoney(item.subtotal) %>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    <% } %>
+                <% }); %>
+
+                <table style="width:100%; border-spacing:0; border-collapse:collapse; padding-top:16px">
+                    <tr>
+                        <td style="text-align:right; color:#8a8a8a; padding-right:10px">Gastos de envío</td>
+                        <td style="text-align:right; color:#8a8a8a; width:80px">
+                            <% if(order.shippingCost.amount == 0 && order.shipmentMethod.id != 9) { %>
+                                Gratis
+                            <% } else if(order.shipmentMethod.id == 9) { %>
+                                Retiro <br />en tienda
+                            <% } else { %>
+                                <%= formatHelper.formatMoney(order.shippingCost) %>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right; padding:10px 10px 0 0; text-transform:uppercase">Total</td>
+                        <td style="text-align:right; padding-top:10px; font-weight:bold; width:80px">
+                            <%= formatHelper.formatMoney(order.total) %>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="width:100%; border-top:1px solid #cccccc; margin-top:32px; padding-top:16px">
+                    <tr>
+                        <td>
+                            <em style="color:#8a8a8a">Tipo de envío:</em><br> <%= order.shipmentMethod.description %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <em style="color:#8a8a8a">Fecha del pedido:</em><br>
+                            <%= order.date %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <em style="color:#8a8a8a">Forma de Pago:</em><br> <%= order.paymentMethod.name %>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="width:100%; margin-top:20px">
+                    <tr>
+                        <td style="vertical-align:top; width:50%">
+                            <h4 style="color:#c74044; text-transform:uppercase"><%= order.shipmentMethod.id == 9 ? 'Persona quien Retira' : 'Datos de Envío' %></h4>
+                            <p>
+                                <%= order.receivedBy.name %><br>
+                                <% if(order.shipmentMethod.id != 9) { %>
+                                    <%= order.shippedTo.address %><br>
+                                    <%= order.shippedTo.comuna.name %><br>
+                                    <%= order.shippedTo.comuna.parent.name %>
+                                <% } else { %>
+                                    <%= order.shippedTo.rut %>
+                                <% } %><br>
+                                <%= order.shippedTo.phone %>
+                            </p>
+                        </td>
+                        <td style="vertical-align:top; width:50%">
+                            <h4 style="color:#c74044; text-transform:uppercase">Datos de facturación</h4>
+                            <p>
+                                <%= order.receivedBy.name %><br>
+                                <%= order.shippedTo.address %><br>
+                                <%= order.shippedTo.comuna.name %> <%= order.shippedTo.postalAddress ? ' - ' + order.shippedTo.postalAddress : '' %><br>
+                                <%= order.shippedTo.comuna.parent.name %>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <% if(locals.gmapKey && order.shipmentMethod.id == 9) { %>
+                    <div style="margin-top:20px">
+                        <h4 style="color:#c74044; text-transform:uppercase">Tienda para Retiro</h4>
+                        <p>
+                            <b><%= domain.name.toUpperCase() %> <%= order.destination.name %></b><br>
+                            <%= order.destination.postalAddress.address %>, <%= order.destination.postalAddress.comuna.name %><br>
+                            Tel: <%= order.destination.phone %>
+                        </p>
+                        <img style="width:100%;" src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C<%= order.destination.postalAddress.latitude %>,<%= order.destination.postalAddress.longitude %>&key=<%= gmapKey %>" />
+                    </div>
+                <% } %>
+
+                <table style="width:100%; border-top:1px solid #e6e6e6; margin-top:20px; text-align:center">
+                    <tr>
+                        <td style="padding:20px">
+                            <img src="<%= domainHelper.getLogo() %>" style="height:26px; display:inline-block">
+                            <div style="margin-top:10px">
+                                <% if(webSite.templateInstance.getConfigValue("facebook-url")) { %>
+                                    <a href="<%= webSite.templateInstance.getConfigValue('facebook-url') %>"><img src="https://www.motomundi.cl/content/assets/icons/facebook.png"></a>
+                                <% } %>
+                                <% if(webSite.templateInstance.getConfigValue("instagram-url")) { %>
+                                    <a href="<%= webSite.templateInstance.getConfigValue('instagram-url') %>"><img src="https://www.motomundi.cl/content/assets/icons/instagram.png"></a>
+                                <% } %>
+                            </div>
+                            <p style="font-size:11px; color:#b0b0b0">
+                                No respondas a este mensaje. Si necesitas contactarnos, hazlo <a href="<%= domainHelper.getSiteRoot() %>/contactenos" style="color:#c74044">aquí</a>.
+                            </p>
+                            <p style="font-size:11px; color:#b0b0b0">
+                                Copyright 2016 © <%= formatHelper.toTitleCase(domain.name) %>. Todos los derechos reservados.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

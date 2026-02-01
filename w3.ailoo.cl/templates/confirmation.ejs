@@ -1,0 +1,1043 @@
+<div style="width:100%!important;min-width:100%;box-sizing:border-box;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+    <table
+            style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;background:#fefefe;width:580px;margin:0 auto;Margin:0 auto;text-align:inherit;min-width:580px!important">
+        <tbody>
+        <tr style="padding:0;vertical-align:top;text-align:left">
+            <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <img
+                                                src="<%= domainHelper.getLogo() %>"
+                                                alt="<%= domain.name %>"
+                                                style="outline:none;text-decoration:none;clear:both;display:block;width:auto;max-height:277px;max-width:350px!important;height:auto;margin:40px auto 24px auto">
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <h1 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;font-size:20px;text-transform:uppercase;padding-bottom:20px;border-bottom:1px solid #cccccc">
+                                            Pedido <strong><%= order.number %></strong><br> realizado correctamente
+                                        </h1>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                            Hola, <strong><%= order.receivedBy.name %></strong>:
+                                        </p>
+                                        <!--
+                                        <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                            En <span >$formatHelper.ToTitleCase($domain.Name)</span> ya nos hemos puesto en marcha para que
+                                            recibas cuanto antes todo tu material y puedas disfrutarlo.
+                                        </p>
+                -->
+
+                                        <% if (order.shipmentMethod.id == 9) { %>
+                                            <p>
+                                                Has solicitado retiro en tienda. Debido a que estamos preparando su
+                                                pedido para retiro, <b>NO DEBES PASAR A RETIRAR</b> hasta que recibas
+                                                nuestra confirmación.
+                                            </p>
+                                        <% } else { %>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+
+                                                Gracias por elegir Motomundi, tu mundo sobre dos ruedas. Estamos
+                                                emocionados de confirmar tu compra y ser parte de tu aventura sobre dos
+                                                ruedas.
+
+                                            </p>
+                                        <% } %>
+
+                                        <% if (order.paymentMethod.id == 4) { %>
+                                            <p
+                                                    style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;background-color:#ffe8b8;color:#4d3400;padding:1rem;text-align:center;margin-top:20px">
+                                                Solo recordarte que has escogido <strong>Transferencia bancaria</strong>
+                                                como método de pago y que el pedido se procesará una vez recibido el
+                                                ingreso.
+                                            </p>
+                                            <div
+                                                    style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;margin:2rem 0;padding-top:1rem">
+                                                <h2 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;font-size:20px">
+                                                    Datos Bancarios
+                                                </h2>
+                                                <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;Margin-bottom:10px;margin-bottom:1rem">
+                                                    Para que podamos localizar fácilmente tu transferencia es muy
+                                                    importante
+                                                    que en el campo <em>Remitente</em> u <em>Ordenante</em> indiques:
+                                                    <strong>Número de pedido, Nombre</strong> y
+                                                    <strong>Apellidos</strong>.
+                                                </p>
+                                                <table
+                                                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                                    <tbody>
+                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                        #foreach($acct in $paymentConfig.bankAccounts)
+                                                        <th
+                                                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-left:0!important;padding-right:0!important">
+                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                <tbody>
+                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                        <img src="${domainHelper.GetSiteRoot()}/Content/images/banks/${acct.bankId}.png"
+                                                                             style="outline:none;text-decoration:none;max-width:100%;clear:both;display:block;height:48px;width:auto;max-height:48px!important"
+                                                                        />
+                                                                        <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px;margin-top:1rem">
+                                                                            $acct.bankName
+                                                                        </h4>
+                                                                        <ul style="list-style-type:none;margin-left:0;padding-left:0;font-size:14px">
+                                                                            <li style="margin-bottom:.5rem">
+                                                                                <em style="color:#8a8a8a;font-size:12px;display:block">Beneficiario:</em>
+                                                                                <span>$acct.nameOwner</span>
+                                                                            </li>
+                                                                            <li style="margin-bottom:.5rem">
+                                                                                <em style="color:#8a8a8a;font-size:12px;display:block">Rut
+                                                                                    beneficiario:</em>
+                                                                                $acct.rutOwner
+                                                                            </li>
+                                                                            <li style="margin-bottom:.5rem">
+                                                                                <em style="color:#8a8a8a;font-size:12px;display:block">Numero
+                                                                                    Cuenta:</em>
+                                                                                $acct.accountType $acct.number
+                                                                            </li>
+                                                                            <li style="margin-bottom:.5rem">
+                                                                                <em style="color:#8a8a8a;font-size:12px;display:block">
+                                                                                    Email:
+                                                                                </em> $acct.email
+                                                                            </li>
+                                                                        </ul>
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </th>
+                                                        #end
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                                En cuanto salga de nuestro almacén te enviaremos un correo para que
+                                                estés
+                                                informado del estado del pedido.
+                                            </p>
+                                            <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px">
+                                                ¡Gracias!
+                                            </p>
+                                        <% } %>
+                                    </th>
+                                    <th
+                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;background-color:#ebebeb;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;padding-top:16px">
+                                                                    Consulta cómo está tu pedido en todo momento.
+                                                                </p>
+                                                                <div>
+                                                                    <div>
+
+                                                                    </div>
+                                                                </div>
+                                                                <center style="width:100%;min-width:none!important">
+                                                                    <table align="center"
+                                                                           style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;float:none;text-align:center;width:auto;margin:0 0 16px 0;Margin:0 0 16px 0;margin-bottom:0">
+                                                                        <tbody>
+                                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                            <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                                <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                                    <tbody>
+                                                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                        <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;line-height:1.3;text-align:left;color:#fefefe;background:#c74044;border-radius:3px;border:none;padding:5px 10px 5px 10px;font-size:12px">
+                                                                                            <a href="${domainHelper.GetSiteRoot()}/Account/OrderDetail.rails?orderId=$order.Id&hash=$hash"
+                                                                                               style="margin:0;Margin:0;text-align:left;line-height:1.3;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:bold;color:#fefefe;text-decoration:none;display:inline-block;border:0 solid #c74044;border-radius:3px;padding:5px 10px 5px 10px;font-size:12px"
+                                                                                               target="_blank">
+                                                                                                Ir al estado del pedido
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </center>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </th>
+                                    <th
+                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <p
+                                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;padding-top:8px">
+                                            También te dejamos un resumen con la información más relevante:
+                                        </p>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;background-color:#ebebeb;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <h3 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;Margin-bottom:10px;text-transform:uppercase;font-size:16px;margin-bottom:0;color:#484848;padding-left:16px">
+                                                                    Tu pedido
+                                                                </h3>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-bottom:1px solid #cccccc;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th valign="middle"
+
+                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:370.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;Margin-bottom:10px;font-size:10px;text-transform:uppercase;margin-bottom:0">
+                                                                    Artículo
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th valign="middle"
+
+                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:32.33333px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;Margin-bottom:10px;text-align:center;font-size:10px;text-transform:uppercase;margin-bottom:0">
+                                                                    Unidades
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th valign="middle"
+
+                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;Margin-bottom:10px;text-align:right;font-size:10px;text-transform:uppercase;margin-bottom:0">
+                                                                    <% if (typeof isNeto !== 'undefined' && isNeto) { %>
+                                                                        Precio Neto
+                                                                    <% } else { %>
+                                                                        Precio
+                                                                    <% } %>
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <% order.items.forEach(function(item) { %>
+                                            <% if (item.type === OrderItemType.Product || item.type === OrderItemType.Coupon || item.type === OrderItemType.Discount) { %>
+
+                                                <table
+                                                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-bottom:1px solid #cccccc;margin-left:0px;padding:0;display:table;width:100%">
+                                                    <tbody>
+                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                        <th valign="middle"
+                                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                <tbody>
+                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:center;font-size:16px;line-height:1.3">
+                                                                        <% if(item.type === OrderItemType.Coupon || item.type === OrderItemType.Discount) { %>
+                                                                            <img src="${domainHelper.GetSiteRoot()}/Templates/MotoMundiMobile/content/images/checkout-discount.png"
+                                                                                 alt="$item.Product.FullName"
+                                                                                 style="padding-left: 10px;outline:none;text-decoration:none;clear:both;display:block;width:30px;height:30px;max-width:30px!important">
+
+                                                                        <% } else { %>
+                                                                            <img src="<%= domainHelper.getSiteRoot() + item.imageURL %>"
+                                                                                 alt="$item.Product.FullName"
+                                                                                 class='prod_img'
+                                                                                 style="outline:none;text-decoration:none;clear:both;display:block;width:50px;height:50px;max-width:50px!important">
+                                                                        <% } %>
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </th>
+                                                        <th valign="middle"
+                                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:322.33333px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                <tbody>
+                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                        <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;Margin-bottom:10px;margin-bottom:0">
+                                                                            <% if(item.product) { %>
+                                                                                <%= item.product.fullName %> <%= item.featureDescription %>
+                                                                            <% } else if(item.type === "COUPON") { %>
+                                                                                Cupón <%= item.coupon.name %>
+                                                                            <% } else { %>
+                                                                                <%= item.comment %>
+                                                                            <% } %>
+                                                                            <span
+                                                                                    style="display:none!important;overflow:hidden;max-height:0;width:0;line-height:0;font-size:13px!important;font-style:italic;color:#8a8a8a"><span>Unidades: $item.Quantity</span></span>
+                                                                        </p>
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </th>
+                                                        <th valign="middle"
+                                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:32.33333px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                <tbody>
+                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                        <p
+                                                                                style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;font-size:16px;line-height:1.3;Margin-bottom:10px;color:#8a8a8a;text-align:center;margin-bottom:0">
+                                                                            <%= item.quantity %>
+                                                                        </p>
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </th>
+                                                        <th valign="middle"
+                                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                <tbody>
+                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                        <p
+                                                                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;font-size:16px;line-height:1.3;Margin-bottom:10px;white-space:nowrap;text-align:right;margin-bottom:0">
+                                                                            <strong><%= item.unitPrice %></strong>
+                                                                        </p>
+                                                                    </th>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </th>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            <% } %>
+                                        <% }); %>
+
+                                        <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:467.33333px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:right;color:#8a8a8a;margin:0">
+                                                                    Gastos de envío
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;white-space:nowrap;text-align:right;color:#8a8a8a;margin:0">
+
+                                                                    <% if(order.shippingCost.amount == 0 && order.shipmentMethod.id != 9) { %>
+                                                                        Gratis
+                                                                    <% } else if(order.shipmentMethod.id == 9) { %>
+                                                                        Retiro <br/>en tienda
+                                                                    <% } else { %>
+                                                                        <%= formatHelper.formatMoney(order.shippingCost.amount) %>
+                                                                    <% } %>
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;text-transform:uppercase;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:370.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3"></th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th valign="bottom"
+
+                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:right;margin:0">
+                                                                    Total
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th valign="bottom"
+
+                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:80.66667px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;white-space:nowrap;text-align:right;margin:0">
+                                                                    <strong><%= formatHelper.formatMoney(order.total) %></strong>
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <p
+                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;padding-top:8px">
+                                                                <center>
+                                                                    <a href="https://youtu.be/ca8vPpLiiIQ"
+                                                                       target="_blank">
+                                                                        <img style="width:100%;"
+                                                                             src="https://www.motomundi.cl/Content/uploads/1/returns.jpg"/>
+                                                                    </a>
+                                                                </center>
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </th>
+                                    <th
+                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;margin-bottom:32px;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <ul style="list-style-type:none;margin-left:0;padding-left:0;margin-top:32px">
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">
+                                                                            Tipo de
+                                                                            envío:
+                                                                        </em><br> <%= order.shipmentMethod.description %>
+                                                                    </li>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">Fecha del pedido:</em><br>
+                                                                        <%= order.date %>
+                                                                    </li>
+                                                                    <% if(order.shipmentMethod.id != 9) { %>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">
+                                                                                Fecha de entrega aproximada:
+                                                                            </em><br>Nos tomará <strong>entre 1 a 5 días
+                                                                                hábiles</strong> en
+                                                                            <strong>preparar</strong> su pedido.
+                                                                            Este tiempo <strong>NO</strong> corresponde
+                                                                            al
+                                                                            tiempo de entrega. Para ver los tiempos de
+                                                                            entrega
+                                                                            presione
+                                                                            <a href="https://www.motomundi.cl/10228-plazos-de-entrega">aquí</a>.
+                                                                            A estos
+                                                                            tiempos hay que sumar el tiempo de
+                                                                            preparación.
+
+
+                                                                        </li>
+                                                                    <% } %>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">
+                                                                            Forma de
+                                                                            Pago:
+                                                                        </em><br> <%= order.paymentMethod.name %>
+                                                                    </li>
+                                                                </ul>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+
+                                                                <% if (order.shipmentMethod.id == 9) { %>
+                                                                    <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px">
+                                                                        Persona quien Retira
+                                                                    </h4>
+                                                                    <ul style="list-style-type:none;margin-left:0;padding-left:0">
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Nombre:</em><br>
+                                                                            <%= order.receivedBy.name %>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Rut/Dni:</em><br>
+                                                                            <%= order.shippedTo.rut %>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Teléfono:</em><br>
+                                                                            <a
+                                                                                    href="tel:<%= order.shippedTo.phone %>"
+                                                                                    value="<%= order.shippedTo.phone %>"
+                                                                                    target="_blank"><%= order.shippedTo.phone %></a>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">
+                                                                                Correo electrónico:
+                                                                            </em><br>
+                                                                            <a href="mailto:<%= order.shippedTo.email %>"
+                                                                               target="_blank"><%= order.shippedTo.email %></a>
+                                                                        </li>
+
+                                                                    </ul>
+
+                                                                <% } else { %>
+
+                                                                    <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px">
+                                                                        Datos de Envío
+                                                                    </h4>
+                                                                    <ul style="list-style-type:none;margin-left:0;padding-left:0">
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Nombre:</em><br>
+                                                                            <%= order.receivedBy.name %>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Dirección:</em><br>
+                                                                            <a
+                                                                                    href="https://maps.google.com/?q=${formatHelper.EncodeUrl($order.ShippedTo.Address)}&amp;entry=gmail&amp;source=g">
+                                                                                <%= order.shippedTo.address %>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Comuna:</em><br>
+                                                                            <%= order.shippedTo.comuna.name %>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Región:</em><br>
+                                                                            <%= order.shippedTo.comuna.parent?.name %>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">País:</em><br>
+                                                                            Chile
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">Teléfono:</em><br>
+                                                                            <a
+                                                                                    href="tel:<%= order.shippedTo.phone %>"
+                                                                                    value="<%= order.shippedTo.phone %>"
+                                                                                    target="_blank">
+                                                                                <%=order.shippedTo.phone%>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li style="margin-bottom:.7rem">
+                                                                            <em style="color:#8a8a8a">
+                                                                                Correo electrónico:
+                                                                            </em><br>
+                                                                            <a href="mailto:<%= order.shippedTo.email %>"
+                                                                               target="_blank">
+                                                                                <%=order.shippedTo.email%>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                <% } %>
+
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px">
+                                                                    Datos de facturación
+                                                                </h4>
+                                                                <ul style="list-style-type:none;margin-left:0;padding-left:0">
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">Nombre:</em><br>
+                                                                        <%= order.receivedBy.name %>
+
+                                                                    </li>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">Dirección:</em><br> <a
+                                                                                href="https://maps.google.com/?q=<%= formatHelper.encodeUrl(order.shippedTo.address + " " + order.shippedTo.comuna?.name) %>&amp;entry=gmail&amp;source=g">
+                                                                            <%= order.shippedTo.address %>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">Comuna:</em><br>
+                                                                        <%= order.shippedTo.comuna.name %>
+                                                                        <% if( order.shippedTo.postalAddress ) { %>
+                                                                            - <%= order.shippedTo.postalAddress %>
+                                                                        <% } %>
+                                                                    </li>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">Provincia:</em><br>
+                                                                        <%= order.shippedTo.comuna.parent.name %>
+                                                                    </li>
+                                                                    <li style="margin-bottom:.7rem">
+                                                                        <em style="color:#8a8a8a">País:</em><br> Chile
+                                                                    </li>
+                                                                </ul>
+                                                            </th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+
+
+                                            </tr>
+                                            <% if(locals.gmapKey && order.shipmentMethod.id == 9) { %>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px">
+                                                            Tienda para Retiro
+                                                        </h4>
+                                                        <ul style="list-style-type:none;margin-left:0;padding-left:0">
+
+                                                            <li style="margin-bottom:.7rem">
+
+                                                                <b><%= domain.name.toUpperCase() %>  <%= order.destination.name %></b>
+                                                                <br/>
+                                                                <a href="https://maps.google.com/?q=<%=formatHelper.encodeUrl(order.destination.postalAddress.address)%>&amp;entry=gmail&amp;source=g">
+
+                                                                    <%= order.destination.postalAddress.address %>
+                                                                    , <%= order.destination.postalAddress.comuna.name %>
+
+                                                                </a>
+                                                                <br/>Tel: <%= order.destination.phone %>
+                                                            </li>
+                                                        </ul>
+
+                                                        <img style="width:100%;" width="100%"
+                                                             src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C<%=order.destination.postalAddress.latitude + "," + order.destination.postalAddress.longitude%>&key=$gmapKey"/>
+                                                    </td>
+                                                </tr>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </th>
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <table
+                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
+                    <tbody>
+                    <tr style="padding:0;vertical-align:top;text-align:left">
+                        <th
+                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:564px;padding-left:16px;padding-right:16px">
+                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                <tbody>
+                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                        <table
+                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-top:1px solid #cccccc;margin-left:0px;padding:0;display:table;width:100%">
+                                            <tbody>
+                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                <th
+                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;padding-bottom:0!important;margin:0 auto;Margin:0 auto;width:564px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                        <tbody>
+                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                <table
+                                                                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                                                    <tbody>
+                                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                        <th
+                                                                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;padding-top:0!important;padding-bottom:12px!important;margin:0 auto;Margin:0 auto;width:564px;padding-left:0!important;padding-right:0!important">
+                                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                                <tbody>
+                                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                                        <table
+                                                                                                style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;display:table;width:100%">
+                                                                                            <tbody>
+                                                                                            <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                                <th
+                                                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                                                        <tbody>
+                                                                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                                                                <a href="$domainHelper.GetSiteRoot()"
+                                                                                                                   style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none"
+                                                                                                                   target="_blank">
+                                                                                                                    <img
+                                                                                                                            src="<%= domainHelper.getLogo() %>"
+                                                                                                                            alt="<%= (domain.name) %> logo"
+                                                                                                                            style="outline:none;text-decoration:none;max-width:100%;clear:both;display:block;border:none;width:auto;height:26px;max-height:26px">
+                                                                                                                </a>
+                                                                                                            </th>
+                                                                                                        </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </th>
+                                                                                                <th
+                                                                                                        style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;margin:0 auto;Margin:0 auto;padding-bottom:16px;width:274px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                                                                    <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                                                        <tbody>
+                                                                                                        <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                                            <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+
+
+                                                                                                                <p
+                                                                                                                        style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;Margin-bottom:10px;text-align:right;color:#8a8a8a;font-size:12px;margin-bottom:0">
+
+                                                                                                                    <% if(webSite.templateInstance.getConfigValue("facebook-url")) { %>
+                                                                                                                        <a href='<%= webSite.templateInstance.getConfigValue("facebook-url") %>'
+                                                                                                                           style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none;margin-left:2px"
+                                                                                                                           target="_blank">
+                                                                                                                            <img src="https://www.motomundi.cl/content/assets/icons/facebook.png"
+                                                                                                                                 alt="Facebook logo"
+                                                                                                                                 style="outline:none;text-decoration:none;width:auto;max-width:100%;clear:both;border:none;display:inline-block"
+                                                                                                                            >
+                                                                                                                        </a>
+                                                                                                                    <% } %>
+
+                                                                                                                    <% if(webSite.templateInstance.getConfigValue("tiktok-url")) { %>
+                                                                                                                        <a href='https://www.tiktok.com/@motomundicl'
+                                                                                                                           style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none;margin-left:2px"
+                                                                                                                           target="_blank">
+                                                                                                                            <img src="https://www.motomundi.cl/content/assets/icons/tiktok.png"
+                                                                                                                                 alt="Twitter logo"
+                                                                                                                                 style="outline:none;text-decoration:none;width:auto;max-width:100%;clear:both;border:none;display:inline-block"
+                                                                                                                            >
+                                                                                                                        </a>
+                                                                                                                    <% } %>
+                                                                                                                    <% if(webSite.templateInstance.getConfigValue("youtube-url")) { %>
+                                                                                                                        <a href='<%= webSite.templateInstance.getConfigValue("youtube-url") %>'
+                                                                                                                           style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none;margin-left:2px"
+                                                                                                                           target="_blank">
+                                                                                                                            <img src="https://www.motomundi.cl/content/assets/icons/youtube.png"
+                                                                                                                                 alt="Youtube logo"
+                                                                                                                                 style="outline:none;text-decoration:none;width:auto;max-width:100%;clear:both;border:none;display:inline-block"
+                                                                                                                            >
+                                                                                                                        </a>
+                                                                                                                    <% } %>
+                                                                                                                    <% if(webSite.templateInstance.getConfigValue("instagram-url")) { %>
+                                                                                                                        <a href="http://www.instagram.com/motomundi"
+                                                                                                                        style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none;margin-left:2px"
+                                                                                                                        target="_blank">
+                                                                                                                        <img src="https://www.motomundi.cl/content/assets/icons/instagram.png"
+                                                                                                                             alt="Instagram logo"
+                                                                                                                             style="outline:none;text-decoration:none;width:auto;max-width:100%;clear:both;border:none;display:inline-block"
+                                                                                                                        >
+                                                                                                                        </a>
+                                                                                                                    <% } %>
+                                                                                                                </p>
+                                                                                                            </th>
+                                                                                                        </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </th>
+                                                                                            </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </th>
+                                                                                    <th
+                                                                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </th>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <table
+                                                                        style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;border-top:1px solid #e6e6e6;margin-left:0px;padding:0;display:table;width:100%">
+                                                                    <tbody>
+                                                                    <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                        <th
+                                                                                style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;text-align:left;font-size:16px;line-height:1.3;padding-bottom:0!important;margin:0 auto;Margin:0 auto;width:564px;padding-top:16px;padding-left:0!important;padding-right:0!important">
+                                                                            <table style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;text-align:left;width:100%">
+                                                                                <tbody>
+                                                                                <tr style="padding:0;vertical-align:top;text-align:left">
+                                                                                    <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
+                                                                                        <p
+                                                                                                style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;color:#8a8a8a;font-size:12px">
+                                                                                            <small style="font-size:11px;color:#b0b0b0">
+                                                                                                No respondas a este
+                                                                                                mensaje. Si necesitas
+                                                                                                ponerte en contacto con
+                                                                                                nostros, hazlo <a
+                                                                                                        href="<%domainHelper.getSiteRoot()%>/contactenos"
+                                                                                                        style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none"
+                                                                                                        target="_blank">aquí</a>.
+                                                                                            </small>
+                                                                                        </p>
+                                                                                        <p
+                                                                                                style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;color:#8a8a8a;font-size:12px">
+                                                                                            <small style="font-size:11px;color:#b0b0b0">
+                                                                                                <span><%= formatHelper.toTitleCase(domain.name) %></span>.cl
+                                                                                                es el nombre comercial
+                                                                                                de <span><%=formatHelper.toTitleCase(domain.party.name)%></span>
+                                                                                            </small>
+                                                                                        </p>
+                                                                                        <p
+                                                                                                style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;color:#8a8a8a;font-size:12px">
+                                                                                            <small style="font-size:11px;color:#b0b0b0">
+                                                                                                Copyright <%= new Date().getFullYear() %> © <span><%=formatHelper.toTitleCase(domain.name)%></span>.
+                                                                                                Todos los derechos
+                                                                                                reservados.
+                                                                                            </small>
+                                                                                        </p>
+                                                                                        <p
+                                                                                                style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;color:#8a8a8a;font-size:12px">
+                                                                                            <small style="font-size:11px;color:#b0b0b0">
+                                                                                                <a href="<%domainHelper.getSiteRoot()%>/aviso-legal"
+                                                                                                   style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none"
+                                                                                                   target="_blank">
+                                                                                                    Aviso Legal</a>
+                                                                                            </small>
+                                                                                        </p>
+                                                                                        <p style="text-align:center;">
+                                                                                            <a href='https://www.ailoo.cl'><img
+                                                                                                        style="padding-top: 3px;width: 100px;"
+                                                                                                        src="https://www.ailoo.cl/Images/ailoo-white.png"/></a>
+                                                                                            <br/>
+                                                                                            <small style="font-size:11px;color:#b0b0b0">
+                                                                                                <a style="text-decoration:none;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;text-align:center;color:#8a8a8a;font-size:12px"
+                                                                                                   href='https://www.ailoo.cl'>Powered
+                                                                                                    by www.ailoo.cl</a>
+                                                                                            </small>
+
+                                                                                        </p>
+                                                                                    </th>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </th>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </th>
+                                                            <th
+                                                                    style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </th>
+                                    <th
+                                            style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3;width:0;padding:0!important"></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div></div>
+    <div>
+    </div>
+    <div style="display:none;white-space:nowrap;font:15px courier;line-height:0">
+        &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    </div>
+    <div></div>
+</div>
