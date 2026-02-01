@@ -67,7 +67,7 @@
                                         </p>
                 -->
 
-                                        <% if (order.shipmentMethod.id == 9) { %>
+                                        <% if (order.shipmentMethod?.id == 9) { %>
                                             <p>
                                                 Has solicitado retiro en tienda. Debido a que estamos preparando su
                                                 pedido para retiro, <b>NO DEBES PASAR A RETIRAR</b> hasta que recibas
@@ -208,7 +208,7 @@
                                                                                     <tbody>
                                                                                     <tr style="padding:0;vertical-align:top;text-align:left">
                                                                                         <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin:0;Margin:0;line-height:1.3;text-align:left;color:#fefefe;background:#c74044;border-radius:3px;border:none;padding:5px 10px 5px 10px;font-size:12px">
-                                                                                            <a href="${domainHelper.GetSiteRoot()}/Account/OrderDetail.rails?orderId=$order.Id&hash=$hash"
+                                                                                            <a href="<%= domainHelper.getSiteRoot() %>/Account/OrderDetail.rails?orderId=<%=order.Id%>&hash=<%= hash %>"
                                                                                                style="margin:0;Margin:0;text-align:left;line-height:1.3;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:bold;color:#fefefe;text-decoration:none;display:inline-block;border:0 solid #c74044;border-radius:3px;padding:5px 10px 5px 10px;font-size:12px"
                                                                                                target="_blank">
                                                                                                 Ir al estado del pedido
@@ -464,9 +464,9 @@
                                                             <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
                                                                 <p style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;Margin:0;font-size:16px;line-height:1.3;margin-bottom:10px;Margin-bottom:10px;white-space:nowrap;text-align:right;color:#8a8a8a;margin:0">
 
-                                                                    <% if(order.shippingCost.amount == 0 && order.shipmentMethod.id != 9) { %>
+                                                                    <% if(order.shippingCost.amount == 0 && order.shipmentMethod?.id != 9) { %>
                                                                         Gratis
-                                                                    <% } else if(order.shipmentMethod.id == 9) { %>
+                                                                    <% } else if(order.shipmentMethod?.id == 9) { %>
                                                                         Retiro <br/>en tienda
                                                                     <% } else { %>
                                                                         <%= formatHelper.formatMoney(order.shippingCost.amount) %>
@@ -596,13 +596,13 @@
                                                                         <em style="color:#8a8a8a">
                                                                             Tipo de
                                                                             envío:
-                                                                        </em><br> <%= order.shipmentMethod.description %>
+                                                                        </em><br> <%= order.shipmentMethod?.description %>
                                                                     </li>
                                                                     <li style="margin-bottom:.7rem">
                                                                         <em style="color:#8a8a8a">Fecha del pedido:</em><br>
                                                                         <%= order.date %>
                                                                     </li>
-                                                                    <% if(order.shipmentMethod.id != 9) { %>
+                                                                    <% if(order.shipmentMethod?.id != 9) { %>
                                                                         <li style="margin-bottom:.7rem">
                                                                             <em style="color:#8a8a8a">
                                                                                 Fecha de entrega aproximada:
@@ -648,7 +648,7 @@
                                                         <tr style="padding:0;vertical-align:top;text-align:left">
                                                             <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
 
-                                                                <% if (order.shipmentMethod.id == 9) { %>
+                                                                <% if (order.shipmentMethod?.id == 9) { %>
                                                                     <h4 style="padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;word-wrap:normal;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;margin-bottom:10px;Margin-bottom:10px;text-transform:uppercase;font-size:16px">
                                                                         Persona quien Retira
                                                                     </h4>

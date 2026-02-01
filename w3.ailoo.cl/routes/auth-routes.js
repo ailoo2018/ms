@@ -4,19 +4,9 @@ const jwt = require("jsonwebtoken");
 const {db: drizzleDb} = require("../db/drizzle");
 const {and, eq} = require("drizzle-orm");
 const crypto = require('crypto');
+const {doHash} = require("../utils/utils");
 
-function doHash(val) {
-  const key = 'optive15';
 
-  // Create the HMAC instance using md5 and the key
-  const hmac = crypto.createHmac('md5', key);
-
-  // Update with the input value (ASCII encoding as per your C# code)
-  hmac.update(val, 'ascii');
-
-  // Digest the hash as a hex string and convert to uppercase
-  return hmac.digest('hex').toUpperCase();
-}
 
 app.get("/:domainId/auth/test", async (req, res, next) => {
   try {

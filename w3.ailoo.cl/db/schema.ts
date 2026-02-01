@@ -20,6 +20,16 @@ const {relations} = require("drizzle-orm");
 // Defining the schema namespace
 const motomundiSchema = mysqlSchema("motomundi");
 
+const geographicBoundary = motomundiSchema.table("geographicboundary", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", {length: 45}),
+    code: varchar("Code", {length: 10}),
+    type: varchar("Type", {length: 20}), // e.g., 'COUNTRY', 'REGION', 'COMMUNE'
+    geocoding: text("Geocoding"),
+    latitude: double("Latitude"),
+    longitude: double("Longitude"),
+});
+
 const brand = motomundiSchema.table("brand", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 255 }),
@@ -38,7 +48,66 @@ const brand = motomundiSchema.table("brand", {
     nameDomainIdx: index("IDX_BRAND_NAMEDOMAIN").on(table.name, table.domainId),
 }));
 
-// --- Model Table ---
+const party = motomundiSchema.table("party", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", {length: 255}),
+    type: varchar("Type", {length: 20}).notNull(),
+    firstName: varchar("FirstName", {length: 45}),
+    lastName: varchar("LastName", {length: 45}),
+    address: varchar("Address", {length: 255}),
+    rut: varchar("Rut", {length: 45}),
+    giro: varchar("Giro", {length: 255}),
+    phone: varchar("Phone", {length: 45}),
+    comuna: varchar("Comuna", {length: 45}),
+    email: varchar("Email", {length: 100}),
+    ridingStyles: varchar("RidingStyles", {length: 255}),
+    receiveNewsletter: smallint("ReceiveNewsletter"),
+    comunaId: int("ComunaId"),
+    domainId: int("DomainId"),
+    tradeName: varchar("TradeName", {length: 255}),
+    createDate: datetime("CreateDate"),
+    deleted: smallint("Deleted").default(0),
+    modifiedDate: datetime("ModifiedDate"),
+    noOrderRecovery: smallint("NoOrderRecovery").default(0),
+    gender: smallint("Gender"),
+    birthDay: datetime("BirthDay"),
+    avatar: varchar("Avatar", {length: 45}),
+}, (table) => ({
+    idxDomain: index("IDX_DOMAIN").on(table.domainId),
+    idxPartyEmail: index("IDX_PARTY_EMAIL").on(table.email, table.domainId),
+    idxPartyRut: index("IDX_PARTY_RUT").on(table.domainId, table.rut),
+}));
+
+const user = motomundiSchema.table("user", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    username: varchar("Username", {length: 255}),
+    password: varchar("Password", {length: 255}),
+    supplierId: int("SupplierId"),
+    personId: int("PersonId"),
+    lastLogin: datetime("LastLogin"),
+    email: varchar("Email", {length: 100}),
+    nickname: varchar("Nickname", {length: 45}),
+    isBackEndUser: smallint("IsBackEndUser").notNull().default(0),
+    domainId: int("DomainId"),
+    hasAccessToB2B: smallint("HasAccessToB2B").default(0),
+    deleted: smallint("Deleted").default(0),
+    phoneExtension: varchar("PhoneExtension", {length: 5}),
+    historyWrongPassword: int("HistoryWrongPassword").default(0),
+    isBlocked: smallint("IsBlocked").default(0),
+    blockedDate: datetime("BlockedDate"),
+    whatsApp: varchar("WhatsApp", {length: 45}),
+    avatar: varchar("Avatar", {length: 100}),
+}, (table) => ({
+    supplierIdx: index("SupplierId").on(table.supplierId),
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
+    personIdx: index("FK_USER_PARTY_idx").on(table.personId),
+    fkUserParty: foreignKey({
+        columns: [table.personId],
+        foreignColumns: [party.id],
+        name: "FK_USER_PARTY"
+    }).onDelete("cascade"),
+}));
+
 const model = motomundiSchema.table("model", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 255 }),
@@ -118,8 +187,6 @@ const product = motomundiSchema.table("product", {
 
 const productItem = motomundiSchema.table("productitem", {
     id: int("Id").primaryKey().autoincrement().notNull(),
-    // Note: This matches your SQL 'ProductItemId' bigint
-    externalProductItemId: bigint("ProductItemId", { mode: 'number' }),
     description: varchar("Description", { length: 255 }),
     barCode1: varchar("BarCode1", { length: 100 }),
     barCode2: varchar("BarCode2", { length: 100 }),
@@ -130,7 +197,6 @@ const productItem = motomundiSchema.table("productitem", {
     deleted: smallint("Deleted").default(0),
     originId: int("OriginId"),
 }, (table) => ({
-    productItemIdIdx: index("IDX_PRODITEMID").on(table.externalProductItemId),
     productIdIdx: index("FK_PRDITEM_PRD_idx").on(table.productId),
     barcode1Idx: index("IDX_PRDITEM_BARCODE1").on(table.barCode1),
     // Foreign Key Constraint
@@ -141,7 +207,34 @@ const productItem = motomundiSchema.table("productitem", {
     }).onDelete("cascade"),
 }));
 
-// --- SaleOrder Table ---
+const facility = motomundiSchema.table("facility", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", {length: 255}),
+    code: varchar("Code", {length: 45}),
+    type: int("Type"),
+    deleted: smallint("Deleted").default(0),
+    domainId: int("DomainId"),
+    isAvailableForInternet: smallint("IsAvailableForInternet").default(0),
+    isHeadquarters: smallint("IsHeadquarters").default(0),
+    allowPickup: smallint("AllowPickup").default(0),
+    phone: varchar("Phone", {length: 45}),
+    configuration: text("Configuration"),
+    parentId: int("ParentId"),
+    facilityDeliveryTimeId: int("FacilityDeliveryTimeId"),
+    linkedFacilityId: int("LinkedFacilityId"),
+}, (table) => ({
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
+    deliveryTimeIdx: index("FK_FACILITY_DELTIME_idx").on(table.facilityDeliveryTimeId),
+
+    // Foreign Key Constraint
+    // Note: Reference 'facilityDeliveryTime' table if you have it mapped
+    deliveryTimeFk: foreignKey({
+        columns: [table.facilityDeliveryTimeId],
+        foreignColumns: [table.id], // Placeholder: Replace with facilityDeliveryTime.id
+        name: "FK_FACILITY_DELTIME"
+    }).onDelete("set null"),
+}));
+
 const saleOrder = motomundiSchema.table("saleorder", {
     id: int("Id").autoincrement().primaryKey(),
     orderDate: datetime("OrderDate"),
@@ -167,7 +260,6 @@ const saleOrder = motomundiSchema.table("saleorder", {
     shippedToIdx: index("ShippedToId").on(table.shippedToId),
 }));
 
-// --- SaleOrderItem Table ---
 const saleOrderItem = motomundiSchema.table("saleorderitem", {
     id: int("Id").autoincrement().primaryKey(),
     unitPrice: double("UnitPrice"),
@@ -196,7 +288,6 @@ const saleOrderItem = motomundiSchema.table("saleorderitem", {
     }).onDelete("cascade"),
 }));
 
-// --- PostalAddress Table ---
 const postalAddress = motomundiSchema.table("postaladdress", {
     postalAddressId: int("PostalAddressId").primaryKey().notNull(),
     address: varchar("Address", {length: 255}),
@@ -229,65 +320,6 @@ const postalAddress = motomundiSchema.table("postaladdress", {
     postalAddressIdx: index("PostalAddressId").on(table.postalAddressId),
 }));
 
-// --- Party Table ---
-const party = motomundiSchema.table("party", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    name: varchar("Name", {length: 255}),
-    type: varchar("Type", {length: 20}).notNull(),
-    firstName: varchar("FirstName", {length: 45}),
-    lastName: varchar("LastName", {length: 45}),
-    address: varchar("Address", {length: 255}),
-    rut: varchar("Rut", {length: 45}),
-    giro: varchar("Giro", {length: 255}),
-    phone: varchar("Phone", {length: 45}),
-    comuna: varchar("Comuna", {length: 45}),
-    email: varchar("Email", {length: 100}),
-    ridingStyles: varchar("RidingStyles", {length: 255}),
-    receiveNewsletter: smallint("ReceiveNewsletter"),
-    comunaId: int("ComunaId"),
-    domainId: int("DomainId"),
-    tradeName: varchar("TradeName", {length: 255}),
-    createDate: datetime("CreateDate"),
-    deleted: smallint("Deleted").default(0),
-    modifiedDate: datetime("ModifiedDate"),
-    noOrderRecovery: smallint("NoOrderRecovery").default(0),
-    gender: smallint("Gender"),
-    birthDay: datetime("BirthDay"),
-    avatar: varchar("Avatar", {length: 45}),
-}, (table) => ({
-    idxDomain: index("IDX_DOMAIN").on(table.domainId),
-    idxPartyEmail: index("IDX_PARTY_EMAIL").on(table.email, table.domainId),
-    idxPartyRut: index("IDX_PARTY_RUT").on(table.domainId, table.rut),
-}));
-
-const facility = motomundiSchema.table("facility", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    name: varchar("Name", {length: 255}),
-    code: varchar("Code", {length: 45}),
-    type: int("Type"),
-    deleted: smallint("Deleted").default(0),
-    domainId: int("DomainId"),
-    isAvailableForInternet: smallint("IsAvailableForInternet").default(0),
-    isHeadquarters: smallint("IsHeadquarters").default(0),
-    allowPickup: smallint("AllowPickup").default(0),
-    phone: varchar("Phone", {length: 45}),
-    configuration: text("Configuration"),
-    parentId: int("ParentId"),
-    facilityDeliveryTimeId: int("FacilityDeliveryTimeId"),
-    linkedFacilityId: int("LinkedFacilityId"),
-}, (table) => ({
-    domainIdx: index("IDX_DOMAIN").on(table.domainId),
-    deliveryTimeIdx: index("FK_FACILITY_DELTIME_idx").on(table.facilityDeliveryTimeId),
-
-    // Foreign Key Constraint
-    // Note: Reference 'facilityDeliveryTime' table if you have it mapped
-    deliveryTimeFk: foreignKey({
-        columns: [table.facilityDeliveryTimeId],
-        foreignColumns: [table.id], // Placeholder: Replace with facilityDeliveryTime.id
-        name: "FK_FACILITY_DELTIME"
-    }).onDelete("set null"),
-}));
-
 const facilityContactMechanism = motomundiSchema.table("facilitycontactmechanism", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     contactMechanismId: int("ContactMechanismId"),
@@ -296,38 +328,6 @@ const facilityContactMechanism = motomundiSchema.table("facilitycontactmechanism
     // Adding indexes for performance (standard for join tables)
     facilityIdx: index("facility_id_idx").on(table.facilityId),
     contactMechanismIdx: index("contact_mechanism_id_idx").on(table.contactMechanismId),
-}));
-
-
-// --- User Table ---
-const user = motomundiSchema.table("user", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    username: varchar("Username", {length: 255}),
-    password: varchar("Password", {length: 255}),
-    supplierId: int("SupplierId"),
-    personId: int("PersonId"),
-    lastLogin: datetime("LastLogin"),
-    email: varchar("Email", {length: 100}),
-    nickname: varchar("Nickname", {length: 45}),
-    isBackEndUser: smallint("IsBackEndUser").notNull().default(0),
-    domainId: int("DomainId"),
-    hasAccessToB2B: smallint("HasAccessToB2B").default(0),
-    deleted: smallint("Deleted").default(0),
-    phoneExtension: varchar("PhoneExtension", {length: 5}),
-    historyWrongPassword: int("HistoryWrongPassword").default(0),
-    isBlocked: smallint("IsBlocked").default(0),
-    blockedDate: datetime("BlockedDate"),
-    whatsApp: varchar("WhatsApp", {length: 45}),
-    avatar: varchar("Avatar", {length: 100}),
-}, (table) => ({
-    supplierIdx: index("SupplierId").on(table.supplierId),
-    domainIdx: index("IDX_DOMAIN").on(table.domainId),
-    personIdx: index("FK_USER_PARTY_idx").on(table.personId),
-    fkUserParty: foreignKey({
-        columns: [table.personId],
-        foreignColumns: [party.id],
-        name: "FK_USER_PARTY"
-    }).onDelete("cascade"),
 }));
 
 const contactMechanism = motomundiSchema.table("contactmechanism", {
@@ -402,6 +402,57 @@ const shipmentMethodType = motomundiSchema.table("shipmentmethodtype", {
     description: varchar("Description", { length: 255 }),
 });
 
+const webContentConfiguration = motomundiSchema.table("webcontentconfiguration", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", {length: 255}),
+    configuration: text("Configuration"), // SQL says longtext, Drizzle text is sufficient
+    domainId: int("DomainId"),
+    webContentId: int("WebContentId"),
+    isDefault: smallint("IsDefault").notNull().default(0),
+    isEnabled: smallint("IsEnabled").default(1),
+    content: text("Content"),
+    location: varchar("Location", {length: 255}),
+    type: smallint("Type").default(0),
+    subtype: smallint("Subtype").default(0),
+    col: smallint("Col").default(0),
+    template: text("Template"),
+    title: varchar("Title", {length: 200}),
+    orderWeight: smallint("OrderWeight").default(0),
+    createDate: datetime("CreateDate"),
+    webSiteId: int("WebSiteId"),
+    createUserId: int("CreateUserId"),
+    modifyUserId: int("ModifyUserId"),
+    modifyDate: datetime("ModifyDate"),
+    status: smallint("Status"),
+    version: smallint("Version"),
+    visibility: smallint("Visibility"),
+    isFeatured: smallint("IsFeatured"),
+    friendlyUrl: varchar("FriendlyUrl", {length: 100}),
+    displaySettings: text("DisplaySettings"),
+}, (table) => ({
+    locationIdx: index("IDX_WCC_LOCATION").on(table.location, table.webSiteId, table.domainId),
+    domIdIdx: index("IDX_WCC_DOMID").on(table.domainId),
+    websiteIdx: index("IDX_WCC_WEBSITEID").on(table.webSiteId),
+}));
+
+const website = motomundiSchema.table("website", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    webServerSiteId: int("WebServerSiteId"),
+    name: varchar("Name", {length: 100}),
+    templateInstanceId: int("TemplateInstanceId"),
+    domainId: varchar("DomainId", {length: 45}),
+    categoryId: int("CategoryId").default(0),
+    type: smallint("Type"),
+    config: text("Config"),
+}, (table) => ({
+    templateIdx: index("FK_WEBSITE_WCC_idx").on(table.templateInstanceId),
+    templateFk: foreignKey({
+        columns: [table.templateInstanceId],
+        foreignColumns: [webContentConfiguration.id],
+        name: "FK_WEBSITE_WCC"
+    }),
+}));
+
 // --- RELATIONS ---
 const reviewRelations = relations(review, ({one}) => ({
     user: one(user, {
@@ -446,6 +497,10 @@ const saleOrderItemRelations = relations(saleOrderItem, ({one}) => ({
         fields: [saleOrderItem.orderId],
         references: [saleOrder.id],
     }),
+    product: one(product, {
+        fields: [saleOrderItem.productId],
+        references: [product.id],
+    })
 }));
 
 const postalAddressRelations = relations(postalAddress, ({one, many}) => ({
@@ -470,7 +525,6 @@ const postalAddressRelations = relations(postalAddress, ({one, many}) => ({
 const partyRelations = relations(party, ({many}) => ({
     orders: many(saleOrder),
 }));
-
 
 const orderJournal = motomundiSchema.table("orderjournal", {
     id: int("Id").primaryKey().autoincrement().notNull(),
@@ -506,79 +560,6 @@ const facilityImage = motomundiSchema.table("facilityimage", {
 });
 
 
-// --- WebContentConfiguration Table ---
-const webContentConfiguration = motomundiSchema.table("webcontentconfiguration", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    name: varchar("Name", {length: 255}),
-    configuration: text("Configuration"), // SQL says longtext, Drizzle text is sufficient
-    domainId: int("DomainId"),
-    webContentId: int("WebContentId"),
-    isDefault: smallint("IsDefault").notNull().default(0),
-    isEnabled: smallint("IsEnabled").default(1),
-    content: text("Content"),
-    location: varchar("Location", {length: 255}),
-    type: smallint("Type").default(0),
-    subtype: smallint("Subtype").default(0),
-    col: smallint("Col").default(0),
-    template: text("Template"),
-    title: varchar("Title", {length: 200}),
-    orderWeight: smallint("OrderWeight").default(0),
-    createDate: datetime("CreateDate"),
-    webSiteId: int("WebSiteId"),
-    createUserId: int("CreateUserId"),
-    modifyUserId: int("ModifyUserId"),
-    modifyDate: datetime("ModifyDate"),
-    status: smallint("Status"),
-    version: smallint("Version"),
-    visibility: smallint("Visibility"),
-    isFeatured: smallint("IsFeatured"),
-    friendlyUrl: varchar("FriendlyUrl", {length: 100}),
-    displaySettings: text("DisplaySettings"),
-}, (table) => ({
-    locationIdx: index("IDX_WCC_LOCATION").on(table.location, table.webSiteId, table.domainId),
-    domIdIdx: index("IDX_WCC_DOMID").on(table.domainId),
-    websiteIdx: index("IDX_WCC_WEBSITEID").on(table.webSiteId),
-}));
-
-// --- Website Table ---
-const website = motomundiSchema.table("website", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    webServerSiteId: int("WebServerSiteId"),
-    name: varchar("Name", {length: 100}),
-    templateInstanceId: int("TemplateInstanceId"),
-    domainId: varchar("DomainId", {length: 45}),
-    categoryId: int("CategoryId").default(0),
-    type: smallint("Type"),
-    config: text("Config"),
-}, (table) => ({
-    templateIdx: index("FK_WEBSITE_WCC_idx").on(table.templateInstanceId),
-    templateFk: foreignKey({
-        columns: [table.templateInstanceId],
-        foreignColumns: [webContentConfiguration.id],
-        name: "FK_WEBSITE_WCC"
-    }),
-}));
-
-
-const geographicBoundary = motomundiSchema.table("geographicboundary", {
-    id: int("Id").primaryKey().autoincrement().notNull(),
-    name: varchar("Name", {length: 45}),
-    code: varchar("Code", {length: 10}),
-    type: varchar("Type", {length: 20}), // e.g., 'COUNTRY', 'REGION', 'COMMUNE'
-    geocoding: text("Geocoding"),
-    latitude: double("Latitude"),
-    longitude: double("Longitude"),
-});
-
-
-const webContentConfigurationRelations = relations(webContentConfiguration, ({one}) => ({
-    // The parent website this piece of content belongs to
-    website: one(website, {
-        fields: [webContentConfiguration.webSiteId],
-        references: [website.id],
-    }),
-}));
-
 const websiteRelations = relations(website, ({one, many}) => ({
     // The specific configuration/template that defines this website's layout
     templateInstance: one(webContentConfiguration, {
@@ -586,11 +567,9 @@ const websiteRelations = relations(website, ({one, many}) => ({
         references: [webContentConfiguration.id],
     }),
     // All content configurations associated with this website
-    contents: many(webContentConfiguration),
+//    contents: many(webContentConfiguration),
 }));
 
-
-// --- Junction/Association Table ---
 const geographicBoundaryAssociation = motomundiSchema.table("geographicboundaryassociation", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     belongToId: int("BelongToId"), // The Parent (e.g., Region)
@@ -600,8 +579,6 @@ const geographicBoundaryAssociation = motomundiSchema.table("geographicboundarya
     uniqueAssociation: unique("IDX_GBA_UNIQUE").on(table.containsId, table.belongToId),
 }));
 
-
-// --- RELATIONS ---
 const geographicBoundaryRelations = relations(geographicBoundary, ({many}) => ({
     // Boundaries that this one is part of (Parents)
     parentAssociations: many(geographicBoundaryAssociation, {relationName: "child_to_parents"}),
@@ -623,7 +600,6 @@ const geographicBoundaryAssociationRelations = relations(geographicBoundaryAssoc
     }),
 }));
 
-// --- RELATIONS ---
 const facilityImageRelations = relations(facilityImage, ({one}) => ({
     facility: one(facility, {
         fields: [facilityImage.facilityId],
@@ -631,7 +607,6 @@ const facilityImageRelations = relations(facilityImage, ({one}) => ({
     }),
 }));
 
-// --- RELATIONS ---
 const orderJournalRelations = relations(orderJournal, ({one}) => ({
     order: one(saleOrder, {
         fields: [orderJournal.orderId],
@@ -650,7 +625,6 @@ const contactMechanismRelations = relations(contactMechanism, ({one}) => ({
     }),
 }));
 
-// --- RELATIONS ---
 const facilityContactMechanismRelations = relations(facilityContactMechanism, ({one}) => ({
     facility: one(facility, {
         fields: [facilityContactMechanism.facilityId],
@@ -662,26 +636,17 @@ const facilityContactMechanismRelations = relations(facilityContactMechanism, ({
     }),
 }));
 
-// --- RELATIONS ---
 const facilityRelations = relations(facility, ({one, many}) => ({
-    // Self-referencing relation (Parent Facility)
-    parent: one(facility, {
-        fields: [facility.parentId],
-        references: [facility.id],
-        relationName: "sub_facilities",
-    }),
     // Images
     images: many(facilityImage),
-    // Sub-facilities
-    children: many(facility, {
-        relationName: "sub_facilities",
-    }),
     contacts: many(facilityContactMechanism),
     // Linked Facility relation
+/*
     linkedFacility: one(facility, {
         fields: [facility.linkedFacilityId],
         references: [facility.id],
     }),
+*/
 }));
 
 const domainRelations = relations(domain, ({ one }) => ({
@@ -738,6 +703,7 @@ module.exports = {
     brand,
     model,
     product,
+    productRelations,
     brandRelations,
     modelRelations,
     motomundiSchema,
@@ -775,6 +741,6 @@ module.exports = {
     website,
     webContentConfiguration,
     websiteRelations,
-    webContentConfigurationRelations,
+
     paymentMethodType,
 };

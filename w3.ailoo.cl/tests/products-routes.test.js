@@ -7,10 +7,13 @@ const app = require("../app");
 const productHelper = require("../services/product-helper");
 const request = require('supertest');
 const {db: drizzleDb} = require("../db/drizzle");
+const {productItem} = require("../db/schema");
 
 test('drizzle', async (t) => {
   try {
     const a = 1 + 1
+
+
     const order = await drizzleDb.query.saleOrder.findFirst({
       where: (saleOrder, {eq}) =>
           and(
@@ -24,6 +27,7 @@ test('drizzle', async (t) => {
           },
           with: {
             product: {
+
               with: {
                 brand: true,
                 model: true,
@@ -53,6 +57,10 @@ test('drizzle', async (t) => {
 
         }
       },
+    });
+
+    const pitDb = await drizzleDb.query.productItem.findFirst({
+      where: (productItem) => eq(productItem.id, 503290)
     });
 
     console.log(order)

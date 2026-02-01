@@ -13,7 +13,6 @@ const {OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../mod
 const {getPriceByProductItems, getProductItemDescription, getFeaturesDescription} = require("../services/product-helper");
 const {and, eq, sql } = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
-const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
 const {app} = require("../server");
 const {db: drizzleDb, db} = require("../db/drizzle");
 const adminClient = require("../services/adminClient");
@@ -21,8 +20,6 @@ const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
 const {confirmWebPay} = require("../payments/confirm.webpay");
 const {CartItemType} = require("../models/cart-models");
 const {findCart} = require("../services/cartService");
-const ejs = require('ejs');
-const path = require('path');
 const {stockByStore} = require("../db/inventory");
 const retShippingMethods = {
   "destination": {
@@ -58,6 +55,7 @@ const retShippingMethods = {
   ]
 }
 const container = require("../container");
+const {orderConfirmationHtml, sendOrderConfirmationEmail} = require("../services/emailsService");
 const cartService = container.resolve("cartService");
 
 
@@ -86,9 +84,17 @@ app.get("/:domainId/shipping/methods", async (req, res, next) => {
  */
 app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
   try {
-    const carrierId = parseInt(req.params.carrierId);
+    const domainId = parseInt(req.params.domainId);
+    const carrierId = parseInt(req.query.carrierId);
+    const wuid = req.query.wuid;
 
-    res.json(carrierId)
+    const cart = await findCart(wuid, domainId);
+
+    cart.shipmentMethod = { id: carrierId };
+
+    await cartService.update(cart)
+
+    res.json(cart.shipmentMethod)
   } catch (e) {
     next(e)
   }
@@ -203,24 +209,25 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
         domainId: domainId
       });
 
+      const cart = await findCart(rq.wuid, domainId)
       const [orderResult] = await tx.insert(saleOrder).values({
         orderDate: new Date(),
         expectedDeliveryDate: new Date(),
         shippedToId: sharedId, // Points to both tables via the shared ID
         state: 1,
         paymentMethodTypeId: rq.paymentMethod.gateway,
-        shipmentMethodTypeId: null,
+        shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
         orderedBy: person.id,
         invoicedTo: null, // todo datos de factura
         domainId: domainId
       });
 
       const newOrderId = orderResult.insertId;
-      const pitMap = await getProductItemsMap(rq.items, domainId)
+      //const pitMap = await getProductItemsMap(rq.items, domainId)
 
       let orderTotal = 0
 
-      const cart = await findCart(rq.wuid, domainId)
+
       for (var item of cart.items) {
 
 
@@ -228,7 +235,16 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
           validateRequestPrice(item, rq)
 
+          const pitDb = await drizzleDb.query.productItem.findFirst({
+            where: (productItem) => eq(productItem.id, 503290)
+          });
+
+          item.product.id = pitDb.productId
+
           let itemToInsert =createProductSaleOrderItem(newOrderId, item)
+
+
+
           const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
           const orderItemId = orderItemResult.insertId;
           if (item.packContents && item.packContents.length > 0) {
@@ -422,12 +438,16 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
     })
 
     try {
-      await adminClient.paymentValidated(rq.orderId, authcode, domainId)
+      await adminClient.paymentValidated(confirmRs.orderId, authcode, domainId)
     } catch (e) {
       logger.error("Unable to notify payment validated to admin: " + e.message)
     }
 
-
+    try{
+      await sendOrderConfirmationEmail( confirmRs.orderId,  domainId)
+    }catch(e){
+      console.error(e.message, e)
+    }
 
     res.json({
       success: true,
@@ -453,207 +473,21 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 })
 
 
-const juice = require('juice');
-const sgMail = require('@sendgrid/mail');
-const parametersClient = require("../services/parametersClient");
-const fs = require('fs').promises;
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+app.get("/test-send", async (req, res, next) => {
 
-async function orderConfirmationHtml(orderId, domainId) {
+  const domainId = 1
+  const orderId = parseInt(req.query.orderId)
+   const resp = await sendOrderConfirmationEmail(orderId, domainId);
+  res.json(resp);
+})
 
-  const order = await drizzleDb.query.saleOrder.findFirst({
-    where: (saleOrder, {eq}) =>
-        and(
-            eq(saleOrder.id, orderId),
-            eq(saleOrder.domainId, domainId),
-        ),
-    with: {
-      paymentMethod: true,
-      shipmentMethod: true,
-      items: true,
-      customer: {
-        columns: {
-          id: true,
-          name: true,
-        }
-      },
-      destinationFacility: {
-        columns: {
-          id: true,
-          name: true,
-        }
-      },
-      shippingAddress: {
-        with: {
-          comuna: {
-            id: true,
-            name: true,
-          }
-        }
-        // how can I also get comuna ej: with: comuna
-      }
-    },
-  });
-  const domainDb = await drizzleDb.query.domain.findFirst({
-    where: (domain, {eq}) => eq(domain.id, domainId),
-    with: {
-      ownerParty: {
-        columns: {
-          id: true,
-          name: true,
-        }
-      }
-    },
-  });
-
-  const pitIds = order.items.filter(it => it.productItemId > 0).map(it2 => it2.productItemId);
-
-  const productsService = container.resolve("productsService")
-  const products = await productsService.findProductsByProductItems(pitIds, domainId);
-  var imgHelper = new ProductImageHelper();
-  for (var item of order.items) {
-    if (!(item.productItemId > 0))
-      continue;
-
-    item.product = null
-
-    var itemProduct = products.find(p => p.productItems.some(pit => pit.id === item.productItemId));
-    if (itemProduct) {
-      item.product = itemProduct;
-      item.imageURL = imgHelper.getUrl(itemProduct.image, 300, domainId)
-
-      item.productItem = itemProduct.productItems.find(pit => pit.id === item.productItemId)
-      item.featureDescription = getFeaturesDescription(item.product, item.productItem);
-
-
-    }
-  }
-
-
-  const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
-  let logo = logoParam ? logoParam.value : {};
-
-  const emailData = {
-    order: {
-      number: order.id,
-      paymentMethod: order.paymentMethod,
-      date: order.orderDate,
-      receivedBy: {
-        name: order.customer ? order.customer.name : "",
-      },
-      shipmentMethod: order.shipmentMethod,
-      items: order.items,
-      shippedTo: order.shippingAddress ? {
-        name: order.shippingAddress.name,
-        rut: order.shippingAddress.rut,
-        phone: order.shippingAddress.phone,
-        email: order.shippingAddress.email,
-        address: order.shippingAddress.address,
-        comuna: {
-          id: order.shippingAddress.comuna.id,
-          name: order.shippingAddress.comuna.name,
-          parent: {
-            name: "Region Metropolitana"
-          }
-        }
-      } : null,
-      destination: {
-        name: "Casa",
-        phone: "123123",
-
-        postalAddress: {
-          address: "",
-          comuna: {
-            name: "",
-          },
-          latitude: "",
-          longitude: "",
-        }
-      },
-
-      paymentConfig: {
-        bankAccounts: [],
-      },
-      shippingCost: {
-        amount: 1000,
-      },
-      subtotal: 1000,
-      total: 1000,
-    },
-    OrderItemType: OrderItemType,
-    formatOrderDate: function (date) {
-      const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
-        'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-
-      const d = new Date(date);
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = months[d.getMonth()];
-      const year = d.getFullYear();
-      const hours = String(d.getHours()).padStart(2, '0');
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-
-      return `${day} ${month}. ${year} ${hours}:${minutes}`;
-    },
-    formatHelper: {
-      toTitleCase: (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
-      formatMoney: (amount) => `$${amount.toLocaleString()}`,
-      encodeUrl: (str) => encodeURIComponent(str)
-    },
-    domainHelper: {
-      getLogo: () => logo,
-      getSiteRoot: () => 'https://www.motomundi.cl'
-    },
-    domain: {id: 1, name: "MotoMundi", party: {name: "MotoMundi SPA"}},
-    isNeto: false,
-    tiempoDespacho: '3-5 días hábiles',
-    hash: "",
-    gmapKey: process.env.GOOGLE_MAPS_KEY || '',
-    webSite: {
-      templateInstance: {
-        getConfigValue: key => {
-          if(key === "facebook-url"){
-            return "https://www.facebook.com/motomundi.la"
-          }
-          if(key === "instagram-url"){
-            return "https://www.instagram.com/motomundi"
-          }
-          if(key === "youtube-url"){
-            return "https://www.youtube.com/motomunditv"
-          }
-          if(key === "tiktok-url"){
-            return "https://www.tiktok.com/motomundicl"
-          }
-          return "";
-        }
-      }
-    }
-  };
-
-
-  const templatePath = path.join(__dirname, '../templates/confirmation.ejs');
-  const template = await fs.readFile(templatePath, 'utf-8');
-  const html = ejs.render(template, emailData);
-  return  html;
-}
 
 app.get("/test-email", async (req, res, next) => {
 
   const domainId = 1
   const orderId = parseInt(req.query.orderId)
-  const html = await orderConfirmationHtml(orderId, domainId);
-
-  // Inline all CSS styles automatically
-  // const inlinedHtml =  juice(html);
-
-  const msg = {
-    to: "jcfuentes@ailoo.cl",
-    from: 'ventas@motomundi.cl',
-    subject: `Pedido ${orderId} - Confirmación`,
-    html: html
-  };
-
-//  const response = await sgMail.send(msg);
+  const { html } = await orderConfirmationHtml(orderId, domainId);
   res.send(html);
 })
 
@@ -669,6 +503,9 @@ function validateRequestPrice(item, rq){
 }
 
 function createProductSaleOrderItem(orderId, cartItem, orderItemId){
+
+
+
   return {
     orderId: orderId,
     productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AlasXpress = void 0;
 class AlasXpress {
     calculate(vw, comunaId, domainId) {
-        let total = { amount: 1000, unit: "CLP" };
+        let total = { amount: 4900, unit: "CLP" };
         const quote = {
             cost: total,
             estimatedDays: 2,
