@@ -1,4 +1,4 @@
-process.env.NODE_ENV = "production" //process.env.NODE_ENV || 'production';
+process.env.NODE_ENV = "developer" //process.env.NODE_ENV || 'production';
 require("@ailoo/shared-libs/config")
 const {and, eq, sql } = require("drizzle-orm");
 
@@ -7,12 +7,39 @@ const app = require("../app");
 const productHelper = require("../services/product-helper");
 const request = require('supertest');
 const {db: drizzleDb} = require("../db/drizzle");
-const {productItem} = require("../db/schema");
+const {productItem, facility, postalAddress} = require("../db/schema.ts");
 
 test('drizzle', async (t) => {
   try {
     const a = 1 + 1
 
+    const facilityDb = await drizzleDb.query.facility.findFirst({
+      where: (productItem) => eq(facility.id, 1),
+      with: {
+        contacts: {
+          with: {
+            contactMechanism: {
+              with: {
+                postalAddress: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    var contactPostal = facilityDb.contacts.find(c => c.contactMechanism.postalAddress);
+    var postalAddres = contactPostal.contactMechanism.postalAddress;
+    const postalAddrDb = await drizzleDb.query.postalAddress.findFirst(
+        {
+          where: (postalAddress) => eq(postalAddress.postalAddressId, facilityDb.contacts[0].id),
+        }
+    )
+
+
+    const pitDb = await drizzleDb.query.productItem.findFirst({
+      where: (productItem) => eq(productItem.id, 503290)
+    });
 
     const order = await drizzleDb.query.saleOrder.findFirst({
       where: (saleOrder, {eq}) =>
@@ -59,9 +86,6 @@ test('drizzle', async (t) => {
       },
     });
 
-    const pitDb = await drizzleDb.query.productItem.findFirst({
-      where: (productItem) => eq(productItem.id, 503290)
-    });
 
     console.log(order)
   }catch(e){

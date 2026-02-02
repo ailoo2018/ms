@@ -640,6 +640,7 @@ const facilityRelations = relations(facility, ({one, many}) => ({
     // Images
     images: many(facilityImage),
     contacts: many(facilityContactMechanism),
+
     // Linked Facility relation
 /*
     linkedFacility: one(facility, {

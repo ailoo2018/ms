@@ -32,6 +32,10 @@ const OrderState = Object.freeze({
 
 })
 
+const ShipmentMethodType = Object.freeze({
+  StorePickup: 9
+})
+
 const PriceComponentType =
     {
       BASE_PRICE: 0,
@@ -66,6 +70,7 @@ class Money {
     this.currency = currency || 'CLP';
   }
 }
+
 
 
 // Missing Price class implementation
@@ -145,4 +150,5 @@ module.exports = {
   PaymentMethodType,
   ProductType,
   ProductFeatureType,
+  ShipmentMethodType,
 }

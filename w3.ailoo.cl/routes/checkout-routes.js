@@ -6,12 +6,17 @@ const {
   saleOrder,
   saleOrderItem,
   party,
+  facility,
   orderJournal
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
-const {OrderItemType, SaleType, OrderState, PaymentMethodType} = require("../models/domain");
-const {getPriceByProductItems, getProductItemDescription, getFeaturesDescription} = require("../services/product-helper");
-const {and, eq, sql } = require("drizzle-orm");
+const {OrderItemType, SaleType, OrderState, PaymentMethodType, ShipmentMethodType} = require("../models/domain");
+const {
+  getPriceByProductItems,
+  getProductItemDescription,
+  getFeaturesDescription
+} = require("../services/product-helper");
+const {and, eq, sql} = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const {app} = require("../server");
 const {db: drizzleDb, db} = require("../db/drizzle");
@@ -56,6 +61,7 @@ const retShippingMethods = {
 }
 const container = require("../container");
 const {orderConfirmationHtml, sendOrderConfirmationEmail} = require("../services/emailsService");
+
 const cartService = container.resolve("cartService");
 
 
@@ -65,9 +71,8 @@ app.get("/:domainId/shipping/methods", async (req, res, next) => {
     const wuid = req.query.wuid;
 
 
-
     const cart = await findCart(wuid, domainId)
-    if(!cart.destination)
+    if (!cart.destination)
       throw new Error("Carro de compra aun not tiene destino no tiene destino")
 
     const quotes = await cartService.listShippingQuotes(cart, cart.destination.comunaId, domainId);
@@ -90,7 +95,7 @@ app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
 
     const cart = await findCart(wuid, domainId);
 
-    cart.shipmentMethod = { id: carrierId };
+    cart.shipmentMethod = {id: carrierId};
 
     await cartService.update(cart)
 
@@ -109,9 +114,22 @@ app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
     const cart = await findCart(wuid, domainId)
 
-    const pitIds = cart.items.map(i => i.product.productItemId);
 
-    const stocks = await stockByStore(facilityId, pitIds, domainId );
+    const pitIds = []
+    for(var i of cart.items){
+      if(i.product)
+        pitIds.push( i.product.productItemId )
+      if(i.packId > 0){
+        i.packContents.forEach((item)=>{
+          if(item.product){
+            pitIds.push(item.product.productItemId);
+          }
+        })
+      }
+    }
+
+
+    const stocks = await stockByStore(facilityId, pitIds, domainId);
 
     var avlDate = addBusinessDays(new Date(), 2);
     var nextDate = new Date()
@@ -120,9 +138,9 @@ app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
     let description = "";
 
     if (avlDate.getMonth() === nextDate.getMonth()) {
-      description = `${avlDate.getDate()} y ${nextDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', { month: 'long' })}`;
+      description = `${avlDate.getDate()} y ${nextDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', {month: 'long'})}`;
     } else {
-      description = `${avlDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', { month: 'long' })} y ${nextDate.getDate()} de ${nextDate.toLocaleDateString('es-CL', { month: 'long' })}`;
+      description = `${avlDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', {month: 'long'})} y ${nextDate.getDate()} de ${nextDate.toLocaleDateString('es-CL', {month: 'long'})}`;
     }
 
 
@@ -191,29 +209,60 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
           person.email, domainId);
 
 
-      const [cmResult] = await tx.insert(contactMechanism).values({});
-      const sharedId = cmResult.insertId;
-
-      await tx.insert(postalAddress).values({
-        postalAddressId: sharedId, // Use the shared ID
-        name: rq.shipmentInformation.address.name.trim(),
-        surname: rq.shipmentInformation.address.surnames,
-        address: rq.shipmentInformation.address.address,
-        address2: rq.shipmentInformation.address.address2,
-        notifyWhatsApp: rq.notifyWhatsApp,
-        rut: rq.shipmentInformation.address.rut,
-        email: rq.customerInformation.email,
-        comment: rq.shipmentInformation.notes,
-        comunaId: rq.shipmentInformation.address.comuna.id,
-        postalCode: rq.shipmentInformation.address.postalCode,
-        domainId: domainId
-      });
-
+      let postalAddressId = null;
       const cart = await findCart(rq.wuid, domainId)
+      if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
+        const facilityDb = await drizzleDb.query.facility.findFirst({
+          where: (productItem) => eq(facility.id, rq.pickupStore.id),
+          with: {
+            contacts: {
+              with: {
+                contactMechanism: {
+                  with: {
+                    postalAddress: true
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        var contactPostal = facilityDb.contacts.find(c => c.contactMechanism && c.contactMechanism.postalAddress);
+        if (contactPostal) {
+          var postalAddress = contactPostal.contactMechanism.postalAddress;
+          postalAddressId = postalAddress.postalAddressId
+
+        }
+
+
+      } else {
+        const [cmResult] = await tx.insert(contactMechanism).values({});
+        postalAddressId = cmResult.insertId;
+
+
+        await tx.insert(postalAddress).values({
+          postalAddressId: sharedId, // Use the shared ID
+          name: rq.shipmentInformation.address.name.trim(),
+          surname: rq.shipmentInformation.address.surnames,
+          address: rq.shipmentInformation.address.address,
+          address2: rq.shipmentInformation.address.address2,
+          notifyWhatsApp: rq.notifyWhatsApp,
+          rut: rq.shipmentInformation.address.rut,
+          email: rq.customerInformation.email,
+          comment: rq.shipmentInformation.notes,
+          comunaId: rq.shipmentInformation.address.comuna.id,
+          postalCode: rq.shipmentInformation.address.postalCode,
+          domainId: domainId
+        });
+
+      }
+
+
+
       const [orderResult] = await tx.insert(saleOrder).values({
         orderDate: new Date(),
         expectedDeliveryDate: new Date(),
-        shippedToId: sharedId, // Points to both tables via the shared ID
+        shippedToId: postalAddressId, // Points to both tables via the shared ID
         state: 1,
         paymentMethodTypeId: rq.paymentMethod.gateway,
         shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
@@ -241,22 +290,19 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
           item.product.id = pitDb.productId
 
-          let itemToInsert =createProductSaleOrderItem(newOrderId, item)
-
-
+          let itemToInsert = createProductSaleOrderItem(newOrderId, item)
 
           const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
           const orderItemId = orderItemResult.insertId;
           if (item.packContents && item.packContents.length > 0) {
             for (var packItem of item.packContents) {
-              const packItemDb =createProductSaleOrderItem(newOrderId, packItem, orderItemId)
+              const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId)
               await tx.insert(saleOrderItem).values(packItemDb);
             }
           }
 
           orderTotal += item.quantity * item.price
-        }
-        else if(item.type === CartItemType.Pack){
+        } else if (item.type === CartItemType.Pack) {
 
           // validate price
           validateRequestPrice(item, rq)
@@ -270,7 +316,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
           }
 
           // add discount of pack a separate line
-          if(item.packDiscount) {
+          if (item.packDiscount) {
             orderTotal += item.packDiscount.price
             await tx.insert(saleOrderItem).values({
               orderId: newOrderId,
@@ -285,7 +331,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
         }
       }
 
-      return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: sharedId};
+      return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: postalAddressId};
     })
 
     res.json({id: result.orderId, total: result.total, addressId: result.addressId})
@@ -443,9 +489,9 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
       logger.error("Unable to notify payment validated to admin: " + e.message)
     }
 
-    try{
-      await sendOrderConfirmationEmail( confirmRs.orderId,  domainId)
-    }catch(e){
+    try {
+      await sendOrderConfirmationEmail(confirmRs.orderId, domainId)
+    } catch (e) {
       console.error(e.message, e)
     }
 
@@ -473,12 +519,11 @@ app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
 })
 
 
-
 app.get("/test-send", async (req, res, next) => {
 
   const domainId = 1
   const orderId = parseInt(req.query.orderId)
-   const resp = await sendOrderConfirmationEmail(orderId, domainId);
+  const resp = await sendOrderConfirmationEmail(orderId, domainId);
   res.json(resp);
 })
 
@@ -487,23 +532,22 @@ app.get("/test-email", async (req, res, next) => {
 
   const domainId = 1
   const orderId = parseInt(req.query.orderId)
-  const { html } = await orderConfirmationHtml(orderId, domainId);
+  const {html} = await orderConfirmationHtml(orderId, domainId);
   res.send(html);
 })
 
 
-function validateRequestPrice(item, rq){
+function validateRequestPrice(item, rq) {
   const rqItem = rq.items.find(ri => ri.id === item.id)
-  if(!rqItem)
+  if (!rqItem)
     throw Error(`Producto no esperado en carro compra: ${item.name}`)
 
-  if(rqItem.price !== rqItem.price) {
+  if (rqItem.price !== rqItem.price) {
     throw Error(`Precio se modifico para item ${rqItem.name}`)
   }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId){
-
+function createProductSaleOrderItem(orderId, cartItem, orderItemId) {
 
 
   return {

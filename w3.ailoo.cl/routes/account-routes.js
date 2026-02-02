@@ -146,7 +146,7 @@ app.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
           "type": "shipping",
           "comuna": {
             "id": addr.ComunaId,
-            "name": "NOT AVAL"
+            "name": addr.ComunaName,
           },
           "rut": addr.Rut || null,
         }

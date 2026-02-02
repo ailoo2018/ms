@@ -132,7 +132,7 @@ const cmsClient = {
     }
 
     if (w.name === "Seo") {
-      return "Seo"
+      return "Seo2"
     }
     if (w.name === "Html") {
       return "HtmlWidget"
