@@ -23,6 +23,28 @@ app.get("/:domainId/blog/featured", async (req, res, next) => {
 })
 
 
+app.get("/:domainId/blog/search", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(req.query.offset) || 0;
+    const categoryId = (req.query.categoryId) || '';
+
+    const posts = await cmsClient.search({
+      limit: limit,
+      offset: offset,
+      categoryId: categoryId
+    }, domainId)
+
+    posts.total = 100;
+    res.json(posts)
+  } catch (e) {
+    next(e)
+  }
+
+})
+
+
 
 app.get("/:domainId/blog/articles/:id", async (req, res, next) => {
   try {
