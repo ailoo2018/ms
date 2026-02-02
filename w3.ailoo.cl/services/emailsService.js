@@ -201,7 +201,7 @@ async function sendOrderConfirmationEmail( orderId, domainId) {
   const msg = {
     to: to,
     from: 'ventas@motomundi.cl',
-    subject: `Pedido ${orderId} - Confirmación`,
+    subject: `Tu pedido ${orderId} en Motomundi ya está en proceso 🏍️`,
     html: html
   };
 
