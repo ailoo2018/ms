@@ -229,8 +229,8 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
         var contactPostal = facilityDb.contacts.find(c => c.contactMechanism && c.contactMechanism.postalAddress);
         if (contactPostal) {
-          var postalAddress = contactPostal.contactMechanism.postalAddress;
-          postalAddressId = postalAddress.postalAddressId
+          var postalAddressDb = contactPostal.contactMechanism.postalAddress;
+          postalAddressId = postalAddressDb.postalAddressId
 
         }
 
@@ -241,7 +241,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
 
         await tx.insert(postalAddress).values({
-          postalAddressId: sharedId, // Use the shared ID
+          postalAddressId: postalAddressId, // Use the shared ID
           name: rq.shipmentInformation.address.name.trim(),
           surname: rq.shipmentInformation.address.surnames,
           address: rq.shipmentInformation.address.address,
