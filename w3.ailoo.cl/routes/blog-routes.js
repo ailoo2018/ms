@@ -1,7 +1,8 @@
 const {app} = require("../server");
 const cmsClient = require("../services/cmsClient")
 const {findWidget} = require("../db/webcontent");
-
+const {db: drizzleDb} = require("../db/drizzle");
+const {and, eq, sql} = require("drizzle-orm");
 
 app.get("/:domainId/blog/featured", async (req, res, next) => {
   try {
@@ -52,14 +53,37 @@ app.get("/:domainId/blog/articles/:id", async (req, res, next) => {
     const articleId = parseInt(req.params.id)
 
     const wcc = await findWidget(articleId, domainId)
+
+
+
+
+
     const wccAux = await cmsClient.getWcc(articleId, domainId)
+
+
+
 
     const widgets = wccAux.children.filter(w => w.type === 3).map(w2 => {
       const component = cmsClient.getNuxtComponent(w2)
       return { id: w2.id, name: w2.name, configuration: w2.config, component };
     });
 
+    if(widgets){
+      for(var w of widgets) {
+        const wccDb = await drizzleDb.query.webContentConfiguration.findFirst({
+          where: (webContentConfiguration) => eq(webContentConfiguration.id, w.id),
+          columns: {
+            id: true,
+            template: true,
+          }
+        });
 
+        if(wccDb) {
+          w.template = wccDb.template
+        }
+      }
+
+    }
 
     res.json({
       id: wcc.Id,
@@ -67,6 +91,7 @@ app.get("/:domainId/blog/articles/:id", async (req, res, next) => {
       createDate: wcc.CreateDate,
       widgets,
       configuration: JSON.parse(wcc.Configuration),
+      template: null,
     })
   } catch (e) {
     next(e)
