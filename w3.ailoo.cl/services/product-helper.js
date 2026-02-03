@@ -143,6 +143,19 @@ const getSalesRules = async domainId => {
   return await rs.json()
 }
 
+function startsWithNumbersAndHyphen2(text) {
+  if (!text) return false;
+  return /^\d+-/.test(text);
+}
+
+function getLink(product) {
+  if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
+    return "/motocicleta/" + product.linkName
+  }
+
+  return "/motocicleta/" + product.id + "-" + product.linkName
+}
+
 async function findProduct(productId, domainId) {
   const p = await productService.findProductWithInventory(productId, domainId)
   p.description = await productDescription(productId);
@@ -188,5 +201,6 @@ module.exports = {
   getProductSalesRules,
   getFeaturesDescription,
   isApplicableSalesRule,
-  findProduct
+  findProduct,
+  getLink,
 }

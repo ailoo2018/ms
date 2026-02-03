@@ -2,6 +2,7 @@ const {buildQueryByCollectionId} = require("./collections");
 const {getElClient, getIndexName} = require("../connections/el");
 const ProductImageHelper = require("../../packages/shared-libs/helpers/ProductImageHelper");
 const logger = require("@ailoo/shared-libs/logger");
+const {getLink} = require("../services/product-helper");
 
 const aggs = {
   "brands_count": {
@@ -508,18 +509,8 @@ function processTags(tagCountAgg) {
   return [...groupBy.values()]
 }
 
-function startsWithNumbersAndHyphen2(text) {
-  if (!text) return false;
-  return /^\d+-/.test(text);
-}
 
-function getLink(product) {
-  if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
-    return "/motocicleta/" + product.linkName
-  }
 
-  return "/motocicleta/" + product.id + "-" + product.linkName
-}
 
 
 async function search(criteria, domainId) {

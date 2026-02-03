@@ -9,7 +9,7 @@ const {search} = require("../el/search");
 
 const {SaleType, ProductType} = require("../models/domain");
 
-const {getProductSalesRules, isApplicableSalesRule, findProduct} = require("../services/product-helper");
+const {getProductSalesRules, isApplicableSalesRule, findProduct, getLink} = require("../services/product-helper");
 const {getElClient, getIndexName} = require("../connections/el");
 const container = require("../container");
 const productService = container.resolve('productsService');
@@ -1269,7 +1269,7 @@ app.get("/:domainId/recommend", async (req, res, next) => {
 
     var products = body.hits.hits.map(h => {
       const p = h._source
-      p.url = createLink(p)
+      p.url = getLink(p)
       p.coverImages = {
         "150": imgHelper.getUrl(p.image, 150, domainId),
         "300": imgHelper.getUrl(p.image, 300, domainId),
@@ -1294,6 +1294,3 @@ app.get("/:domainId/recommend", async (req, res, next) => {
 })
 
 
-function createLink(p) {
-  return `/motocicleta/${p.linkName}`
-}

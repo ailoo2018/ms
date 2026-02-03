@@ -156,6 +156,7 @@ async function findCart(wuid, domainId) {
   }
 
   cart.items = cart.items.filter(item => item)
+  cart.points = Math.round(cart.total * 0.02)
   return cart;
 }
 
