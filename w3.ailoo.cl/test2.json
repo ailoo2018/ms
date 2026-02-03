@@ -1,170 +1,219 @@
 {
-  "discounts": [],
-  "videos": [],
-  "motorbikeVersion": [],
-  "id": 3212224,
-  "directCategories": [
-    42755
-  ],
-  "directCategoryisAvailableForInternet": true,
-  "name": "Fluid Haul - Azul/Blanco",
-  "brand": {
-    "linkName": "Alpinestars",
-    "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
-    "id": 130,
-    "name": "Alpinestars",
-    "showNameInWeb": true,
-    "featured": true,
-    "isAvailableForInternet": true
-  },
-  "tags": [
-    {
-      "categoryId": 746,
-      "categoryName": "Estilo Piloto",
-      "categoryOrderWeight": 0,
-      "id": 13672,
-      "name": "Motocross / Enduro",
-      "type": "attribute",
-      "useInFilter": true,
-      "filter": "13672|Motocross / Enduro|True|attribute|0|Estilo Piloto"
-    }
-  ],
-  "maxPrice": 159800,
-  "minPrice": 159800,
-  "unitsSold": 0,
-  "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
-  "rating": 0,
-  "availableInStore": false,
-  "hasDiscount": false,
-  "isNew": false,
-  "isReserved": false,
-  "model": {
-    "id": 10489,
-    "name": "Fluid"
-  },
-  "fullName": "Alpinestars Fluid Haul - Azul/Blanco",
-  "linkName": "3212224-conjuntos-alpinestars-fluid-haul---azul-blanco",
-  "createDate": "2025-03-07T10:16:30",
-  "domainId": 1,
-  "tireSpecs": [],
-  "motorcycles": [],
-  "isAvailableForInternet": true,
-  "universalQuantity": 1,
-  "discountAmount": 0,
-  "priceComponents": [
-    {
-      "isCalculated": false,
-      "id": 9933246,
-      "brandId": 0,
-      "categoryId": 0,
-      "country": "CL",
-      "fromQuantity": 0,
-      "thruQuantity": 0,
-      "tagId": 0,
-      "typeId": 0,
-      "saleTypeId": 0,
-      "productId": 3212224,
-      "productItemId": 0,
-      "amount": 159800,
-      "percent": 0,
-      "currency": "CLP",
-      "packId": 0,
-      "type": 0,
-      "price": {
-        "amount": 159800,
-        "unit": "CLP"
+  "viewData": {
+    "product": {
+      "id": 2995437,
+      "name": "Chaqueta Honda Andes V3 Drystar",
+      "isSimpleProduct": false,
+      "requiresFeatureSelect": true,
+      "brand": {
+        "linkName": "Alpinestars",
+        "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
+        "id": 130,
+        "name": "Alpinestars",
+        "showNameInWeb": true,
+        "featured": true,
+        "isAvailableForInternet": true
       },
-      "isDiscount": false,
-      "ruleId": 0,
-      "isBasePrice": true
+      "model": null,
+      "productItems": [
+        {
+          "id": 3443256,
+          "sku": null,
+          "barcode1": "8059175379635",
+          "isInStock": true,
+          "sizeId": 986,
+          "colorId": 158960,
+          "price": 262425.0,
+          "msrp": 349900.0,
+          "discount": 0.0,
+          "discountPercent": 25.0
+        },
+        {
+          "id": 3443257,
+          "sku": null,
+          "barcode1": "8059175379703",
+          "isInStock": true,
+          "sizeId": 986,
+          "colorId": 183594,
+          "price": 262425.0,
+          "msrp": 349900.0,
+          "discount": 0.0,
+          "discountPercent": 25.0
+        },
+        {
+          "id": 3443258,
+          "sku": null,
+          "barcode1": "8059175379642",
+          "isInStock": true,
+          "sizeId": 987,
+          "colorId": 158960,
+          "price": 262425.0,
+          "msrp": 349900.0,
+          "discount": 0.0,
+          "discountPercent": 25.0
+        },
+        {
+          "id": 3443259,
+          "sku": null,
+          "barcode1": "8059175379710",
+          "isInStock": true,
+          "sizeId": 987,
+          "colorId": 183594,
+          "price": 262425.0,
+          "msrp": 349900.0,
+          "discount": 0.0,
+          "discountPercent": 25.0
+        },
+        {
+          "id": 3443260,
+          "sku": null,
+          "barcode1": "8059175379659",
+          "isInStock": false,
+          "sizeId": 988,
+          "colorId": 158960,
+          "price": 0.0,
+          "msrp": 0.0,
+          "discount": 0.0,
+          "discountPercent": 0.0
+        },
+        {
+          "id": 3443261,
+          "sku": null,
+          "barcode1": "8059175379727",
+          "isInStock": false,
+          "sizeId": 988,
+          "colorId": 183594,
+          "price": 0.0,
+          "msrp": 0.0,
+          "discount": 0.0,
+          "discountPercent": 0.0
+        },
+        {
+          "id": 3443262,
+          "sku": null,
+          "barcode1": "8059175379666",
+          "isInStock": true,
+          "sizeId": 992,
+          "colorId": 158960,
+          "price": 262425.0,
+          "msrp": 349900.0,
+          "discount": 0.0,
+          "discountPercent": 25.0
+        },
+        {
+          "id": 3443263,
+          "sku": null,
+          "barcode1": "8059175379734",
+          "isInStock": false,
+          "sizeId": 992,
+          "colorId": 183594,
+          "price": 0.0,
+          "msrp": 0.0,
+          "discount": 0.0,
+          "discountPercent": 0.0
+        }
+      ],
+      "isNew": false,
+      "type": 0,
+      "reviews": [],
+      "minPrice": 262425.0,
+      "maxPrice": 262425.0,
+      "msrp": 349900.0,
+      "price": 262425.0,
+      "discount": {
+        "amount": 0.0,
+        "percent": 25.0
+      },
+      "ytVideos": [
+        {
+          "id": "Obwtn8kcLos",
+          "title": "Alpinestars Chaqueta Honda Andes V3 Drystar",
+          "origin": "PRODUCT",
+          "name": null
+        }
+      ],
+      "hasDiscount": true,
+      "financing": [
+        {
+          "installments": 12,
+          "tae": 0
+        }
+      ],
+      "image": "/Content/products/1/f/39/f39be4ff4c8e4e66b1270af65e30198e_600.jpg",
+      "images": [
+        {
+          "id": 1866166,
+          "imageId": "f39be4ff4c8e4e66b1270af65e30198e.jpg",
+          "orderWeight": 0,
+          "imageURL": "/Content/products/1/f/39/f39be4ff4c8e4e66b1270af65e30198e_600.jpg",
+          "featureId": 158960,
+          "featureDesc": "Negro"
+        },
+        {
+          "id": 1866167,
+          "imageId": "444c2df9e96544188b303f8307bfb939.jpg",
+          "orderWeight": 1,
+          "imageURL": "/Content/products/1/4/44/444c2df9e96544188b303f8307bfb939_600.jpg",
+          "featureId": 0,
+          "featureDesc": null
+        },
+        {
+          "id": 1866168,
+          "imageId": "8a72d141b6a64aeba84ad1c2e0046178.jpg",
+          "orderWeight": 2,
+          "imageURL": "/Content/products/1/8/a7/8a72d141b6a64aeba84ad1c2e0046178_600.jpg",
+          "featureId": 183594,
+          "featureDesc": "Gris Claro/ Azul Brillante/ Rojo"
+        },
+        {
+          "id": 1866169,
+          "imageId": "6c2320b31d20456ebf51f4e494c9d1c7.jpg",
+          "orderWeight": 3,
+          "imageURL": "/Content/products/1/6/c2/6c2320b31d20456ebf51f4e494c9d1c7_600.jpg",
+          "featureId": 0,
+          "featureDesc": null
+        }
+      ],
+      "colors": [
+        {
+          "id": 158960,
+          "name": "Negro",
+          "orderWeight": 0,
+          "type": 1
+        },
+        {
+          "id": 183594,
+          "name": "Gris Claro/ Azul Brillante/ Rojo",
+          "orderWeight": 0,
+          "type": 1
+        }
+      ],
+      "sizes": [
+        {
+          "id": 986,
+          "name": "M",
+          "orderWeight": 50,
+          "type": 0
+        },
+        {
+          "id": 987,
+          "name": "L",
+          "orderWeight": 80,
+          "type": 0
+        },
+        {
+          "id": 988,
+          "name": "XL",
+          "orderWeight": 90,
+          "type": 0
+        },
+        {
+          "id": 992,
+          "name": "2XL",
+          "orderWeight": 100,
+          "type": 0
+        }
+      ]
     }
-  ],
-  "salesTaxes": [
-    {
-      "id": 7495341,
-      "name": "I.V.A. 19%",
-      "percentage": 19,
-      "code": 14
-    }
-  ],
-  "mercadoLibre": {},
-  "orderWeight": 0,
-  "googleProductCategory": 0,
-  "inventoryControl": 0,
-  "isTaxExempt": false,
-  "requiresLot": false,
-  "discountPercent": 0,
-  "preOrder": false,
-  "code": "",
-  "quantityInStock": 0,
-  "features": [
-    {
-      "id": 8,
-      "name": "Tamaño Unico",
-      "orderWeight": 0,
-      "type": 0
-    }
-  ],
-  "productItems": [
-    {
-      "codes": "",
-      "id": 3717453,
-      "barcode1": "",
-      "barcode2": "",
-      "colorId": 0,
-      "sizeId": 8,
-      "sword": " Conjuntos Ropa MX Motocicleta Alpinestars Fluid Haul Azul/Blanco Tamaño Unico Sin Tamaño",
-      "description": " Conjuntos Ropa MX Motocicleta Alpinestars Fluid Haul Azul/Blanco Tamaño Unico Sin Tamaño",
-      "productId": 3212224
-    }
-  ],
-  "availableSizes": [],
-  "images": [
-    {
-      "id": 1926803,
-      "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
-      "orderWeight": 0,
-      "colorId": 0,
-      "colorTagsIds": []
-    },
-    {
-      "id": 1926804,
-      "image": "52e341631e91491799095581818e8db0.jpg",
-      "orderWeight": 1,
-      "colorId": 0,
-      "colorTagsIds": []
-    }
-  ],
-  "parentCategories": [
-    {
-      "id": 42755,
-      "name": "Conjuntos",
-      "isDirectCategory": true
-    }
-  ],
-  "categories": [
-    {
-      "id": 42755,
-      "name": "Conjuntos",
-      "isDirectCategory": true
-    },
-    {
-      "id": 67,
-      "name": "Ropa MX",
-      "isDirectCategory": false
-    },
-    {
-      "id": 82141,
-      "name": "Motocicleta",
-      "isDirectCategory": false
-    }
-  ],
-  "summary": "",
-  "hasColor": false,
-  "hasSize": true,
-  "isSimpleProduct": true,
-  "requiresFeaturedSelect": true,
-  "productType": 1,
-  "motoOrderWeight": 0,
-  "description": "<div><font face=\"Verdana\" size=\"2\"><b>Alpinestars Fluid Haul</b></font></div><div><font face=\"Verdana\" size=\"2\"><br></font></div><font face=\"Verdana\" size=\"2\">Conjunto Jersey + Pantalón&nbsp;</font>"
+  }
 }

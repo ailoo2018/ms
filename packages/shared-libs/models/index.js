@@ -59,7 +59,15 @@ class Price {
 
   }
 
-  getDiscountPriceCompoent() {
+  getTotalDiscount(){
+    const dctComp = this.this.getDiscountPriceComponent()
+    if(dctComp){
+      return dctComp.priceComponents.length
+    }
+    return 0;
+  }
+
+  getDiscountPriceComponent() {
     for (var pc of this.priceComponents) {
       if (pc.type === PriceComponentType.DISCOUNT)
         return pc;
@@ -69,10 +77,32 @@ class Price {
 
   }
 
+  getPrice(){
+    const basePrice = this.getBasePriceComponent();
+    if (basePrice) {
+      const discount = this.getDiscountPriceComponent();
+      if (discount) {
+        if (discount.percent > 0) {
+          const roundedAmount = Math.round(basePrice.price.amount * (1 - discount.percent / 100));
+          const dct = basePrice.price.amount - roundedAmount;
+          return { price: new Money(roundedAmount, basePrice.price.currency), discount:  new Money(dct, basePrice.price.currency)} ;
+        } else {
+          const finalAmount = basePrice.price.amount - Math.round(discount.price.amount);
+          return { price: new Money(finalAmount, basePrice.price.currency),
+            discount: new Money(finalAmount - discount.price.amount, basePrice.price.currency) };
+        }
+      } else {
+        return { price:  basePrice.price, discount: null };
+      }
+    }
+
+    return { price: new Money(0, "CLP"), discount: null };
+  }
+
   getFinalPrice() {
     const basePrice = this.getBasePriceComponent();
     if (basePrice) {
-      const discount = this.getDiscountPriceCompoent();
+      const discount = this.getDiscountPriceComponent();
       if (discount) {
         if (discount.percent > 0) {
           const roundedAmount = Math.round(basePrice.price.amount * (1 - discount.percent / 100));

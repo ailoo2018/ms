@@ -37,7 +37,6 @@ const findProductItemByFeatures = (pSm, features) => {
 
 
 const getPrice = async (prodSm, pit, saleTypeId, currency, packId = 0, quantity = 1,  discountRuleService) => {
-
   return await _getPriceByProductItem(prodSm, pit, saleTypeId, currency, packId, quantity,  discountRuleService);
 }
 

@@ -1,5 +1,6 @@
 const {getIndexName} = require("../el");
 const {getPrice} = require("../products/price");
+const {SaleType} = require("../models");
 
 class ProductsService {
 
@@ -190,6 +191,18 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
 
     const stock = await this.productStock([productId], domainId);
 
+    for(var pit of p.productItems){
+      const priceComponent = await getPrice(p, pit, SaleType.Internet, "CLP", 0, 1, this.discountRuleService);
+      const { price, discount } = priceComponent.getPrice()
+
+      pit.price = {
+        currency: price.currency,
+        price: price.amount,
+        oldPrice: discount ? price.amount - discount.amount : price.amount,
+        discount: discount ? discount.amount : 0,
+      }
+    }
+
     for (var s of stock) {
       var prodItem = p.productItems.find(pit => pit.id === s.productItemId)
 
@@ -221,5 +234,4 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
 
 }
 
-module
-    .exports = ProductsService;
+module.exports = ProductsService;

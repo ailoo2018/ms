@@ -1,10 +1,9 @@
-process.env.NODE_ENV = "developer" //process.env.NODE_ENV || 'production';
 require("../utils/config")
 
 const { createContainer, asClass, asValue } = require('awilix');
 const CmsService = require("../services/CmsService");
 const {WebContentDb} = require("../repos/WebContentDb");
-
+const ProductsService = require("../services/ProductsService")
 
 const {redisClient, connectRedis} = require("../rdb");
 const {getElClient} = require("../el");
@@ -23,7 +22,7 @@ const container = createContainer();
 
 
 container.register({
-
+    productsService: asClass(ProductsService).singleton(),
     cartService: asClass(CartService).singleton(),
     discountRuleService: asClass(DiscountRuleService).singleton(),
     shippingService: asClass(ShippingService).singleton(),
