@@ -24,11 +24,16 @@ app.get('/', (req, res) => {
   logger.info("here")
   res.json({
     msg: "Welcome to the WcC App",
+/*
     DB_HOST: process.env.DB_HOST,
     DB_USER: process.env.DB_USER,
     DB_PORT: process.env.DB_PORT,
     DB_DATABASE: process.env.DB_DATABASE,
+*/
+
     CMS_URL: process.env.CMS_URL,
+    MERCADO_PAGO_ACCESS_TOKEN: process.env.MERCADO_PAGO_ACCESS_TOKEN,
+    WEBPAY_COMMERCE_CODE: process.env.WEBPAY_COMMERCE_CODE,
   //  AILOO_TOKEN: process.env.AILOO_ACCESS_TOKEN,
     ADMIN_URL: process.env.ADMIN_URL,
   });
