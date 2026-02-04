@@ -31,8 +31,12 @@ async function findCart(wuid, domainId) {
       const product = await findProductByProductItem(cartItem.product.productItemId, domainId)
       const productItem = product.productItems.find(pit => pit.id === cartItem.product.productItemId);
       const img = ProductHelper.getProductImage(product, productItem)
-      if (img)
+      if (img) {
         cartItem.image = img.image
+        if(cartItem.product)
+          cartItem.product.image = img.image
+      }
+
 
       cart.totalItems += cartItem.quantity
 
@@ -48,16 +52,10 @@ async function findCart(wuid, domainId) {
 
       if (priceComp) {
         let price = priceComp.getPrice()
-        cartItem.price = price.price.amount
+        cartItem.price = priceComp.price
         cartItem.oldPrice = price.discount ? price.price - price.discount : price.price.amount
         cartItem.discount = price.discount ? price.discount.amount : 0
 
-/*
-        packProduct.product.price = price.getFinalPrice().amount
-        packProduct.price = price.getFinalPrice().amount
-        packProduct.oldPrice = packProduct.price
-        packProduct.discount = 0
-*/
       }
 
 
@@ -116,10 +114,12 @@ async function findCart(wuid, domainId) {
 
       const oldPrice = total
       if(cartItem.type === CartItemType.Product){
-        const pit = await ProductHelper.getPriceByProductItem(cartItem.product.productItemId, SaleType.Internet, domainId)
-        cartItem.price = pit.price
-        cartItem.oldPrice = pit.basePrice
-        cartItem.discount = pit.discount
+        const priceComp = await productService.getPrice(product, productItem, SaleType.Internet)
+        let price = priceComp.getPrice()
+        // const pit = await ProductHelper.getPriceByProductItem(cartItem.product.productItemId, SaleType.Internet, domainId)
+        cartItem.price = priceComp.price
+        cartItem.oldPrice = price.discount ? price.price - price.discount : price.price.amount
+        cartItem.discount = price.discount ? price.discount.amount : 0
 
       } else if (cartItem.packId > 0) {
         const { discounts, rule } = await cartService.analyze(saleContext, cartItem.packId, domainId)

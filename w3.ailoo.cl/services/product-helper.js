@@ -47,12 +47,15 @@ function getFeaturesDescription(product, pit) {
 function getProductImage(product, pit) {
   let img = null
 
-  if(product.images.length > 0)
-    img = product.images[0];
   if (pit && pit.colorId > 0) {
     img = product.images.find(img => img.colorId === pit.colorId)
-
   }
+
+  if(!img && product.images.length > 0)
+    img = product.images[0];
+
+
+
   return img
 }
 

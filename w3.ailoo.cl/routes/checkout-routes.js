@@ -11,11 +11,6 @@ const {
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
 const {OrderItemType, SaleType, OrderState, PaymentMethodType, ShipmentMethodType} = require("../models/domain");
-const {
-  getPriceByProductItems,
-  getProductItemDescription,
-  getFeaturesDescription
-} = require("../services/product-helper");
 const {and, eq, sql} = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const {app} = require("../server");
@@ -615,6 +610,7 @@ async function getPartyPartial(email, domainId) {
   return result ?? null;
 }
 
+/*
 async function getProductItemsMap(items, domainId) {
   const pits = await getPriceByProductItems(items
           .filter(f => f.type === CartItemType.Product)
@@ -631,4 +627,5 @@ async function getProductItemsMap(items, domainId) {
 
   return map;
 }
+*/
 
