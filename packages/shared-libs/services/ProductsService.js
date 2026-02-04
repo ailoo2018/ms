@@ -198,7 +198,7 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
       pit.price = {
         currency: price.currency,
         price: price.amount,
-        oldPrice: discount ? price.amount - discount.amount : price.amount,
+        oldPrice: discount ? price.amount + discount.amount : price.amount,
         discount: discount ? discount.amount : 0,
       }
     }
