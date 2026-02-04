@@ -237,12 +237,25 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const wuid = req.params.wuid;
-    const cart = await findCart(wuid, domainId);
+    let cart = await findCart(wuid, domainId);
     if(!cart) {
-      res.status(404).json({
-        message: "Cart not found",
-        error: 'cart not found',
-      });
+      const newCart = {
+        "id": null,
+        "wuid": rq.wuid,
+        "notificationsCount": 0,
+        "lastNotified": "0001-01-01T00:00:00",
+        "webSiteId": 0,
+        "createDate": new Date(),
+        "modifiedDate": new Date(),
+        "currency": rq.currency ? rq.currency : "CLP",
+        "userId": rq.userId ? rq.userId : 0,
+        "domainId": domainId,
+        items: []
+      };
+
+      const newCartId = await CartRepos.addCart(newCart)
+      newCart.id = newCartId;
+      cart = newCart;
     }
 
     res.json(cart)
