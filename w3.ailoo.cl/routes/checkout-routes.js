@@ -84,9 +84,7 @@ app.get("/:domainId/shipping/methods", async (req, res, next) => {
 
 })
 
-/**
- * TODO
- */
+
 app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
@@ -285,7 +283,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
           validateRequestPrice(item, rq)
 
           const pitDb = await drizzleDb.query.productItem.findFirst({
-            where: (productItem) => eq(productItem.id, 503290)
+            where: (productItem) => eq(productItem.id, item.product.productItemId)
           });
 
           item.product.id = pitDb.productId
@@ -367,6 +365,7 @@ app.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
   }
 })
 
+/* todo */
 app.get("/:domainId/checkout/click-collect", async (req, res, next) => {
   try {
 
@@ -547,8 +546,7 @@ function validateRequestPrice(item, rq) {
   }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId) {
-
+function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) {
 
   return {
     orderId: orderId,
