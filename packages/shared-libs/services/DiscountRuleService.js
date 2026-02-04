@@ -203,7 +203,7 @@ select * from Discount where ValidFrom <= ? and ValidThru >= ? and DomainId = ? 
 
 	appliesProductTag(rule, tagId) {
 		for (var item of rule.config.rules) {
-			if (!item.tags || item.tags.length > 0 || item.tags.some(tagId => tagId === tagId))
+			if (item.tags == null || item.tags.length === 0 || item.tags.some(tId => tId === tagId))
 				return true;
 		}
 		return false;
