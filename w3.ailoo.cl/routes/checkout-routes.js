@@ -201,6 +201,12 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
         logger.info("Person does not exist. Creating person for email " + rq.customerInformation.email +
             ". The partyId is " + person.id);
         await contactsClient.index(person.id, domainId);
+      }else {
+        // update phone
+        await tx
+            .update(party)
+            .set({ phone: rq.customerInformation.address.phone })
+            .where(eq(party.id, person.id));
       }
 
       await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
@@ -255,8 +261,6 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
         });
 
       }
-
-
 
       const [orderResult] = await tx.insert(saleOrder).values({
         orderDate: new Date(),
