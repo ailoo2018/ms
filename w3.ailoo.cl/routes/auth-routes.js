@@ -145,7 +145,7 @@ app.get("/:domainId/auth/google", async (req, res, next) => {
       code: authCode,
       client_id: googleplus_client_id,
       client_secret: googleplus_client_secret,
-      redirect_uri: "http://localhost:3000",
+      redirect_uri: "https://www.motomundi.cl",
       grant_type: 'authorization_code',
     })
 
