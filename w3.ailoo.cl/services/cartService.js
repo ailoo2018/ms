@@ -52,7 +52,7 @@ async function findCart(wuid, domainId) {
 
       if (priceComp) {
         let price = priceComp.getPrice()
-        cartItem.price = priceComp.price
+        cartItem.price = price.price
         cartItem.oldPrice = price.discount ? price.price - price.discount : price.price.amount
         cartItem.discount = price.discount ? price.discount.amount : 0
 
@@ -117,7 +117,7 @@ async function findCart(wuid, domainId) {
         const priceComp = await productService.getPrice(product, productItem, SaleType.Internet)
         let price = priceComp.getPrice()
         // const pit = await ProductHelper.getPriceByProductItem(cartItem.product.productItemId, SaleType.Internet, domainId)
-        cartItem.price = priceComp.price
+        cartItem.price = price.price
         cartItem.oldPrice = price.discount ? price.price - price.discount : price.price.amount
         cartItem.discount = price.discount ? price.discount.amount : 0
 
