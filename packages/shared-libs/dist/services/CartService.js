@@ -6,9 +6,10 @@ const ShippingCostFactory_1 = require("./shipping/ShippingCostFactory");
 const shipping_types_1 = require("../models/shipping.types");
 // --- Supporting Interfaces ---
 exports.AppliesToEnum = {
-    CheapestItem: "CheapestItem",
-    TotalApplicableItems: "TotalApplicableItems",
-    TotalApplicableItemsOneSale: "TotalApplicableItemsOneSale"
+    Unknown: 0,
+    CheapestItem: 1,
+    TotalApplicableItems: 2,
+    TotalApplicableItemsOneSale: 3,
 };
 // --- Helper Functions ---
 function getPriceOfCheapestItem(applicableItems) {

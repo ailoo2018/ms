@@ -1,9 +1,10 @@
 import { ShoppingCart } from "../models/cart.types";
 import { ShippingService } from "./ShippingService";
 export declare const AppliesToEnum: {
-    readonly CheapestItem: "CheapestItem";
-    readonly TotalApplicableItems: "TotalApplicableItems";
-    readonly TotalApplicableItemsOneSale: "TotalApplicableItemsOneSale";
+    readonly Unknown: 0;
+    readonly CheapestItem: 1;
+    readonly TotalApplicableItems: 2;
+    readonly TotalApplicableItemsOneSale: 3;
 };
 interface Discount {
     type: "%" | "$";
@@ -29,7 +30,7 @@ interface ProductRuleDto {
 interface DiscountRule {
     id: number | string;
     name: string;
-    appliesTo: string;
+    appliesTo: number;
     discount: Discount;
     rules: ProductRuleDto[];
 }

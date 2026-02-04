@@ -8,9 +8,10 @@ import {ShipmentCategoryType, ShippingMethod} from "../models/shipping.types";
 // --- Supporting Interfaces ---
 
 export const AppliesToEnum = {
-  CheapestItem: "CheapestItem",
-  TotalApplicableItems: "TotalApplicableItems",
-  TotalApplicableItemsOneSale: "TotalApplicableItemsOneSale"
+  Unknown: 0,
+  CheapestItem: 1,
+  TotalApplicableItems: 2,
+  TotalApplicableItemsOneSale: 3,
 } as const;
 
 
@@ -32,7 +33,7 @@ interface ProductRuleDto {
 interface DiscountRule {
   id: number | string;
   name: string;
-  appliesTo: string;
+  appliesTo: number;
   discount: Discount;
   rules: ProductRuleDto[];
 }
