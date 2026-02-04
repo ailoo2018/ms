@@ -241,14 +241,14 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
     if(!cart) {
       const newCart = {
         "id": null,
-        "wuid": rq.wuid,
+        "wuid": wuid,
         "notificationsCount": 0,
         "lastNotified": "0001-01-01T00:00:00",
         "webSiteId": 0,
         "createDate": new Date(),
         "modifiedDate": new Date(),
-        "currency": rq.currency ? rq.currency : "CLP",
-        "userId": rq.userId ? rq.userId : 0,
+        "currency":  "CLP",
+        "userId": 0,
         "domainId": domainId,
         items: []
       };
