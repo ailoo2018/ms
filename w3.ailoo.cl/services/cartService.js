@@ -31,6 +31,7 @@ async function findCart(wuid, domainId) {
       const product = await findProductByProductItem(cartItem.product.productItemId, domainId)
       const productItem = product.productItems.find(pit => pit.id === cartItem.product.productItemId);
       const img = ProductHelper.getProductImage(product, productItem)
+
       if (img) {
         cartItem.image = img.image
         if(cartItem.product)
@@ -66,7 +67,10 @@ async function findCart(wuid, domainId) {
 
       total += (cartItem.price * cartItem.quantity)
     }
-    else if (cartItem.packContents && cartItem.packContents.length > 0) {
+    // PACK
+    else if (cartItem.packContents && cartItem.packContents.length > 0)
+    {
+
       if (!cartItem.quantity)
         cartItem.quantity = 1
 
@@ -86,7 +90,8 @@ async function findCart(wuid, domainId) {
 
 
         cart.totalItems += packProduct.quantity
-
+        packProduct.url = LinkHelper.getProductUrl(product)
+        packProduct.product.url = LinkHelper.getProductUrl(product)
         packProduct.product.name = product.fullName
         packProduct.product.price = 0
         packProduct.price = 0

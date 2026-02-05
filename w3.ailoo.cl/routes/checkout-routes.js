@@ -11,7 +11,7 @@ const {
 } = require("../db/schema.ts");
 const PbxRepository = require("../el/pbx");
 const {OrderItemType, SaleType, OrderState, PaymentMethodType, ShipmentMethodType} = require("../models/domain");
-const {and, eq, sql} = require("drizzle-orm");
+  const {and, eq, sql} = require("drizzle-orm");
 const logger = require("@ailoo/shared-libs/logger");
 const {app} = require("../server");
 const {db: drizzleDb, db} = require("../db/drizzle");

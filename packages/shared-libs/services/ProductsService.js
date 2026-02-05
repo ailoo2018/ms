@@ -40,7 +40,6 @@ class ProductsService {
 
   }
 
-
   async findProduct(productId, domainId) {
     const response = await this.elClient.get({
       index: getIndexName(domainId),
@@ -184,6 +183,26 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
 
   async getPrice(product, pit, saleTypeId, currency = "CLP") {
     return await getPrice(product, pit, saleTypeId, currency, 0, 1, this.discountRuleService);
+  }
+
+  async price(product, pit, saleTypeId, currency = "CLP") {
+    const priceComp = await getPrice(product, pit, saleTypeId, currency, 0, 1, this.discountRuleService);
+
+    if (priceComp) {
+      let price = priceComp.getPrice()
+      return {
+       price: price.price.amount,
+       oldPrice: price.discount ? price.price.aount - price.discount.amount : price.price.amount,
+       discount: price.discount ? price.discount.amount : 0,
+      }
+
+    }
+
+    return {
+      price: 0,
+      oldPrice: 0,
+      discount: 0,
+    }
   }
 
   async findProductWithInventory(productId, domainId) {

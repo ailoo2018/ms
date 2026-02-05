@@ -402,6 +402,149 @@ const shipmentMethodType = motomundiSchema.table("shipmentmethodtype", {
     description: varchar("Description", { length: 255 }),
 });
 
+const invoice = motomundiSchema.table("invoice", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    number: varchar("Number", { length: 20 }),
+    date: datetime("Date"),
+    description: text("Description"),
+    type: int("Type"),
+    purchaseSale: int("PurchaseSale"),
+    email: varchar("Email", { length: 80 }),
+    deleted: tinyint("Deleted").default(0),
+    supplierId: int("SupplierId"),
+    facilityId: int("FacilityId"),
+    receivedById: int("ReceivedById"),
+    status: int("Status").notNull().default(0),
+    destinationFacilityId: int("DestinationFacilityId"),
+    userId: int("UserId"),
+    saleTypeId: int("SaleTypeId"),
+    paymentTermId: int("PaymentTermId"),
+    registeredDate: datetime("RegisteredDate"),
+    emitedById: int("EmitedById"),
+    associatedDocumentId: int("AssociatedDocumentId"),
+    domainId: int("DomainId"),
+    isDigital: smallint("IsDigital").default(0),
+    isNotified: smallint("IsNotified").default(0),
+    reason: smallint("Reason"),
+    siiStatus: smallint("SiiStatus").default(0),
+    siiStatusMessage: varchar("SiiStatusMessage", { length: 255 }),
+    validUntil: datetime("ValidUntil"),
+    declarePeriod: int("DeclarePeriod"),
+    tipoDespacho: smallint("TipoDespacho"),
+    reasonGuia: smallint("ReasonGuia"),
+    cashRegisterId: int("CashRegisterId"),
+    availableDate: datetime("AvailableDate"),
+    currency: varchar("Currency", { length: 3 }),
+    referenceId: int("ReferenceId"),
+    allowsReserve: smallint("AllowsReserve").default(0),
+    originAddressId: int("OriginAddressId"),
+    destinationAddressId: int("DestinationAddressId"),
+    isNotifiedApiBoleta: smallint("IsNotifiedApiBoleta").default(0),
+}, (table) => ({
+    typeIdx: index("IDX_TYPE").on(table.type),
+    receivedByIdx: index("IDX_INV_RECV").on(table.receivedById),
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
+    isDigitalIdx: index("IDX_INV_ISDIGITAL").on(table.isDigital),
+    userIdx: index("FK_Invoice_User_idx").on(table.userId),
+    purchaseSaleIdx: index("IDX_INV_PURCHSALE").on(table.purchaseSale),
+    numberIdx: index("IDX_NUMBER").on(table.number),
+    isNotifiedIdx: index("IDX_INV_ISNOTIFIED").on(table.isNotified),
+    dateDomainIdx: index("IDX_DATE").on(table.date, table.domainId),
+    originAddrIdx: index("FK_Invoice_OrgPostalAddr_idx").on(table.originAddressId),
+    destAddrIdx: index("FK_Invoice_DestPostalAddr_idx").on(table.destinationAddressId),
+    siiStatusIdx: index("IDX_INV_SIISTATUS").on(table.siiStatus, table.domainId),
+    // Complex composite index for DTE logic
+    complexDteIdx: index("IDX_ENVDTE").on(
+        table.domainId, table.isDigital, table.type,
+        table.siiStatus, table.purchaseSale, table.deleted, table.date
+    ),
+    facilityCashIdx: index("IDX_FACILITY_ID").on(table.facilityId, table.cashRegisterId),
+
+    // Foreign Keys
+    destAddrFk: foreignKey({
+        columns: [table.destinationAddressId],
+        foreignColumns: [postalAddress.postalAddressId],
+        name: "FK_Invoice_DestPostalAddr"
+    }),
+    originAddrFk: foreignKey({
+        columns: [table.originAddressId],
+        foreignColumns: [postalAddress.postalAddressId],
+        name: "FK_Invoice_OrgPostalAddr"
+    }),
+    receivedByFk: foreignKey({
+        columns: [table.receivedById],
+        foreignColumns: [party.id],
+        name: "FK_Invoice_ReceivedBy"
+    }),
+    userFk: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [user.id],
+        name: "FK_Invoice_User"
+    }).onDelete("cascade"),
+}));
+
+const invoiceItem = motomundiSchema.table("invoiceitem",      {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    quantity: decimal("Quantity", { precision: 10, scale: 3 }),
+    amount: double("Amount"),
+    isExento: tinyint("IsExento", { mode: 'number' }),
+    description: varchar("Description", { length: 255 }),
+    invoiceItemType: int("InvoiceItemType"),
+    purchaseSale: int("PurchaseSale"),
+    productId: int("ProductId"),
+    invoiceId: int("InvoiceId"),
+    featureId: int("FeatureId"),
+    invoiceItemId: int("InvoiceItemId"), // Self-reference link
+    percent: double("Percent").default(0),
+    netAmount: double("NetAmount"),
+    ivaAmount: double("IvaAmount"),
+    productItemId: int("ProductItemId"),
+    uom: smallint("Uom").default(0),
+    lotId: int("LotId"),
+    currency: varchar("Currency", { length: 3 }),
+    saleTaxId: int("SaleTaxId"),
+    productCode: varchar("ProductCode", { length: 45 }),
+    couponId: int("CouponId"),
+    quantityD: double("QuantityD"),
+    serialNumber: varchar("SerialNumber", { length: 50 }),
+    estimatedProductCostId: int("EstimatedProductCostId"),
+    returnReason: smallint("ReturnReason"),
+    ordered: decimal("Ordered", { precision: 10, scale: 3 }),
+}, (table) => ({
+    productIdx: index("ProductId").on(table.productId),
+    invoiceIdx: index("InvoiceId").on(table.invoiceId),
+    parentItemIdx: index("InvoiceItemId").on(table.invoiceItemId),
+    featureIdx: index("FeatureId").on(table.featureId),
+    typeIdx: index("IDX_INVIT_TYPE").on(table.invoiceItemType),
+    prodItemIdx: index("FK_INVOICEITEM_PRODITEM").on(table.productItemId),
+    couponIdx: index("FK_INVITEM_COUPON_idx").on(table.couponId),
+    serialIdx: index("IDX_INVIT_SERIAL").on(table.serialNumber),
+
+    // Foreign Keys
+    invoiceFk: foreignKey({
+        columns: [table.invoiceId],
+        foreignColumns: [invoice.id],
+        name: "fk_invid_invitem"
+    }).onDelete("cascade"),
+    productFk: foreignKey({
+        columns: [table.productId],
+        foreignColumns: [product.id],
+        name: "fk_invitem_product"
+    }),
+    productItemFk: foreignKey({
+        columns: [table.productItemId],
+        foreignColumns: [productItem.id],
+        name: "FK_INVOICEITEM_PRODITEM"
+    }),
+    parentItemFk: foreignKey({
+        columns: [table.invoiceItemId],
+        foreignColumns: [table.id],
+        name: "FK_INVITEM_INVITEM"
+    }),
+}));
+
+
+
 const webContentConfiguration = motomundiSchema.table("webcontentconfiguration", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", {length: 255}),
@@ -699,6 +842,47 @@ const productItemRelations = relations(productItem, ({ one }) => ({
     }),
 }));
 
+const invoiceRelations = relations(invoice, ({ one, many }) => ({
+    items: many(invoiceItem),
+    user: one(user, {
+        fields: [invoice.userId],
+        references: [user.id],
+    }),
+    receivedBy: one(party, {
+        fields: [invoice.receivedById],
+        references: [party.id],
+    }),
+    destinationAddress: one(postalAddress, {
+        fields: [invoice.destinationAddressId],
+        references: [postalAddress.postalAddressId],
+    }),
+    originAddress: one(postalAddress, {
+        fields: [invoice.originAddressId],
+        references: [postalAddress.postalAddressId],
+    }),
+}));
+
+const invoiceItemRelations = relations(invoiceItem, ({ one }) => ({
+    invoice: one(invoice, {
+        fields: [invoiceItem.invoiceId],
+        references: [invoice.id],
+    }),
+    product: one(product, {
+        fields: [invoiceItem.productId],
+        references: [product.id],
+    }),
+    variant: one(productItem, {
+        fields: [invoiceItem.productItemId],
+        references: [productItem.id],
+    }),
+    // Relation for nested items (e.g., discounts attached to a main product item)
+    parentItem: one(invoiceItem, {
+        fields: [invoiceItem.invoiceItemId],
+        references: [invoiceItem.id],
+        relationName: "sub_items"
+    }),
+}));
+
 
 module.exports = {
     brand,
@@ -744,4 +928,8 @@ module.exports = {
     websiteRelations,
 
     paymentMethodType,
+    invoice,
+    invoiceItem,
+    invoiceRelations,
+    invoiceItemRelations,
 };
