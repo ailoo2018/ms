@@ -164,7 +164,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
             email: rq.customerInformation.email,
             comuna: rq.customerInformation.address.comuna ? rq.customerInformation.address.comuna : null,
             rut: rq.customerInformation.address.rut,
-            phone: rq.customerInformation.phone ? rq.customerInformation.phone : "",
+            phone: rq.customerInformation.phone ? rq.customerInformation.phone :  "",
             createDate: new Date(),
             type: "PERSON", // Matches your varchar(20) 'Type' column
             receiveNewsletter: 1,
