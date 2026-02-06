@@ -181,7 +181,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           // update phone
           await tx
               .update(party)
-              .set({phone: rq.customerInformation.address.phone})
+              .set({phone: rq.customerInformation.phone})
               .where(eq(party.id, person.id));
         }
 
@@ -223,7 +223,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
           await tx.insert(postalAddress).values({
             postalAddressId: postalAddressId, // Use the shared ID
-            phone: rq.shipmentInformation.address.phone,
+            phone: rq.shipmentInformation.phone,
             name: rq.shipmentInformation.address.name.trim(),
             surname: rq.shipmentInformation.address.surnames,
             address: rq.shipmentInformation.address.address,
