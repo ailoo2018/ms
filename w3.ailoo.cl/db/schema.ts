@@ -418,7 +418,7 @@ const invoice = motomundiSchema.table("invoice", {
     saleTypeId: int("SaleTypeId"),
     paymentTermId: int("PaymentTermId"),
     registeredDate: datetime("RegisteredDate"),
-    emitedById: int("EmitedById"),
+    emittedById: int("EmitedById"),
     associatedDocumentId: int("AssociatedDocumentId"),
     domainId: int("DomainId"),
     isDigital: smallint("IsDigital").default(0),

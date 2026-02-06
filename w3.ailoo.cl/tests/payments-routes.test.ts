@@ -1,5 +1,9 @@
 process.env.NODE_ENV = "developer";
 import '@ailoo/shared-libs/config';
+import {addPaymentToInvoice} from "../payments/confirm.payments.t.ts";
+
+
+
 import request from "supertest";
 import {describe, it} from "node:test";
 import assert from "node:assert/strict";
@@ -9,12 +13,18 @@ describe('User API', () => {
 
   it('GET /:domainId/invoices/:invoiceId composite product', async () => {
 
+    await addPaymentToInvoice(17080191, 149900, 8, "12312", 1);
+
+
     let response = await request(app)
         .get('/1/invoices/17080191')
         .expect(200)
         .expect('Content-Type', /json/);
 
     assert.ok(response.body);
+
+
+
 
 /*
     response = await request(app)

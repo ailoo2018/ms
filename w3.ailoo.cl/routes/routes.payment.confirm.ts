@@ -1,7 +1,13 @@
 import {Router} from "express";
 import logger from "@ailoo/shared-libs/logger";
 import {and, eq, sql} from "drizzle-orm";
-import {confirmPayment, validateInvoice, validateOrder, ValidationType} from "../payments/confirm.payments.t.ts";
+import {
+    addPaymentToInvoice,
+    confirmPayment,
+    validateInvoice,
+    validateOrder,
+    ValidationType
+} from "../payments/confirm.payments.t.ts";
 import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.ts";
 import schema from "../db/schema.ts";
 import {sendOrderConfirmationEmail} from "../services/emailsService.js";
@@ -22,30 +28,13 @@ router.post("/:domainId/checkout/payment-result-invoice", async (req, res, next)
         const confirmRs: PaymentValidation = await confirmPayment(rq.authorizationCode, rq.paymentMethodId, ValidationType.Invoice, domainId)
 
         if (confirmRs.success) {
-            const [result] = await drizzleDb.insert(payment).values({
-                amount: confirmRs.transactionAmount,
-                paymentMethodType: rq.paymentMethodId,
-                effectiveDate: new Date(),
-                paymentRefNum: confirmRs.authorizationCode,
-                domainId: domainId,
-                receivedById: 1,
-                emittedById: 1,
-                currency: "CLP",
-                createDate: new Date(),
-                tenderAmount: confirmRs.transactionAmount,
-            })
-
-            let paymentId: number = result.insertId
-
-            const [paRs] = await drizzleDb.insert(paymentApplication).values({
-                amount: confirmRs.transactionAmount,
-                paymentId: paymentId,
-                invoiceId: parseInt(confirmRs.referenceId),
-                originalCurrency: "CLP",
-                originalAmount: confirmRs.transactionAmount,
-                conversionFactor: 1,
-            })
-
+            await addPaymentToInvoice(
+                parseInt(confirmRs.referenceId),
+                confirmRs.transactionAmount,
+                rq.paymentMethodId,
+                confirmRs.authorizationCode,
+                domainId
+                )
         }
 
         try {

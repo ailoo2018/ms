@@ -5,6 +5,10 @@ import { invoiceHelper}  from "../helpers/invoice-helper.js";
 import {PaymentMethodType} from "../models/domain.js";
 import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator";
 import container from "../container/index.ts";
+import schema from "../db/schema.ts"
+import {adminClient} from "../services/adminClient.js";
+
+const { invoice, payment, paymentApplication } = schema;
 
 export const ValidationType = {
     Invoice: 0,
@@ -64,7 +68,6 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
 
 }
 
-
 type PaymentMethodValues = typeof PaymentMethodType[keyof typeof PaymentMethodType];
 
 // 2. Define the map with Record
@@ -99,4 +102,48 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
 }
 
 
+export async function addPaymentToInvoice(invoiceId: number, amount: number, paymentMethodId: number, authorizationCode: string, domainId: number)
+{
+    const invRs = await drizzleDb.select({
+        receivedById: invoice.receivedById,
+        emittedById: invoice.emittedById
+    }).from(invoice).where(
+        and(
+            eq(invoice.id, invoiceId),
+            eq(invoice.domainId, domainId)
+        )
+    )
 
+    const inv = invRs[0];
+
+    const [result] = await drizzleDb.insert(payment).values({
+        amount: amount,
+        paymentMethodType: paymentMethodId,
+        effectiveDate: new Date(),
+        paymentRefNum: authorizationCode,
+        domainId: domainId,
+        receivedById: inv.emittedById,
+        emittedById: inv.receivedById,
+        currency: "CLP",
+        createDate: new Date(),
+        tenderAmount: amount,
+    })
+
+    let paymentId: number = result.insertId
+
+    const [paRs] = await drizzleDb.insert(paymentApplication).values({
+        amountApplied: amount,
+        paymentId: paymentId,
+        invoiceId: invoiceId,
+        originalCurrency: "CLP",
+        originalAmount: amount,
+        conversionFactor: 1,
+    })
+
+    try{
+        await adminClient.indexDocument(invoiceId, domainId)
+    }catch(e){
+        console.error(e.message, e)
+    }
+
+}
