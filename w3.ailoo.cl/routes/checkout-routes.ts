@@ -134,7 +134,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         let user = null
         let person = null;
 
-        logger.log("drizzleDb.transaction 1")
+        logger.info("drizzleDb.transaction 1")
 
         if (rq.userId > 0) {
           user = await drizzleDb.query.user.findFirst({
@@ -145,17 +145,17 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           });
         }
 
-        logger.log("drizzleDb.transaction 2")
+        logger.info("drizzleDb.transaction 2")
 
         if (user != null && user.person != null)
           person = user.person;
 
-        logger.log("drizzleDb.transaction 3")
+        logger.info("drizzleDb.transaction 3")
 
         if (person == null)
           person = await getPartyPartial(rq.customerInformation.email, domainId);
 
-        logger.log("drizzleDb.transaction 4")
+        logger.info("drizzleDb.transaction 4")
         if (person == null) {
           const [result] = await tx.insert(party).values({
             name: rq.customerInformation.address.name,
@@ -183,11 +183,11 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
               .where(eq(party.id, person.id));
         }
 
-        logger.log("drizzleDb.transaction 5")
+        logger.info("drizzleDb.transaction 5")
         await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
             person.email, domainId);
 
-        logger.log("drizzleDb.transaction 6")
+        logger.info("drizzleDb.transaction 6")
         let postalAddressId = null;
         const cart = await findCart(rq.wuid, domainId)
         if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
@@ -237,7 +237,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
         }
 
-        logger.log("drizzleDb.transaction 7")
+        logger.info("drizzleDb.transaction 7")
 
         const [orderResult] = await tx.insert(saleOrder).values({
           orderDate: new Date(),
@@ -255,7 +255,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         //const pitMap = await getProductItemsMap(rq.items, domainId)
 
         let orderTotal = 0
-        logger.log("drizzleDb.transaction 8")
+        logger.info("drizzleDb.transaction 8")
 
         for (const item of cart.items) {
 
@@ -311,7 +311,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           }
         }
 
-        logger.log("drizzleDb.transaction 9")
+        logger.info("drizzleDb.transaction 9: " + orderResult.insertId);
 
         return {id: orderResult.insertId, total: orderTotal,  addressId: postalAddressId};
       }catch(txerro){
