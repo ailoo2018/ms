@@ -192,8 +192,6 @@ select * from Discount where ValidFrom <= ? and ValidThru >= ? and DomainId = ? 
 	}
 
 	appliesSaleType(rule, saleTypeId) {
-		if (rule.id === 17)
-			console.log("here")
 
 		if (!rule.config.saleTypes || rule.config.saleTypes.length === 0 || rule.config.saleTypes.some(st => st.id === saleTypeId))
 			return true;

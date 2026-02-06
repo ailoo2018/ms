@@ -56,7 +56,7 @@ import paymentsRoutes from "./routes/routes.payment.confirm.js";
 app.use(paymentsRoutes);
 
 app.get('/', (req, res) => {
-  logger.info("here")
+
   res.json({
     msg: "Welcome to the WcC App",
     /*

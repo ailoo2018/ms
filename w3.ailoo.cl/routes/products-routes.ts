@@ -77,7 +77,7 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
         })
       })
       const imgRsJs = await imgRs.json()
-      console.log("imgRs" + JSON.stringify(imgRsJs))
+
     }
 
 
