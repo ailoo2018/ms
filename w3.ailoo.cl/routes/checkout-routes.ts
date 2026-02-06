@@ -156,15 +156,15 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           person = await getPartyPartial(rq.customerInformation.email, domainId);
 
         logger.info("drizzleDb.transaction 4: " + person)
-        if (person == null) {
+        if (!person) {
           const [result] = await tx.insert(party).values({
             name: rq.customerInformation.address.name,
             firstName: rq.customerInformation.address.name,
             lastName: rq.customerInformation.address.surnames,
             email: rq.customerInformation.email,
-            comuna: rq.customerInformation.phone,
+            comuna: rq.customerInformation.address.comuna,
             rut: rq.customerInformation.address.rut,
-            phone: rq.customerInformation.address.phone,
+            phone: rq.customerInformation.phone,
             createDate: new Date(),
             type: "PERSON", // Matches your varchar(20) 'Type' column
             receiveNewsletter: 1,
