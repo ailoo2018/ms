@@ -128,177 +128,195 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
     const result = await drizzleDb.transaction(async (tx) => {
 
-      let user = null
-      let person = null;
+      try {
+        let user = null
+        let person = null;
 
-      if (rq.userId > 0) {
-        user = await drizzleDb.query.user.findFirst({
-          where: eq(user.id, rq.userId),
-          with: {
-            person: true, // This joins the 'party' table
-          },
-        });
-      }
+        console.log("drizzleDb.transaction 1")
 
-      if (user != null && user.person != null)
-        person = user.person;
+        if (rq.userId > 0) {
+          user = await drizzleDb.query.user.findFirst({
+            where: eq(user.id, rq.userId),
+            with: {
+              person: true, // This joins the 'party' table
+            },
+          });
+        }
 
-      if (person == null)
-        person = await getPartyPartial(rq.customerInformation.email, domainId);
+        console.log("drizzleDb.transaction 2")
 
-      if (person == null) {
-        const [result] = await tx.insert(party).values({
-          name: rq.customerInformation.address.name,
-          firstName: rq.customerInformation.address.name,
-          lastName: rq.customerInformation.address.surnames,
-          email: rq.customerInformation.email,
-          comuna: rq.customerInformation.phone,
-          rut: rq.customerInformation.address.rut,
-          phone: rq.customerInformation.address.phone,
-          createDate: new Date(),
-          type: "PERSON", // Matches your varchar(20) 'Type' column
-          receiveNewsletter: 1,
-          domainId: domainId,
-        });
+        if (user != null && user.person != null)
+          person = user.person;
 
-        person = result
-        logger.info("Person does not exist. Creating person for email " + rq.customerInformation.email +
-            ". The partyId is " + person.id);
-        await contactsClient.index(person.id, domainId);
-      }else {
-        // update phone
-        await tx
-            .update(party)
-            .set({ phone: rq.customerInformation.address.phone })
-            .where(eq(party.id, person.id));
-      }
+        console.log("drizzleDb.transaction 3")
 
-      await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
-          person.email, domainId);
+        if (person == null)
+          person = await getPartyPartial(rq.customerInformation.email, domainId);
 
+        console.log("drizzleDb.transaction 4")
+        if (person == null) {
+          const [result] = await tx.insert(party).values({
+            name: rq.customerInformation.address.name,
+            firstName: rq.customerInformation.address.name,
+            lastName: rq.customerInformation.address.surnames,
+            email: rq.customerInformation.email,
+            comuna: rq.customerInformation.phone,
+            rut: rq.customerInformation.address.rut,
+            phone: rq.customerInformation.address.phone,
+            createDate: new Date(),
+            type: "PERSON", // Matches your varchar(20) 'Type' column
+            receiveNewsletter: 1,
+            domainId: domainId,
+          });
 
-      let postalAddressId = null;
-      const cart = await findCart(rq.wuid, domainId)
-      if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
-        const facilityDb = await drizzleDb.query.facility.findFirst({
-          where: (productItem) => eq(facility.id, rq.pickupStore.id),
-          with: {
-            contacts: {
-              with: {
-                contactMechanism: {
-                  with: {
-                    postalAddress: true
+          person = result
+          logger.info("Person does not exist. Creating person for email " + rq.customerInformation.email +
+              ". The partyId is " + person.id);
+          await contactsClient.index(person.id, domainId);
+        } else {
+          // update phone
+          await tx
+              .update(party)
+              .set({phone: rq.customerInformation.address.phone})
+              .where(eq(party.id, person.id));
+        }
+
+        console.log("drizzleDb.transaction 5")
+        await PbxRepository.updateParty(rq.customerInformation.phone, person.id, person.name,
+            person.email, domainId);
+
+        console.log("drizzleDb.transaction 6")
+        let postalAddressId = null;
+        const cart = await findCart(rq.wuid, domainId)
+        if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
+          const facilityDb = await drizzleDb.query.facility.findFirst({
+            where: (productItem) => eq(facility.id, rq.pickupStore.id),
+            with: {
+              contacts: {
+                with: {
+                  contactMechanism: {
+                    with: {
+                      postalAddress: true
+                    }
                   }
                 }
               }
             }
-          }
-        });
+          });
 
-        var contactPostal = facilityDb.contacts.find(c => c.contactMechanism && c.contactMechanism.postalAddress);
-        if (contactPostal) {
-          var postalAddressDb = contactPostal.contactMechanism.postalAddress;
-          postalAddressId = postalAddressDb.postalAddressId
+          var contactPostal = facilityDb.contacts.find(c => c.contactMechanism && c.contactMechanism.postalAddress);
+          if (contactPostal) {
+            var postalAddressDb = contactPostal.contactMechanism.postalAddress;
+            postalAddressId = postalAddressDb.postalAddressId
+
+          }
+
+
+        } else {
+          const [cmResult] = await tx.insert(contactMechanism).values({});
+          postalAddressId = cmResult.insertId;
+
+
+          await tx.insert(postalAddress).values({
+            postalAddressId: postalAddressId, // Use the shared ID
+            phone: rq.shipmentInformation.address.phone,
+            name: rq.shipmentInformation.address.name.trim(),
+            surname: rq.shipmentInformation.address.surnames,
+            address: rq.shipmentInformation.address.address,
+            address2: rq.shipmentInformation.address.address2,
+            notifyWhatsApp: rq.notifyWhatsApp,
+            rut: rq.shipmentInformation.address.rut,
+            email: rq.customerInformation.email,
+            comment: rq.shipmentInformation.notes,
+            comunaId: rq.shipmentInformation.address.comuna.id,
+            postalCode: rq.shipmentInformation.address.postalCode,
+            domainId: domainId
+          });
 
         }
 
+        console.log("drizzleDb.transaction 7")
 
-      } else {
-        const [cmResult] = await tx.insert(contactMechanism).values({});
-        postalAddressId = cmResult.insertId;
-
-
-        await tx.insert(postalAddress).values({
-          postalAddressId: postalAddressId, // Use the shared ID
-          phone: rq.shipmentInformation.address.phone,
-          name: rq.shipmentInformation.address.name.trim(),
-          surname: rq.shipmentInformation.address.surnames,
-          address: rq.shipmentInformation.address.address,
-          address2: rq.shipmentInformation.address.address2,
-          notifyWhatsApp: rq.notifyWhatsApp,
-          rut: rq.shipmentInformation.address.rut,
-          email: rq.customerInformation.email,
-          comment: rq.shipmentInformation.notes,
-          comunaId: rq.shipmentInformation.address.comuna.id,
-          postalCode: rq.shipmentInformation.address.postalCode,
+        const [orderResult] = await tx.insert(saleOrder).values({
+          orderDate: new Date(),
+          expectedDeliveryDate: new Date(),
+          shippedToId: postalAddressId, // Points to both tables via the shared ID
+          state: 1,
+          paymentMethodTypeId: rq.paymentMethod.gateway,
+          shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
+          orderedBy: person.id,
+          invoicedTo: null, // todo datos de factura
           domainId: domainId
         });
 
-      }
+        const newOrderId = orderResult.insertId;
+        //const pitMap = await getProductItemsMap(rq.items, domainId)
 
-      const [orderResult] = await tx.insert(saleOrder).values({
-        orderDate: new Date(),
-        expectedDeliveryDate: new Date(),
-        shippedToId: postalAddressId, // Points to both tables via the shared ID
-        state: 1,
-        paymentMethodTypeId: rq.paymentMethod.gateway,
-        shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
-        orderedBy: person.id,
-        invoicedTo: null, // todo datos de factura
-        domainId: domainId
-      });
+        let orderTotal = 0
+        console.log("drizzleDb.transaction 8")
 
-      const newOrderId = orderResult.insertId;
-      //const pitMap = await getProductItemsMap(rq.items, domainId)
-
-      let orderTotal = 0
+        for (const item of cart.items) {
 
 
-      for (const item of cart.items) {
+          if (item.type === CartItemType.Product) {
 
+            validateRequestPrice(item, rq)
 
-        if (item.type === CartItemType.Product) {
-
-          validateRequestPrice(item, rq)
-
-          const pitDb = await drizzleDb.query.productItem.findFirst({
-            where: (productItem) => eq(productItem.id, item.product.productItemId)
-          });
-
-          item.product.id = pitDb.productId
-
-          let itemToInsert = createProductSaleOrderItem(newOrderId, item, null, domainId)
-
-          const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
-          const orderItemId = orderItemResult.insertId;
-          if (item.packContents && item.packContents.length > 0) {
-            for (var packItem of item.packContents) {
-              const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId)
-              await tx.insert(saleOrderItem).values(packItemDb);
-            }
-          }
-
-          orderTotal += item.quantity * item.price
-        } else if (item.type === CartItemType.Pack) {
-
-          // validate price
-          validateRequestPrice(item, rq)
-
-
-          for (var packItem of item.packContents) {
-            const packItemDb = createProductSaleOrderItem(newOrderId, packItem, null, domainId)
-            await tx.insert(saleOrderItem).values(packItemDb);
-
-            orderTotal += packItem.quantity * packItem.price
-          }
-
-          // add discount of pack a separate line
-          if (item.packDiscount) {
-            orderTotal += item.packDiscount.price
-            await tx.insert(saleOrderItem).values({
-              orderId: newOrderId,
-              quantity: "1",
-              unitPrice: item.packDiscount.price,
-              unitCurrency: "CLP",
-              type: OrderItemType.Discount,
-              comment: item.packDiscount.name,
+            const pitDb = await drizzleDb.query.productItem.findFirst({
+              where: (productItem) => eq(productItem.id, item.product.productItemId)
             });
+
+            item.product.id = pitDb.productId
+
+            let itemToInsert = createProductSaleOrderItem(newOrderId, item, null, domainId)
+
+            const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
+            const orderItemId = orderItemResult.insertId;
+            if (item.packContents && item.packContents.length > 0) {
+              for (var packItem of item.packContents) {
+                const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId)
+                await tx.insert(saleOrderItem).values(packItemDb);
+              }
+            }
+
+            orderTotal += item.quantity * item.price
+          } else if (item.type === CartItemType.Pack) {
+
+            // validate price
+            validateRequestPrice(item, rq)
+
+
+            for (var packItem of item.packContents) {
+              const packItemDb = createProductSaleOrderItem(newOrderId, packItem, null, domainId)
+              await tx.insert(saleOrderItem).values(packItemDb);
+
+              orderTotal += packItem.quantity * packItem.price
+            }
+
+            // add discount of pack a separate line
+            if (item.packDiscount) {
+              orderTotal += item.packDiscount.price
+              await tx.insert(saleOrderItem).values({
+                orderId: newOrderId,
+                quantity: "1",
+                unitPrice: item.packDiscount.price,
+                unitCurrency: "CLP",
+                type: OrderItemType.Discount,
+                comment: item.packDiscount.name,
+              });
+            }
+
           }
-
         }
-      }
 
-      return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: postalAddressId};
+        console.log("drizzleDb.transaction 9")
+
+        return {id: orderResult.insertId, total: orderTotal, orderId: orderResult.insertId, addressId: postalAddressId};
+      }catch(txerro){
+        console.error("CHECKOUT ERROR!!!!! " + txerro.message);
+        console.error("CHECKOUT ERROR!!!!! " + txerro.stack);
+
+      }
     })
 
     res.json({id: result.orderId, total: result.total, addressId: result.addressId})
