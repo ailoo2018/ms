@@ -41,6 +41,9 @@ class ProductsService {
   }
 
   async findProduct(productId, domainId) {
+    if(!productId)
+      return null
+
     const response = await this.elClient.get({
       index: getIndexName(domainId),
       id: productId,
@@ -206,6 +209,10 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
   }
 
   async findProductWithInventory(productId, domainId) {
+
+    if(!productId)
+      return null
+
     const p = await this.findProduct(productId, domainId)
 
     const stock = await this.productStock([productId], domainId);

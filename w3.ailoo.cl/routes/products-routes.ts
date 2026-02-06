@@ -94,6 +94,10 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
 
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
+
+    if(!productId)
+      return res.status(404).json({ message: "product not found"})
+
     const p = await findProduct(productId, domainId);
 
 
