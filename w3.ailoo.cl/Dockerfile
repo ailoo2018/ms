@@ -12,6 +12,7 @@ RUN npm install
 COPY w3.ailoo.cl ./w3.ailoo.cl
 COPY packages ./packages
 
+
 # Build shared libs
 RUN npm run build --workspace=@ailoo/shared-libs
 RUN npm run build --workspace=w3.ailoo.cl
