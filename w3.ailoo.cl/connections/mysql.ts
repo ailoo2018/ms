@@ -1,3 +1,4 @@
+import generated from "@ailoo/shared-libs/config";
 import mysql from "mysql2/promise";
 
 console.log("about to create pool");

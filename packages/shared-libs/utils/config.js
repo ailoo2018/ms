@@ -14,5 +14,7 @@ function loadConfig() {
     return process.env;
 }
 
-module.exports = loadConfig();
+loadConfig();
+
+module.exports = process.env
 

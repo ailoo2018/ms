@@ -6,6 +6,7 @@
     "w3.ailoo.cl"
   ],
   "dependencies": {
-    "@ailoo/shared-libs": "^1.0.0"
+    "@ailoo/shared-libs": "^1.0.0",
+    "express": "^5.2.1"
   }
 }

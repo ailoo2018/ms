@@ -303,6 +303,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
     res.json({id: result.orderId, total: result.total, addressId: result.addressId})
   } catch (err) {
+    console.error("CHECKOUT ERROR!!!!! " + err.message);
+    console.error("CHECKOUT ERROR!!!!! " + err.stack);
+
     next(err);
   }
 })
@@ -396,7 +399,6 @@ router.get("/:domainId/checkout/click-collect", async (req, res, next) => {
 })
 
 
-
 function validateRequestPrice(item, rq) {
   const rqItem = rq.items.find(ri => ri.id === item.id)
   if (!rqItem)
@@ -470,24 +472,5 @@ async function getPartyPartial(email, domainId) {
 
   return result ?? null;
 }
-
-/*
-async function getProductItemsMap(items, domainId) {
-  const pits = await getPriceByProductItems(items
-          .filter(f => f.type === CartItemType.Product)
-          .map(i => i.product.productItemId)
-      , SaleType.Internet
-      , domainId)
-
-  var map = new Map();
-  pits.productItems.forEach(pit => {
-    if (!map.has(pit.productItemId)) {
-      map.set(pit.productItemId, pit);
-    }
-  })
-
-  return map;
-}
-*/
 
 export default router

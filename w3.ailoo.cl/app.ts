@@ -1,6 +1,6 @@
 import logger from "@ailoo/shared-libs/logger";
 import generated from "@ailoo/shared-libs/config";
-
+console.log(generated)
 
 import authRoutes from "./routes/auth-routes.js";
 app.use(authRoutes);
