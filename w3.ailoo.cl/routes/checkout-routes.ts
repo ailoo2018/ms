@@ -123,6 +123,8 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
   try {
     const rq = req.body
+
+    logger.info("create-order rq: " + JSON.stringify(rq));
     const domainId = parseInt(req.params.domainId);
 
 
