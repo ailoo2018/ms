@@ -17,15 +17,13 @@ COPY packages ./packages
 RUN npm run build --workspace=@ailoo/shared-libs
 RUN npm run build --workspace=w3.ailoo.cl
 
-# Copy application code
-COPY ./w3.ailoo.cl/dist ./w3.ailoo.cl
 #COPY packages ./packages
 
 # Build main app
-WORKDIR /app/w3.ailoo.cl
+# WORKDIR /app/w3.ailoo.cl
 EXPOSE 3000
 
 
 # Start the compiled JS version
 # We use the 'dist' folder defined in tsconfig outDir
-CMD ["node", "./app.js"]
+CMD ["node", "w3.ailoo.cl/dist/app.js"]
