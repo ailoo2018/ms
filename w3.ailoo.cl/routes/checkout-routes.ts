@@ -155,7 +155,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         if (person == null)
           person = await getPartyPartial(rq.customerInformation.email, domainId);
 
-        logger.info("drizzleDb.transaction 4")
+        logger.info("drizzleDb.transaction 4: " + person)
         if (person == null) {
           const [result] = await tx.insert(party).values({
             name: rq.customerInformation.address.name,
@@ -317,7 +317,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
       }catch(txerro){
         logger.error("CHECKOUT ERROR!!!!! " + txerro.message);
         logger.error("CHECKOUT ERROR!!!!! " + txerro.stack);
-
+        throw txerro;
       }
     })
 
