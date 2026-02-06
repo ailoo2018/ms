@@ -6,6 +6,7 @@ import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from 
 import {getElClient, getIndexName} from "../connections/el.js";
 import container from "../container/index.js";
 import {stockAllStores} from "../db/inventory.js";
+import logger from "@ailoo/shared-libs/logger";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -95,14 +96,17 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
 
-    if(!productId)
-      return res.status(404).json({ message: "product not found"})
+    if(!productId) {
+      logger.error("product not found: " + productId);
+      return res.status(404).json({message: "product not found"})
+    }
 
     const p = await findProduct(productId, domainId);
 
 
     res.json(p);
   } catch (e) {
+    logger.error("product not found: " + JSON.stringify(req.params));
     next(e)
   }
 })
