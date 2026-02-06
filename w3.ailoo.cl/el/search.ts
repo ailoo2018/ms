@@ -1,9 +1,6 @@
 import {getElClient, getIndexName} from "../connections/el.js";
-
 import {buildQueryByCollectionId} from "./collections.js";
-
-
-import ProductImageHelper from "../../packages/shared-libs/helpers/ProductImageHelper.js";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import logger from "@ailoo/shared-libs/logger";
 import {getLink} from "../helpers/product-helper.js";
 
