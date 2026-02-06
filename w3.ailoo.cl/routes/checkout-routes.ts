@@ -321,7 +321,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
       }
     })
 
-    logger.info("drizzleDb.transaction result: " + JSON.stringify(result))
+    logger.error("drizzleDb.transaction result: " + JSON.stringify(result))
     res.json({id: result.id, total: result.total, addressId: result.addressId})
   } catch (err) {
     logger.error("CHECKOUT ERROR!!!!! " + err.message);
