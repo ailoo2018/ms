@@ -10,7 +10,8 @@ import {
     mysqlTable,
     smallint,
     text,
-    tinyint, unique,
+    tinyint,
+    unique,
     varchar
 } from "drizzle-orm/mysql-core";
 
@@ -31,13 +32,13 @@ const geographicBoundary = motomundiSchema.table("geographicboundary", {
 const brand = motomundiSchema.table("brand", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 255 }),
-    showInMenu: tinyint("ShowInMenu", { unsigned: true }).notNull().default(0),
+    showInMenu: tinyint("ShowInMenu"),
     logo: varchar("Logo", { length: 255 }),
     description: text("Description"),
     title: varchar("Title", { length: 255 }),
     linkName: varchar("LinkName", { length: 255 }),
     domainId: int("DomainId"),
-    modifiedDate: datetime("ModifiedDate").default("1990-01-01 00:00:00"),
+    modifiedDate: datetime("ModifiedDate"),
     deleted: smallint("Deleted").default(0),
     showNameInWeb: smallint("ShowNameInWeb"),
     isAvailableForInternet: smallint("IsAvailableForInternet"),
@@ -126,7 +127,7 @@ const model = motomundiSchema.table("model", {
 const product = motomundiSchema.table("product", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     code: varchar("Code", { length: 45 }),
-    isHighlighted: tinyint("IsHighlighted", { mode: 'number' }),
+    isHighlighted: tinyint("IsHighlighted"),
     name: varchar("Name", { length: 255 }),
     summary: varchar("Summary", { length: 255 }),
     description: text("Description"),
@@ -296,7 +297,7 @@ const postalAddress = motomundiSchema.table("postaladdress", {
     surname: varchar("Surname", {length: 255}),
     phone: varchar("Phone", {length: 255}),
     email: varchar("Email", {length: 255}),
-    receiveInformation: tinyint("ReceiveInformation", {mode: 'number'}),
+    receiveInformation: tinyint("ReceiveInformation"),
     comunaId: int("ComunaId"),
     rut: varchar("Rut", {length: 45}),
     comment: text("Comment"),
@@ -366,8 +367,8 @@ const review = motomundiSchema.table("review", {
     // State is unsigned in your SQL
     state: int("State", {unsigned: true}).notNull().default(0),
     // tinyint(1) usually maps to boolean mode in Drizzle
-    isEvaluation: tinyint("IsEvaluation", {mode: 'number'}).notNull().default(0),
-    isDeleted: tinyint("IsDeleted", {mode: 'number'}).notNull().default(0),
+    isEvaluation: tinyint("IsEvaluation").notNull().default(0),
+    isDeleted: tinyint("IsDeleted").notNull().default(0),
     domainId: int("DomainId").default(0),
     likes: smallint("Likes"),
     dislikes: smallint("Dislikes"),
@@ -485,7 +486,7 @@ const invoiceItem = motomundiSchema.table("invoiceitem",      {
     id: int("Id").primaryKey().autoincrement().notNull(),
     quantity: decimal("Quantity", { precision: 10, scale: 3 }),
     amount: double("Amount"),
-    isExento: tinyint("IsExento", { mode: 'number' }),
+    isExento: tinyint("IsExento"),
     description: varchar("Description", { length: 255 }),
     invoiceItemType: int("InvoiceItemType"),
     purchaseSale: int("PurchaseSale"),

@@ -1,4 +1,4 @@
-import type {PaymentValidation, PaymentValidator} from "./paymentValidator";
+import type {PaymentValidation, PaymentValidator} from "./paymentValidator.js";
 import logger from "@ailoo/shared-libs/logger";
 import {MercadoPagoConfig, Payment} from "mercadopago";
 

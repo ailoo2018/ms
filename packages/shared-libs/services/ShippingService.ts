@@ -35,4 +35,4 @@ where  mt.Id not in (4) and  IsEnabled = 1
     }
 }
 
-module.exports = ShippingService;
+// module.exports = ShippingService;

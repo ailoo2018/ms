@@ -1,13 +1,13 @@
 import '@ailoo/shared-libs/config';
-import {WebPayValidator} from "../clients/webPayClient.ts";
+import {WebPayValidator} from "../clients/webPayClient.js";
 import {asClass, asValue, createContainer} from "awilix";
-import {MercadoPagoValidator} from "../clients/mercadoPagoClient.ts";
+import {MercadoPagoValidator} from "../clients/mercadoPagoClient.js";
 import ProductsService from "@ailoo/shared-libs/ProductsService";
 import {DiscountRuleService} from "@ailoo/shared-libs/DiscountRuleService";
 import {ProductCategoryService} from "@ailoo/shared-libs/ProductCategoryService";
 import {CartService} from "@ailoo/shared-libs/CartService";
 import {CartRepos} from "@ailoo/shared-libs/CartRepos";
-import ShippingService from "@ailoo/shared-libs/ShippingService";
+import {ShippingService } from "@ailoo/shared-libs/ShippingService";
 import {ProductCategoryDb} from "@ailoo/shared-libs/ProductCategoryDb";
 
 import {pool} from "../connections/mysql.js";

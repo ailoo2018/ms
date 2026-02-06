@@ -1,6 +1,6 @@
 process.env.NODE_ENV = "developer";
 import '@ailoo/shared-libs/config';
-import {addPaymentToInvoice} from "../payments/confirm.payments.t.ts";
+import {addPaymentToInvoice} from "../payments/confirm.payments.t.js";
 
 
 

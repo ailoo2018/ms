@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "target": "ES6",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "target": "ES2022",
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "sourceMap": false,  // Don't need in production
+    "removeComments": true,  // Smaller output
+    "declaration": false,  // Don't generate .d.ts files
+    "rootDir": "./", // Ensure this is set to keep folder structure clean
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist", "scripts"]
 }

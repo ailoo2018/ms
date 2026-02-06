@@ -1,4 +1,4 @@
-import type {PaymentValidation, PaymentValidator} from "./paymentValidator.ts";
+import type {PaymentValidation, PaymentValidator} from "./paymentValidator.js";
 
 import transbankSdk from "transbank-sdk";
 

@@ -5,7 +5,10 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch app.ts",
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "debug": "node --inspect --import tsx app.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,5 +35,8 @@
     "supertest": "^7.2.2",
     "transbank-sdk": "^6.1.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }

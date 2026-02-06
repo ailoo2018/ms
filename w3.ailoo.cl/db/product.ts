@@ -1,0 +1,26 @@
+import {pool} from "../connections/mysql.js";
+import { RowDataPacket } from "mysql2"; // Optional: for better typing
+
+export const productDescription = async function(productId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows ] = await connection.execute<RowDataPacket[]>(
+        `
+            select Description from Product where Id = ?
+`, [ productId ]);
+
+    if(rows.length > 0) {
+      return rows[0].Description
+    }
+
+    return "";
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}
+

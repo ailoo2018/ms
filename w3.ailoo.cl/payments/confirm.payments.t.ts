@@ -3,9 +3,9 @@ import {and, eq} from "drizzle-orm";
 import { ordersHelper} from "../helpers/order-helper.js";
 import { invoiceHelper}  from "../helpers/invoice-helper.js";
 import {PaymentMethodType} from "../models/domain.js";
-import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator";
-import container from "../container/index.ts";
-import schema from "../db/schema.ts"
+import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.js";
+import container from "../container/index.js";
+import schema from "../db/schema.js"
 import {adminClient} from "../services/adminClient.js";
 
 const { invoice, payment, paymentApplication } = schema;

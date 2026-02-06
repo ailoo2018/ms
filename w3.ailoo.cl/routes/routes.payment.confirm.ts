@@ -4,22 +4,20 @@ import {and, eq, sql} from "drizzle-orm";
 import {
     addPaymentToInvoice,
     confirmPayment,
-    validateInvoice,
-    validateOrder,
     ValidationType
-} from "../payments/confirm.payments.t.ts";
-import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.ts";
-import schema from "../db/schema.ts";
+} from "../payments/confirm.payments.t.js";
+import type {PaymentValidation} from "../clients/paymentValidator.js";
+import schema from "../db/schema.js";
 import {sendOrderConfirmationEmail} from "../services/emailsService.js";
 import {adminClient} from "../services/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import { OrderState } from "../models/domain.js";
 
-const {payment, paymentApplication, saleOrder, orderJournal} = schema
+const { saleOrder, orderJournal} = schema
 
 const router = Router(); // Create a router instead of using 'app'
 
-router.post("/:domainId/checkout/payment-result-invoice", async (req, res, next) => {
+router.post("/:domainId/checkout/payment-result-invoice", async (req, res) => {
 
     try {
         const domainId = parseInt(req.params.domainId);
@@ -56,7 +54,7 @@ router.post("/:domainId/checkout/payment-result-invoice", async (req, res, next)
     }
 })
 
-router.post("/:domainId/checkout/payment-result", async (req, res, next) => {
+router.post("/:domainId/checkout/payment-result", async (req, res) => {
 
     try {
         const domainId = parseInt(req.params.domainId);
