@@ -36,8 +36,10 @@ app.use(motorcyclesRoutes);
 import productsRoutes from "./routes/products-routes.js";
 app.use(productsRoutes);
 
+/*
 import testRoutes from "./routes/test-routes.ts";
 app.use(testRoutes);
+*/
 
 
 
