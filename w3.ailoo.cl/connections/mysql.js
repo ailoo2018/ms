@@ -1,6 +1,4 @@
-const mysql = require('mysql2/promise');
-
-
+import mysql from "mysql2/promise";
 // Create a MySQL connection pool
 console.log("about to create pool");
 const pool = mysql.createPool({
@@ -18,4 +16,4 @@ const pool = mysql.createPool({
 });
 
 
-module.exports.pool = pool;
+export {  pool };

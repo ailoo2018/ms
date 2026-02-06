@@ -1,8 +1,7 @@
-const { pool } = require("../connections/mysql");
+import {pool} from "../connections/mysql.js";
 
 
-
-module.exports.findWidget = async function(id, domainId) {
+export const findWidget = async function(id, domainId) {
 
   const connection = await pool.getConnection();
 

@@ -1,66 +1,35 @@
-const contactsClient = require("../services/contactsClient.js");
+import { Router } from "express";
+import { contactsClient } from "../services/contactsClient.js";
+import schema from "../db/schema.ts";
+import { PbxRepository}  from "../el/pbx.js";
+import {OrderItemType, OrderState, PaymentMethodType, SaleType, ShipmentMethodType} from "../models/domain.js";
+import {and, eq, sql} from "drizzle-orm";
+import logger from "@ailoo/shared-libs/logger";
+
+import {db as drizzleDb} from "../db/drizzle.js";
+import {CartItemType} from "../models/cart-models.js";
+import {findCart} from "../services/cartService.js";
+import {stockByStore} from "../db/inventory.js";
+import container from "../container/index.ts";
+import {orderConfirmationHtml, sendOrderConfirmationEmail} from "../services/emailsService.js";
+
+const router = Router(); // Create a router instead of using 'app'
 
 const {
   contactMechanism,
-  postalAddress,
-  saleOrder,
-  saleOrderItem,
-  party,
-  facility,
-  orderJournal
-} = require("../db/schema.ts");
-const PbxRepository = require("../el/pbx");
-const {OrderItemType, SaleType, OrderState, PaymentMethodType, ShipmentMethodType} = require("../models/domain");
-  const {and, eq, sql} = require("drizzle-orm");
-const logger = require("@ailoo/shared-libs/logger");
-const {app} = require("../server");
-const {db: drizzleDb, db} = require("../db/drizzle");
-const adminClient = require("../services/adminClient");
-const {confirmMercadoPagoPayment} = require("../payments/confirm.mercadopago");
-const {confirmWebPay} = require("../payments/confirm.webpay");
-const {CartItemType} = require("../models/cart-models");
-const {findCart} = require("../services/cartService");
-const {stockByStore} = require("../db/inventory");
-const retShippingMethods = {
-  "destination": {
-    "comuna": {
-      "id": 316
-    }
-  },
-  "methods": [
-    {
-      "id": 13,
-      "name": "Alas Express",
-      "price": 0.0,
-      "oldPrice": 0.0,
-      "estimatedDays": 0,
-      "eta": {
-        "from": "2026-01-15T00:00:00-03:00",
-        "to": "2026-01-16T00:00:00-03:00"
-      },
-      "type": 2
-    },
-    {
-      "id": 9,
-      "name": "Retiro en Tienda",
-      "price": 0.0,
-      "oldPrice": 0.0,
-      "estimatedDays": 0,
-      "eta": {
-        "from": "2026-01-15T00:00:00-03:00",
-        "to": "2026-01-16T00:00:00-03:00"
-      },
-      "type": 1
-    }
-  ]
-}
-const container = require("../container");
-const {orderConfirmationHtml, sendOrderConfirmationEmail} = require("../services/emailsService");
+      facility,
+      orderJournal,
+      party,
+      postalAddress,
+      saleOrder,
+      saleOrderItem
+} = schema
+
 
 const cartService = container.resolve("cartService");
 
 
-app.get("/:domainId/shipping/methods", async (req, res, next) => {
+router.get("/:domainId/shipping/methods", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const wuid = req.query.wuid;
@@ -79,8 +48,7 @@ app.get("/:domainId/shipping/methods", async (req, res, next) => {
 
 })
 
-
-app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
+router.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const carrierId = parseInt(req.query.carrierId);
@@ -99,7 +67,7 @@ app.get("/:domainId/shipping/set-carrier", async (req, res, next) => {
 
 })
 
-app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
+router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const facilityId = parseInt(req.query.facilityId);
@@ -150,7 +118,7 @@ app.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
 })
 
-app.post("/:domainId/checkout/create-order", async (req, res, next) => {
+router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
   try {
     const rq = req.body
@@ -163,7 +131,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
       let person = null;
 
       if (rq.userId > 0) {
-        user = await db.query.user.findFirst({
+        user = await drizzleDb.query.user.findFirst({
           where: eq(user.id, userId),
           with: {
             person: true, // This joins the 'party' table
@@ -338,7 +306,7 @@ app.post("/:domainId/checkout/create-order", async (req, res, next) => {
   }
 })
 
-app.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
+router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
   try {
     res.json({
       "gateways": [
@@ -365,8 +333,7 @@ app.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
   }
 })
 
-/* todo */
-app.get("/:domainId/checkout/click-collect", async (req, res, next) => {
+router.get("/:domainId/checkout/click-collect", async (req, res, next) => {
   try {
 
     res.json({
@@ -427,113 +394,6 @@ app.get("/:domainId/checkout/click-collect", async (req, res, next) => {
 
 })
 
-app.post("/:domainId/checkout/payment-result", async (req, res, next) => {
-
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const rq = req.body
-    let authcode
-    let orderTotal = 0
-    let confirmRs
-    let gatewayResponse = null;
-    let orderId = 0
-    let amount = 0
-
-    if (rq.paymentMethodType === PaymentMethodType.MercadoPago) {
-      confirmRs = await confirmMercadoPagoPayment(rq.paymentId, domainId)
-
-    } else if (rq.paymentMethodType === PaymentMethodType.Webpay) {
-      confirmRs = await confirmWebPay(rq.token, domainId)
-
-    } else {
-      return res.status(500).json({success: false, error: "Tipo de pago no soportado: " + rq.paymentMethodType})
-    }
-
-    if (!confirmRs || !confirmRs.success)
-      return res.status(500).json({success: false, error: confirmRs.message});
-    else {
-      authcode = confirmRs.authcode
-      orderTotal = confirmRs.orderTotal
-      gatewayResponse = confirmRs.gatewayResponse
-      orderId = confirmRs.orderId
-      amount = confirmRs.amount
-    }
-
-    await drizzleDb.transaction(async (tx) => {
-      await tx
-          .update(saleOrder)
-          .set({
-            authCode: authcode, // Ensure property name matches your req
-            state: OrderState.Pagado, // Ensure property name matches your req
-          })
-          .where(
-              and(
-                  eq(saleOrder.id, orderId),
-                  eq(saleOrder.domainId, domainId)
-              )
-          );
-
-      await tx.insert(orderJournal).values({
-        orderId: orderId,
-        description: `Order paid successfully. AuthCode: ${authcode}`,
-        state: OrderState.Pagado,
-        creationDate: new Date(),
-        userId: sql`NULL`,
-      });
-    })
-
-    try {
-      await adminClient.paymentValidated(confirmRs.orderId, authcode, domainId)
-    } catch (e) {
-      logger.error("Unable to notify payment validated to admin: " + e.message)
-    }
-
-    try {
-      await sendOrderConfirmationEmail(confirmRs.orderId, domainId)
-    } catch (e) {
-      console.error(e.message, e)
-    }
-
-    res.json({
-      success: true,
-      orderId: orderId,
-      orderTotal: amount,
-      paymentDate: new Date(),
-      newState: OrderState.Pagado,
-      authorization: authcode,
-      gatewayResponse,
-    });
-
-  } catch (e) {
-    console.error("error: " + e.message)
-    res.json({
-      success: false,
-      error: e.message,
-      message: e.message,
-    });
-
-  }
-
-
-})
-
-
-app.get("/test-send", async (req, res, next) => {
-
-  const domainId = 1
-  const orderId = parseInt(req.query.orderId)
-  const resp = await sendOrderConfirmationEmail(orderId, domainId);
-  res.json(resp);
-})
-
-
-app.get("/test-email", async (req, res, next) => {
-
-  const domainId = 1
-  const orderId = parseInt(req.query.orderId)
-  const {html} = await orderConfirmationHtml(orderId, domainId);
-  res.send(html);
-})
 
 
 function validateRequestPrice(item, rq) {
@@ -629,3 +489,4 @@ async function getProductItemsMap(items, domainId) {
 }
 */
 
+export default router

@@ -1,6 +1,6 @@
 const CONTACTS_URL = process.env.CONTACTS_URL;
 
-const contactsClient = {
+export const contactsClient = {
 
   index: async (contactId, domainId) => {
     const url = new URL("/index/" + domainId + "?partyIds=" + contactId, CONTACTS_URL);
@@ -20,4 +20,3 @@ const contactsClient = {
 
 }
 
-module.exports = contactsClient

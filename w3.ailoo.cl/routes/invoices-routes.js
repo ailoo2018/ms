@@ -1,17 +1,14 @@
-const {app} = require("../server");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq, sql} = require("drizzle-orm");
-const {
-  invoice: Invoice
-} = require("../db/schema.ts");
-const container = require("../container");
-const ProductHelper = require("../services/product-helper");
-const {SaleType} = require("../models/domain");
+import {db as drizzleDb} from "../db/drizzle.js";
+import {and, eq, sql} from "drizzle-orm";
+import container from "../container/index.ts";
+import {SaleType} from "../models/domain.js";
+import { Router } from "express";
+import {getFeaturesDescription, getProductImage} from "../helpers/product-helper.js";
 
-
+const router = Router(); // Create a router instead of using 'app'
 const productsService = container.resolve("productsService");
 
-app.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
+router.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const invoiceId = parseInt(req.params.invoiceId);
@@ -69,10 +66,10 @@ app.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
           }
         }
 
-        const pitImg = ProductHelper.getProductImage(product, productItem)
+        const pitImg = getProductImage(product, productItem)
         retItem.productItem = {
           id: productItem.id,
-          name: ProductHelper.getFeaturesDescription(product, productItem),
+          name: getFeaturesDescription(product, productItem),
           image: pitImg ? pitImg.image : null,
         }
 
@@ -105,3 +102,5 @@ app.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
     next(e)
   }
 })
+
+export default router;

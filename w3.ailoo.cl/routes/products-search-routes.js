@@ -1,14 +1,14 @@
-const {app} = require("../server");
-const {getElClient, getProductCollectionsIndexName, getIndexName} = require("../connections/el");
-const {buildQueryByCollectionId} = require("../el/collections");
-const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
-const logger = require("@ailoo/shared-libs/logger")
-const {search} = require("../el/search");
-const container = require("../container");
+import {Router} from "express";
+import container from "../container/index.ts";
+import {search} from "../el/search.js";
+import logger from "@ailoo/shared-libs/logger";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
+import {buildQueryByCollectionId} from "../el/collections.js";
+import {getElClient, getIndexName, getProductCollectionsIndexName} from "../connections/el.js";
 
+const router = Router(); // Create a router instead of using 'app'
 
-
-app.get("/:domainId/products/collections/:collectionId", async (req, res, next) => {
+router.get("/:domainId/products/collections/:collectionId", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
@@ -41,7 +41,7 @@ app.get("/:domainId/products/collections/:collectionId", async (req, res, next) 
 
 const categoryService = container.resolve('productCategoryService');
 
-app.get("/:domainId/products/search", async (req, res, next) => {
+router.get("/:domainId/products/search", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
@@ -75,7 +75,7 @@ app.get("/:domainId/products/search", async (req, res, next) => {
 })
 
 
-app.post("/:domainId/products/search", async (req, res, next) => {
+router.post("/:domainId/products/search", async (req, res, next) => {
   try {
     // var {categoryId, brandId, collectionId, sword, limit, offset} = req.query;
     var rq = req.body;
@@ -144,3 +144,4 @@ app.post("/:domainId/products/search", async (req, res, next) => {
   }
 })
 
+export default router;

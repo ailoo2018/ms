@@ -1,21 +1,20 @@
-const {app} = require("../server");
-const cmsClient = require("../services/cmsClient");
-const {getElClient} = require("../connections/el");
-const {CartItemType} = require("../models/cart-models");
-const CartRepos = require("../el/cart");
-const {findProductByProductItem} = require("../el/products");
-const ProductService = require('../services/product-helper');
-const {SaleType, ProductType} = require("../models/domain");
-const container = require("../container");
-const {getProductImage} = require("../services/product-helper");
-const {v4: uuidv4} = require('uuid');
-const {findCart} = require("../services/cartService");
+import {findCart} from "../services/cartService.js";
+import { Router } from "express";
+import {v4 as uuidv4} from "uuid";
+import container from "../container/index.ts";
+import {getProductImage, getProductItemDescription} from "../helpers/product-helper.js";
+import {CartItemType} from "../models/cart-models.js";
+import {addCart, findCartByWuid, updateCart} from "../el/cart.js";
+import {ProductType} from "../models/domain.js";
+const router = Router(); // Create a router instead of using 'app'
+
+
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
 
-app.get("/:domainId/cart/comuna", async (req, res, next) => {
+router.get("/:domainId/cart/comuna", async (req, res, next) => {
 
   try{
     const domainId = parseInt(req.params.domainId);
@@ -34,16 +33,16 @@ app.get("/:domainId/cart/comuna", async (req, res, next) => {
   }
 })
 
-app.get("/:domainId/cart/remove-item", async (req, res, next) => {
+router.get("/:domainId/cart/remove-item", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
     const {wuid, itemId, type} = req.query
 
-      const cart = await CartRepos.findCartByWuid(wuid)
+      const cart = await findCartByWuid(wuid)
     cart.items = cart.items.filter(ite => ite).filter(item => item.id !== itemId   && item.type !== type)
 
-    await CartRepos.updateCart(cart)
+    await updateCart(cart)
 
     const newCart = await findCart(wuid, domainId);
     res.json(newCart)
@@ -54,16 +53,17 @@ app.get("/:domainId/cart/remove-item", async (req, res, next) => {
   }
 
 })
-app.get("/:domainId/cart/empty", async (req, res, next) => {
+
+router.get("/:domainId/cart/empty", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
     const {wuid} = req.query
 
-    const cart = await CartRepos.findCartByWuid(wuid)
+    const cart = await findCartByWuid(wuid)
     cart.items = []
 
-    await CartRepos.updateCart(cart)
+    await updateCart(cart)
 
     const newCart = await findCart(wuid, domainId);
     res.json(newCart)
@@ -75,7 +75,7 @@ app.get("/:domainId/cart/empty", async (req, res, next) => {
 
 })
 
-app.post('/:domainId/cart/add', async (req, res, next) => {
+router.post('/:domainId/cart/add', async (req, res, next) => {
 
   const rq = req.body;
 
@@ -85,7 +85,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
     let cart = null;
 
-    const existingCart = await CartRepos.findCartByWuid(rq.wuid)
+    const existingCart = await findCartByWuid(rq.wuid)
     if (existingCart) {
       if (!existingCart.items)
         existingCart.items = []
@@ -106,7 +106,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
         items: []
       };
 
-      const newCartId = await CartRepos.addCart(newCart)
+      const newCartId = await addCart(newCart)
       newCart.id = newCartId;
       cart = newCart;
     }
@@ -122,7 +122,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
       }
 
       const productItem = product.productItems.find(pit => pit.id = rq.productItemId)
-      const prodImage = ProductService.getProductImage(product, productItem)
+      const prodImage = getProductImage(product, productItem)
 
       if (product.productType === ProductType.Simple) {
 
@@ -134,11 +134,11 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
           cartItem = {
             id: uuidv4(),
             packId: 0,
-            name: ProductService.getProductItemDescription(product, productItem),
+            name: getProductItemDescription(product, productItem),
             product: {
               productItemId: productItem.id,
               image: prodImage ? prodImage.image : null,
-              name: ProductService.getProductItemDescription(product, productItem),
+              name: getProductItemDescription(product, productItem),
               type: product.productType,
             },
             quantity: rq.quantity,
@@ -153,11 +153,11 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
         cartItem = {
           id: uuidv4(),
           packId: 0,
-          name: ProductService.getProductItemDescription(product, productItem),
+          name: getProductItemDescription(product, productItem),
           product: {
             productItemId: productItem.id,
             image: prodImage ? prodImage.image : null,
-            name: ProductService.getProductItemDescription(product, productItem),
+            name: getProductItemDescription(product, productItem),
             type: product.productType,
           },
           quantity: rq.quantity,
@@ -173,7 +173,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
             return res.status(404).json({error: 'ProductItem not found: ' + packItem.productItemId});
           }
 
-          const packItemImage = ProductService.getProductImage(packProduct, packPit)
+          const packItemImage = getProductImage(packProduct, packPit)
 
           cartItem.packContents.push({
             "packId": 0,
@@ -221,7 +221,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
 
 
 
-    await CartRepos.updateCart(cart);
+    await updateCart(cart);
 
 
     res.json(cart)
@@ -231,9 +231,7 @@ app.post('/:domainId/cart/add', async (req, res, next) => {
   }
 });
 
-
-
-app.get("/:domainId/cart/:wuid", async (req, res, next) => {
+router.get("/:domainId/cart/:wuid", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const wuid = req.params.wuid;
@@ -253,7 +251,7 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
         items: []
       };
 
-      const newCartId = await CartRepos.addCart(newCart)
+      const newCartId = await addCart(newCart)
       newCart.id = newCartId;
       cart = newCart;
     }
@@ -264,8 +262,7 @@ app.get("/:domainId/cart/:wuid", async (req, res, next) => {
   }
 })
 
-
-app.post("/:domainId/cart/update-quantity", async (req, res, next) => {
+router.post("/:domainId/cart/update-quantity", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const wuid = req.body.wuid;
@@ -286,7 +283,7 @@ app.post("/:domainId/cart/update-quantity", async (req, res, next) => {
       cartItem.quantity = parseInt(quantity);
     }
 
-    await CartRepos.updateCart(cart)
+    await updateCart(cart)
 
 
     res.json(cart)
@@ -295,3 +292,4 @@ app.post("/:domainId/cart/update-quantity", async (req, res, next) => {
   }
 })
 
+export default router

@@ -2,29 +2,12 @@
 const baseUrl = process.env.PRODUCTS_MS_URL
 let _tree = null
 
-const getTree = async domainId => {
-
-  if(_tree)
-    return _tree;
-
-
-  var rs = await fetch(baseUrl + "/category/tree/" + domainId)
-  _tree = await rs.json()
-
-  flatten(_tree, null)
-
-  return _tree
-
-}
-
 const nodeMap = new Map();
-// Pre-process the tree once
+
 function flatten(node, parentId = null) {
   nodeMap.set(node.id, parentId); // Store the ID of the parent
   node.children.forEach(child => flatten(child, node.id));
 }
-
-
 
 function findNodeById(root, targetId) {
   if (root.id === targetId) {
@@ -42,11 +25,6 @@ function findNodeById(root, targetId) {
 }
 
 
-const findCategory = async (categoryId, domainId) => {
-  const root = await getTree(domainId)
-  return findNodeById(root, categoryId)
-}
-
 function isOrHasParent(childId, targetParentId) {
   let currentId = childId;
   while (currentId !== null) {
@@ -56,9 +34,31 @@ function isOrHasParent(childId, targetParentId) {
   return false;
 }
 
+const getTree = async domainId => {
+
+  if(_tree)
+    return _tree;
 
 
+  var rs = await fetch(baseUrl + "/category/tree/" + domainId)
+  _tree = await rs.json()
 
-module.exports = { getTree, findCategory, isOrHasParent }
+  flatten(_tree, null)
+
+  return _tree
+
+}
+
+const findCategory = async (categoryId, domainId) => {
+  const root = await getTree(domainId)
+  return findNodeById(root, categoryId)
+}
+
+export default {
+  getTree, findCategory, isOrHasParent
+}
+
+
+//  module.exports = { getTree, findCategory, isOrHasParent }
 
 

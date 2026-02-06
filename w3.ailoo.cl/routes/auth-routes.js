@@ -1,23 +1,25 @@
-const {app} = require("../server");
-const authService = require("../services/authService");
-const jwt = require("jsonwebtoken");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq} = require("drizzle-orm");
-const crypto = require('crypto');
-const {doHash} = require("../utils/utils");
+import {Router} from "express";
+import { authenticate} from "../services/authService.js";
+import jwt from "jsonwebtoken";
+import {db as drizzleDb} from "../db/drizzle.js";
+import {and, eq} from "drizzle-orm";
+import crypto from "crypto";
+import {doHash} from "../utils/utils.js";
 
 
+const router = Router();
 
-app.get("/:domainId/auth/test", async (req, res, next) => {
+
+router.get("/:domainId/auth/test", async (req, res, next) => {
   try {
-    const ret = await authService.authenticate("Juan", "jcfuentes@lava.cl", "071882aa-5d83-4b54-b26c-0d9651c0e959", 1);
+    const ret = await authenticate("Juan", "jcfuentes@lava.cl", "071882aa-5d83-4b54-b26c-0d9651c0e959", 1);
     res.json(ret);
   } catch (error) {
     next(error)
   }
 })
 
-app.post("/:domainId/auth/login", async (req, res, next) => {
+router.post("/:domainId/auth/login", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
 
@@ -76,7 +78,7 @@ app.post("/:domainId/auth/login", async (req, res, next) => {
   }
 });
 
-app.post("/:domainId/auth/hash-login", async (req, res, next) => {
+router.post("/:domainId/auth/hash-login", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const {hash, pid, wuid} = req.body;
@@ -131,7 +133,7 @@ app.post("/:domainId/auth/hash-login", async (req, res, next) => {
 });
 
 
-app.get("/:domainId/auth/google", async (req, res, next) => {
+router.get("/:domainId/auth/google", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId)
@@ -173,7 +175,7 @@ app.get("/:domainId/auth/google", async (req, res, next) => {
 
     console.log('Google Response:', userInfo)
 
-    const {user, party} = await authService.authenticate(userInfo.name, userInfo.email, wuid, domainId)
+    const {user, party} = await authenticate(userInfo.name, userInfo.email, wuid, domainId)
 
 
     res.json({
@@ -204,3 +206,5 @@ function createToken(pl) {
 
   return token;
 }
+
+export default router

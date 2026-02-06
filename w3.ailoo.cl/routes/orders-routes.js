@@ -1,6 +1,9 @@
-const {db} = require("../db/drizzle")
-const {app} = require("../server");
-const { db: drizzleDb} = require("../db/drizzle");
+import { Router } from "express";
+import {db} from "../db/drizzle.js";
+
+import schema from "../db/schema.ts";
+
+const router = Router();
 const {
   contactMechanism,
   postalAddress,
@@ -8,9 +11,9 @@ const {
   saleOrderItem,
   party,
   orderJournal
-} = require("../db/schema.ts");
+} = schema
 
-app.get("/:domainId/orders/:orderId", async (req, res, next) => {
+router.get("/:domainId/orders/:orderId", async (req, res, next) => {
 
   try{
     const domainId = parseInt(req.params.domainId);
@@ -31,3 +34,5 @@ app.get("/:domainId/orders/:orderId", async (req, res, next) => {
   }
 
 })
+
+export default router

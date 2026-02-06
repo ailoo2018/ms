@@ -1,4 +1,5 @@
-const redis = require("redis");
+import redis from "redis";
+
 const db = redis.createClient({
     url: process.env.REDIS_CONNECTION_STRING,
     socket: {
@@ -14,7 +15,7 @@ db.connect().then(function (            ) {
     console.log("connected redis: " + process.env.REDIS_CONNECTION_STRING)
 });
 
-async function deleteKeysByPattern(pattern) {
+export async function deleteKeysByPattern(pattern) {
     const client = db;
     try {
         let keysToDelete = [];
@@ -45,5 +46,4 @@ async function deleteKeysByPattern(pattern) {
     }
 }
 
-module.exports.db=db;
-module.exports.deleteKeysByPattern=deleteKeysByPattern;
+export { db }

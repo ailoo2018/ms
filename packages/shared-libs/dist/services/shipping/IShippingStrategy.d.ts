@@ -7,4 +7,5 @@ export interface ShippingQuote {
 }
 export interface IShippingStrategy {
     calculate(vw: number, comunaId: number, domainId: number): Promise<ShippingQuote>;
+
 }

@@ -1,11 +1,20 @@
-const {app, validateJWT} = require("../server");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq, asc, inArray} = require("drizzle-orm");
-const {facility} = require("../db/schema.ts");
+import {db as drizzleDb} from "../db/drizzle.js";
+import {and, asc, eq, inArray} from "drizzle-orm";
+import schema from "../db/schema.ts";
+
+// Then use it like this:
+import {Router} from "express";
+
+const { facility } = schema;
+
+
+
+
+const router = Router(); // Create a router instead of using 'app'
 
 const calendarBaseUrl = process.env.CALENDAR_URL;
 
-app.get("/:domainId/stores/list", async (req, res, next) => {
+router.get("/:domainId/stores/list", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const facilities = await drizzleDb.query.facility.findMany({
@@ -57,7 +66,7 @@ app.get("/:domainId/stores/list", async (req, res, next) => {
 })
 
 
-app.get("/:domainId/stores/:facilityId/calendar", async (req, res, next) => {
+router.get("/:domainId/stores/:facilityId/calendar", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
@@ -71,3 +80,5 @@ app.get("/:domainId/stores/:facilityId/calendar", async (req, res, next) => {
     next(e)
   }
 })
+
+export default router

@@ -1,22 +1,17 @@
-const {app} = require("../server");
-const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
-const logger = require("@ailoo/shared-libs/logger")
-const productRepos = require("../el/products");
-const {productStock, stockAllStores} = require("../db/inventory");
-const {productDescription} = require("../db/product");
-// const productService = require("../services/product-helper");
-const {search} = require("../el/search");
-
-const {SaleType, ProductType} = require("../models/domain");
-
-const {getProductSalesRules, isApplicableSalesRule, findProduct, getLink} = require("../services/product-helper");
-const {getElClient, getIndexName} = require("../connections/el");
-const container = require("../container");
+import { Router } from "express";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
+import {search} from "../el/search.js";
+import {ProductType, SaleType} from "../models/domain.js";
+import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../helpers/product-helper.js";
+import {getElClient, getIndexName} from "../connections/el.js";
+import container from "../container/index.ts";
+import {stockAllStores} from "../db/inventory.js";
+const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
 
-app.get("/:domainId/products/stock", async (req, res, next) => {
+router.get("/:domainId/products/stock", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const productItemId = parseInt(req.query.productItemId)
@@ -41,8 +36,7 @@ app.get("/:domainId/products/stock", async (req, res, next) => {
   }
 })
 
-
-app.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
+router.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
 
   try {
 
@@ -58,7 +52,7 @@ app.get("/:domainId/products/find-by-pit/:id", async (req, res, next) => {
   }
 })
 
-app.get("/:domainId/products/:productId/create-images", async (req, res, next) => {
+router.get("/:domainId/products/:productId/create-images", async (req, res, next) => {
 
   try {
     console.log("create product images")
@@ -94,7 +88,7 @@ app.get("/:domainId/products/:productId/create-images", async (req, res, next) =
 })
 
 
-app.get("/:domainId/products/:productId", async (req, res, next) => {
+router.get("/:domainId/products/:productId", async (req, res, next) => {
 
   try {
 
@@ -137,7 +131,7 @@ async function GetPackProducts(prule, domainId) {
 }
 
 
-app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
+router.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
   try {
     const productId = parseInt(req.params.productId);
@@ -256,7 +250,7 @@ app.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 })
 
 
-app.get("/:domainId/recommend", async (req, res, next) => {
+router.get("/:domainId/recommend", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.query.productId)
@@ -353,3 +347,4 @@ app.get("/:domainId/recommend", async (req, res, next) => {
 })
 
 
+export default router

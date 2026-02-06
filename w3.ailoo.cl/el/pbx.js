@@ -1,6 +1,6 @@
 
 
-const PbxRepository = {
+export const PbxRepository = {
 
   updateParty: async () => {
 
@@ -8,4 +8,3 @@ const PbxRepository = {
 
 }
 
-module.exports = PbxRepository;

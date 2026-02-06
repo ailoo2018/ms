@@ -1,8 +1,12 @@
-const {buildQueryByCollectionId} = require("./collections");
-const {getElClient, getIndexName} = require("../connections/el");
-const ProductImageHelper = require("../../packages/shared-libs/helpers/ProductImageHelper");
-const logger = require("@ailoo/shared-libs/logger");
-const {getLink} = require("../services/product-helper");
+import {getElClient, getIndexName} from "../connections/el.js";
+
+import {buildQueryByCollectionId} from "./collections.js";
+
+
+import ProductImageHelper from "../../packages/shared-libs/helpers/ProductImageHelper.js";
+import logger from "@ailoo/shared-libs/logger";
+import {getLink} from "../helpers/product-helper.js";
+
 
 const aggs = {
   "brands_count": {
@@ -511,9 +515,7 @@ function processTags(tagCountAgg) {
 
 
 
-
-
-async function search(criteria, domainId) {
+export async function search(criteria, domainId) {
 
   let query
   let limit
@@ -631,4 +633,3 @@ async function search(criteria, domainId) {
 
 }
 
-module.exports = {search}

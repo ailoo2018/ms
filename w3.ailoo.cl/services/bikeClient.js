@@ -1,6 +1,6 @@
 const BIKE_BASE_URL = "https://motorbike.ailoo.cl"; // process.env.CMS_URL;
 
-const bikeClient = {
+export const bikeClient = {
 
 
   listBrands: async () => {
@@ -51,4 +51,3 @@ const bikeClient = {
 
 
 
-module.exports = bikeClient;

@@ -1,12 +1,14 @@
-const {productDescription} = require("../db/product");
-const categoryTreeService = require("../services/categoryTreeService");
-const {ProductType, ProductFeatureType} = require("../models/domain");
+import {productDescription} from "../db/product.js";
+import categoryTreeService from "../services/categoryTreeService.js";
+import  {ProductFeatureType, ProductType} from "../models/domain.js";
+import container from "../container/index.ts";
+
 const baseUrl = process.env.PRODUCTS_MS_URL
-const container = require("../container");
-require("node:domain");
+
 const productService = container.resolve('productsService');
 container.resolve('cartService');
-function getProductItemDescription(product, pit) {
+
+export function getProductItemDescription(product, pit) {
   let desc = product.name;
 
   if (product.fullName)
@@ -26,7 +28,7 @@ function getProductItemDescription(product, pit) {
 
 }
 
-function getFeaturesDescription(product, pit) {
+export function getFeaturesDescription(product, pit) {
   let desc = "";
 
 
@@ -44,7 +46,7 @@ function getFeaturesDescription(product, pit) {
 
 }
 
-function getProductImage(product, pit) {
+export function getProductImage(product, pit) {
   let img = null
 
   if (pit && pit.colorId > 0) {
@@ -59,8 +61,7 @@ function getProductImage(product, pit) {
   return img
 }
 
-
-const getPriceByProductItems = async (productItemsIds, saleTypeId, domainId) => {
+export const getPriceByProductItems = async (productItemsIds, saleTypeId, domainId) => {
 
   if (!baseUrl) {
     throw new Error('No baseUrl provided')
@@ -83,7 +84,7 @@ const getPriceByProductItems = async (productItemsIds, saleTypeId, domainId) => 
   return await ret.json()
 }
 
-const getPriceByProductItem = async (productItemId, saleTypeId, domainId) => {
+export const getPriceByProductItem = async (productItemId, saleTypeId, domainId) => {
   const res = await getPriceByProductItems([productItemId], saleTypeId, domainId)
   if(res && res.productItems && res.productItems.length > 0)
     return res.productItems[0]
@@ -91,7 +92,7 @@ const getPriceByProductItem = async (productItemId, saleTypeId, domainId) => {
 }
 
 
-async function isApplicableSalesRule(rule, prodSm, domainId) {
+export async function isApplicableSalesRule(rule, prodSm, domainId) {
   if (prodSm == null)
     return false;
 
@@ -127,7 +128,7 @@ async function isApplicableSalesRule(rule, prodSm, domainId) {
   return true;
 }
 
-const getProductSalesRules = async (product, domainId) => {
+export const getProductSalesRules = async (product, domainId) => {
   const packRules = await getSalesRules(domainId)
 
   const rulesThatApply = []
@@ -141,17 +142,17 @@ const getProductSalesRules = async (product, domainId) => {
   return rulesThatApply
 }
 
-const getSalesRules = async domainId => {
+export const getSalesRules = async domainId => {
   const rs = await fetch(baseUrl + "/" + domainId + "/sales-discounts/")
   return await rs.json()
 }
 
-function startsWithNumbersAndHyphen2(text) {
+export function startsWithNumbersAndHyphen2(text) {
   if (!text) return false;
   return /^\d+-/.test(text);
 }
 
-function getLink(product) {
+export function getLink(product) {
   if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
     return "/motocicleta/" + product.linkName
   }
@@ -159,7 +160,7 @@ function getLink(product) {
   return "/motocicleta/" + product.id + "-" + product.linkName
 }
 
-async function findProduct(productId, domainId) {
+export async function findProduct(productId, domainId) {
   const p = await productService.findProductWithInventory(productId, domainId)
   p.description = await productDescription(productId);
 
@@ -195,15 +196,17 @@ async function findProduct(productId, domainId) {
 
 
 
-module.exports = {
+/*
+export default {
   getProductItemDescription,
   getProductImage,
-  getPriceByProductItems,
-  getPriceByProductItem,
-  getSalesRules,
-  getProductSalesRules,
+  getPriceByProductItems: async (productItemsIds, saleTypeId, domainId) => { /!* logic *!/ },
+  getPriceByProductItem: async (productItemId, saleTypeId, domainId) => { /!* logic *!/ },
+  getSalesRules: async domainId => { /!* logic *!/ },
+  getProductSalesRules: async (product, domainId) => { /!* logic *!/ },
   getFeaturesDescription,
-  isApplicableSalesRule,
-  findProduct,
-  getLink,
-}
+  isApplicableSalesRule: async (rule, prodSm, domainId) => { /!* logic *!/ },
+  findProduct: async (productId, domainId) => { /!* logic *!/ },
+  getLink: (product) => { /!* logic *!/ },
+};
+*/

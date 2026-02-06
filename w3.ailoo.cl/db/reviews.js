@@ -1,7 +1,7 @@
-const {pool} = require("../connections/mysql");
+import {pool} from "../connections/mysql.js";
 
 
-module.exports.partyReviews = async function (partyId, domainId) {
+export const partyReviews = async function (partyId, domainId) {
 
   const connection = await pool.getConnection();
 
@@ -30,8 +30,7 @@ and pty.Id = ?`, [partyId]);
 
 }
 
-
-module.exports.listReviews = async function (rq, domainId) {
+export const listReviews = async function (rq, domainId) {
   const connection = await pool.getConnection();
 
   try {
@@ -85,8 +84,7 @@ module.exports.listReviews = async function (rq, domainId) {
   }
 };
 
-
-module.exports.reviewsStats = async function (productId, domainId) {
+export const reviewsStats = async function (productId, domainId) {
   const connection = await pool.getConnection();
 
   try {

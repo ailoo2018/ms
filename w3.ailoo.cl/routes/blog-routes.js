@@ -1,10 +1,13 @@
-const {app} = require("../server");
-const cmsClient = require("../services/cmsClient")
-const {findWidget} = require("../db/webcontent");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq, sql} = require("drizzle-orm");
+import {and, eq, sql} from "drizzle-orm";
+import cmsClient from "../services/cmsClient.js";
+import {findWidget} from "../db/webcontent.js";
+import {db as drizzleDb} from "../db/drizzle.js";
+import {Router} from "express";
 
-app.get("/:domainId/blog/featured", async (req, res, next) => {
+
+const router = Router(); // Create a router instead of using 'app'
+
+router.get("/:domainId/blog/featured", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const limit = Number(req.query.limit) || 10;
@@ -23,8 +26,7 @@ app.get("/:domainId/blog/featured", async (req, res, next) => {
 
 })
 
-
-app.get("/:domainId/blog/search", async (req, res, next) => {
+router.get("/:domainId/blog/search", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const limit = Number(req.query.limit) || 10;
@@ -45,9 +47,7 @@ app.get("/:domainId/blog/search", async (req, res, next) => {
 
 })
 
-
-
-app.get("/:domainId/blog/articles/:id", async (req, res, next) => {
+router.get("/:domainId/blog/articles/:id", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const articleId = parseInt(req.params.id)
@@ -98,3 +98,5 @@ app.get("/:domainId/blog/articles/:id", async (req, res, next) => {
   }
 
 })
+
+export default router;

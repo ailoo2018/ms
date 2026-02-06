@@ -1,5 +1,5 @@
 
-const ordersService = {
+export const ordersHelper = {
   getTotal: orders => {
 
     let total = 0;
@@ -11,4 +11,3 @@ const ordersService = {
   }
 }
 
-module.exports = ordersService;

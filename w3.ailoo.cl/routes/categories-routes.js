@@ -1,11 +1,12 @@
-const {app} = require("../server");
-const container = require("../container");
-const linkHelper = require("@ailoo/shared-libs/helpers/LinkHelper");
+import {Router} from "express";
+import container from "../container/index.ts";
+import linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
 
 const categoryService = container.resolve('productCategoryService');
 
+const router = Router();
 
-app.get("/:domainId/categories/leafs", async (req, res, next) => {
+router.get("/:domainId/categories/leafs", async (req, res, next) => {
 
   try{
     const { parentId } = req.query;
@@ -25,3 +26,6 @@ app.get("/:domainId/categories/leafs", async (req, res, next) => {
     next(e)
   }
 });
+
+
+export default router;

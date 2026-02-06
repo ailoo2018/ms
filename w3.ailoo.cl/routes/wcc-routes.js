@@ -1,11 +1,13 @@
-const {app} = require( "../server" );
-const {findWidget} = require( "../db/webcontent" );
-const cmsClient = require("../services/cmsClient")
+import {Router} from "express";
+import {findWidget} from "../db/webcontent.js";
 
+import cmsClient from "../services/cmsClient.js";
+
+const router = Router();
 const baseUrl = process.env.CMS_URL;
 
 
-app.get('/:domainId/wcc/:id', async (req, res, next) => {
+router.get('/:domainId/wcc/:id', async (req, res, next) => {
 
   try{
     const id = parseInt(req.params.id);
@@ -28,3 +30,4 @@ app.get('/:domainId/wcc/:id', async (req, res, next) => {
 });
 
 
+export default  router

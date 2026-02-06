@@ -1,8 +1,10 @@
-const {app} = require("../server");
-const CartRepos = require("../el/cart");
+import { Router } from "express";
+const router = Router(); // Create a router instead of using 'app'
 
 
-app.get("/comunas/search", async (req, res, next) => {
+
+
+router.get("/comunas/search", async (req, res, next) => {
 
   try{
     const { sword } = req.query
@@ -28,3 +30,6 @@ app.get("/comunas/search", async (req, res, next) => {
   }
 
 })
+
+
+export default router

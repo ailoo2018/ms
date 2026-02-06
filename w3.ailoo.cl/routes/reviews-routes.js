@@ -1,8 +1,10 @@
-const {app} = require("../server");
-const {productReviews, listReviews, reviewsStats} = require("../db/reviews");
+import {Router} from "express";
+import {listReviews,  reviewsStats} from "../db/reviews.js";
 
 
-app.get("/:domainId/reviews/list", async (req, res, next) => {
+const router = Router(); // Create a router instead of using 'app'
+
+router.get("/:domainId/reviews/list", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const {
@@ -43,7 +45,7 @@ app.get("/:domainId/reviews/list", async (req, res, next) => {
 
 })
 
-app.get("/:domainId/reviews/stats", async (req, res, next) => {
+router.get("/:domainId/reviews/stats", async (req, res, next) => {
 
   try {
     const domainId = parseInt(req.params.domainId);
@@ -85,3 +87,6 @@ app.get("/:domainId/reviews/stats", async (req, res, next) => {
   }
 
 })
+
+
+export default router

@@ -1,6 +1,7 @@
-const { pool } = require("../connections/mysql");
+import {pool} from "../connections/mysql.js";
 
-module.exports.listPartyPostalAddresses = async partyId => {
+
+export const listPartyPostalAddresses = async partyId => {
 
   const connection = await pool.getConnection();
 

@@ -1,21 +1,19 @@
-const {
-    mysqlTable,
-    mysqlSchema,
-    int,
-    datetime,
-    varchar,
-    text,
-    smallint,
-    tinyint,
-    double,
-    decimal,
-    index,
-    foreignKey,
-    unique,
-    bigint,
+import {relations} from "drizzle-orm";
 
-} = require("drizzle-orm/mysql-core");
-const {relations} = require("drizzle-orm");
+import {
+    bigint,
+    datetime,
+    decimal,
+    double, foreignKey, index,
+    int,
+    mysqlSchema,
+    mysqlTable,
+    smallint,
+    text,
+    tinyint, unique,
+    varchar
+} from "drizzle-orm/mysql-core";
+
 
 // Defining the schema namespace
 const motomundiSchema = mysqlSchema("motomundi");
@@ -543,7 +541,85 @@ const invoiceItem = motomundiSchema.table("invoiceitem",      {
     }),
 }));
 
+const payment = motomundiSchema.table("payment", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    effectiveDate: datetime("EffectiveDate"),
+    paymentRefNum: varchar("PaymentRefNum", { length: 255 }),
+    amount: double("Amount"),
+    comment: varchar("Comment", { length: 255 }),
+    paymentMethodType: int("PaymentMethodType", { unsigned: true }),
+    bankId: int("BankId"),
+    domainId: int("DomainId"),
+    deleted: smallint("Deleted").default(0),
+    paymentClosureId: int("PaymentClosureId"),
+    status: smallint("Status").default(0),
+    receivedById: int("ReceivedById"),
+    emittedById: int("EmittedById"),
+    depositDate: datetime("DepositDate"),
+    currency: varchar("Currency", { length: 45 }),
+    createDate: datetime("CreateDate"),
+    financialAccountTransactionId: int("FinancialAccountTransactionId"),
+    identityCardImage: varchar("IdentityCardImage", { length: 45 }),
+    tenderAmount: double("TenderAmount"),
+}, (table) => ({
+    receivedByIdx: index("FK_RCVBY_PARTY_idx").on(table.receivedById),
+    emittedByIdx: index("FK_EMITBY_PARTY_idx").on(table.emittedById),
+    refNumTypeIdx: index("IDX_REFNUM_PAYTYPE").on(table.paymentRefNum, table.paymentMethodType, table.domainId),
+    closureIdx: index("FK_PMNT_PMNTCLOSURE_idx").on(table.paymentClosureId),
+    createDateIdx: index("IDX_PMNT_CRDATE").on(table.createDate),
+    domainEffDateIdx: index("IDX_DOMAIN").on(table.domainId, table.effectiveDate),
+    domainStatusIdx: index("IDX_PMNT_DOMSTATUS").on(table.domainId, table.createDate, table.paymentMethodType, table.status),
+    searchReceivedIdx: index("IDX_PMNT_SEARCH_RCV").on(table.effectiveDate, table.domainId, table.receivedById),
+    searchEmittedIdx: index("IDX_PMNT_SEARCH_EMITTED").on(table.effectiveDate, table.domainId, table.emittedById),
 
+    // Foreign Keys
+    emitByFk: foreignKey({
+        columns: [table.emittedById],
+        foreignColumns: [party.id],
+        name: "FK_EMITBY_PARTY"
+    }),
+    rcvByFk: foreignKey({
+        columns: [table.receivedById],
+        foreignColumns: [party.id],
+        name: "FK_RCVBY_PARTY"
+    }),
+    // paymentClosureId references paymentclosure table (ensure it's mapped)
+/*
+    closureFk: foreignKey({
+        columns: [table.paymentClosureId],
+        foreignColumns: [paymentClosure.id],
+        name: "FK_PMNT_PMNTCLOSURE"
+    }).onDelete("set null"),
+*/
+}));
+
+const paymentApplication = motomundiSchema.table("paymentapplication", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    amountApplied: double("AmountApplied"),
+    paymentId: int("PaymentId"),
+    invoiceId: int("InvoiceId"),
+    customerAccountId: int("CustomerAccountId"),
+    deleted: smallint("Deleted").default(0),
+    originalCurrency: varchar("OriginalCurrency", { length: 45 }),
+    originalAmount: double("OriginalAmount"),
+    conversionFactor: double("ConversionFactor"),
+}, (table) => ({
+    paymentIdx: index("PaymentId").on(table.paymentId),
+    invoiceIdx: index("InvoiceId").on(table.invoiceId),
+
+    // Foreign Keys
+    paymentFk: foreignKey({
+        columns: [table.paymentId],
+        foreignColumns: [payment.id],
+        name: "FK_PayApp_Payment"
+    }).onDelete("cascade"),
+    // Adding the implicit relationship to Invoice
+    invoiceFk: foreignKey({
+        columns: [table.invoiceId],
+        foreignColumns: [invoice.id],
+        name: "FK_PayApp_Invoice"
+    }),
+}));
 
 const webContentConfiguration = motomundiSchema.table("webcontentconfiguration", {
     id: int("Id").primaryKey().autoincrement().notNull(),
@@ -701,7 +777,6 @@ const facilityImage = motomundiSchema.table("facilityimage", {
     url: varchar("Url", {length: 255}),
     facilityId: int("FacilityId"),
 });
-
 
 const websiteRelations = relations(website, ({one, many}) => ({
     // The specific configuration/template that defines this website's layout
@@ -883,8 +958,30 @@ const invoiceItemRelations = relations(invoiceItem, ({ one }) => ({
     }),
 }));
 
+const paymentRelations = relations(payment, ({ one, many }) => ({
+    applications: many(paymentApplication),
+    receivedBy: one(party, {
+        fields: [payment.receivedById],
+        references: [party.id],
+    }),
+    emittedBy: one(party, {
+        fields: [payment.emittedById],
+        references: [party.id],
+    }),
+}));
 
-module.exports = {
+const paymentApplicationRelations = relations(paymentApplication, ({ one }) => ({
+    payment: one(payment, {
+        fields: [paymentApplication.paymentId],
+        references: [payment.id],
+    }),
+    invoice: one(invoice, {
+        fields: [paymentApplication.invoiceId],
+        references: [invoice.id],
+    }),
+}));
+
+export default {
     brand,
     model,
     product,
@@ -932,4 +1029,8 @@ module.exports = {
     invoiceItem,
     invoiceRelations,
     invoiceItemRelations,
+    payment,
+    paymentApplication,
+    paymentRelations,
+    paymentApplicationRelations
 };

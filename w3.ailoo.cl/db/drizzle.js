@@ -1,11 +1,8 @@
-const { pool } = require("../connections/mysql");
-const { drizzle } = require("drizzle-orm/mysql2");
-
-// Import the schema using require
-const schema = require("./schema.ts");
+import {pool} from "../connections/mysql.js";
+import {drizzle} from "drizzle-orm/mysql2";
+import schema from "./schema.ts";
 
 // Initialize Drizzle with the schema object
-const db = drizzle(pool, { schema, mode: 'default' });
+export const db = drizzle(pool, { schema, mode: 'default' });
 
 // Export the db instance
-module.exports = { db };

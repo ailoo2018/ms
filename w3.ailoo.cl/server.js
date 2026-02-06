@@ -1,8 +1,8 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import jwt from "jsonwebtoken";
+import multer from "multer";
 
 const app = express();
 
@@ -63,6 +63,4 @@ const reviewsUpload = upload.fields([
   { name: 'images', maxCount: 10 }
 ]);
 
-module.exports.app=app;
-module.exports.validateJWT=validateJWT;
-module.exports.reviewsUpload=reviewsUpload;
+export { app, validateJWT, reviewsUpload }

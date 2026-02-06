@@ -1,4 +1,5 @@
-const {getElClient, getProductCollectionsIndexName} = require("../connections/el");
+import {getElClient, getProductCollectionsIndexName} from "../connections/el.js";
+
 
 const EntityType = Object.freeze({
   Unknown: 0,
@@ -25,7 +26,7 @@ async function fetchCollection(collectionId, domainId) {
   return {...response._source, id: response._id}
 }
 
-async function buildQueryByCollectionId(collectionId, domainId) {
+export async function buildQueryByCollectionId(collectionId, domainId) {
   const c = await fetchCollection(collectionId)
 
 
@@ -170,4 +171,4 @@ async function buildQueryByCollectionId(collectionId, domainId) {
   return {query, limit:  10, sort, collection: c};
 }
 
-module.exports = {buildQueryByCollectionId}
+// module.exports = {buildQueryByCollectionId}

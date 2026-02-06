@@ -1,11 +1,13 @@
-const sgMail = require('@sendgrid/mail')
-const {app} = require("../server");
-const {errors} = require("@elastic/elasticsearch");
-const paramClient = require("../services/parametersClient");
+import sgMail from "@sendgrid/mail";
+import {errors} from "@elastic/elasticsearch";
+import paramClient from "../services/parametersClient.js";
+
+import {Router} from "express";
+const router = Router(); // Create a router instead of using 'app'
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-app.post("/:domainId/contact", async (req, res, next) => {
+router.post("/:domainId/contact", async (req, res, next) => {
 
   try {
 
@@ -244,3 +246,4 @@ app.post("/:domainId/contact", async (req, res, next) => {
   }
 })
 
+export default router

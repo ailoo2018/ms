@@ -1,6 +1,6 @@
-const crypto = require('crypto');
+import crypto from "crypto";
 
-function doHash(val) {
+export function doHash(val) {
   const key = 'optive15';
 
   // Create the HMAC instance using md5 and the key
@@ -13,4 +13,3 @@ function doHash(val) {
   return hmac.digest('hex').toUpperCase();
 }
 
-module.exports = { doHash}

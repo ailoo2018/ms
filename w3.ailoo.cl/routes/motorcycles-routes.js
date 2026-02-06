@@ -1,8 +1,9 @@
-const {app} = require("../server");
-const bikeClient = require("../services/bikeClient");
+import { Router } from "express";
+ // Create a router instead of using 'app'
+import { bikeClient } from "../services/bikeClient.js";
 
-
-app.get("/motorcycles/manufacturers", async (req, res, next) => {
+const router = Router();
+router.get("/motorcycles/manufacturers", async (req, res, next) => {
 
   try{
     const brands = await bikeClient.listBrands()
@@ -13,7 +14,7 @@ app.get("/motorcycles/manufacturers", async (req, res, next) => {
 
 })
 
-app.get("/motorcycles/models", async (req, res, next) => {
+router.get("/motorcycles/models", async (req, res, next) => {
 
   try{
 
@@ -27,7 +28,7 @@ app.get("/motorcycles/models", async (req, res, next) => {
 
 })
 
-app.get("/motorcycles/years", async (req, res, next) => {
+router.get("/motorcycles/years", async (req, res, next) => {
 
   try{
 
@@ -42,3 +43,5 @@ app.get("/motorcycles/years", async (req, res, next) => {
   }
 
 })
+
+export default router;

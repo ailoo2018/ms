@@ -1,6 +1,5 @@
-const {app} = require("../server");
-const {CartItemType} = require("../models/cart-models");
-const {getElClient} = require("../connections/el");
+import {getElClient} from "../connections/el.js";
+
 
 let INDEX = "shopping-cart";
 if (process.env.NODE_ENV === "test") {
@@ -8,7 +7,7 @@ if (process.env.NODE_ENV === "test") {
 }
 
 
-async function updateCartUserId(cartId, userId){
+export async function updateCartUserId(cartId, userId){
 
   await getElClient().update({
     index: INDEX,
@@ -24,7 +23,7 @@ async function updateCartUserId(cartId, userId){
   });
 }
 
-async function updateCart(existingCart) {
+export async function updateCart(existingCart) {
   const result = await getElClient().update({
     index: INDEX,
     id: existingCart.id,
@@ -35,7 +34,7 @@ async function updateCart(existingCart) {
   return result;
 }
 
-async function findCart(id) {
+export async function findCart(id) {
   if (id == null)
     return null;
   const result = await getElClient().get({
@@ -52,7 +51,7 @@ async function findCart(id) {
   return cart;
 }
 
-async function findCartByWuid(wuid) {
+export async function findCartByWuid(wuid) {
   const response = await getElClient().search({
     index: INDEX,
     body: {
@@ -87,21 +86,13 @@ async function findCartByWuid(wuid) {
   return cart;
 }
 
-async function addCart(cart) {
+export async function addCart(cart) {
   const result = await getElClient().index({
     index: INDEX,
     body: cart,
     refresh: true
   });
 
-
   return result._id;
 }
 
-module.exports = {
-  updateCart,
-  findCart,
-  findCartByWuid,
-  addCart,
-  updateCartUserId
-};

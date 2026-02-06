@@ -19,5 +19,4 @@ const parametersClient = {
 
 };
 
-
-module.exports = parametersClient;
+export default parametersClient;

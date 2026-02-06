@@ -1,10 +1,10 @@
-const SaleType = Object.freeze({
+export const SaleType = Object.freeze({
   Store: 1,
   Distribution: 2,
   Internet: 3,
 })
 
-const OrderItemType = Object.freeze({
+export const OrderItemType = Object.freeze({
   Product: 1,
   Shipping: 2,
   Discount: 3,
@@ -12,7 +12,7 @@ const OrderItemType = Object.freeze({
   Coupon: 5
 })
 
-const OrderState = Object.freeze({
+export const OrderState = Object.freeze({
   Desconocido: 0,
   Ingresado: 1,
   Pagado: 2,
@@ -32,11 +32,11 @@ const OrderState = Object.freeze({
 
 })
 
-const ShipmentMethodType = Object.freeze({
+export const ShipmentMethodType = Object.freeze({
   StorePickup: 9
 })
 
-const PriceComponentType =
+export const PriceComponentType =
     {
       BASE_PRICE: 0,
       SUPPLIER_PRICE: 1,
@@ -52,29 +52,25 @@ const PriceComponentType =
 
     };
 
-const ProductType = Object.freeze({
+export const ProductType = Object.freeze({
   Simple: 0,
   Composite: 1
 })
 
-
-const ProductFeatureType = Object.freeze({
+export const ProductFeatureType = Object.freeze({
   Size: 0,
   Color: 1
 })
 
-
-class Money {
+export class Money {
   constructor(amount, currency) {
     this.amount = amount || 0;
     this.currency = currency || 'CLP';
   }
 }
 
-
-
 // Missing Price class implementation
-class Price {
+export class Price {
   constructor(currency, saleTypeId) {
     this.currency = currency;
     this.saleTypeId = saleTypeId;
@@ -135,12 +131,13 @@ class Price {
 }
 
 
-const PaymentMethodType = Object.freeze({
+export const PaymentMethodType = Object.freeze({
   MercadoPago: 15,
   Webpay: 8,
 })
 
-module.exports = {
+/*
+export  {
   PriceComponentType,
   Price,
   Money,
@@ -151,4 +148,4 @@ module.exports = {
   ProductType,
   ProductFeatureType,
   ShipmentMethodType,
-}
+}*/

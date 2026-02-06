@@ -2,7 +2,7 @@
     <table
             style="border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;background:#fefefe;width:580px;margin:0 auto;Margin:0 auto;text-align:inherit;min-width:580px!important">
         <tbody>
-        <tr style="padding:0;vertical-align:top;text-align:left">
+         <tr style="padding:0;vertical-align:top;text-align:left">
             <td style="word-wrap:break-word;border-collapse:collapse!important;vertical-align:top;color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
                 <table
                         style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:left;margin-left:0px;padding:0;width:100%;display:table">
@@ -366,13 +366,11 @@
                                                                 <tr style="padding:0;vertical-align:top;text-align:left">
                                                                     <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:center;font-size:16px;line-height:1.3">
                                                                         <% if(item.type === OrderItemType.Coupon || item.type === OrderItemType.Discount) { %>
-                                                                            <img src="${domainHelper.GetSiteRoot()}/Templates/MotoMundiMobile/content/images/checkout-discount.png"
-                                                                                 alt="$item.Product.FullName"
+                                                                            <img src="<%= domainHelper.getSiteRoot() %>/Templates/MotoMundiMobile/content/images/checkout-discount.png"
                                                                                  style="padding-left: 10px;outline:none;text-decoration:none;clear:both;display:block;width:30px;height:30px;max-width:30px!important">
 
                                                                         <% } else { %>
                                                                             <img src="<%= domainHelper.getSiteRoot() + item.imageURL %>"
-                                                                                 alt="$item.Product.FullName"
                                                                                  class='prod_img'
                                                                                  style="outline:none;text-decoration:none;clear:both;display:block;width:50px;height:50px;max-width:50px!important">
                                                                         <% } %>
@@ -396,7 +394,7 @@
                                                                                 <%= item.comment %>
                                                                             <% } %>
                                                                             <span
-                                                                                    style="display:none!important;overflow:hidden;max-height:0;width:0;line-height:0;font-size:13px!important;font-style:italic;color:#8a8a8a"><span>Unidades: $item.Quantity</span></span>
+                                                                                    style="display:none!important;overflow:hidden;max-height:0;width:0;line-height:0;font-size:13px!important;font-style:italic;color:#8a8a8a"><span>Unidades: <%= item.quantity %></span>
                                                                         </p>
                                                                     </th>
                                                                 </tr>
@@ -691,7 +689,7 @@
                                                                         <li style="margin-bottom:.7rem">
                                                                             <em style="color:#8a8a8a">Dirección:</em><br>
                                                                             <a
-                                                                                    href="https://maps.google.com/?q=${formatHelper.EncodeUrl($order.ShippedTo.Address)}&amp;entry=gmail&amp;source=g">
+                                                                                    href="https://maps.google.com/?q=<%= formatHelper.encodeUrl(order.shippedTo.address + " " + order.shippedTo.comuna?.name) %>&amp;entry=gmail&amp;source=g">
                                                                                 <%= order.shippedTo.address %>
                                                                             </a>
                                                                         </li>
@@ -801,7 +799,7 @@
                                                         </ul>
 
                                                         <img style="width:100%;" width="100%"
-                                                             src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C<%=order.destination.postalAddress.latitude + "," + order.destination.postalAddress.longitude%>&key=$gmapKey"/>
+                                                             src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C<%=order.destination.postalAddress.latitude + "," + order.destination.postalAddress.longitude%>&key=<%= gmapKey %>>"/>
                                                     </td>
                                                 </tr>
                                             <% } %>
@@ -856,7 +854,7 @@
                                                                                                         <tbody>
                                                                                                         <tr style="padding:0;vertical-align:top;text-align:left">
                                                                                                             <th style="color:#484848;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;font-size:16px;line-height:1.3">
-                                                                                                                <a href="$domainHelper.GetSiteRoot()"
+                                                                                                                <a href="<%= domainHelper.getSiteRoot() %>"
                                                                                                                    style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-weight:normal;padding:0;margin:0;Margin:0;text-align:left;line-height:1.3;color:#c74044;text-decoration:none"
                                                                                                                    target="_blank">
                                                                                                                     <img

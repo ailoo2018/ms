@@ -1,9 +1,10 @@
-const { Client } = require("@elastic/elasticsearch");
+import {Client} from "@elastic/elasticsearch";
+
 
 // Singleton instance
 let client = null;
 
-function getElClient() {
+export function getElClient() {
 	if (!client) {
 		client = new Client({
 			node: process.env.ELASTICSEARCH,
@@ -12,10 +13,7 @@ function getElClient() {
 		return client;
 }
 
-
-
-
-function getProductCollectionsIndexName(domainId){
+export function getProductCollectionsIndexName(domainId){
 
 	if(process.env.NODE_ENV === 'test'){
 		return "test-product-collection"
@@ -24,7 +22,7 @@ function getProductCollectionsIndexName(domainId){
 	return "product-collection";
 }
 
-function getIndexName(domainId){
+export function getIndexName(domainId){
 
 	if(process.env.NODE_ENV === 'test'){
 			return "test-" + domainId + "-clp-0"
@@ -33,8 +31,7 @@ function getIndexName(domainId){
 	return domainId + "-clp-0";
 }
 
-
-function getDiscountIndexName(){
+export function getDiscountIndexName(){
 	if(process.env.NODE_ENV === 'test'){
 		return "test-discounts"
 	}
@@ -42,6 +39,3 @@ function getDiscountIndexName(){
 }
 
 
-module.exports = {
-	getElClient, getIndexName, getDiscountIndexName, getProductCollectionsIndexName
-};

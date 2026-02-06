@@ -149,4 +149,4 @@ const cmsClient = {
 };
 
 
-module.exports = cmsClient;
+export default cmsClient;

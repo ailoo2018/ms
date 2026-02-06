@@ -1,9 +1,9 @@
-const FormData = require('form-data');
-const axios = require('axios');
+import FormData from "form-data";
+import axios from "axios";
 
 const railsAdminUrl = `${process.env.ADMIN_URL || 'http://admin'}/Product/UploadImage.rails`;
 
-async function uploadImagesAilooCDN(images, domainId) {
+export async function uploadImagesAilooCDN(images, domainId) {
 
   const formData = new FormData();
 
@@ -61,7 +61,7 @@ async function uploadImagesAilooCDN(images, domainId) {
   }
 }
 
-async function createImages(imageId, sizes){
+function createImages(imageId, sizes){
   fetch(`${process.env.PROD_URL}/Product/CreateImages.rails`, {
     method: 'POST',
     body: {
@@ -72,4 +72,3 @@ async function createImages(imageId, sizes){
 }
 
 
-module.exports = { uploadImagesAilooCDN };

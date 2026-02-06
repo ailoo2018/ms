@@ -1,10 +1,11 @@
-const logger = require("@ailoo/shared-libs/logger");
+import logger from "@ailoo/shared-libs/logger";
+
 const ADMIN_URL = process.env.ADMIN_URL
 const AILOO_ACCESS_TOKEN = process.env.AILOO_ACCESS_TOKEN
 const AILOO_FACILITY_ID = 479 // bodega online
 const AILOO_CASH_REGISTER_ID= 1211
 
-const adminClient = {
+export const adminClient = {
 
   paymentValidated: async (orderId, authcode, domainId) =>
   {
@@ -44,4 +45,3 @@ const adminClient = {
 
 }
 
-module.exports = adminClient

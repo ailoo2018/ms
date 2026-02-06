@@ -1,12 +1,15 @@
-const {app} = require("../server");
-const {getElClient} = require("../connections/el");
+import {Router} from "express";
+import {getElClient} from "../connections/el.js";
+
+const router = Router();
+
 
 
 function getIndexName(domainId){
   return "rewrite"
 }
 
-app.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
+router.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
   var domainId = req.params.domainId;
   var categoryId = req.params.id;
   try {
@@ -66,3 +69,6 @@ app.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
   }
 
 });
+
+
+export default router;

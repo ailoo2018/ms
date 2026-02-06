@@ -1,13 +1,13 @@
+import {db as drizzleDb} from "../db/drizzle.js";
+import {and, eq} from "drizzle-orm";
+import {findCartByWuid, updateCartUserId} from "../el/cart.js";
+import schema from "../db/schema.ts";
+
 const {
   user,
   party
-} = require("../db/schema.ts");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq} = require("drizzle-orm");
-const cartRepos = require("../el/cart");
-
-
-module.exports.authenticate = async (name, email, wuid, domainId) => {
+} = schema
+export const authenticate = async (name, email, wuid, domainId) => {
 
 
   let isNewUser = false
@@ -71,9 +71,9 @@ module.exports.authenticate = async (name, email, wuid, domainId) => {
 
   // assign user to shopping cart
 
-  const cart = await cartRepos.findCartByWuid(wuid)
+  const cart = await findCartByWuid(wuid)
   if (cart && !cart.userId || cart.userId === 0) {
-    await cartRepos.updateCartUserId(cart.id, u.id)
+    await updateCartUserId(cart.id, u.id)
   }else{
 
   }

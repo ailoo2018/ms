@@ -1,8 +1,9 @@
-const {app} = require("../server");
-const cmsClient = require("../services/cmsClient");
+import { Router } from "express";
+const router = Router(); // Create a router instead of using 'app'
+import cmsClient from "../services/cmsClient.js";
 
 
-app.get('/:domainId/events/latest', async (req, res, next) => {
+router.get('/:domainId/events/latest', async (req, res, next) => {
 
   try{
     let limit = 10;
@@ -28,3 +29,5 @@ app.get('/:domainId/events/latest', async (req, res, next) => {
   }
 
 });
+
+export default router;

@@ -1,16 +1,17 @@
-const CartRepos = require("../el/cart");
-const {CartItemType} = require("../models/cart-models");
-const {findProductByProductItem} = require("../el/products");
-const ProductHelper = require("./product-helper");
-const {SaleType} = require("../models/domain");
-const container = require("../container");
-const LinkHelper = require("@ailoo/shared-libs/helpers/LinkHelper")
+import {findCartByWuid} from "../el/cart.js";
+import {CartItemType} from "../models/cart-models.js";
+import { productRepos} from "../el/products.js";
+import {getProductImage} from "../helpers/product-helper.js";
+import {SaleType} from "../models/domain.js";
+import container from "../container/index.ts";
+import LinkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+
 
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
-async function findCart(wuid, domainId) {
-  const cart = await CartRepos.findCartByWuid(wuid)
+export async function findCart(wuid, domainId) {
+  const cart = await findCartByWuid(wuid)
 
   if (!cart) {
     return null
@@ -28,9 +29,9 @@ async function findCart(wuid, domainId) {
       continue
 
     if (cartItem.type == CartItemType.Product && (!cartItem.packContents || cartItem.packContents.length == 0)) {
-      const product = await findProductByProductItem(cartItem.product.productItemId, domainId)
+      const product = await productRepos.findProductByProductItem(cartItem.product.productItemId, domainId)
       const productItem = product.productItems.find(pit => pit.id === cartItem.product.productItemId);
-      const img = ProductHelper.getProductImage(product, productItem)
+      const img = getProductImage(product, productItem)
 
       if (img) {
         cartItem.image = img.image
@@ -49,7 +50,7 @@ async function findCart(wuid, domainId) {
       cartItem.description = product.name
 
       const priceComp = await productService.getPrice(product, productItem, SaleType.Internet)
-    //  const pit = await ProductHelper.getPriceByProductItem(productItem.id, SaleType.Internet, domainId)
+
 
       if (priceComp) {
         let price = priceComp.getPrice()
@@ -103,7 +104,7 @@ async function findCart(wuid, domainId) {
         }
         packProduct.color = productService.getColor(product, productItem)
         packProduct.size = productService.getSize(product, productItem)
-        packProduct.image = ProductHelper.getProductImage(product, productItem).image
+        packProduct.image = getProductImage(product, productItem).image
 
         total += packProduct.price * 1;
         saleContext.items.push({
@@ -121,7 +122,7 @@ async function findCart(wuid, domainId) {
       if(cartItem.type === CartItemType.Product){
         const priceComp = await productService.getPrice(product, productItem, SaleType.Internet)
         let price = priceComp.getPrice()
-        // const pit = await ProductHelper.getPriceByProductItem(cartItem.product.productItemId, SaleType.Internet, domainId)
+
         cartItem.price = price.price.amount
         cartItem.oldPrice = price.discount ? price.price.amount - price.discount.amount : price.price.amount
         cartItem.discount = price.discount ? price.discount.amount : 0
@@ -178,4 +179,3 @@ async function findCart(wuid, domainId) {
 }
 
 
-module.exports = { findCart }

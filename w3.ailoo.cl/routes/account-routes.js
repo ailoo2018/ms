@@ -1,21 +1,16 @@
-const {app, validateJWT, upload, reviewsUpload} = require("../server");
-const {listPartyPostalAddresses} = require("../db/partyDb");
-const {db: drizzleDb} = require("../db/drizzle");
-const {and, eq, asc} = require("drizzle-orm");
-const {saleOrder} = require("../db/schema.ts");
-const {partyReviews} = require("../db/reviews");
-const container = require("../container");
-const {uploadImagesAilooCDN} = require("../services/cdnService");
-const {review, postalAddress, geographicBoundary} = require("../db/schema.ts");
-const domain = require("node:domain");
+import {Router} from "express";
+import {reviewsUpload,  validateJWT} from "../server.js";
+import {listPartyPostalAddresses} from "../db/partyDb.js";
+import {db as drizzleDb} from "../db/drizzle.js";
+import {and, asc, eq} from "drizzle-orm";
+import schema from "../db/schema.ts";
+const {geographicBoundary, postalAddress, review, saleOrder} = schema
+import {partyReviews} from "../db/reviews.js";
+import container from "../container/index.ts";
+import {uploadImagesAilooCDN} from "../services/cdnService.js";
 
+const router = Router();
 const productService = container.resolve('productsService');
-
-/**
- * Parses a full name into first name, paternal, and maternal surnames.
- * @param {string} fullName
- * @returns {object}
- */
 const parseFullName = (fullName) => {
   // Handle null, undefined, or empty/whitespace input
   if (!fullName || !fullName.trim()) {
@@ -84,7 +79,7 @@ const OrderStateDesc = {
   "15": "En proceso",
 }
 
-app.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
   try {
     const user = req.user;
     const domainId = parseInt(req.params.domainId);
@@ -119,7 +114,7 @@ app.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) 
   }
 });
 
-app.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
 
   try {
     const user = req.user;
@@ -158,7 +153,7 @@ app.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
 
 })
 
-app.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
   try {
     const userId = req.user.id;
 
@@ -176,7 +171,7 @@ app.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
   }
 })
 
-app.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const userId = req.user.id;
@@ -212,7 +207,7 @@ app.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => {
   }
 })
 
-app.post("/:domainId/account/reviews/add", validateJWT, reviewsUpload,
+router.post("/:domainId/account/reviews/add", validateJWT, reviewsUpload,
     async (req, res, next) => {
       try {
         const {domainId} = req.params;
@@ -341,3 +336,5 @@ app.post("/:domainId/account/reviews/add", validateJWT, reviewsUpload,
         next(e)
       }
     })
+
+export default router

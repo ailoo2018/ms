@@ -1,22 +1,21 @@
-const {db: drizzleDb} = require("../db/drizzle");
-const container = require("../container");
-const {getFeaturesDescription} = require("./product-helper");
-const parametersClient = require("./parametersClient");
-const {OrderItemType} = require("../models/domain");
-const path = require("path");
-const {promises: fs} = require("fs");
-const ProductImageHelper = require("@ailoo/shared-libs/helpers/ProductImageHelper")
-const juice = require('juice');
-const sgMail = require('@sendgrid/mail');
-const {and, eq, sql } = require("drizzle-orm");
-const ejs = require('ejs');
-const {doHash} = require("../utils/utils");
-
+import {db as drizzleDb} from "../db/drizzle.js";
+import container from "../container/index.ts";
+import {getFeaturesDescription} from "../helpers/product-helper.js";
+import parametersClient from "./parametersClient.js";
+import {OrderItemType} from "../models/domain.js";
+import path from "path";
+import {promises as fs} from "fs";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
+import juice from "juice";
+import sgMail from "@sendgrid/mail";
+import {and, eq, sql} from "drizzle-orm";
+import ejs from "ejs";
+import {doHash} from "../utils/utils.js";
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-async function orderConfirmationHtml(orderId, domainId) {
+export async function orderConfirmationHtml(orderId, domainId) {
 
   const order = await drizzleDb.query.saleOrder.findFirst({
     where: (saleOrder, {eq}) =>
@@ -185,13 +184,13 @@ async function orderConfirmationHtml(orderId, domainId) {
   };
 
 
-  const templatePath = path.join(__dirname, '../templates/confirmation.ejs');
+  const templatePath = path.join(process.cwd(), '/templates/confirmation.ejs');
   const template = await fs.readFile(templatePath, 'utf-8');
   const html = ejs.render(template, emailData);
   return { to: order.shippingAddress?.email , html };
 }
 
-async function sendOrderConfirmationEmail( orderId, domainId) {
+export async function sendOrderConfirmationEmail( orderId, domainId) {
 
   const { to, html } = await orderConfirmationHtml(orderId, domainId);
 
@@ -211,4 +210,3 @@ async function sendOrderConfirmationEmail( orderId, domainId) {
 }
 
 
-module.exports = { sendOrderConfirmationEmail, orderConfirmationHtml }

@@ -1,7 +1,7 @@
-const {pool} = require("../connections/mysql");
+import {pool} from "../connections/mysql.js";
 
 
-module.exports.productStock = async function (id, domainId) {
+export const productStock = async function (id, domainId) {
 
   const connection = await pool.getConnection();
 
@@ -31,7 +31,7 @@ module.exports.productStock = async function (id, domainId) {
 
 }
 
-module.exports.stockByStore = async function (facilityId, productItemIds, domainId) {
+export const stockByStore = async function (facilityId, productItemIds, domainId) {
 
   const connection = await pool.getConnection();
 
@@ -55,7 +55,7 @@ module.exports.stockByStore = async function (facilityId, productItemIds, domain
 
 }
 
-module.exports.stockAllStores = async function (productItemId, domainId) {
+export const stockAllStores = async function (productItemId, domainId) {
 
   const connection = await pool.getConnection();
 

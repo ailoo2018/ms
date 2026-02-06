@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,20 +29,8 @@
     "mercadopago": "^2.11.0",
     "multer": "^2.0.2",
     "mysql2": "^3.16.0",
+    "supertest": "^7.2.2",
     "transbank-sdk": "^6.1.1",
     "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "jest": "^30.2.0",
-    "supertest": "^7.2.2"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "^uuid$": "<rootDir>/node_modules/uuid/dist/index.js"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(uuid|shared-libs)/)"
-    ]
   }
 }

@@ -1,7 +1,7 @@
-const {pool} = require("../connections/mysql");
+import {pool} from "../connections/mysql.js";
 
 
-  module.exports.productDescription = async function(productId) {
+export const productDescription = async function(productId) {
 
   const connection = await pool.getConnection();
 

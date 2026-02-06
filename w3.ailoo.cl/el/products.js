@@ -1,6 +1,7 @@
-const {getElClient, getIndexName} = require("../connections/el");
+import {getElClient, getIndexName} from "../connections/el.js";
 
-const productRepos = {
+
+export const productRepos = {
   findProduct: async (productId, domainId)=>{
     const response = await getElClient().get({
       index: getIndexName(domainId),
@@ -50,4 +51,4 @@ const productRepos = {
 
 }
 
-module.exports = productRepos;
+
