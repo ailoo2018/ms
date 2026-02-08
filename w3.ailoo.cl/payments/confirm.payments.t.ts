@@ -6,14 +6,10 @@ import {PaymentMethodType} from "../models/domain.js";
 import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.js";
 import container from "../container/index.js";
 import schema from "../db/schema.js"
-import {adminClient} from "../services/adminClient.js";
+import {adminClient} from "../clients/adminClient.js";
 
 const { invoice, payment, paymentApplication } = schema;
 
-export const ValidationType = {
-    Invoice: 0,
-    Order: 1,
-} as const;
 
 export async function validateInvoice(referenceId: string, transactionAmount: number, domainId : number) {
     const invoice = await drizzleDb.query.invoice.findFirst({
@@ -36,7 +32,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
         throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
     }
 
-    // add payment to inovice then index
+
     try{
 
     }catch(e){
@@ -74,9 +70,10 @@ type PaymentMethodValues = typeof PaymentMethodType[keyof typeof PaymentMethodTy
 const validatorMap: Record<PaymentMethodValues, string> = {
     [PaymentMethodType.Webpay]: "webPayValidator",
     [PaymentMethodType.MercadoPago]: "mercadoPagoValidator",
+    [PaymentMethodType.DLocal]: "dlocalValidator",
 };
 
-export async function confirmPayment(authId: string, paymentMethodType: number, validationType: number, domainId: number) {
+export async function confirmPayment(authId: string, paymentMethodType: number,  domainId: number) {
 
     const validator = validatorMap[paymentMethodType as keyof typeof validatorMap];
 
@@ -91,7 +88,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
         throw new Error(`Transaccion rechazada ${response.responseCode}`)
     }
 
-    if(validationType === ValidationType.Invoice) {
+    if(response.referenceType === "invoice") {
         await validateInvoice(response.referenceId, response.transactionAmount, domainId)
     }else{
         await validateOrder(response.referenceId, response.transactionAmount, domainId)
@@ -101,9 +98,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
 
 }
 
-
-export async function addPaymentToInvoice(invoiceId: number, amount: number, paymentMethodId: number, authorizationCode: string, domainId: number)
-{
+export async function addPaymentToInvoice(invoiceId: number, amount: number, paymentMethodId: number, authorizationCode: string, domainId: number){
     const invRs = await drizzleDb.select({
         receivedById: invoice.receivedById,
         emittedById: invoice.emittedById
@@ -146,4 +141,26 @@ export async function addPaymentToInvoice(invoiceId: number, amount: number, pay
         console.error(e.message, e)
     }
 
+}
+
+export function getReferenceId(refId) : number {
+    if(refId.startsWith("invoice-")){
+        refId = refId.replace("invoice-","")
+    }
+
+    if(refId.startsWith("order-")){
+        refId = refId.replace("order-","")
+    }
+
+    const firstNumber: string = refId.split('-')[0];
+    return parseInt(firstNumber, 10);
+}
+
+
+export function getReferenceType(refId) : string {
+    if(refId.startsWith("invoice-")){
+        return "invoice"
+    }
+
+    return "order"
 }

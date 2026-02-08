@@ -3,9 +3,11 @@ export interface PaymentValidation {
     responseCode?: string;
     success: boolean;
     referenceId: string;
+    referenceType: string;
     responseData: any;
     transactionAmount: number;
     authorizationCode: string;
+    paymentMethodId: number;
 
 }
 

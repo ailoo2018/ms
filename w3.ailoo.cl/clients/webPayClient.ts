@@ -1,6 +1,7 @@
 import type {PaymentValidation, PaymentValidator} from "./paymentValidator.js";
 
 import transbankSdk from "transbank-sdk";
+import {getReferenceId, getReferenceType} from "../payments/confirm.payments.t.js";
 
 const { WebpayPlus, Options, IntegrationApiKeys, IntegrationCommerceCodes, Environment } = transbankSdk
 
@@ -32,8 +33,10 @@ export class WebPayValidator implements PaymentValidator {
         const response = await tx.commit(token)
 
         return Promise.resolve({
-            referenceId: response.buy_order,
+            referenceId: "" + getReferenceId(response.buy_order),
+            referenceType: getReferenceType(response.buy_order),
             transactionAmount: response.amount,
+            paymentMethodId: paymentMethodType,
             responseData: response,
             authorizationCode: response.authorization_code,
             success: response.response_code === 0,

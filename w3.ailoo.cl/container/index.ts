@@ -17,11 +17,13 @@ import {pool} from "../connections/mysql.js";
 import {getElClient} from "../connections/el.js";
 
 import {db as redisDb} from "../connections/rdb.js";
+import {DlocalValidator} from "../clients/dlocalValidator.js";
 
 const container = createContainer();
 
 container.register({
   webPayValidator: asClass(WebPayValidator).singleton(),
+  dlocalValidator: asClass(DlocalValidator).singleton(),
   mercadoPagoValidator: asClass(MercadoPagoValidator).singleton(),
   productsService: asClass(ProductsService).singleton(),
   productCategoryService: asClass(ProductCategoryService).singleton(),

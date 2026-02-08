@@ -185,6 +185,7 @@ export class Price {
 export const PaymentMethodType = Object.freeze({
   MercadoPago: 15,
   Webpay: 8,
+  DLocal: 19,
 })
 
 /*

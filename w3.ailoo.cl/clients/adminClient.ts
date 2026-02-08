@@ -7,6 +7,43 @@ const AILOO_CASH_REGISTER_ID= 1211
 
 export const adminClient = {
 
+  addPayment: async (invoiceId: number, amount: number, authCode: string, methodId: number, domainId: number) => {
+    const url = new URL(`/InventoryJSON/AddPayment.rails`, ADMIN_URL);
+
+
+
+    const response = await fetch(`${url}`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(30000) as any, // 5-second timeout
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Ailoo-Access-Token': String(AILOO_ACCESS_TOKEN),
+        'X-Ailoo-Access-FacilityId': String(AILOO_FACILITY_ID),
+        'X-Ailoo-Access-CashRegisterId' : String(AILOO_CASH_REGISTER_ID),
+      },
+      body: JSON.stringify({
+        invoiceId: invoiceId,
+        amount: amount,
+        authorizationCode: authCode,
+        paymentMethodId: methodId,
+        domainId: domainId,
+      })
+
+    });
+
+    if (!response.ok){
+      const errorHtml = await response.text();
+
+      logger.error(`Error al llamar PaymentValidation. Status: ${response.status}`);
+      logger.error(`Server Response Body: ${errorHtml}`); // This logs the HTML
+
+      throw new Error(`ADMIN Error: ${response.status}`);    }
+
+    return await response.json();
+  },
+
+
   indexDocument: async(invoiceId, domainId) => {
     const url = new URL(`/InventoryJSON/IndexDocument.rails`, ADMIN_URL);
 
