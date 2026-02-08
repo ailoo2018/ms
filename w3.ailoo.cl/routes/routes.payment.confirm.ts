@@ -155,7 +155,7 @@ interface ExchangeRateResponse {
     time_last_update_utc: string;
 }
 
-router.get('/api/convert', validateJWT, async (req: Request, res: Response): Promise<any> => {
+router.get('/api/convert',  async (req: Request, res: Response): Promise<any> => {
     // @ts-ignore
     const { from, to, amount } = req.query;
 
