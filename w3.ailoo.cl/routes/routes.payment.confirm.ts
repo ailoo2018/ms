@@ -162,6 +162,7 @@ router.get('/api/convert',  async (req: Request, res: Response): Promise<any> =>
     const API_KEY = process.env.EXCHANGE_RATE_API_KEY;
 
     if (!from || !to || !amount) {
+        // @ts-ignore
         return res.status(400).json({ error: "Missing parameters" });
     }
 
@@ -175,7 +176,8 @@ router.get('/api/convert',  async (req: Request, res: Response): Promise<any> =>
 
         // 2. Filter the returned data for your destination currency
         if (!rates[target]) {
-            return res.status(404).json({ error: `Currency '${target}' not supported.` });
+            // @ts-ignore
+            return res. status(404).json({ error: `Currency '${target}' not supported.` });
         }
 
         const convertedAmount = Number(amount) * rates[target];
