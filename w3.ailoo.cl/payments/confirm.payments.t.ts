@@ -61,7 +61,7 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
     }
     const orderTotal = ordersHelper.getTotal(order)
     if(transactionAmount !== orderTotal){
-        throw new Error( `Montos no coinciden: ${transactionAmount} vs ${orderTotal}` )
+        throw new Error( `Montos de orden de compra no coinciden: ${transactionAmount} vs ${orderTotal}` )
     }
 
 }
