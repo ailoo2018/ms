@@ -9,11 +9,9 @@ import {
 } from "../payments/confirm.payments.t.js";
 import type {PaymentValidation} from "../clients/paymentValidator.js";
 import schema from "../db/schema.js";
-import {sendOrderConfirmationEmail} from "../services/emailsService.js";
 import {adminClient} from "../clients/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {OrderState, PaymentMethodType} from "../models/domain.js";
-import {validateJWT} from "../server.js";
 
 const { saleOrder, orderJournal} = schema
 
@@ -57,6 +55,13 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
 
     try {
         //     await sendOrderConfirmationEmail(confirmRs.orderId, domainId)
+        logger.info("add payment adminClient: " + JSON.stringify({
+            invoiceId: invoiceId,
+            trxAmount: confirmRs.transactionAmount,
+            authCode: confirmRs.authorizationCode,
+            payMethodId: confirmRs.paymentMethodId,
+            domainId: domainId
+        }));
         await adminClient.addPayment(
             invoiceId,
             confirmRs.transactionAmount,
@@ -64,6 +69,7 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
             confirmRs.paymentMethodId,
             domainId) ;
     } catch (e) {
+        logger.error("Error adding payment adminClient: " + e.message)
         console.error(e.message, e)
     }
 }
