@@ -8,7 +8,7 @@ export interface PaymentValidation {
     transactionAmount: number;
     authorizationCode: string;
     paymentMethodId: number;
-
+    transactionDate: Date;
 }
 
 export interface PaymentValidator {

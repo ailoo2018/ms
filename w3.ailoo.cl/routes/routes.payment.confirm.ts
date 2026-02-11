@@ -76,6 +76,7 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
 
         let authCode = ""
         let amount = 0
+        let transactionDate : Date = null
         let paymentData = null
         if(rq.referenceType === "invoice"){
             const payApplications = await drizzleDb.query.paymentApplication.findMany({
@@ -85,10 +86,11 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
                 },
             });
 
-            var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodTypeId)
+            var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodId)
             if(payApp) {
                 amount = payApp.payment.amount
                 authCode = payApp.payment.paymentRefNum
+                transactionDate = payApp.payment.effectiveDate
                 paymentData = { date: payApp.payment.effectiveDate }
             }
 
@@ -104,6 +106,7 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
             responseData: paymentData,
             responseCode: "",
             paymentMethodId: rq.paymentMethodId,
+            transactionDate: transactionDate,
 
         }
 
@@ -128,6 +131,9 @@ router.post("/:domainId/checkout/payment-result", async (req, res) => {
         }
 
 
+        if(!confirmRs.transactionDate) {
+            confirmRs.transactionDate = new Date()
+        }
 
         res.json(confirmRs);
 
