@@ -15,7 +15,7 @@ export class DlocalValidator implements PaymentValidator {
 
         const paymentData : any = fetchPaymentDetails(token)
 
-        logger.info("paymentData: " + JSON.stringify(paymentData)); 
+        logger.info("paymentData: " + JSON.stringify(paymentData));
 
         return Promise.resolve({
             referenceId: "" + getReferenceId(paymentData.external_reference),
@@ -23,6 +23,7 @@ export class DlocalValidator implements PaymentValidator {
             transactionAmount: paymentData.amount,
             paymentMethodId: paymentMethodType,
             responseData: paymentData,
+            transactionDate: new Date(),
             authorizationCode: token,
             success: true,
 

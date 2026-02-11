@@ -36,6 +36,7 @@ export class WebPayValidator implements PaymentValidator {
             referenceId: "" + getReferenceId(response.buy_order),
             referenceType: getReferenceType(response.buy_order),
             transactionAmount: response.amount,
+            transactionDate: new Date(),
             paymentMethodId: paymentMethodType,
             responseData: response,
             authorizationCode: response.authorization_code,

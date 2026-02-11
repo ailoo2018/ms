@@ -25,6 +25,7 @@ export class MercadoPagoValidator implements PaymentValidator {
             referenceId: "" + getReferenceId( paymentData.external_reference ),
             referenceType: getReferenceType(paymentData.external_reference),
             transactionAmount: paymentData.transaction_amount,
+            transactionDate: new Date(),
             paymentMethodId: paymentMethodType,
             responseData: paymentData,
             authorizationCode: token,
