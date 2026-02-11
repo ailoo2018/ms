@@ -15,11 +15,17 @@ export class DlocalValidator implements PaymentValidator {
 
         const paymentData : any = await fetchPaymentDetails(token)
 
+        if(paymentData.status !== "PAID"){
+            throw new Error("DLocal payment status is not paid: " + paymentData.status)
+        }
+
+
         logger.info("paymentData: " + JSON.stringify(paymentData));
 
         return Promise.resolve({
-            referenceId: "" + getReferenceId(paymentData.external_reference),
-            referenceType: getReferenceType(paymentData.external_reference),
+            referenceId: "" + getReferenceId(paymentData.order_id),
+            referenceType: getReferenceType(paymentData.order_id),
+            currency: paymentData.currency,
             transactionAmount: paymentData.amount,
             paymentMethodId: paymentMethodType,
             responseData: paymentData,

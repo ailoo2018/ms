@@ -67,6 +67,7 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
             confirmRs.transactionAmount,
             confirmRs.authorizationCode,
             confirmRs.paymentMethodId,
+            confirmRs.currency || "CLP",
             domainId) ;
     } catch (e) {
         logger.error("Error adding payment adminClient: " + e.message)

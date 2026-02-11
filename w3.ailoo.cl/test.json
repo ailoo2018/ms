@@ -1,180 +1,34 @@
 {
-  "wuid": "f8513206-b59c-4415-bdde-bbe886ab77ea",
-  "addresses": {
-    "selectedShipping": {
-      "name": "Test",
-      "surnames": "Ailoo",
-      "rut": "11.111.111-1",
-      "address": "Test",
-      "address2": "",
-      "legalName": "",
-      "type": "",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postal_code": "",
-      "phone": "111 111 11",
-      "comuna_id": 316
-    },
-    "shipping": {
-      "name": "Test",
-      "surnames": "Ailoo",
-      "rut": "11.111.111-1",
-      "address": "Test",
-      "address2": "",
-      "legalName": "",
-      "type": "",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postal_code": "",
-      "phone": "111 111 11",
-      "comuna_id": 316
-    },
-    "billing": {}
+  "id": "DP-6176205",
+  "amount": 1.48,
+  "balance_amount": 1.43,
+  "balance_fee": 0.05,
+  "currency": "USD",
+  "balance_currency": "USD",
+  "payment_method_type": "CREDIT_CARD",
+  "country": "CL",
+  "created_date": "2026-02-11T20:23:26",
+  "approved_date": "2026-02-11T20:24:53",
+  "status": "PAID",
+  "order_id": "27838418-1770841405679",
+  "notification_url": "https://www.motomundi.cl/api/webhooks/dlocal",
+  "success_url": "https://www.motomundi.cl/payments/dlocal/invoice?referenceId=27838418&referenceType=invoice",
+  "back_url": "https://www.motomundi.cl/checkout/27838418",
+  "redirect_url": "https://checkout.dlocalgo.com/validate/FmjpsLmz3BY0TvciU2NfjZtBXrtRU5SV",
+  "merchant_checkout_token": "FmjpsLmz3BY0TvciU2NfjZtBXrtRU5SV",
+  "direct": true,
+  "payer": {
+    "first_name": "Juan",
+    "last_name": "Fuentes",
+    "email": "jcfuentes@ailoo.cl",
+    "document_type": "RUT",
+    "document": "153203008"
   },
-  "customerInformation": {
-    "phone": "111 111 11",
-    "email": "Test@test.cl",
-    "address": {
-      "name": "Test",
-      "surnames": "Ailoo",
-      "rut": "11.111.111-1",
-      "address": "Test",
-      "address2": "",
-      "legalName": "",
-      "type": "",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postal_code": ""
-    }
-  },
-  "shipmentInformation": {
-    "method": 1,
-    "address": {
-      "name": "Test",
-      "surnames": "Ailoo",
-      "rut": "11.111.111-1",
-      "address": "Test",
-      "address2": "",
-      "legalName": "",
-      "type": "",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postal_code": "",
-      "phone": "111 111 11",
-      "comuna_id": 316
-    },
-    "store": {
-      "id": 1,
-      "title": "LAS TRANQUERAS (LAS CONDES)",
-      "name": "LAS TRANQUERAS",
-      "address": "LAS TRANQUERAS 56",
-      "latitude": -33400898749676830,
-      "longitude": -7055551688038699,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      }
-    },
-    "pickupOption": "pickup_here",
-    "modifiedDate": "2026-02-06T21:26:18.355Z",
-    "carrierId": 9,
-    "comments": "",
-    "remarks": ""
-  },
-  "createAccount": false,
-  "subscribe": true,
-  "notifyWhatsApp": true,
-  "selectedCarrier": 9,
-  "paymentMethod": {
-    "gateway": 8
-  },
-  "pickupStore": {
-    "id": 1,
-    "title": "LAS TRANQUERAS (LAS CONDES)",
-    "name": "LAS TRANQUERAS",
-    "address": "LAS TRANQUERAS 56",
-    "latitude": -33400898749676830,
-    "longitude": -7055551688038699,
-    "comuna": {
-      "id": 316,
-      "name": "LAS CONDES"
-    }
-  },
-  "selectedMapData": {
-    "store_id": 1
-  },
-  "items": [
-    {
-      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-      "product": {
-        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-        "productItemId": 503290,
-        "name": "XENA test webpay Tamaño Unico",
-        "type": 0,
-        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
-      },
-      "quantity": 6,
-      "color": null,
-      "oldPrice": 10,
-      "description": "test webpay",
-      "discount": 0,
-      "type": 0,
-      "packId": 0,
-      "size": {
-        "id": 8,
-        "name": "Tamaño Unico",
-        "orderWeight": 0,
-        "type": 0
-      },
-      "price": 10,
-      "name": "XENA test webpay Tamaño Unico",
-      "id": "773fa00b-1992-4ab6-b6a8-6ce49c4c836a",
-      "loading": false
-    }
-  ],
-  "mercadoPagoPaymentData": null
+  "card": {
+    "bin": "450881",
+    "issuer": "BANCO SANTANDER-CHILE",
+    "last_four": "8087"
+  }
+} {
+  "timestamp": "2026-02-11T20:25:03.898Z"
 }

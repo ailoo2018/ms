@@ -35,6 +35,7 @@ export class WebPayValidator implements PaymentValidator {
         return Promise.resolve({
             referenceId: "" + getReferenceId(response.buy_order),
             referenceType: getReferenceType(response.buy_order),
+            currency: "CLP",
             transactionAmount: response.amount,
             transactionDate: new Date(),
             paymentMethodId: paymentMethodType,

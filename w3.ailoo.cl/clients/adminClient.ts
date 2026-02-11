@@ -7,7 +7,7 @@ const AILOO_CASH_REGISTER_ID= 1211
 
 export const adminClient = {
 
-  addPayment: async (invoiceId: number, amount: number, authCode: string, methodId: number, domainId: number) => {
+  addPayment: async (invoiceId: number, amount: number, authCode: string, methodId: number, currency: string, domainId: number) => {
     const url = new URL(`/InventoryJSON/AddPayment.rails`, ADMIN_URL);
 
 
@@ -25,6 +25,7 @@ export const adminClient = {
       body: JSON.stringify({
         invoiceId: invoiceId,
         amount: amount,
+        currency: currency,
         authorizationCode: authCode,
         paymentMethodId: methodId,
         domainId: domainId,

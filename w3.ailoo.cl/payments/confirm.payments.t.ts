@@ -7,6 +7,7 @@ import type {PaymentValidation, PaymentValidator} from "../clients/paymentValida
 import container from "../container/index.js";
 import schema from "../db/schema.js"
 import {adminClient} from "../clients/adminClient.js";
+import logger from "@ailoo/shared-libs/logger";
 
 const { invoice, payment, paymentApplication } = schema;
 
@@ -25,6 +26,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
     });
 
     if (!invoice) {
+        logger.error("Invoice no encontrada: " + referenceId);
         return { success: false, message: `Invoice no encontrada` }
     }
     const invoiceTotal = invoiceHelper.getTotal(invoice)

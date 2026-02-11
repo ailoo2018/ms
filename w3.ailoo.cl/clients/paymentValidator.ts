@@ -6,6 +6,7 @@ export interface PaymentValidation {
     referenceType: string;
     responseData: any;
     transactionAmount: number;
+    currency?: string;
     authorizationCode: string;
     paymentMethodId: number;
     transactionDate: Date;
