@@ -13,7 +13,7 @@ export class DlocalValidator implements PaymentValidator {
         logger.info(logMsg);
 
 
-        const paymentData : any = fetchPaymentDetails(token)
+        const paymentData : any = await fetchPaymentDetails(token)
 
         logger.info("paymentData: " + JSON.stringify(paymentData));
 

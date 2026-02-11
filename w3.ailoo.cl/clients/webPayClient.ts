@@ -13,7 +13,7 @@ const isProduction : boolean = process.env.NODE_ENV === 'production' && process.
 
 export class WebPayValidator implements PaymentValidator {
     async validate(token: string, paymentMethodType: number, domainId: number): Promise<PaymentValidation> {
-        const logMsg = `confirmWebPay: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
+        const logMsg = `confirmWebPay222: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
         console.log(logMsg);
 
 

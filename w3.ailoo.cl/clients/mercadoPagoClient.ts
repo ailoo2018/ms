@@ -8,7 +8,7 @@ import {getReferenceId, getReferenceType} from "../payments/confirm.payments.t.j
 
 export class MercadoPagoValidator implements PaymentValidator {
     async validate(token: string, paymentMethodType: number, domainId: number): Promise<PaymentValidation> {
-        const logMsg = `confirmWebPay: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
+        const logMsg = `MercadoPagoValidator: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
         console.log(logMsg);
         logger.info(logMsg);
 
