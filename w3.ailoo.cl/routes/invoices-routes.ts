@@ -10,7 +10,7 @@ const productsService = container.resolve("productsService");
 
 router.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
   try {
-    const domainId = parseInt(req.params.domainId);
+    const domainId   = parseInt(req.params.domainId);
     const invoiceId = parseInt(req.params.invoiceId);
 
     const invoice = await drizzleDb.query.invoice.findFirst({
@@ -28,7 +28,7 @@ router.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
     let total = 0;
     let netTotal = 0;
     let envio = 0;
-    for(const item of invoice.items) {
+    for(const item of invoice.items.filter(it => it.invoiceItemType !== 7 /*saletax*/)) {
 
       const retItem = {
         id: item.id,

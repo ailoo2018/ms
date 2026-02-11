@@ -12,7 +12,7 @@ import schema from "../db/schema.js";
 import {sendOrderConfirmationEmail} from "../services/emailsService.js";
 import {adminClient} from "../clients/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
-import { OrderState } from "../models/domain.js";
+import {OrderState, PaymentMethodType} from "../models/domain.js";
 import {validateJWT} from "../server.js";
 
 const { saleOrder, orderJournal} = schema
@@ -68,7 +68,50 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
     }
 }
 
+router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
 
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const rq = req.body
+
+        let authCode = ""
+        let amount = 0
+        let paymentData = null
+        if(rq.referenceType === "invoice"){
+            const payApplications = await drizzleDb.query.paymentApplication.findMany({
+                where: (paymentApplication, { eq }) => eq(paymentApplication.invoiceId, rq.referenceId),
+                with: {
+                    payment: true, // This includes the parent payment details
+                },
+            });
+
+            var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodTypeId)
+            if(payApp) {
+                amount = payApp.payment.amount
+                authCode = payApp.payment.paymentRefNum
+                paymentData = { date: payApp.payment.effectiveDate }
+            }
+
+        }
+
+
+        const rs : PaymentValidation = {
+            referenceType: rq.referenceType,
+            referenceId: rq.referenceId,
+            success: true,
+            authorizationCode: authCode,
+            transactionAmount: amount,
+            responseData: paymentData,
+            responseCode: "",
+            paymentMethodId: rq.paymentMethodId,
+
+        }
+
+        res.json(rs)
+    }catch(e){
+        next(e)
+    }
+})
 
 router.post("/:domainId/checkout/payment-result", async (req, res) => {
 

@@ -8,12 +8,14 @@ import {getReferenceId, getReferenceType} from "../payments/confirm.payments.t.j
 
 export class DlocalValidator implements PaymentValidator {
     async validate(token: string, paymentMethodType: number, domainId: number): Promise<PaymentValidation> {
-        const logMsg = `confirmWebPay: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
+        const logMsg = `confirm dlocal: ${token} | domainId: ${domainId} | env: ${process.env.NODE_ENV}`;
         console.log(logMsg);
         logger.info(logMsg);
 
 
         const paymentData : any = fetchPaymentDetails(token)
+
+        logger.info("paymentData: " + JSON.stringify(paymentData)); 
 
         return Promise.resolve({
             referenceId: "" + getReferenceId(paymentData.external_reference),
