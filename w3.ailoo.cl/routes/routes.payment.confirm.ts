@@ -58,6 +58,7 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
         logger.info("add payment adminClient: " + JSON.stringify({
             invoiceId: invoiceId,
             trxAmount: confirmRs.transactionAmount,
+            currency: confirmRs.currency,
             authCode: confirmRs.authorizationCode,
             payMethodId: confirmRs.paymentMethodId,
             domainId: domainId
@@ -69,7 +70,7 @@ async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
             confirmRs.paymentMethodId,
             confirmRs.currency || "CLP",
             domainId) ;
-    } catch (e) {
+    } catch  (e) {
         logger.error("Error adding payment adminClient: " + e.message)
         console.error(e.message, e)
     }

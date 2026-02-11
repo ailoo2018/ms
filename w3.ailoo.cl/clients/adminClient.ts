@@ -10,6 +10,14 @@ export const adminClient = {
   addPayment: async (invoiceId: number, amount: number, authCode: string, methodId: number, currency: string, domainId: number) => {
     const url = new URL(`/InventoryJSON/AddPayment.rails`, ADMIN_URL);
 
+    logger.info("adding payment to invoice: " + JSON.stringify({
+      invoiceId: invoiceId,
+      amount: amount,
+      currency: currency,
+      authorizationCode: authCode,
+      paymentMethodId: methodId,
+      domainId: domainId,
+    }))
 
 
     const response = await fetch(`${url}`, {

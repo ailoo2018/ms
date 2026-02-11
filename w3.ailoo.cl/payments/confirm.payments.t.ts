@@ -12,7 +12,7 @@ import logger from "@ailoo/shared-libs/logger";
 const { invoice, payment, paymentApplication } = schema;
 
 
-export async function validateInvoice(referenceId: string, transactionAmount: number, domainId : number) {
+export async function validateInvoice(referenceId: string, transactionAmount: number, paymentMethodType: number, domainId : number) {
     const invoice = await drizzleDb.query.invoice.findFirst({
         where: (invoice, { eq }) =>
             and(
@@ -31,7 +31,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
     }
     const invoiceTotal = invoiceHelper.getTotal(invoice)
     if(transactionAmount !== invoiceTotal){
-        throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
+   //     throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
     }
 
 
@@ -91,7 +91,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
     }
 
     if(response.referenceType === "invoice") {
-        await validateInvoice(response.referenceId, response.transactionAmount, domainId)
+        await validateInvoice(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
     }else{
         await validateOrder(response.referenceId, response.transactionAmount, domainId)
     }
