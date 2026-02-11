@@ -131,8 +131,10 @@ router.post("/:domainId/checkout/payment-result", async (req, res) => {
         const confirmRs: PaymentValidation = await confirmPayment(rq.authorizationCode, rq.paymentMethodId, domainId)
 
         if(confirmRs.referenceType === "invoice" && confirmRs.success) {
+            logger.info("payInvoice")
             await payInvoice(confirmRs, domainId)
         }else if(confirmRs.success) {
+            logger.info("paySaleOrder")
             await paySaleOrder(confirmRs, domainId)
         }
 
