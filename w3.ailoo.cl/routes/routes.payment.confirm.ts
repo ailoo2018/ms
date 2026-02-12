@@ -83,6 +83,7 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
         const rq = req.body
 
         let authCode = ""
+        let currency = "CLP"
         let amount = 0
         let transactionDate : Date = null
         let paymentData = null
@@ -97,6 +98,7 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
             var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodId)
             if(payApp) {
                 amount = payApp.payment.amount
+                currency = payApp.payment.currency
                 authCode = payApp.payment.paymentRefNum
                 transactionDate = payApp.payment.effectiveDate
                 paymentData = { date: payApp.payment.effectiveDate }
@@ -110,6 +112,7 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
             referenceId: rq.referenceId,
             success: true,
             authorizationCode: authCode,
+            currency: currency,
             transactionAmount: amount,
             responseData: paymentData,
             responseCode: "",
