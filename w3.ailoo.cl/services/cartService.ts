@@ -55,7 +55,7 @@ export async function findCart(wuid, domainId) {
       if (priceComp) {
         let price = priceComp.getPrice()
         cartItem.price = price.price.amount
-        cartItem.oldPrice = price.discount ? price.price.aount - price.discount.amount : price.price.amount
+        cartItem.oldPrice = price.discount ? price.price.amount + price.discount.amount : price.price.amount
         cartItem.discount = price.discount ? price.discount.amount : 0
 
       }
