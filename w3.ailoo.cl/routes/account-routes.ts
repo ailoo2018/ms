@@ -157,7 +157,7 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    const result = await drizzleDb.query.user.findFirst({
+    const user = await drizzleDb.query.user.findFirst({
       where: (user, {eq}) => eq(user.id, userId),
       // Use 'with' if you need the linked Party (Person) data too
       with: {
@@ -165,7 +165,11 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
       }
     });
 
-    res.json(result)
+    res.json({
+      id: user.id,
+      username: user.username,
+      person: user.person,
+    })
   } catch (err) {
     next(err);
   }
