@@ -1,5 +1,5 @@
 import {Router} from "express";
-
+import logger from "@ailoo/shared-libs/logger";
 const router = Router(); // Create a router instead of using 'app'
 import cmsClient from "../services/cmsClient.js";
 import {getElClient} from "../connections/el.js";
@@ -39,6 +39,8 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
     try {
         let {from, to, limit, offset} = req.body;
 
+        logger.info("CALLED events/list: ", {from, to, limit, offset})
+
         limit = limit || 10
         offset = offset || 0;
 
@@ -54,30 +56,33 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
             to = to || lastDay.toISOString();
         }
 
+        let body =  {
+            query: {
+                bool: {
+                    must: [{
+                        range: {
+                            startDate: {
+                                gte: from,
+                                lte: to
+                            }
+                        }
+                    }, {
+                        term: {domainId: domainId,}
+                    }
+                    ]
+                }
+            },
+            sort: [
+                {startDate: {order: 'asc'}}
+            ],
+            from: offset,
+            size: limit ,
+        }
+
+        logger.info("el search events: " + JSON.stringify(body))
         const result = await getElClient().search({
             index: 'events',
-            body: {
-                query: {
-                    bool: {
-                        must: [{
-                            range: {
-                                startDate: {
-                                    gte: from,
-                                    lte: to
-                                }
-                            }
-                        }, {
-                            term: {domainId: domainId,}
-                        }
-                        ]
-                    }
-                },
-                sort: [
-                    {startDate: {order: 'asc'}}
-                ],
-                from: offset,
-                size: limit ,
-            }
+            body: body
         });
 
         const events = result.hits.hits.map(hit => {
@@ -96,6 +101,7 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
             events: events ,
         });
     } catch (e) {
+        logger.error("error events/list: " + e.message)
         next(e);
     }
 })
