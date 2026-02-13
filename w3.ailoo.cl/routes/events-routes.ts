@@ -36,10 +36,13 @@ router.get('/:domainId/events/latest', async (req, res, next) => {
 router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
     const domainId = req.params.domainId;
     try {
-        let {from, to} = req.body;
+        let {from, to, limit, offset} = req.body;
+
+        limit = limit || 10
+        offset = offset || 0;
 
         if (from)
-            from = new Date(from.substring(0, 11))
+            from = new Date(from.substring(0, 10))
 
         if (!from || !to) {
             const now = new Date();
@@ -71,7 +74,8 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
                 sort: [
                     {startDate: {order: 'asc'}}
                 ],
-                size: 500 // Adjust this value based on your needs
+                from: offset,
+                size: limit ,
             }
         });
 
@@ -86,7 +90,10 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
             return ev;
         });
 
-        res.json(events);
+        res.json({
+            totalCount: result.hits.total.value,
+            events: events ,
+        });
     } catch (e) {
         next(e);
     }
