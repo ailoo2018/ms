@@ -33,6 +33,7 @@ router.get('/:domainId/events/latest', async (req, res, next) => {
 });
 
 
+
 router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
     const domainId = req.params.domainId;
     try {
