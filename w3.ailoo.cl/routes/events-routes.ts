@@ -36,14 +36,18 @@ router.get('/:domainId/events/latest', async (req, res, next) => {
 router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
     const domainId = req.params.domainId;
     try {
-        let {startDate, endDate} = req.query;
-        if (!startDate || !endDate) {
-            const now = new Date();
-            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        let {from, to} = req.body;
 
-            startDate = startDate || firstDay.toISOString();
-            endDate = endDate || lastDay.toISOString();
+        if (from)
+            from = new Date(from.substring(0, 11))
+
+        if (!from || !to) {
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), now.getMonth() - 10, 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 10, 0);
+
+            from = from || firstDay.toISOString();
+            to = to || lastDay.toISOString();
         }
 
         const result = await getElClient().search({
@@ -54,8 +58,8 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
                         must: [{
                             range: {
                                 startDate: {
-                                    gte: startDate,
-                                    lte: endDate
+                                    gte: from,
+                                    lte: to
                                 }
                             }
                         }, {
@@ -65,16 +69,22 @@ router.post('/:domainId/events/list', async (req, res, next): Promise<any> => {
                     }
                 },
                 sort: [
-                    {startDate: {order: 'desc'}}
+                    {startDate: {order: 'asc'}}
                 ],
                 size: 500 // Adjust this value based on your needs
             }
         });
 
-        const events = result.hits.hits.map(hit => ({
-            id: hit._id,
-            ...hit._source
-        }));
+        const events = result.hits.hits.map(hit => {
+            let ev = {
+                id: hit._id,
+                ...hit._source
+            }
+
+            ev.endDate = ev.startDate
+
+            return ev;
+        });
 
         res.json(events);
     } catch (e) {
