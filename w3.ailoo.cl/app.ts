@@ -55,6 +55,10 @@ app.use(invoicesRoutes);
 import paymentsRoutes from "./routes/routes.payment.confirm.js";
 app.use(paymentsRoutes);
 
+import sitemapProductRoutes from "./routes/sitemaps/products.sitemap.route.js";
+app.use(sitemapProductRoutes);
+
+
 app.get('/', (req, res) => {
 
   res.json({
