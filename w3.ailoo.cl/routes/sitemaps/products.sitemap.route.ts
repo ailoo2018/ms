@@ -1,6 +1,6 @@
 import cmsClient from "../../services/cmsClient.js";
 import router from "../events-routes.js";
-import {getElClient, getIndexName} from "../../connections/el.js";
+import {getElClient, getIndexName, getProductCollectionsIndexName} from "../../connections/el.js";
 import * as ProductHelper from "../../helpers/product-helper.js";
 
 router.get('/:domainId/sitemap', async (req, res, next) => {
@@ -59,9 +59,42 @@ router.get('/:domainId/sitemap', async (req, res, next) => {
 
         })
 
+        var collectionsRs = await getElClient().search({
+            index: getProductCollectionsIndexName(domainId),
+
+            query: {
+                bool: {
+                    must: [
+                        {term: {domainId: domainId}},
+                    ]
+                }
+            },
+            _source: {
+                includes: [ "id", "url", "createDate",  ]
+            },
+            from: 0,
+            size: 10000,
+
+        })
+
+
+        const collectionsUrl = collectionsRs.hits.hits.map(h => {
+            var c = h._source
+
+            if(!c.url.startsWith("/"))
+                c.url = "/" + c.url
+
+            return  {
+                loc: c.url,
+                lastmod: c.createDate,
+                changefreq: 'weekly',
+                priority: 0.9
+            }
+        })
+
         console.log("Total product links: " + productsUrls.length)
 
-        res.json(productsUrls)
+        res.json([...collectionsUrl, ...productsUrls])
     } catch (err) {
         next(err)
     }
