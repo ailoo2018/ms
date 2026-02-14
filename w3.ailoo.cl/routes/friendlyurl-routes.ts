@@ -21,8 +21,20 @@ router.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
     }
 
     const query =  {
-      "term" : {
-        "friendlyUrl.keyword" : url
+      "bool": {
+        "must": [
+          {
+            "term" : {
+              "friendlyUrl.keyword" : url
+            }
+
+          },
+          {
+            "term": {
+              "domainId" : domainId,
+            }
+          }
+        ]
       }
 
     }
