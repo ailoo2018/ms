@@ -85,7 +85,7 @@ router.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
         res.json({
           "collectionId": collRs.hits.hits[0]._id,
           "query": {
-            "collectionId": collRs.hits.hits[0]._id,
+            "collection": collRs.hits.hits[0]._id,
           },
           "path": "/product/list",
           "source": null,
