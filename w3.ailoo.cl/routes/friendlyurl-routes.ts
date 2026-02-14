@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {getElClient} from "../connections/el.js";
+import {getElClient, getProductCollectionsIndexName} from "../connections/el.js";
 
 const router = Router();
 
@@ -59,7 +59,40 @@ router.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
 
       res.json(ret)
     }else{
-      res.status(404).json({
+
+      var collRs = await getElClient().search({
+        index: getProductCollectionsIndexName(domainId),
+        query:  {
+          "bool": {
+            "must": [
+              {
+                "term": {
+                  "url.keyword": url.toLowerCase(),
+                }
+              },
+              {
+                "term": {
+                  "domainId": domainId
+                }
+              }
+            ]
+          }
+        }
+      })
+
+      if(collRs.hits.hits.length > 0){
+        var c = collRs.hits.hits[0]._source;
+        res.json({
+          "collectionId": collRs.hits.hits[0]._id,
+          "query": {
+            "collectionId": collRs.hits.hits[0]._id,
+          },
+          "path": "/product/list",
+          "source": null,
+        })
+      }
+
+      return res.status(404).json({
         error: "route not found"
       });
     }
