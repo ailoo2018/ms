@@ -1,3 +1,4 @@
+const {WebContentType, WebContentSubtype} = require("../models");
 
 
 function formatLink(str) {
@@ -51,4 +52,18 @@ module.exports.getProductUrl= function(product){
         return "/motocicleta/" + product.linkName
     }
 
-    return "/motocicleta/" + product.id + "-" + product.linkName}
+    return "/motocicleta/" + product.id + "-" + product.linkName
+}
+
+module.exports.getWccUrl= function(wcc){
+
+    if (wcc.subtype === WebContentSubtype.BlogEntry && wcc.domainId === 1)
+        return "moto-blog/" + wcc.id + "-" +  formatLink(wcc.name);
+
+
+    if (wcc.type === WebContentType.Page && wcc.subtype === WebContentSubtype.ContentPage) {
+        return formatLink(wcc.name)
+    }
+
+    return formatLink(wcc.name)
+}

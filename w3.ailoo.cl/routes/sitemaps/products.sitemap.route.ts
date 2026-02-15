@@ -2,13 +2,47 @@ import cmsClient from "../../services/cmsClient.js";
 import router from "../events-routes.js";
 import {getElClient, getIndexName, getProductCollectionsIndexName} from "../../connections/el.js";
 import * as ProductHelper from "../../helpers/product-helper.js";
+import {db as drizzleDb} from "../../db/drizzle.js";
+import schema from "../../db/schema.js";
+import {and, eq} from "drizzle-orm";
+import linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+
+
+const { webContentConfiguration } = schema;
 
 router.get('/:domainId/sitemap', async (req, res, next) => {
 
     try {
+
+
+
         const domainId = parseInt(req.params.domainId);
 
-        var response = await getElClient().search({
+        const wccs = await drizzleDb.select({
+            id: webContentConfiguration.id,
+            name: webContentConfiguration.name,
+            domainId: webContentConfiguration.domainId,
+            createDate: webContentConfiguration.createDate,
+            modifyDate: webContentConfiguration.modifyDate,
+            type: webContentConfiguration.type,
+            subtype: webContentConfiguration.subtype,
+        }).from(webContentConfiguration).where(and(
+            eq(webContentConfiguration.domainId, domainId),
+            eq(webContentConfiguration.webContentId, 151),
+        ))
+
+        const wccsUrls = wccs.map(wcc => {
+            const url = linkHelper.getWccUrl(wcc);
+            return {
+                loc: url,
+                lastmod: wcc.createDate,
+                changefreq: 'monthly',
+                priority: 0.6
+            }
+        })
+
+
+        let response = await getElClient().search({
             index: getIndexName(domainId),
 
             query: {
@@ -22,14 +56,14 @@ router.get('/:domainId/sitemap', async (req, res, next) => {
                 }
             },
             _source: {
-                includes: [ "id", "linkName", "fullName", "createDate", "modifiedDate" ]
+                includes: ["id", "linkName", "fullName", "createDate", "modifiedDate"]
             },
             from: 0,
             size: 10000,
 
-        })
+        });
 
-        var productsUrls = response.hits.hits.map(h => {
+        let productsUrls = response.hits.hits.map(h => {
 
             try {
                 var p = h._source
@@ -94,7 +128,8 @@ router.get('/:domainId/sitemap', async (req, res, next) => {
 
         console.log("Total product links: " + productsUrls.length)
 
-        res.json([...collectionsUrl, ...productsUrls])
+
+        res.json([...collectionsUrl, ...productsUrls, ...wccsUrls])
     } catch (err) {
         next(err)
     }

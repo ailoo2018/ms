@@ -28,6 +28,14 @@ const SaleType = Object.freeze({
   Internet: 3,
 })
 
+const WebContentType = Object.freeze({
+  Page: 7
+})
+const WebContentSubtype = Object.freeze({
+  BlogEntry: 6,
+  ContentPage: 12,
+})
+
 // Missing Price class implementation
 class Price {
   constructor(currency, saleTypeId) {
@@ -131,5 +139,6 @@ module.exports = {
   Money,
   SaleType,
   AppliesToEnum,
-
+  WebContentType,
+  WebContentSubtype
 };
