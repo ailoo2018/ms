@@ -522,7 +522,7 @@ export async function search(criteria, domainId) {
   let collection : any;
   let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
   if (criteria.collectionId && criteria.collectionId !== "") {
-    ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria.collectionId, domainId));
+    ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
     if(collection)
       searchDescription = collection.name
 

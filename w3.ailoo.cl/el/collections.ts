@@ -26,9 +26,18 @@ async function fetchCollection(collectionId, domainId) {
   return {...response._source, id: response._id}
 }
 
-export async function buildQueryByCollectionId(collectionId, domainId) {
-  const c = await fetchCollection(collectionId, domainId)
+export async function buildQueryByCollectionId(criteria : any,  domainId: number) {
+  const c = await fetchCollection(criteria.collectionId, domainId)
+  if(c.name.toLowerCase() === "novedades"){
+    c.createdDaysAgo = 45;
+  }
 
+  if(criteria.brands.length > 0){
+    if(!c.brands)
+      c.brands = []
+
+    criteria.brands.forEach(b => c.brands.push({ id: b }))
+  }
 
   let query = {
     bool: {
@@ -44,8 +53,36 @@ export async function buildQueryByCollectionId(collectionId, domainId) {
           domainId: domainId,
         },
       },
-
   )
+
+
+  if (criteria.sizes && criteria.sizes.length > 0) {
+    must.push({
+      terms: {
+        "availableSizes.name.keyword": criteria.sizes,
+      }
+    })
+  }
+  if (criteria.colors && criteria.colors.length > 0) {
+    must.push({
+      "nested": {
+        "path": "images",
+        "query": {
+          "terms": {
+            "images.colorTagsIds": criteria.colors
+          }
+        }
+      }
+    })
+  }
+  if (criteria.models && criteria.models.length > 0) {
+    must.push({
+      terms: {
+        "model.id": criteria.models,
+      }
+    })
+  }
+
   /*{    range: {      quantityInStock: {gt: 0}    }  }*/
 
   if (c.brands && c.brands.length > 0) {
@@ -55,12 +92,20 @@ export async function buildQueryByCollectionId(collectionId, domainId) {
       }
     })
   }
+
+  let catIds = [...criteria.categories]
+
   if (c.categories && c.categories.length > 0) {
+    c.categories.forEach(c => { catIds.push(c.id) })
+  }
+
+  if(catIds.length > 0) {
     must.push({
       terms: {
-        "categories.id": c.categories.map(b => b.id),
+        "categories.id": catIds,
       }
     })
+
   }
 
   if (c.rules) {
@@ -79,6 +124,26 @@ export async function buildQueryByCollectionId(collectionId, domainId) {
           "id": c.rules.filter(r => r.type === EntityType.Product).map(r => r.id),
         }
       })
+    }
+
+    let tagIds = []
+    if(criteria.tags.length > 0)
+      tagIds = [...criteria.tags]
+
+    if (c.rules.some(r => r.type === EntityType.Tag)) {
+      c.rules.filter(r => r.type === EntityType.Tag).forEach(r2 => { tagIds.push(r2.id) })
+    }
+
+    if(tagIds.length > 0) {
+      must.push({
+        terms: {
+          "tags.id": tagIds,
+        }
+      })
+    }
+
+    if(c.createdDaysAgo > 0){
+      c.rules.push({ type: EntityType.DaysAgo, numericValue: c.createdDaysAgo })
     }
 
     const crDateRule = c.rules.find(r => r.type === EntityType.DaysAgo)
@@ -123,6 +188,7 @@ export async function buildQueryByCollectionId(collectionId, domainId) {
       }
     })
   }
+
 
 
   if (must.length > 0) {
