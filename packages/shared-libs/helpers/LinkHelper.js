@@ -58,7 +58,7 @@ module.exports.getProductUrl= function(product){
 module.exports.getWccUrl= function(wcc){
 
     if (wcc.subtype === WebContentSubtype.BlogEntry && wcc.domainId === 1)
-        return "moto-blog/" + wcc.id + "-" +  formatLink(wcc.name);
+        return "moto-blog/" + formatLink(wcc.name);
 
 
     if (wcc.type === WebContentType.Page && wcc.subtype === WebContentSubtype.ContentPage) {
