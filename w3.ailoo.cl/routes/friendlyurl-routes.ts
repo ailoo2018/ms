@@ -28,11 +28,6 @@ router.post("/:domainId/friendly-url/lookup", async (req, res, next) => {
               "friendlyUrl.keyword" : url
             }
 
-          },
-          {
-            "term": {
-              "domainId" : domainId,
-            }
           }
         ]
       }
