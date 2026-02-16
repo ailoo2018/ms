@@ -187,6 +187,11 @@ export async function buildQueryByCollectionId(criteria : any,  domainId: number
         isAvailableForInternet: true
       }
     })
+    must.push({
+      term: {
+        directCategoryisAvailableForInternet: true
+      }
+    })
   }
 
 

@@ -553,8 +553,16 @@ export async function search(criteria, domainId) {
         "properties",
         "propertiesMap",
         "productItems",
-        "motorcycles", "model", "tags", "priceComponents", "discounts", "salesTaxes", "googleProductCategory",
-        "departments", "mercadoLibre", "summary"
+        "motorcycles",
+        "model",
+        "tags",
+        "priceComponents",
+        "discounts",
+        "salesTaxes",
+        "googleProductCategory",
+        "departments",
+        "mercadoLibre",
+        "summary"
       ]
     }
 
