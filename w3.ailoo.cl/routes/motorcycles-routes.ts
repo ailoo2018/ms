@@ -17,7 +17,7 @@ router.get("/motorcycles/manufacturers", async (req, res, next) => {
   try{
     const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
     const brands = await bikeClient.listBrands(filterBikeWithProducts);
-    res.json(brands)
+    res.json(brands.filter(b => b.name !== "*"))
   }catch(err){
     next(err);
   }

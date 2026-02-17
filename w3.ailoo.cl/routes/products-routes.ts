@@ -1,6 +1,5 @@
 import { Router } from "express";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
-import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import {search} from "../el/search.js";
 import {ProductType, SaleType} from "../models/domain.js";
 import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../helpers/product-helper.js";
