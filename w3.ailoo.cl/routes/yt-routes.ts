@@ -12,7 +12,7 @@ router.get('/:domainId/yt/latest', async (req, res, next) => {
         const cachedData = await redisDb.get(CACHE_KEY);
 
         if (cachedData) {
-            return res.json(JSON.parse(cachedData));
+            return res.json(JSON.parse(cachedData.toString()));
         }
 
         // 2. If no cache, fetch fresh data
