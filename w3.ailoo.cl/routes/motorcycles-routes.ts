@@ -15,7 +15,8 @@ const motorcylcesService = container.resolve('motorcyclesService');
 router.get("/motorcycles/manufacturers", async (req, res, next) => {
 
   try{
-    const brands = await bikeClient.listBrands()
+    const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
+    const brands = await bikeClient.listBrands(filterBikeWithProducts);
     res.json(brands)
   }catch(err){
     next(err);
@@ -28,8 +29,9 @@ router.get("/motorcycles/models", async (req, res, next) => {
   try{
 
     const brandId = parseInt(req.query.brandId)
+    const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
 
-    const models = await bikeClient.listModels(brandId)
+    const models = await bikeClient.listModels(brandId, filterBikeWithProducts)
     res.json(models)
   }catch(err){
     next(err);
@@ -43,9 +45,9 @@ router.get("/motorcycles/years", async (req, res, next) => {
 
     const brandId = parseInt(req.query.brandId)
     const modelId = parseInt(req.query.modelId)
+    const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
 
-
-    const models = await bikeClient.listYears(modelId, brandId)
+    const models = await bikeClient.listYears(modelId, brandId, filterBikeWithProducts)
     res.json(models)
   }catch(err){
     next(err);

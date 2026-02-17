@@ -3,8 +3,8 @@ const BIKE_BASE_URL = "https://motorbike.ailoo.cl"; // process.env.CMS_URL;
 export const bikeClient = {
 
 
-  listBrands: async () => {
-    const url = new URL(`/brands?filterBikeWithProducts=true`, BIKE_BASE_URL);
+  listBrands: async (filterBikeWithProducts) => {
+    const url = new URL(`/brands?filterBikeWithProducts=` + filterBikeWithProducts, BIKE_BASE_URL);
 
     const response = await fetch(url, {
       signal: AbortSignal.timeout(5000), // 5-second timeout
@@ -17,8 +17,8 @@ export const bikeClient = {
     if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
     return response.json();
   },
-  listModels: async (brandId) => {
-    const url = new URL(`/brands/${brandId}/models?filterBikeWithProducts=true`, BIKE_BASE_URL);
+  listModels: async (brandId, filterBikeWithProducts) => {
+    const url = new URL(`/brands/${brandId}/models?filterBikeWithProducts=` + filterBikeWithProducts, BIKE_BASE_URL);
 
     const response = await fetch(url, {
       signal: AbortSignal.timeout(5000), // 5-second timeout
@@ -32,8 +32,8 @@ export const bikeClient = {
     return response.json();
   },
 
-  listYears: async (modelId, brandId) => {
-    const url = new URL(`/brands/${brandId}/models/${modelId}/years?filterBikeWithProducts=true`, BIKE_BASE_URL);
+  listYears: async (modelId, brandId, filterBikeWithProducts) => {
+    const url = new URL(`/brands/${brandId}/models/${modelId}/years?filterBikeWithProducts=` + filterBikeWithProducts, BIKE_BASE_URL);
 
     const response = await fetch(url, {
       signal: AbortSignal.timeout(5000), // 5-second timeout
