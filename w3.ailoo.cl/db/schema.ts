@@ -107,6 +107,21 @@ const user = motomundiSchema.table("user", {
     }).onDelete("cascade"),
 }));
 
+const userConfiguration = motomundiSchema.table("userconfiguration", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    userId: int("UserId"),
+    configuration: text("Configuration"),
+    role: varchar("Role", { length: 45 }),
+}, (table) => ({
+    userIdx: index("FK_USERCONF_USER_idx").on(table.userId),
+    // Foreign Key with Cascade Delete
+    userFk: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [user.id],
+        name: "FK_USERCONF_USER"
+    }).onDelete("cascade"),
+}));
+
 const model = motomundiSchema.table("model", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 255 }),
@@ -681,11 +696,20 @@ const reviewRelations = relations(review, ({one}) => ({
     }),
 }));
 
-const userRelations = relations(user, ({one}) => ({
+const userRelations = relations(user, ({one, many}) => ({
     person: one(party, {
         fields: [user.personId],
         references: [party.id],
     }),
+    configurations: many(userConfiguration),
+}));
+
+const userConfigurationRelations = relations(userConfiguration, ({ one, many }) => ({
+    user: one(user, {
+        fields: [userConfiguration.userId],
+        references: [user.id],
+    }),
+
 }));
 
 const saleOrderRelations = relations(saleOrder, ({many, one}) => ({
@@ -1004,6 +1028,8 @@ export default {
     facilityContactMechanismRelations,
     facilityRelations,
     user,
+    userConfiguration,
+    userConfigurationRelations,
     party,
     contactMechanism,
     userRelations,
