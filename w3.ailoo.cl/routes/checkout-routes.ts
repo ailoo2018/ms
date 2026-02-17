@@ -159,10 +159,22 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         logger.info("drizzleDb.transaction 4.0: " + person)
         logger.info("drizzleDb.transaction 4.1: " + rq.customerInformation.phone)
         if (!person) {
+
+          // try getting name and surname from customerInformation (db Party)
+          // if not found use information submitted in shipmentInformation
+          let fname = rq.customerInformation.address.name;
+          let lname = rq.customerInformation.address.surnames;
+          let name = rq.customerInformation.address.name;
+          if(!name) {
+            fname = rq.shipmentInformation.address?.name?.trim()
+            lname = rq.shipmentInformation.address?.surnames?.trim()
+
+            name = fname?.trim() + " " + lname?.trim()
+          }
           const [result] = await tx.insert(party).values({
-            name: rq.customerInformation.address.name,
-            firstName: rq.customerInformation.address.name,
-            lastName: rq.customerInformation.address.surnames,
+            name: name || null,
+            firstName: fname || null,
+            lastName: lname || null,
             email: rq.customerInformation.email,
             comuna: rq.customerInformation.address.comuna ? rq.customerInformation.address.comuna : null,
             rut: rq.customerInformation.address.rut,

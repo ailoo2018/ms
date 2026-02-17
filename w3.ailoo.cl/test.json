@@ -1,34 +1,162 @@
 {
-  "id": "DP-6176205",
-  "amount": 1.48,
-  "balance_amount": 1.43,
-  "balance_fee": 0.05,
-  "currency": "USD",
-  "balance_currency": "USD",
-  "payment_method_type": "CREDIT_CARD",
-  "country": "CL",
-  "created_date": "2026-02-11T20:23:26",
-  "approved_date": "2026-02-11T20:24:53",
-  "status": "PAID",
-  "order_id": "27838418-1770841405679",
-  "notification_url": "https://www.motomundi.cl/api/webhooks/dlocal",
-  "success_url": "https://www.motomundi.cl/payments/dlocal/invoice?referenceId=27838418&referenceType=invoice",
-  "back_url": "https://www.motomundi.cl/checkout/27838418",
-  "redirect_url": "https://checkout.dlocalgo.com/validate/FmjpsLmz3BY0TvciU2NfjZtBXrtRU5SV",
-  "merchant_checkout_token": "FmjpsLmz3BY0TvciU2NfjZtBXrtRU5SV",
-  "direct": true,
-  "payer": {
-    "first_name": "Juan",
-    "last_name": "Fuentes",
-    "email": "jcfuentes@ailoo.cl",
-    "document_type": "RUT",
-    "document": "153203008"
+  "wuid": "7b55a835-d609-4b81-bd38-c6f078807b53",
+  "addresses": {
+    "selectedShipping": {
+      "name": "Juan Carlos",
+      "surnames": "Fuentes",
+      "phone": "2666.0690",
+      "rut": "15320300-8",
+      "address": "Lorenzo de Medici 77, Dept 408",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": "7561040",
+      "id": 77640,
+      "default": true,
+      "comuna_id": 316,
+      "nif": "15320300-8",
+      "alias": null
+    },
+    "shipping": {
+      "name": "Juan Carlos",
+      "surnames": "Fuentes",
+      "phone": "2666.0690",
+      "rut": "15320300-8",
+      "address": "Lorenzo de Medici 77, Dept 408",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": "7561040",
+      "id": 77640,
+      "default": true,
+      "comuna_id": 316,
+      "nif": "15320300-8",
+      "alias": null
+    },
+    "billing": {}
   },
-  "card": {
-    "bin": "450881",
-    "issuer": "BANCO SANTANDER-CHILE",
-    "last_four": "8087"
-  }
-} {
-  "timestamp": "2026-02-11T20:25:03.898Z"
+  "customerInformation": {
+    "phone": "2666.0690",
+    "email": "jcfuentes@motomundi.net",
+    "address": {
+      "name": "Juan Carlos",
+      "surnames": "Fuentes",
+      "phone": "2666.0690",
+      "rut": "15320300-8",
+      "address": "Lorenzo de Medici 77, Dept 408",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": "7561040",
+      "id": 77640,
+      "default": true,
+      "comuna_id": 316,
+      "nif": "15320300-8",
+      "alias": null
+    }
+  },
+  "shipmentInformation": {
+    "method": 1,
+    "address": {
+      "name": "Juan Carlos",
+      "surnames": "Fuentes",
+      "phone": "2666.0690",
+      "rut": "15320300-8",
+      "address": "Lorenzo de Medici 77, Dept 408",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": "7561040",
+      "id": 77640,
+      "default": true,
+      "comuna_id": 316,
+      "nif": "15320300-8",
+      "alias": null
+    },
+    "store": {
+      "id": 1,
+      "title": "LAS TRANQUERAS (LAS CONDES)",
+      "name": "LAS TRANQUERAS",
+      "address": "LAS TRANQUERAS 56",
+      "latitude": -33400898749676830,
+      "longitude": -7055551688038699,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      }
+    },
+    "pickupOption": "pickup_here",
+    "modifiedDate": "2026-02-17T16:54:48.509Z",
+    "carrierId": 9,
+    "comments": "",
+    "remarks": ""
+  },
+  "createAccount": false,
+  "subscribe": true,
+  "notifyWhatsApp": true,
+  "selectedCarrier": 9,
+  "paymentMethod": {
+    "gateway": 8
+  },
+  "pickupStore": {
+    "id": 1,
+    "title": "LAS TRANQUERAS (LAS CONDES)",
+    "name": "LAS TRANQUERAS",
+    "address": "LAS TRANQUERAS 56",
+    "latitude": -33400898749676830,
+    "longitude": -7055551688038699,
+    "comuna": {
+      "id": 316,
+      "name": "LAS CONDES"
+    }
+  },
+  "selectedMapData": {
+    "store_id": 1
+  },
+  "items": [
+    {
+      "packId": 0,
+      "product": {
+        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
+        "productItemId": 503290,
+        "name": "XENA test webpay Tamaño Unico",
+        "type": 0,
+        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
+      },
+      "quantity": 1,
+      "name": "XENA test webpay Tamaño Unico",
+      "id": "0b2c32a2-f7be-4026-8ad8-8c73a96458e5",
+      "type": 0,
+      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
+      "color": null,
+      "size": {
+        "id": 8,
+        "name": "Tamaño Unico",
+        "orderWeight": 0,
+        "type": 0
+      },
+      "description": "test webpay",
+      "price": 10,
+      "oldPrice": 10,
+      "discount": 0,
+      "loading": false
+    }
+  ],
+  "mercadoPagoPaymentData": null
 }
