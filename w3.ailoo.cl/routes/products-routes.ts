@@ -66,6 +66,7 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
       return res.json({})
     }
 
+    const result = []
     for (var img of p.images) {
       const imgRs = await fetch(`${process.env.PRODUCTS_MS_URL}/${domainId}/cdn/images/create`, {
         method: 'POST',
@@ -74,15 +75,16 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
         },
         body: JSON.stringify({
           imageId: img.image,
-          sizes: [150, 300, 600, 800]
+          sizes: [50, 150, 300, 600, 800]
         })
       })
       const imgRsJs = await imgRs.json()
 
+      result.push(imgRsJs)
     }
 
 
-    res.json({});
+    res.json({results: result});
   } catch (e) {
     next(e)
   }
