@@ -58,6 +58,9 @@ app.use(paymentsRoutes);
 import sitemapProductRoutes from "./routes/sitemaps/products.sitemap.route.js";
 app.use(sitemapProductRoutes);
 
+import ytRoutes from "./routes/yt-routes.js";
+app.use(ytRoutes);
+
 
 app.get('/', (req, res) => {
 

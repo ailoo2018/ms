@@ -196,17 +196,3 @@ export async function findProduct(productId, domainId) {
 
 
 
-/*
-export default {
-  getProductItemDescription,
-  getProductImage,
-  getPriceByProductItems: async (productItemsIds, saleTypeId, domainId) => { /!* logic *!/ },
-  getPriceByProductItem: async (productItemId, saleTypeId, domainId) => { /!* logic *!/ },
-  getSalesRules: async domainId => { /!* logic *!/ },
-  getProductSalesRules: async (product, domainId) => { /!* logic *!/ },
-  getFeaturesDescription,
-  isApplicableSalesRule: async (rule, prodSm, domainId) => { /!* logic *!/ },
-  findProduct: async (productId, domainId) => { /!* logic *!/ },
-  getLink: (product) => { /!* logic *!/ },
-};
-*/

@@ -10,9 +10,10 @@ const {getElClient} = require("../el");
 const { pool } = require('../db');
 const {ProductCategoryService} = require("../services/ProductCategoryService");
 const {ProductCategoryDb} = require("../repos/ProductCategoryDb");
-const ShippingService = require("../services/ShippingService");
+const { ShippingService } = require("../services/ShippingService");
 
 const { CartService } = require( "../services/CartService");
+const  { SizeChartService }  = require( "../services/products/SizeChartService");
 const { CartRepos } = require( "../repos/CartRepos");
 const {DiscountRuleService} = require("../services/DiscountRuleService");
 
@@ -30,7 +31,7 @@ container.register({
     productCategoryService: asClass(ProductCategoryService).singleton(),
     webContentDb: asClass(WebContentDb).singleton(),
     productCategoryDb: asClass(ProductCategoryDb).singleton(),
-
+    sizeChartService: asClass(SizeChartService).singleton(),
     cartRepository: asClass(CartRepos).singleton(),
 
 

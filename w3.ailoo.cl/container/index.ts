@@ -9,6 +9,7 @@ import {CartService} from "@ailoo/shared-libs/CartService";
 import {CartRepos} from "@ailoo/shared-libs/CartRepos";
 import {ShippingService } from "@ailoo/shared-libs/ShippingService";
 import {ProductCategoryDb} from "@ailoo/shared-libs/ProductCategoryDb";
+import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
 
 
 
@@ -23,6 +24,7 @@ const container = createContainer();
 
 container.register({
   webPayValidator: asClass(WebPayValidator).singleton(),
+  sizeChartService: asClass(SizeChartService).singleton(),
   dlocalValidator: asClass(DlocalValidator).singleton(),
   mercadoPagoValidator: asClass(MercadoPagoValidator).singleton(),
   productsService: asClass(ProductsService).singleton(),

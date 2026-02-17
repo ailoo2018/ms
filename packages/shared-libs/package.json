@@ -30,6 +30,7 @@
     "./price": "./products/price.js",
     "./ProductsService": "./services/ProductsService.js",
     "./ProductCategoryService": "./services/ProductCategoryService.js",
+    "./SizeChartService": "./dist/services/products/SizeChartService.js",
     "./DiscountRuleService": "./services/DiscountRuleService.js",
     "./CartService": "./dist/services/CartService.js",
     "./ShippingService": "./dist/services/ShippingService.js",
