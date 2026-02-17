@@ -220,10 +220,14 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           const [cmResult] = await tx.insert(contactMechanism).values({});
           postalAddressId = cmResult.insertId;
 
+          let phone = rq.shipmentInformation.phone
+          if(!phone){
+            phone = rq.customerInformation.phone
+          }
 
           await tx.insert(postalAddress).values({
             postalAddressId: postalAddressId, // Use the shared ID
-            phone: rq.shipmentInformation.phone,
+            phone: phone,
             name: rq.shipmentInformation.address.name.trim(),
             surname: rq.shipmentInformation.address.surnames,
             address: rq.shipmentInformation.address.address,

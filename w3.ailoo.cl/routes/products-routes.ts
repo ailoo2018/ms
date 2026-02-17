@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import {search} from "../el/search.js";
 import {ProductType, SaleType} from "../models/domain.js";
 import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../helpers/product-helper.js";
@@ -7,9 +8,11 @@ import {getElClient, getIndexName} from "../connections/el.js";
 import container from "../container/index.js";
 import {stockAllStores} from "../db/inventory.js";
 import logger from "@ailoo/shared-libs/logger";
+import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
+const sizeChartService = container.resolve('sizeChartService') as SizeChartService;
 
 
 router.get("/:domainId/products/stock", async (req, res, next) => {
@@ -104,6 +107,11 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     }
 
     const p = await findProduct(productId, domainId);
+    const charts  = await sizeChartService.findAllThatApplyToProduct(p, domainId)
+    p.sizeChart = null
+    if(charts && charts.length > 0){
+      p.sizeChart = charts[0]
+    }
 
 
     res.json(p);
