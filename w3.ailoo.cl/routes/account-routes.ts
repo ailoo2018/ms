@@ -1,13 +1,16 @@
 import {Router} from "express";
 import {reviewsUpload,  validateJWT} from "../server.js";
 import {listPartyPostalAddresses} from "../db/partyDb.js";
+import * as ProductHelper from "../helpers/product-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
-import {and, asc, eq} from "drizzle-orm";
+import {and, asc, desc, eq} from "drizzle-orm";
 import schema from "../db/schema.js";
 const {geographicBoundary, postalAddress, review, saleOrder} = schema
 import {partyReviews} from "../db/reviews.js";
 import container from "../container/index.js";
 import {uploadImagesAilooCDN} from "../services/cdnService.js";
+import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
+import {getProductImage} from "../helpers/product-helper.js";
 
 const router = Router();
 const productService = container.resolve('productsService');
@@ -91,20 +94,61 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, nex
           eq(saleOrder.domainId, domainId)
       )
       ,
-      orderBy: (saleOrder, {asc}) => [asc(saleOrder.id)],
+      orderBy: (saleOrder, {desc}) => [desc(saleOrder.id)],
       with: {
         items: true, // This matches the 'items' key in your saleOrderRelations
       },
     });
 
+    const pitIds = []
+    for(var o of results){
+      for(var oi of o.items){
+        if(oi.productItemId > 0)
+          pitIds.push(oi.productItemId)
+      }
+    }
+
+
+
+    const products = await productService.findProductsByProductItems(pitIds, domainId)
+
     res.json({
       orders: results.map(r => {
+        const orderProducts = []
+        for(var oi of r.items){
+
+          if(!oi.productItemId )
+            continue
+
+          var product = products.find(p => p.productItems.some(pit => {
+            return pit.id === oi.productItemId
+          }))
+          if(!product)
+            continue
+
+          var productItem = product.productItems.find(pit => pit.id === oi.productItemId)
+          if(!productItem)
+            continue
+
+          var image = getProductImage(product, productItem)
+
+          orderProducts.push({
+            id: product.id,
+            name: product.name,
+            brand: product.brand,
+            description: ProductHelper.getProductItemDescription(product, productItem),
+            productItemId: productItem.id,
+            image: image.image,
+            quantity: oi.quantity,
+          })
+        }
         return {
           id: r.id,
-          date: r.date,
+          date: r.orderDate,
           total: 0,
           statusId: r.state,
           status: OrderStateDesc["" + r.state] ? OrderStateDesc["" + r.state] : "Desconocido",
+          products: orderProducts,
 
         }
       })
