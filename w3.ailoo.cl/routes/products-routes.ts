@@ -8,6 +8,8 @@ import container from "../container/index.js";
 import {stockAllStores} from "../db/inventory.js";
 import logger from "@ailoo/shared-libs/logger";
 import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
+import {db as redisDb} from "../connections/rdb.js";
+import {productCacheKey} from "../utils/cache-utils.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -93,12 +95,19 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
 })
 
 
+const CACHE_TTL = 60 * 60 * 1; // 10 hours in seconds
 router.get("/:domainId/products/:productId", async (req, res, next) => {
 
   try {
 
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
+
+    const cachedData = await redisDb.get(productCacheKey(productId, domainId));
+    if (cachedData) {
+      return res.json(JSON.parse(cachedData.toString()));
+    }
+
 
     if(!productId) {
       logger.error("product not found: " + productId);
@@ -112,6 +121,9 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
       p.sizeChart = charts[0]
     }
 
+    await redisDb.set(productCacheKey(productId, domainId), JSON.stringify(p), {
+      EX: CACHE_TTL
+    });
 
     res.json(p);
   } catch (e) {
