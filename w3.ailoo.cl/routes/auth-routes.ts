@@ -115,6 +115,9 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
       });
     }
 
+    if(dbUser.username && dbUser.username === "[object Object]"){
+      dbUser.username = ""
+    }
 
     res.json({
       userId: dbUser.id,
