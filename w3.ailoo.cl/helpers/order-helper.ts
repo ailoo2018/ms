@@ -31,12 +31,12 @@ export const ordersHelper = {
         continue;
 
       const product = products.find(p => p.productItems.some(pit => {
-        return pit.id === oi.productItemId
+        return pit.id === pitId
       }));
       if (!product)
         continue;
 
-      var productItem = product.productItems.find(pit => pit.id === oi.productItemId)
+      var productItem = product.productItems.find(pit => pit.id === pitId)
       if (!productItem)
         continue;
 

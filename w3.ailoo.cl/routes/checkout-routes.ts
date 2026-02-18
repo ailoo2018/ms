@@ -361,14 +361,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
           "name": "webpay",
           "order": 1
         },
-        {
+    /*    {
           "id": 15,
           "driver": "mercadopago",
           "description": null,
           "logo_class": "mercadopago",
           "name": "mercadopago",
           "order": 2
-        }
+        }*/
       ]
     })
   } catch (e) {
