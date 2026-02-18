@@ -130,13 +130,23 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
 })
 router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
     try {
-        const user = req.user;
+        const userReq = req.user;
+
+        const userDb = await drizzleDb.query.user.findFirst({
+            where: (user, {eq, and}) => {
+                return eq(user.id, userReq.id)
+            },
+            with: {
+                person: true,
+            }
+        })
+
         const domainId = parseInt(req.params.domainId);
         const results: any = await drizzleDb.query.saleOrder.findMany({
             limit: 10,
             offset: 0,
             where: and(
-                eq(saleOrder.orderedBy, user.id),
+                eq(saleOrder.orderedBy, userDb.person?.id || 0),
                 eq(saleOrder.domainId, domainId)
             )
             ,

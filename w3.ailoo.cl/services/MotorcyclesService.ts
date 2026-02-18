@@ -52,9 +52,7 @@ export class MotorcyclesService {
 
     async listUserBikes(userId:number){
         const userConfigurationDb = await this.drizzleDb.query.userConfiguration.findFirst({
-            where: (userConfiguration) => {
-                eq(userConfiguration.userId, userId)
-            },
+            where: (userConfiguration, { eq }) => eq(userConfiguration.userId, userId),
 
         })
 
@@ -71,7 +69,7 @@ export class MotorcyclesService {
 
         const userConfigurationDb = await this.drizzleDb.query.userConfiguration.findFirst({
             where: (userConfiguration) => {
-                eq(userConfiguration.userId, userId)
+                return eq(userConfiguration.userId, userId)
             },
 
         })
@@ -90,7 +88,7 @@ export class MotorcyclesService {
             userConfigDb = {userId: userId, configuration: {bikes: []}}
 
 
-            var result = await drizzleDb.insert(userConfiguration).values({
+            const [result] = await drizzleDb.insert(userConfiguration).values({
                 userId: userConfigDb.userId,
                 configuration: JSON.stringify(userConfigDb.configuration)
             }) as any

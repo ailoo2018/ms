@@ -83,28 +83,57 @@ router.post("/:domainId/auth/login", async (req, res, next) => {
 router.post("/:domainId/auth/hash-login", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
-    const {hash, pid, wuid} = req.body;
+    const {hash, pid, wuid, type} = req.body;
 
     if (hash !== doHash(pid)) {
       return res.status(401).json({error: "Invalid credentials", message: "Invalid credentials"});
     }
 
-    const partyDb = await drizzleDb.query.party.findFirst({
-      where: (party, {eq}) => eq(party.id, pid)
-    })
+    let partyDb = null;
+    if(type === "order"){
+      const saleOrderDb = await drizzleDb.query.saleOrder.findFirst({
+        where: (saleOrder, {eq, and}) => and(eq(saleOrder.id, pid),eq(saleOrder.domainId, domainId)),
+        with: {
+          customer:true
+        }
+      })
 
-    // 2. Query the user
-    let dbUser = await drizzleDb.query.user.findFirst({
+      if(!saleOrderDb)
+        return res.status(401).json({ message: "order not found"})
+
+      partyDb = saleOrderDb.customer
+    }else {
+
+      partyDb = await drizzleDb.query.party.findFirst({
+        where: (party, {eq}) => eq(party.id, pid)
+      })
+    }
+
+    let dbUser = null
+
+    dbUser = await drizzleDb.query.user.findFirst({
       where: (user) => and(
-          eq(user.personId, pid),      // Use eq() for exact match on email/username
+          eq(user.username, partyDb.email),
+          eq(user.domainId, domainId)
       ),
     });
 
+
+    if(!dbUser){
+
+      dbUser = await drizzleDb.query.user.findFirst({
+        where: (user) => and(
+            eq(user.personId, partyDb.id),      // Use eq() for exact match on email/username
+        ),
+      });
+    }
+
     if (!dbUser) {
       const [result] = await drizzleDb.insert(user).values({
-        username: "" + party.email,
+        username: "" + partyDb.email,
         password: "mx000006",
         domainId: domainId,
+        personId: partyDb.id,
       })
 
 
