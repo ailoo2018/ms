@@ -734,6 +734,7 @@ const saleOrderRelations = relations(saleOrder, ({many, one}) => ({
         fields: [saleOrder.orderedBy],
         references: [party.id],
     }),
+    journals: many(orderJournal),
 }));
 
 const saleOrderItemRelations = relations(saleOrderItem, ({one}) => ({
