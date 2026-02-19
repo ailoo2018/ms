@@ -2,7 +2,7 @@ import {db as drizzleDb} from "../db/drizzle.js";
 import {and, eq} from "drizzle-orm";
 import { ordersHelper} from "../helpers/order-helper.js";
 import { invoiceHelper}  from "../helpers/invoice-helper.js";
-import {PaymentMethodType} from "../models/domain.js";
+import {OrderState, PaymentMethodType} from "../models/domain.js";
 import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.js";
 import container from "../container/index.js";
 import schema from "../db/schema.js"
@@ -55,6 +55,11 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
             items: true,
         },
     });
+
+    if(order.state !== OrderState.Ingresado && order.state !== OrderState.DerivadoSAC){
+        throw Error("La orden debe estar en estado 'ingresado' para poder ser pagado. Estado es " +
+            order.state)
+    }
 
     if (!order) {
         throw new Error( `Orden de compra ${referenceId} no encontrada` )
