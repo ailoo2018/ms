@@ -56,10 +56,7 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
         },
     });
 
-    if(order.state !== OrderState.Ingresado && order.state !== OrderState.DerivadoSAC){
-        throw Error("La orden debe estar en estado 'ingresado' para poder ser pagado. Estado es " +
-            order.state)
-    }
+
 
     if (!order) {
         throw new Error( `Orden de compra ${referenceId} no encontrada` )

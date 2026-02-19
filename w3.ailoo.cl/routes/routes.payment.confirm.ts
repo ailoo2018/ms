@@ -18,6 +18,24 @@ const { saleOrder, orderJournal} = schema
 const router = Router(); // Create a router instead of using 'app'
 
 async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
+
+    const order :any  = await drizzleDb.query.saleOrder.findFirst({
+        where: (saleOrder, { eq }) =>
+            and(
+                eq(saleOrder.id, parseInt(confirmRs.referenceId)),
+                eq(saleOrder.domainId, domainId),
+            ),
+
+        with: {
+            items: true,
+        },
+    });
+
+
+    if(order.state !== OrderState.Ingresado && order.state !== OrderState.DerivadoSAC){
+        return
+    }
+
     await drizzleDb.transaction(async (tx) => {
         await tx
             .update(saleOrder)
