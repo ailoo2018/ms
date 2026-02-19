@@ -3,7 +3,7 @@ import {reviewsUpload, validateJWT} from "../server.js";
 import {listPartyPostalAddresses} from "../db/partyDb.js";
 import * as ProductHelper from "../helpers/product-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
-import {and, asc, desc, eq} from "drizzle-orm";
+import {and, asc, desc, eq, ne} from "drizzle-orm";
 import schema from "../db/schema.js";
 
 const {geographicBoundary, postalAddress, review, saleOrder} = schema
@@ -128,6 +128,9 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
         next(e)
     }
 })
+
+
+
 router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
     try {
         const userReq = req.user;
@@ -147,7 +150,8 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, nex
             offset: 0,
             where: and(
                 eq(saleOrder.orderedBy, userDb.person?.id || 0),
-                eq(saleOrder.domainId, domainId)
+                eq(saleOrder.domainId, domainId),
+                ne(saleOrder.state, 1)
             )
             ,
             orderBy: (saleOrder, {desc}) => [desc(saleOrder.id)],
