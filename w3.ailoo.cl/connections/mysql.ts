@@ -1,7 +1,7 @@
 import generated from "@ailoo/shared-libs/config";
 import mysql from "mysql2/promise";
 
-console.log("about to create pool");
+console.log("about to create pool: " + process.env.DB_HOST);
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,

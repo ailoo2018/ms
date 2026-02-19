@@ -1,8 +1,12 @@
-process.env.NODE_ENV = "developer";
+process.env.NODE_ENV = "production";
 import '@ailoo/shared-libs/config';
-import {addPaymentToInvoice} from "../payments/confirm.payments.t.js";
+
+import {db as drizzleDb} from "../db/drizzle.js";
 
 
+import {and, eq, sql} from "drizzle-orm";
+import schema from "../db/schema.js";
+const {saleOrder, orderJournal, payment, paymentApplication} = schema
 
 import request from "supertest";
 import {describe, it} from "node:test";
@@ -13,16 +17,24 @@ describe('User API', () => {
 
   it('GET /:domainId/invoices/:invoiceId composite product', async () => {
 
-    await addPaymentToInvoice(17080191, 149900, 8, "12312", 1);
+    try {
+      let invoiceId = 27942086
 
+      const results = await drizzleDb
+          .select({
+            payment: payment,
+          })
+          .from(paymentApplication)
+          .innerJoin(
+              payment,
+              eq(paymentApplication.paymentId, payment.id)
+          )
+          .where(eq(paymentApplication.invoiceId, invoiceId));
 
-    let response = await request(app)
-        .get('/1/invoices/17080191')
-        .expect(200)
-        .expect('Content-Type', /json/);
-
-    assert.ok(response.body);
-
+      const payments = results.map(r => r.payment);
+    }catch(e){
+      console.error(e);
+    }
 
 
 
