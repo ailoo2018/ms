@@ -20,6 +20,7 @@ export class MercadoPagoValidator implements PaymentValidator {
         const payment = new Payment(client)
         const paymentData = await payment.get({ id: token })
 
+        const isApproved = paymentData.status === "approved";
 
         return Promise.resolve({
             referenceId: "" + getReferenceId( paymentData.external_reference ),
@@ -30,7 +31,7 @@ export class MercadoPagoValidator implements PaymentValidator {
             paymentMethodId: paymentMethodType,
             responseData: paymentData,
             authorizationCode: token,
-            success: true,
+            success: isApproved,
 
         });
     }
