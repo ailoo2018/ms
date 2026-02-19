@@ -52,7 +52,7 @@ async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
 
         await tx.insert(orderJournal).values({
             orderId: parseInt(confirmRs.referenceId),
-            description: `Order paid successfully. AuthCode: ${confirmRs.authorizationCode}`,
+            description: `El pago exitoso. Código de autorización: ${confirmRs.authorizationCode}`,
             state: OrderState.Pagado,
             creationDate: new Date(),
             userId: sql`NULL`,

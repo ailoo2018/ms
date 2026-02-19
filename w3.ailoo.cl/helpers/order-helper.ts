@@ -43,6 +43,12 @@ export const ordersHelper = {
       var image = getProductImage(product, productItem)
 
       if(!pitMap.has(pitId)){
+
+        let category = null
+        if(product.parentCategories && product.parentCategories.length > 0){
+          category = product.parentCategories[0]
+        }
+
         pitMap.set(pitId, {
           id: productItem.id,
           image: image?.image || null,
@@ -50,9 +56,11 @@ export const ordersHelper = {
           product: {
             id: product.id,
             name: product.name,
+            category: category,
             fullName: product.fullName,
             brand: product.brand,
             image: image.image,
+
           },
         })
       }
