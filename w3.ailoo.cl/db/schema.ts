@@ -348,6 +348,31 @@ const contactMechanism = motomundiSchema.table("contactmechanism", {
     id: int("Id").primaryKey().autoincrement().notNull(),
 });
 
+const partyContactMechanism = motomundiSchema.table("partycontactmechanism", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    partyId: int("PartyId"),
+    contactMechanismId: int("ContactMechanismId"),
+    fromDate: datetime("FromDate"),
+    thruDate: datetime("ThruDate"),
+    comment: varchar("Comment", { length: 255 }),
+    purpose: smallint("Purpose"),
+    isDefault: smallint("IsDefault"),
+}, (table) => ({
+    partyIdx: index("FK_PARTYCM_PARTY_idx").on(table.partyId),
+    contactMechIdx: index("FK_PARTYCM_CONTMECH_idx").on(table.contactMechanismId),
+    // Foreign Key Constraints
+    fkParty: foreignKey({
+        columns: [table.partyId],
+        foreignColumns: [party.id],
+        name: "FK_PARTYCM_PARTY"
+    }).onDelete("cascade"),
+    fkContactMech: foreignKey({
+        columns: [table.contactMechanismId],
+        foreignColumns: [contactMechanism.id],
+        name: "FK_PARTYCM_CONTMECH"
+    }).onDelete("cascade"),
+}));
+
 const domain = motomundiSchema.table("domain", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 45 }),
@@ -769,6 +794,7 @@ const postalAddressRelations = relations(postalAddress, ({one, many}) => ({
 
 const partyRelations = relations(party, ({many}) => ({
     orders: many(saleOrder),
+    contactMechanisms: many(partyContactMechanism),
 }));
 
 const orderJournal = motomundiSchema.table("orderjournal", {
@@ -1007,6 +1033,17 @@ const paymentApplicationRelations = relations(paymentApplication, ({ one }) => (
     }),
 }));
 
+const partyContactMechanismRelations = relations(partyContactMechanism, ({ one }) => ({
+    party: one(party, {
+        fields: [partyContactMechanism.partyId],
+        references: [party.id],
+    }),
+    contactMechanism: one(contactMechanism, {
+        fields: [partyContactMechanism.contactMechanismId],
+        references: [contactMechanism.id],
+    }),
+}));
+
 export default {
     brand,
     model,
@@ -1032,13 +1069,15 @@ export default {
     userConfiguration,
     userConfigurationRelations,
     party,
+    partyRelations,
+    partyContactMechanism,
+    partyContactMechanismRelations,
     contactMechanism,
     userRelations,
     saleOrderRelations,
     saleOrderItemRelations,
     shipmentMethodType,
     postalAddressRelations,
-    partyRelations,
     orderJournal,
     orderJournalRelations,
     contactMechanismRelations,

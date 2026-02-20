@@ -6,7 +6,7 @@ import {db as drizzleDb} from "../db/drizzle.js";
 import {and, asc, desc, eq, ne} from "drizzle-orm";
 import schema from "../db/schema.js";
 
-const {geographicBoundary, postalAddress, review, saleOrder} = schema
+const {geographicBoundary, postalAddress, review, saleOrder, contactMechanism, partyContactMechanism} = schema
 import {partyReviews} from "../db/reviews.js";
 import container from "../container/index.js";
 import {uploadImagesAilooCDN} from "../services/cdnService.js";
@@ -101,7 +101,6 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
 })
 
 
-
 router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
     try {
         const userReq = req.user;
@@ -190,9 +189,18 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, nex
 
 router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
     try {
-        const { domainId, id } = req.params;
+        const {domainId, id} = req.params;
         const rq = req.body;
         const addressId = parseInt(id);
+
+        const userDb = await drizzleDb.query.user.findFirst({
+            where: (user, {eq}) => eq(user.id, req.user.id),
+            with: {
+                person: true
+            }
+        })
+
+        let party = userDb.person
 
         const data = {
             address: rq.address,
@@ -215,15 +223,24 @@ router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, ne
 
         if (addressId === 0) {
             // MySQL INSERT
+            const [cmResult] = await drizzleDb.insert(contactMechanism).values({});
+            finalId = cmResult.insertId;
+
             const [result] = await drizzleDb.insert(postalAddress).values({
                 ...data,
                 createDate: new Date(),
                 // If postalAddressId is NOT autoincrement, use rq.id or a generator
-                postalAddressId: rq.id
+                postalAddressId: finalId
             });
 
-            // If it IS autoincrement, MySQL returns the new ID here:
-            finalId = result.insertId || rq.id;
+            // add address to party contact mechanism
+            const [result2] = await drizzleDb.insert(partyContactMechanism).values({
+                partyId: party.id,
+                contactMechanismId: finalId,
+                fromDate: new Date(),
+            });
+
+            console.log("result2: " + result2);
         } else {
             // MySQL UPDATE
             await drizzleDb.update(postalAddress)
@@ -237,7 +254,7 @@ router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, ne
             .where(eq(postalAddress.postalAddressId, finalId))
             .limit(1);
 
-        res.json(updatedAddress[0] || { success: true });
+        res.json(updatedAddress[0] || {success: true});
 
     } catch (e) {
         console.error(e);
@@ -246,7 +263,7 @@ router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, ne
 })
 
 router.get("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
-    try{
+    try {
 
         const id = parseInt(req.params.id)
         const domainId = parseInt(req.params.domainId)
@@ -255,7 +272,7 @@ router.get("/:domainId/account/addresses/:id", validateJWT, async (req, res, nex
             where: (postalAddress, {eq}) => {
                 return eq(postalAddress.postalAddressId, id)
             },
-            with:{
+            with: {
                 comuna: true,
                 country: true,
             }
@@ -275,7 +292,7 @@ router.get("/:domainId/account/addresses/:id", validateJWT, async (req, res, nex
             "county": address.country,
             "rut": address.rut,
         })
-    }catch(e){
+    } catch (e) {
         next(e)
     }
 })
