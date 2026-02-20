@@ -8,7 +8,7 @@ export const listPartyPostalAddresses = async partyId => {
   try {
     const [rows ] = await connection.execute(
         `
-select cm.*, pcm.Purpose, gb.Name as ComunaName
+select cm.*, pcm.IsDefault, pcm.Purpose, gb.Name as ComunaName
 from 
     postaladdress cm
     join partycontactmechanism pcm on pcm.ContactMechanismId = cm.PostalAddressId

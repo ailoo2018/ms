@@ -187,6 +187,52 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, nex
     }
 });
 
+router.delete("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
+    try {
+        const {domainId, id} = req.params;
+        const addressId = parseInt(id);
+
+        await drizzleDb.delete(postalAddress)
+            .where(eq(postalAddress.postalAddressId, addressId));
+
+        res.json({})
+    } catch (e) {
+        next(e)
+    }
+})
+
+router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const userId = req.user.id
+
+        const userDb = await drizzleDb.query.user.findFirst({
+            where: (user, {eq }) => eq(user.id, req.user.id),
+            with: {
+                person: {
+                    with:  { contactMechanisms: true }
+                }
+            }
+        })
+
+        if(userDb?.person?.contactMechanisms){
+            for(var cm of userDb.person.contactMechanisms){
+
+                let isDefault = cm.contactMechanismId === id
+
+                await drizzleDb.update(partyContactMechanism).set({
+                    isDefault: isDefault
+                }).where(eq(partyContactMechanism.id, cm.id))
+            }
+        }
+
+
+        res.json({})
+    } catch (e) {
+        next(e)
+    }
+})
+
 router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
     try {
         const {domainId, id} = req.params;
@@ -311,7 +357,7 @@ router.get("/:domainId/account/addresses", validateJWT, async (req, res, next) =
 
                 return {
                     "id": addr.PostalAddressId,
-                    "default": true,
+                    "default": !!addr.IsDefault,
                     "comuna_id": addr.ComunaId || 0,
                     "address": addr.Address || null,
                     "phone": addr.Phone || null,
