@@ -188,6 +188,98 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, nex
     }
 });
 
+router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
+    try {
+        const { domainId, id } = req.params;
+        const rq = req.body;
+        const addressId = parseInt(id);
+
+        const data = {
+            address: rq.address,
+            address2: rq.address2,
+            commune: rq.comuna?.name,
+            comunaId: rq.comuna?.id,
+            name: rq.fname,
+            surname: rq.lname,
+            phone: rq.phone,
+            rut: rq.rut,
+            postalCode: rq.postalCode,
+            latitude: rq.comuna?.latitude?.toString(),
+            longitude: rq.comuna?.longitude?.toString(),
+            alias: rq.alias,
+            domainId: parseInt(domainId),
+            // Add other fields as necessary
+        };
+
+        let finalId = addressId;
+
+        if (addressId === 0) {
+            // MySQL INSERT
+            const [result] = await drizzleDb.insert(postalAddress).values({
+                ...data,
+                createDate: new Date(),
+                // If postalAddressId is NOT autoincrement, use rq.id or a generator
+                postalAddressId: rq.id
+            });
+
+            // If it IS autoincrement, MySQL returns the new ID here:
+            finalId = result.insertId || rq.id;
+        } else {
+            // MySQL UPDATE
+            await drizzleDb.update(postalAddress)
+                .set(data)
+                .where(eq(postalAddress.postalAddressId, addressId));
+        }
+
+        // Fetch the record to return it to the frontend
+        const updatedAddress = await drizzleDb.select()
+            .from(postalAddress)
+            .where(eq(postalAddress.postalAddressId, finalId))
+            .limit(1);
+
+        res.json(updatedAddress[0] || { success: true });
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+})
+
+router.get("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
+    try{
+
+        const id = parseInt(req.params.id)
+        const domainId = parseInt(req.params.domainId)
+
+        const address = await drizzleDb.query.postalAddress.findFirst({
+            where: (postalAddress, {eq}) => {
+                return eq(postalAddress.postalAddressId, id)
+            },
+            with:{
+                comuna: true,
+                country: true,
+            }
+        })
+
+        res.json({
+
+            "id": address.postalAddressId,
+            "alias": address.alias,
+            "fname": address.name,
+            "lname": address.surname,
+            "address": address.address,
+            "address2": address.address2,
+            "comuna": address.comuna,
+            "phone": address.phone,
+            "postalCode": address.postalCode,
+            "county": address.country,
+            "rut": address.rut,
+        })
+    }catch(e){
+        next(e)
+    }
+})
+
 router.get("/:domainId/account/addresses", validateJWT, async (req, res, next) => {
 
     try {
