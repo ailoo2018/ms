@@ -41,15 +41,17 @@ export async function findCart(id) {
     index: INDEX,
     id: id
   })
-  if (!result.body && !result.body._source) {
+  if (!result && !result._source) {
     return null;
   }
 
-  var cart = result.body._source;
-  cart.id = result.body._id;
+  var cart = result._source;
+  cart.id = result._id;
 
   return cart;
 }
+
+
 
 export async function findCartByWuid(wuid) {
   const response = await getElClient().search({

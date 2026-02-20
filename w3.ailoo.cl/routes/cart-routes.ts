@@ -1,4 +1,4 @@
-import {findCart} from "../services/cartService.js";
+import {findCart, findCartById} from "../services/cartService.js";
 import { Router } from "express";
 import {v4 as uuidv4} from "uuid";
 import container from "../container/index.js";
@@ -230,6 +230,23 @@ router.post('/:domainId/cart/add', async (req, res, next) => {
     next(err);
   }
 });
+
+router.get("/:domainId/cart/find", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const id = req.query.id;
+    let cart = await findCartById(id, domainId);
+
+    if(!cart){
+      return res.status(404).json({error: 'Cart not found'});
+    }
+
+    res.json(cart)
+  } catch (err) {
+    next(err);
+  }
+})
+
 
 router.get("/:domainId/cart/:wuid", async (req, res, next) => {
   try {

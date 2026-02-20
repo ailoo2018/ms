@@ -13,7 +13,11 @@ export const findOrder = async (orderId, domainId) => {
             items: true,
             customer: true,
             paymentMethod: true,
-            shippingAddress: true,
+            shippingAddress: {
+                with: {
+                    comuna: true,
+                },
+            },
             shipmentMethod: true,
             journals: true,
         }

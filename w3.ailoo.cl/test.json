@@ -1,162 +1,21 @@
 {
-  "wuid": "7b55a835-d609-4b81-bd38-c6f078807b53",
-  "addresses": {
-    "selectedShipping": {
-      "name": "Juan Carlos",
-      "surnames": "Fuentes",
-      "phone": "2666.0690",
-      "rut": "15320300-8",
-      "address": "Lorenzo de Medici 77, Dept 408",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": "7561040",
-      "id": 77640,
-      "default": true,
-      "comuna_id": 316,
-      "nif": "15320300-8",
-      "alias": null
-    },
-    "shipping": {
-      "name": "Juan Carlos",
-      "surnames": "Fuentes",
-      "phone": "2666.0690",
-      "rut": "15320300-8",
-      "address": "Lorenzo de Medici 77, Dept 408",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": "7561040",
-      "id": 77640,
-      "default": true,
-      "comuna_id": 316,
-      "nif": "15320300-8",
-      "alias": null
-    },
-    "billing": {}
-  },
-  "customerInformation": {
-    "phone": "2666.0690",
-    "email": "jcfuentes@motomundi.net",
-    "address": {
-      "name": "Juan Carlos",
-      "surnames": "Fuentes",
-      "phone": "2666.0690",
-      "rut": "15320300-8",
-      "address": "Lorenzo de Medici 77, Dept 408",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": "7561040",
-      "id": 77640,
-      "default": true,
-      "comuna_id": 316,
-      "nif": "15320300-8",
-      "alias": null
-    }
-  },
-  "shipmentInformation": {
-    "method": 1,
-    "address": {
-      "name": "Juan Carlos",
-      "surnames": "Fuentes",
-      "phone": "2666.0690",
-      "rut": "15320300-8",
-      "address": "Lorenzo de Medici 77, Dept 408",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": "7561040",
-      "id": 77640,
-      "default": true,
-      "comuna_id": 316,
-      "nif": "15320300-8",
-      "alias": null
-    },
-    "store": {
-      "id": 1,
-      "title": "LAS TRANQUERAS (LAS CONDES)",
-      "name": "LAS TRANQUERAS",
-      "address": "LAS TRANQUERAS 56",
-      "latitude": -33400898749676830,
-      "longitude": -7055551688038699,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      }
-    },
-    "pickupOption": "pickup_here",
-    "modifiedDate": "2026-02-17T16:54:48.509Z",
-    "carrierId": 9,
-    "comments": "",
-    "remarks": ""
-  },
-  "createAccount": false,
-  "subscribe": true,
-  "notifyWhatsApp": true,
-  "selectedCarrier": 9,
-  "paymentMethod": {
-    "gateway": 8
-  },
-  "pickupStore": {
-    "id": 1,
-    "title": "LAS TRANQUERAS (LAS CONDES)",
-    "name": "LAS TRANQUERAS",
-    "address": "LAS TRANQUERAS 56",
-    "latitude": -33400898749676830,
-    "longitude": -7055551688038699,
-    "comuna": {
-      "id": 316,
-      "name": "LAS CONDES"
-    }
-  },
-  "selectedMapData": {
-    "store_id": 1
-  },
+  "transaction_id": "191896",
+  "affiliation": "store",
+  "value": "10.00",
+  "currency": "CLP",
+  "tax": "2.00",
+  "shipping": "0.00",
   "items": [
     {
-      "packId": 0,
-      "product": {
-        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-        "productItemId": 503290,
-        "name": "XENA test webpay Tamaño Unico",
-        "type": 0,
-        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
-      },
-      "quantity": 1,
-      "name": "XENA test webpay Tamaño Unico",
-      "id": "0b2c32a2-f7be-4026-8ad8-8c73a96458e5",
-      "type": 0,
-      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-      "color": null,
-      "size": {
-        "id": 8,
-        "name": "Tamaño Unico",
-        "orderWeight": 0,
-        "type": 0
-      },
-      "description": "test webpay",
-      "price": 10,
-      "oldPrice": 10,
-      "discount": 0,
-      "loading": false
+      "id": "331533",
+      "name": "XENA test webpay",
+      "list_name": "Cart Items",
+      "brand": "XENA",
+      "category": "",
+      "variant": "XENA test webpay Tamaño Unico",
+      "list_position": 1,
+      "quantity": "1",
+      "price": "10.00"
     }
-  ],
-  "mercadoPagoPaymentData": null
+  ]
 }

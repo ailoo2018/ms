@@ -1,4 +1,4 @@
-import {findCartByWuid} from "../el/cart.js";
+import * as Cart from "../el/cart.js";
 import {CartItemType} from "../models/cart-models.js";
 import { productRepos} from "../el/products.js";
 import {getProductImage} from "../helpers/product-helper.js";
@@ -10,9 +10,19 @@ import LinkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
-export async function findCart(wuid, domainId) {
-  const cart = await findCartByWuid(wuid)
+export async function findCartById(id, domainId) {
+  const cart = await Cart.findCart(id)
+  return await initializeCart(cart, domainId);
 
+}
+
+export async function findCart(wuid, domainId) {
+  const cart = await Cart.findCartByWuid(wuid)
+  return await initializeCart(cart, domainId);
+
+}
+
+async function initializeCart(cart, domainId){
   if (!cart) {
     return null
   }
@@ -137,7 +147,7 @@ export async function findCart(wuid, domainId) {
             name: rule.name,
             price: discounts[0].price
           }
-              total += discounts[0].price
+          total += discounts[0].price
 
           for (const appliesTo of discounts[0].appliesTo) {
 

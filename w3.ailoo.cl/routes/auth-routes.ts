@@ -7,6 +7,7 @@ import crypto from "crypto";
 import {doHash} from "../utils/utils.js";
 
 import schema from "../db/schema.js"
+import {findCart} from "../el/cart.js";
 
 
 const router = Router();
@@ -102,6 +103,11 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
         return res.status(401).json({ message: "order not found"})
 
       partyDb = saleOrderDb.customer
+    }else if(type === "cart"){
+      const cart = await findCart(pid)
+      if(cart){
+
+      }
     }else {
 
       partyDb = await drizzleDb.query.party.findFirst({
