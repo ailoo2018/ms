@@ -221,7 +221,7 @@ router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req, 
                 let isDefault = cm.contactMechanismId === id
 
                 await drizzleDb.update(partyContactMechanism).set({
-                    isDefault: isDefault
+                    isDefault: isDefault ? 1 : 0,
                 }).where(eq(partyContactMechanism.id, cm.id))
             }
         }
