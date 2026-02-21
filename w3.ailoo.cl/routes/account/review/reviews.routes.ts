@@ -87,6 +87,7 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
                         rating: r.Rating,
                         likes: r.Likes,
                         dislikes: r.Dislikes,
+                        videoUrl: r.VideoUrl,
                         pros: null,
                         cons: null,
                         configuration: configuration ,
@@ -219,6 +220,7 @@ router.post("/:domainId/account/reviews/add", validateJWT, reviewsUpload,    asy
                 title: title,             // e.g., "Excellent Helmet!"
                 name: name,           // e.g., "Diego Rosas"
                 location: location,           // e.g., "Santiago"
+                videoUrl: videoUrl,
                 comments: comment,        // e.g., "Very comfortable at high speeds."
                 date: new Date(),              // Current timestamp
                 productId: product.id,     // The product being reviewed

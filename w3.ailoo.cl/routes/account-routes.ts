@@ -4,13 +4,9 @@ import {listPartyPostalAddresses} from "../db/partyDb.js";
 import * as ProductHelper from "../helpers/product-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {and, asc, desc, eq, ne} from "drizzle-orm";
-import {partyReviews} from "../db/reviews.js";
 
 import container from "../container/index.js";
-import {uploadImagesAilooCDN} from "../services/cdnService.js";
-import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import {getProductImage} from "../helpers/product-helper.js";
-import {ordersHelper} from "../helpers/order-helper.js";
 import {findOrder} from "../services/ordersService.js";
 const router = Router();
 
