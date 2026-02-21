@@ -24,7 +24,28 @@ left outer join Review r on p.ProductId = r.ProductId and r.UserId = u.Id
 where i.Deleted = 0 and i.SaleTypeId in (1,3)
 and prod.Deleted = 0
 and r.Id is null
-and pty.Id = ?`, [partyId]);
+and pty.Id = ?
+group by p.Id
+`, [partyId]);
+
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}
+
+export const deleteReview = async (reviewId, userId, domainId) => {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+        `DELETE FROM Review WHERE Id = ? AND DomainId = ? AND UserId = ?
+`, [reviewId, domainId, userId]);
 
 
     return rows;
@@ -57,7 +78,8 @@ from review r
          left outer join invoiceitem ii on i.Id = ii.InvoiceId
 where u.PersonId = ?
   -- and r.State = 2
-group by r.Id;
+group by r.Id
+order by r.Id desc;
 
 `, [partyId]);
 

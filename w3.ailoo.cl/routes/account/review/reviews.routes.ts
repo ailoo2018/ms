@@ -1,6 +1,6 @@
 import {reviewsUpload, validateJWT} from "../../../server.js";
 import {db as drizzleDb} from "../../../db/drizzle.js";
-import {partyPendingReviews, partyReviewed, partyReviews} from "../../../db/reviews.js";
+import {deleteReview, partyPendingReviews, partyReviewed} from "../../../db/reviews.js";
 import container from "../../../container/index.js";
 import {uploadImagesAilooCDN} from "../../../services/cdnService.js";
 import router from "../../account-routes.js";
@@ -12,17 +12,23 @@ const {
     geographicBoundary,
     postalAddress,
     review,
-    saleOrder,
-    contactMechanism,
-    partyContactMechanism,
-    user,
-    product,
-    invoice,
-    invoiceItem,
-    party
 } = schema
 
 const productService = container.resolve('productsService');
+
+router.delete("/:domainId/account/reviews/:id", validateJWT, async (req, res, next) => {
+    try{
+        const reviewId = parseInt(req.params.id);
+        const domainId = parseInt(req.params.domainId);
+
+
+        await deleteReview(reviewId, req.user.id, domainId)
+
+        res.json({})
+    }catch(e){
+        next(e)
+    }
+})
 
 router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => {
     try {
@@ -52,6 +58,11 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
             reviewed: reviewsRows.filter(r1 => products.find(p => r1.ProductId === p.id)).map(r => {
                 const product = products.find(p => r.ProductId === p.id)
 
+                let configuration = null
+                try{
+                    configuration = r.Model && r.Model.length > 0 ? JSON.parse(r.Model) : null
+                }finally{}
+
                 return {
                     product: product ? {
                         id: product.id,
@@ -78,6 +89,7 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
                         dislikes: r.Dislikes,
                         pros: null,
                         cons: null,
+                        configuration: configuration ,
                     }
                 }
             }),
@@ -93,7 +105,8 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
                         minPrice: product.minPrice,
                         image: product.image,
                         brand: product.brand,
-                        parentCategories: product.parentCategories
+                        parentCategories: product.parentCategories,
+
                     } : null,
                     invoiceId: r.InvoiceId,
                     invoiceDate: r.InvoiceDate,
