@@ -62,6 +62,10 @@ import ytRoutes from "./routes/yt-routes.js";
 app.use(ytRoutes);
 
 
+import reviewsRoutes from "./routes/account/review/reviews.routes.js";
+app.use(reviewsRoutes);
+
+
 app.get('/', (req, res) => {
 
   res.json({

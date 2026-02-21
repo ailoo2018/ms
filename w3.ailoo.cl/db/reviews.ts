@@ -1,14 +1,20 @@
 import {pool} from "../connections/mysql.js";
 
 
-export const partyReviews = async function (partyId, domainId) {
+export const partyPendingReviews = async function (partyId, domainId) {
 
   const connection = await pool.getConnection();
 
   try {
     const [rows] = await connection.execute(
         `
-   select p.*, i.Id as InvoiceId from Invoice i 
+   select p.*, 
+        i.Id as InvoiceId,
+        i.Type   as InvoiceType,
+        i.Date   as InvoiceDate,
+        ii.ProductItemId,
+        ii.Amount as Price
+   from Invoice i 
 join Party pty on i.ReceivedById = pty.Id
 join User u on u.PersonId = pty.Id
 join InvoiceItem ii on i.Id = ii.InvoiceId
@@ -29,6 +35,42 @@ and pty.Id = ?`, [partyId]);
   }
 
 }
+
+export const partyReviewed = async function (partyId, domainId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+        `
+select r.*,
+       i.Id     as InvoiceId,
+       i.Number as InvoiceNumber,
+       i.Type   as InvoiceType,
+       i.Date   as InvoiceDate,
+       ii.ProductItemId,
+       ii.Amount as Price
+from review r
+         join user u on r.UserId = u.Id
+         join product p on r.ProductId = p.Id
+         left outer join invoice i on i.ReceivedById = u.PersonId
+         left outer join invoiceitem ii on i.Id = ii.InvoiceId
+where u.PersonId = ?
+  -- and r.State = 2
+group by r.Id;
+
+`, [partyId]);
+
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}
+
 
 export const listReviews = async function (rq, domainId) {
   const connection = await pool.getConnection();
