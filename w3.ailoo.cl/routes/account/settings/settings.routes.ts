@@ -87,6 +87,10 @@ router.post("/:domainId/account/create", async (req, res, next   ) => {
             )
 
             partyId = result.insertId;
+
+            await drizzleDb.update(schema.user).set({
+                personId: partyId,
+            }).where(eq(schema.user.id, userId));
         }
 
 

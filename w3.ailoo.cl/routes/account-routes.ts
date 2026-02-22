@@ -385,6 +385,7 @@ router.get("/:domainId/account/addresses", validateJWT, async (req, res, next) =
 router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
     try {
         const userId = req.user.id;
+        const domainId = parseInt(req.params.domainId);
 
         const user = await drizzleDb.query.user.findFirst({
             where: (user, {eq}) => eq(user.id, userId),
@@ -394,10 +395,27 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
             }
         });
 
+        let party = user.person || null;
+        if(!user.person){
+            party = await drizzleDb.query.party.findFirst({
+                where: (party, {and, eq}) => and(
+                    eq(party.email, user.username.trim()),
+                    eq(party.domainId, domainId),
+                ),
+            })
+
+            if(party != null){
+                await drizzleDb.update(schema.user).set({
+                    personId: party.id,
+                }).where(eq(schema.user.id, userId));
+            }
+
+        }
+
         res.json({
             id: user.id,
             username: user.username,
-            person: user.person,
+            person: party,
         })
     } catch (err) {
         next(err);
