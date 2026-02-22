@@ -15,7 +15,6 @@ import {
     varchar
 } from "drizzle-orm/mysql-core";
 
-
 // Defining the schema namespace
 const motomundiSchema = mysqlSchema("motomundi");
 
@@ -713,6 +712,57 @@ const website = motomundiSchema.table("website", {
     }),
 }));
 
+// --- Wishlist Table ---
+const wishList = motomundiSchema.table("wishlist", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", { length: 100 }),
+    createDate: datetime("CreateDate"),
+    isDefault: smallint("IsDefault"),
+    domainId: int("DomainId"),
+    partyId: int("PartyId"),
+    isDeleted: smallint("IsDeleted").default(0),
+}, (table) => ({
+    partyIdx: index("fk_wishlist_party_idx").on(table.partyId),
+    partyFk: foreignKey({
+        columns: [table.partyId],
+        foreignColumns: [party.id],
+        name: "fk_wishlist_party"
+    }).onDelete("cascade"),
+}));
+
+// --- WishlistItem Table ---
+const wishListItem = motomundiSchema.table("wishlistitem", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    productId: int("ProductId"),
+    partyId: int("PartyId"),
+    domainId: int("DomainId"),
+    addedDate: datetime("AddedDate"),
+    priority: smallint("Priority"),
+    productItemId: int("ProductItemId"),
+    quantity: int("Quantity"),
+    wishListId: int("WishListId"),
+}, (table) => ({
+    wishlistIdx: index("fk_wishlistitem_wishlist_idx").on(table.wishListId),
+    wishlistFk: foreignKey({
+        columns: [table.wishListId],
+        foreignColumns: [wishList.id],
+        name: "fk_wishlistitem_wishlist"
+    }).onDelete("cascade"),
+    // Adding optional FKs for Product and ProductItem for integrity
+    productFk: foreignKey({
+        columns: [table.productId],
+        foreignColumns: [product.id],
+        name: "fk_wishlistitem_product"
+    }),
+    productItemFk: foreignKey({
+        columns: [table.productItemId],
+        foreignColumns: [productItem.id],
+        name: "fk_wishlistitem_productitem"
+    }),
+}));
+
+
+
 // --- RELATIONS ---
 const reviewRelations = relations(review, ({one}) => ({
     user: one(user, {
@@ -1044,6 +1094,30 @@ const partyContactMechanismRelations = relations(partyContactMechanism, ({ one }
     }),
 }));
 
+const wishListRelations = relations(wishList, ({ one, many }) => ({
+    party: one(party, {
+        fields: [wishList.partyId],
+        references: [party.id],
+    }),
+    items: many(wishListItem),
+}));
+
+const wishListItemRelations = relations(wishListItem, ({ one }) => ({
+    wishList: one(wishList, {
+        fields: [wishListItem.wishListId],
+        references: [wishList.id],
+    }),
+    product: one(product, {
+        fields: [wishListItem.productId],
+        references: [product.id],
+    }),
+    variant: one(productItem, {
+        fields: [wishListItem.productItemId],
+        references: [productItem.id],
+    }),
+}));
+
+
 export default {
     brand,
     model,
@@ -1091,6 +1165,7 @@ export default {
     webContentConfiguration,
     websiteRelations,
 
+
     paymentMethodType,
     invoice,
     invoiceItem,
@@ -1099,5 +1174,11 @@ export default {
     payment,
     paymentApplication,
     paymentRelations,
-    paymentApplicationRelations
+    paymentApplicationRelations,
+
+    wishList,
+    wishListItem,
+    wishListRelations,
+    wishListItemRelations,
+
 };

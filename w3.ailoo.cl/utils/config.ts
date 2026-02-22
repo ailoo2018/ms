@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+import dotenv from "dotenv";
 
 function loadConfig() {
 
@@ -14,5 +14,5 @@ function loadConfig() {
     return process.env;
 }
 
-module.exports = loadConfig();
+loadConfig();
 

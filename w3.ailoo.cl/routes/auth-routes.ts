@@ -1,10 +1,9 @@
 import {Router} from "express";
 import { authenticate} from "../services/authService.js";
-import jwt from "jsonwebtoken";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {and, eq} from "drizzle-orm";
 import crypto from "crypto";
-import {doHash} from "../utils/utils.js";
+import {createToken, doHash} from "../utils/utils.js";
 
 import schema from "../db/schema.js"
 import {findCart} from "../el/cart.js";
@@ -237,14 +236,6 @@ router.get("/:domainId/auth/google", async (req, res, next) => {
 
 })
 
-function createToken(pl) {
-  const secretKey = process.env.JWT_SECRET;
-  const iat = Math.floor(Date.now() / 1000)
-  const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30)
-  // Create the token
-  const token = jwt.sign({...pl, iat, exp}, secretKey);
 
-  return token;
-}
 
 export default router

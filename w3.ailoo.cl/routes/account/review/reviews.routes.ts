@@ -3,10 +3,11 @@ import {db as drizzleDb} from "../../../db/drizzle.js";
 import {deleteReview, partyPendingReviews, partyReviewed} from "../../../db/reviews.js";
 import container from "../../../container/index.js";
 import {uploadImagesAilooCDN} from "../../../services/cdnService.js";
-import router from "../../account-routes.js";
+import {Router} from "express";
 import {and, asc, desc, eq, ne} from "drizzle-orm";
 import schema from "../../../db/schema.js";
 
+const router = Router(); // Create a router instead of using 'app'
 
 const {
     geographicBoundary,
@@ -67,6 +68,7 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
                     product: product ? {
                         id: product.id,
                         name: product.name,
+                        linkName: product.linkName,
                         fullName: product.fullName,
                         minPrice: product.minPrice,
                         image: product.image,
@@ -99,9 +101,11 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
 
                 return {
                     id: product.id,
+
                     product: product ? {
                         id: product.id,
                         name: product.name,
+                        linkName: product.linkName,
                         fullName: product.fullName,
                         minPrice: product.minPrice,
                         image: product.image,

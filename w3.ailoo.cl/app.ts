@@ -36,7 +36,8 @@ app.use(motorcyclesRoutes);
 import productsRoutes from "./routes/products-routes.js";
 app.use(productsRoutes);
 
-
+import settingsRoutes from "./routes/account/settings/settings.routes.js";
+app.use(settingsRoutes);
 
 
 import productsSearchRoutes from "./routes/products-search-routes.js";
@@ -54,6 +55,10 @@ import invoicesRoutes from "./routes/invoices-routes.js";
 app.use(invoicesRoutes);
 import paymentsRoutes from "./routes/routes.payment.confirm.js";
 app.use(paymentsRoutes);
+
+import wishlistRoutes from "./routes/account/wishlist/wishlist.routes.js";
+app.use(wishlistRoutes);
+
 
 import sitemapProductRoutes from "./routes/sitemaps/products.sitemap.route.js";
 app.use(sitemapProductRoutes);

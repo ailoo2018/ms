@@ -1,49 +1,41 @@
-process.env.NODE_ENV = "production";
-import '@ailoo/shared-libs/config';
+import * as assert from "node:assert";
+import '../utils/config.js';
 
-import {db as drizzleDb} from "../db/drizzle.js";
-
-
-import {and, eq, sql} from "drizzle-orm";
-import schema from "../db/schema.js";
-const {saleOrder, orderJournal, payment, paymentApplication} = schema
 
 import request from "supertest";
 import {describe, it} from "node:test";
-import assert from "node:assert/strict";
-import app from "../app.js"; // Import the main app, not just the routes
+
+import {app} from "../server.js"; // Import the main app, not just the routes
+import settingsRoutes from "../routes/account/settings/settings.routes.js";
+import wishlistRoutes from "../routes/account/wishlist/wishlist.routes.js";
+
+
 
 describe('User API', () => {
 
-  it('GET /:domainId/invoices/:invoiceId composite product', async () => {
 
-    try {
-      let invoiceId = 27942086
+    it('GET /:domainId/wishlist composite product', async () => {
+        app.use(wishlistRoutes);
+        app.use(settingsRoutes);
 
-      const results = await drizzleDb
-          .select({
-            payment: payment,
-          })
-          .from(paymentApplication)
-          .innerJoin(
-              payment,
-              eq(paymentApplication.paymentId, payment.id)
-          )
-          .where(eq(paymentApplication.invoiceId, invoiceId));
+        let resp = await request(app)
+            .post('/1/account/create')
+            .send({
+                fname: "Pepe",
+                lname: "Test",
+                email: "test2342_2@test.com",
+                password: "123456"
+            })
 
-      const payments = results.map(r => r.payment);
-    }catch(e){
-      console.error(e);
-    }
+        assert.ok(resp);
 
 
+        resp = await request(app)
+            .get('/1/wishlist')
+            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJqY2Z1ZW50ZXNAbGF2YS5jbCIsInBhcnR5SWQiOjIzOCwiaWF0IjoxNzcxNjAyMDUwLCJleHAiOjE3NzQxOTQwNTB9.uJD9P4f6R_l5WBxVyLnRBF7qmRaVLgyPpJwXVYrhGJI")
+            .expect(200)
+            .expect('Content-Type', /json/);
 
-/*
-    response = await request(app)
-        .post('/1/checkout/payment-result-invoice')
-        .send({ paymentMethodId: 8, authorizationCode: "123123123"}) // Note: supertest uses .send() for body
-        .expect(200)
-        .expect('Content-Type', /json/);
-*/
-  });
+    });
+
 });
