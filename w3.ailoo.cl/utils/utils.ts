@@ -24,3 +24,16 @@ export function createToken(pl) {
 
   return token;
 }
+
+export const getSymmetricDifference = (arr1, arr2) => {
+  const set1 = new Set(arr1);
+  const set2 = new Set(arr2);
+
+  // Numbers in list 1 but not in list 2
+  const diff1 = arr1.filter(x => !set2.has(x));
+
+  // Numbers in list 2 but not in list 1
+  const diff2 = arr2.filter(x => !set1.has(x));
+
+  return [...diff1, ...diff2];
+};
