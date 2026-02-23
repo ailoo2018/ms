@@ -242,59 +242,6 @@ router.get("/:domainId/auth/google", async (req, res, next) => {
 
 })
 
-async function resetPasswordEmailData(person, email, domainId) {
-    const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
-    let logo = logoParam ? logoParam.value : {};
-
-    return {
-        client: {
-            getName: () => {
-                if (person.firstName?.length > 0 && person.lastName) {
-                    return person.firstName + " " + person.lastName;
-                }
-                if (person.firstName?.length > 0) {
-                    return person.firstName
-                }
-                return "" + person.name;
-            },
-        },
-        domainHelper: {
-            getLogo: () => logo,
-            getSiteRoot: () => 'https://www.motomundi.cl'
-        },
-        formatHelper: {
-            toTitleCase: (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
-            formatMoney: (amount) => `$${amount.toLocaleString()}`,
-            encodeUrl: (str) => encodeURIComponent(str)
-        },
-
-        getRecoverUrl: () => {
-            return "https://www.motomundi.cl/account/reset-password?email=" + email + "&hash=" + doHash(email);
-        },
-        domain: {id: 1, name: "MotoMundi", party: {name: "MotoMundi SPA"}},
-        webSite: {
-            templateInstance: {
-                getConfigValue: key => {
-                    if (key === "facebook-url") {
-                        return "https://www.facebook.com/motomundi.la"
-                    }
-                    if (key === "instagram-url") {
-                        return "https://www.instagram.com/motomundi"
-                    }
-                    if (key === "youtube-url") {
-                        return "https://www.youtube.com/motomunditv"
-                    }
-                    if (key === "tiktok-url") {
-                        return "https://www.tiktok.com/motomundicl"
-                    }
-                    return "";
-                }
-            }
-        }
-
-    }
-}
-
 router.post("/:domainId/auth/reset-password", async (req, res, next) => {
 
     try {
@@ -410,6 +357,61 @@ router.get("/test-recover", async (req, res, next) => {
         next(e)
     }
 })
+
+
+async function resetPasswordEmailData(person, email, domainId) {
+    const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
+    let logo = logoParam ? logoParam.value : {};
+
+    return {
+        client: {
+            getName: () => {
+                if (person.firstName?.length > 0 && person.lastName) {
+                    return person.firstName + " " + person.lastName;
+                }
+                if (person.firstName?.length > 0) {
+                    return person.firstName
+                }
+                return "" + person.name;
+            },
+        },
+        domainHelper: {
+            getLogo: () => logo,
+            getSiteRoot: () => 'https://www.motomundi.cl'
+        },
+        formatHelper: {
+            toTitleCase: (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
+            formatMoney: (amount) => `$${amount.toLocaleString()}`,
+            encodeUrl: (str) => encodeURIComponent(str)
+        },
+
+        getPasswordResetUrl: () => {
+            return "https://www.motomundi.cl/account/reset-password?email=" + email + "&hash=" + doHash(email);
+        },
+        domain: {id: 1, name: "MotoMundi", party: {name: "MotoMundi SPA"}},
+        webSite: {
+            templateInstance: {
+                getConfigValue: key => {
+                    if (key === "facebook-url") {
+                        return "https://www.facebook.com/motomundi.la"
+                    }
+                    if (key === "instagram-url") {
+                        return "https://www.instagram.com/motomundi"
+                    }
+                    if (key === "youtube-url") {
+                        return "https://www.youtube.com/motomunditv"
+                    }
+                    if (key === "tiktok-url") {
+                        return "https://www.tiktok.com/motomundicl"
+                    }
+                    return "";
+                }
+            }
+        }
+
+    }
+}
+
 
 
 export default router
