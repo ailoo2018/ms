@@ -59,6 +59,9 @@ app.use(paymentsRoutes);
 import wishlistRoutes from "./routes/account/wishlist/wishlist.routes.js";
 app.use(wishlistRoutes);
 
+import brandsRoutes from "./routes/products/brands.routes.js";
+app.use(brandsRoutes);
+
 
 import sitemapProductRoutes from "./routes/sitemaps/products.sitemap.route.js";
 app.use(sitemapProductRoutes);
