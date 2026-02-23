@@ -13,7 +13,14 @@ const router = Router(); // Create a router instead of using 'app'
 
 router.post("/:domainId/wishlist/sync", validateJWT, async (req, res, next) => {
 
-    res.json({})
+    try{
+
+        res.json({})
+    }catch(e){
+        next(e)
+    }
+
+
 });
 
 router.get("/:domainId/wishlist/add", validateJWT, async (req, res, next) => {
