@@ -71,7 +71,7 @@ export const authenticate = async (name, email, wuid, domainId) => {
   if(!user.personId)
     {
 
-      drizzleDb
+      await drizzleDb
               .update(user)
           .set({ personId: personId })
               .where(eq( user.id, u.id, ))
