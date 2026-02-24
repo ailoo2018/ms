@@ -81,13 +81,9 @@ export const authenticate = async (name, email, wuid, domainId) => {
   // assign user to shopping cart
 
   const cart = await findCartByWuid(wuid)
-  if (cart && !cart.userId || cart.userId === 0) {
-    await updateCartUserId(cart.id, u.id)
-  }else{
-
+  if (cart && !cart.userId) {
+    await updateCartUserId(cart.id, u.id);
   }
-
-
   return { user: u, party: { id: personId, name: name} };
 }
 
