@@ -3,6 +3,7 @@ import cmsClient from "../services/cmsClient.js";
 import {findWidget} from "../db/webcontent.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {Router} from "express";
+import {searchBlogEntries} from "../services/cms/search.js";
 
 
 const router = Router(); // Create a router instead of using 'app'
@@ -28,29 +29,39 @@ router.get("/:domainId/blog/featured", async (req, res, next) => {
 
 router.get("/:domainId/blog/search", async (req, res, next) => {
   try {
-    const domainId = parseInt(req.params.domainId);
-    const limit = Number(req.query.limit) || 10;
-    const offset = Number(req.query.offset) || 0;
-    const categoryId = (req.query.categoryId) || '';
+    const domainId: number = parseInt(req.params.domainId);
+    const limit: number = Number(req.query.limit) || 10;
+    const offset: number = Number(req.query.offset) || 0;
+    const categoryId : string = (req.query.categoryId) || '';
+    const sword : string = (req.query.sword) || '';
 
-    const posts = await cmsClient.search({
+    const hits = await searchBlogEntries({
       limit: limit,
       offset: offset,
-      categoryId: categoryId
-    }, domainId)
+      categoryId: categoryId,
+      sword: sword,
+    }, domainId);
 
-    posts.total = 100;
+    let rs = {
+      category: { id: '', name: '', friendlyUrl: ''},
+      total: hits.total,
+      entries: []
+
+    };
 
     let category = { id: '', name: '', friendlyUrl: ''}
-    if(categoryId?.length > 0 && posts.entries.length > 0) {
-      let entry = posts.entries.find(e => e.mainCategory.id === categoryId);
+
+    let entries = hits.hits.map(h => ({...h._source}));
+    rs.entries = entries
+    if(categoryId?.length > 0 && entries.length > 0) {
+      let entry = entries.find(e => e.mainCategory.id === categoryId);
       if(entry)
         category = entry.mainCategory;
     }
 
-    posts.category = category
+    rs.category = category
 
-    res.json(posts)
+    res.json(rs)
   } catch (e) {
     next(e)
   }
@@ -64,14 +75,7 @@ router.get("/:domainId/blog/articles/:id", async (req, res, next) => {
 
     const wcc = await findWidget(articleId, domainId)
 
-
-
-
-
     const wccAux = await cmsClient.getWcc(articleId, domainId)
-
-
-
 
     const widgets = wccAux.children.filter(w => w.type === 3).map(w2 => {
       const component = cmsClient.getNuxtComponent(w2)

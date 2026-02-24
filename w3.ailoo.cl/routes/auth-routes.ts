@@ -1,3 +1,4 @@
+import logger from "@ailoo/shared-libs/logger";
 import sgMail from "@sendgrid/mail";
 import {Router} from "express";
 import {authenticate} from "../services/authService.js";
@@ -187,6 +188,8 @@ router.get("/:domainId/auth/google", async (req, res, next) => {
         var googleplus_client_id = "573119085091-10gjskn72s3dsfmncmmhppe6p8o3u1qj.apps.googleusercontent.com"
         var googleplus_client_secret = "ihdCgOisRfjZa07cdSlen6Eb"
 
+        logger.info("googleplus_client_id: " + googleplus_client_id)
+
         // 1. Create the data object
         const params = new URLSearchParams({
             code: authCode,
@@ -237,6 +240,8 @@ router.get("/:domainId/auth/google", async (req, res, next) => {
 
         })
     } catch (e) {
+        logger.error("google login error: " + e.message);
+        logger.error("google login error: " + JSON.stringify(e));
         next(e)
     }
 

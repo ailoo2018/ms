@@ -31,6 +31,16 @@ export function getIndexName(domainId){
 	return domainId + "-clp-0";
 }
 
+export function getCmsIndexName(domainId){
+
+	let name = "cms-";
+	if(process.env.NODE_ENV === "test"){
+		name = "test-cms-";
+	}
+	return name + domainId;
+}
+
+
 export function getDiscountIndexName(){
 	if(process.env.NODE_ENV === 'test'){
 		return "test-discounts"
