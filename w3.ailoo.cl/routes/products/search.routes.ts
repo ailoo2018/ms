@@ -1,10 +1,7 @@
 import {Router} from "express";
-import container from "../container/index.js";
-import {search} from "../el/search.js";
+import container from "../../container/index.js";
+import {getQueryDescription, search} from "../../el/search.js";
 import logger from "@ailoo/shared-libs/logger";
-import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
-import {buildQueryByCollectionId} from "../el/collections.js";
-import {getElClient, getIndexName, getProductCollectionsIndexName} from "../connections/el.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -94,19 +91,6 @@ router.post("/:domainId/products/search", async (req, res, next) => {
 
     const sRs : any = await search(criteria, domainId)
 
-    if(!sRs.query)
-      sRs.query = {};
-
-    if(rq.categories && rq.categories.length > 0){
-      const catId = parseInt(rq.categories[0]);
-      const category  = await categoryService.findCategory(catId, domainId)
-
-      sRs.query.category = { id: category.id, name: category.name, linkName: category.linkName };
-    }
-
-    if(rq.sword){
-      sRs.query.sword = rq.sword
-    }
 
     res.json(sRs)
   } catch (e) {

@@ -40,7 +40,7 @@ import settingsRoutes from "./routes/account/settings/settings.routes.js";
 app.use(settingsRoutes);
 
 
-import productsSearchRoutes from "./routes/products-search-routes.js";
+import productsSearchRoutes from "./routes/products/search.routes.js";
 app.use(productsSearchRoutes);
 import blogRoutes from "./routes/blog-routes.js";
 app.use(blogRoutes);

@@ -629,9 +629,16 @@ export async function search(criteria, domainId) {
     }
   }
 
+
+
+
+
+
   return {
     totalHits: totalItems,
-    query: { description: searchDescription},
+    query: {
+      description: getQueryDescription(criteria, filters, domainId)
+    },
     offset: offset,
     limit: limit,
     filters,
@@ -640,3 +647,38 @@ export async function search(criteria, domainId) {
 
 }
 
+
+export function getQueryDescription(criteria, filters, domainId){
+  let  category, brand, collection;
+
+  let description = ""
+
+  if(criteria.categories?.length === 1 ){
+    category = getData(Number(criteria.categories[0]), "categories", filters)
+
+  }
+
+  if(criteria.brands?.length === 1 ){
+    brand = getData(Number(criteria.brands[0]), "brands", filters)
+
+  }
+
+  if(category && brand)
+    return category.name + " " + brand.name
+  if(category)
+    return category.name + " "
+  if(brand)
+    return  "Equipamiento, ropa y accesorios para motociclistas de " + brand.name
+  if(criteria.sword)
+    description =  `Por '${criteria.sword}' hemos encontrado`;
+
+  return description.trim()
+}
+
+function getData(id, type, filters) {
+  const filter = filters.find(f => f.type === type);
+  if(!filter)
+    return null
+
+  return filter.buckets.find(b => b.id === id)
+}
