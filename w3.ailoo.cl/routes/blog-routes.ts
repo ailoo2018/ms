@@ -40,6 +40,16 @@ router.get("/:domainId/blog/search", async (req, res, next) => {
     }, domainId)
 
     posts.total = 100;
+
+    let category = { id: '', name: '', friendlyUrl: ''}
+    if(categoryId?.length > 0 && posts.entries.length > 0) {
+      let entry = posts.entries.find(e => e.mainCategory.id === categoryId);
+      if(entry)
+        category = entry.mainCategory;
+    }
+
+    posts.category = category
+
     res.json(posts)
   } catch (e) {
     next(e)
