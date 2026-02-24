@@ -43,23 +43,22 @@ router.get("/:domainId/blog/search", async (req, res, next) => {
     }, domainId);
 
     let rs = {
-      category: { id: '', name: '', friendlyUrl: ''},
+      category: { id: '', name: sword?.length > 0 ? `Resultado de búsqueda '${sword}'` : '', friendlyUrl: ''},
       total: hits.total,
       entries: []
 
     };
 
-    let category = { id: '', name: '', friendlyUrl: ''}
 
     let entries = hits.hits.map(h => ({...h._source}));
     rs.entries = entries
     if(categoryId?.length > 0 && entries.length > 0) {
       let entry = entries.find(e => e.mainCategory.id === categoryId);
       if(entry)
-        category = entry.mainCategory;
+        rs.category = entry.mainCategory;
     }
 
-    rs.category = category
+
 
     res.json(rs)
   } catch (e) {
