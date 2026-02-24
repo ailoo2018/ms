@@ -20,7 +20,7 @@ export class MotorcyclesService {
     async deleteUserBike(userId: number, motorcycle: any){
         const userConfigurationDb = await this.drizzleDb.query.userConfiguration.findFirst({
             where: (userConfiguration) => {
-                eq(userConfiguration.userId, userId)
+                return eq(userConfiguration.userId, userId)
             },
 
         })
