@@ -524,7 +524,7 @@ export async function search(criteria, domainId) {
   if (criteria.collectionId && criteria.collectionId !== "") {
     ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
     if(collection)
-      searchDescription = collection.name
+      criteria.collection = collection
 
     if (criteria.limit > 0)
       limit = criteria.limit
@@ -662,6 +662,9 @@ export function getQueryDescription(criteria, filters, domainId){
     brand = getData(Number(criteria.brands[0]), "brands", filters)
 
   }
+
+  if(criteria.collection)
+    return criteria.collection.name
 
   if(category && brand)
     return category.name + " " + brand.name
