@@ -5,6 +5,7 @@ import multer from "multer";
 import {db as drizzleDb} from "../../../db/drizzle.js";
 import schema from "../../../db/schema.js";
 import {and, asc, desc, eq, ne} from "drizzle-orm";
+import crypto from "crypto";
 
 const router = Router();
 const upload = multer({
@@ -72,6 +73,39 @@ router.get("/:domainId/account/profile", validateJWT, async (req, res, next) => 
         })
 
     } catch (e) {
+        next(e)
+    }
+})
+
+router.post("/:domainId/account/password", validateJWT, async (req, res, next) => {
+    try{
+        const { current, new: password } = req.body
+
+        const user = await drizzleDb.query.user.findFirst({
+            where: (user, {eq}) => eq(user.id, req.user.id),
+        });
+
+        const hashedPassword = crypto.createHash('md5').update(current).digest('hex');
+
+        if(user.password !== hashedPassword) {
+            return res.status(401).json({
+                code: 'WRONG_PASSWORD',
+                message: "La contraseña actual es incorrecta. Por favor, verifícala e intenta de nuevo",
+                error: "Invalid credentials"
+            });
+        }
+
+        const hashedCurrent = crypto.createHash('md5').update(password).digest('hex');
+
+        await drizzleDb.update(schema.user).set({
+            password: hashedCurrent,
+        }).where(eq(schema.user.id, req.user.id))
+
+
+        res.json({
+            id: user.id
+        })
+    }catch(e){
         next(e)
     }
 })
