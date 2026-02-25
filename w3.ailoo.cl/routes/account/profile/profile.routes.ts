@@ -1,6 +1,6 @@
-import { validateJWT } from "../../../server.js";
-import { uploadImagesAilooCDN } from "../../../services/cdnService.js";
-import { Router } from "express";
+import {validateJWT} from "../../../server.js";
+import {uploadImagesAilooCDN} from "../../../services/cdnService.js";
+import {Router} from "express";
 import multer from "multer";
 import {db as drizzleDb} from "../../../db/drizzle.js";
 import schema from "../../../db/schema.js";
@@ -9,8 +9,106 @@ import {and, asc, desc, eq, ne} from "drizzle-orm";
 const router = Router();
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+    limits: {fileSize: 5 * 1024 * 1024} // 5MB limit
 });
+
+const ridingStyles = {
+    rsATV: "ATV/Quadrimoto",
+    rsMX: "MOTOCROSS/ENDURO",
+    rsAdv: "TRAIL/ADVENTURE",
+    rsHarley: "CHOPPER",
+    rsCafeRacer: "CAFE RACER/VINTAGE",
+    rsRace: "SPORT/RACING",
+    rsScooter: "SCOOTER/URBAN/CITY",
+    rsSportTouring: "TOURING"
+}
+
+
+router.get("/:domainId/account/profile", validateJWT, async (req, res, next) => {
+    try {
+        const user = await drizzleDb.query.user.findFirst({
+            where: (user, {eq, and}) => {
+                return and(eq(user.id, req.user.id))
+            },
+            with: {
+                person: true
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({message: 'User not found'});
+        }
+
+        let firstName, lastName, phone, gender, dateOfBirth;
+        let ridingStyle = []
+        if (user.person) {
+            firstName = user.person.firstName;
+            lastName = user.person.lastName;
+            phone = user.person.phone;
+            gender = user.person.gender;
+            dateOfBirth = user.person.birthDay?.toISOString()?.substring(0, 10) || null;
+
+
+            if (user.person.ridingStyles?.length > 0) {
+                ridingStyle = user.person.ridingStyles.split(",").filter(rs => rs?.length > 0); /*.map(rsId => {
+                    return {
+                        id: rsId,
+                        description: ridingStyles[rsId],
+                    }
+                });*/
+            }
+        }
+
+        res.json({
+            userId: user.id,
+            partyId: user.person?.id || 0,
+            firstName,
+            lastName,
+            phone,
+            dateOfBirth: dateOfBirth,
+            gender: gender,
+            ridingStyles: ridingStyle,
+            rsStr: user.person?.ridingStyles || '',
+        })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
+router.post("/:domainId/account/profile", validateJWT, async (req, res, next) => {
+
+    try {
+
+        const user = await drizzleDb.query.user.findFirst({
+            where: (user, {eq, and}) => {
+                return and(eq(user.id, req.user.id))
+            },
+
+        });
+
+
+        await drizzleDb
+            .update(schema.party)
+            .set({
+                firstName: req.body.firstName?.trim() || null,
+                lastName: req.body.lastName?.trim() || null,
+                birthDay: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : null,
+                ridingStyles: req.body.ridingStyles?.join(",") || null,
+                phone: req.body.phone,
+
+            })
+            .where(eq(schema.party.id, user.personId));
+
+        const party = await drizzleDb.query.party.findFirst({
+            where: (party, {eq}) => eq(party.id, user.personId),
+        })
+
+        res.json(party)
+    } catch (e) {
+        next(e)
+    }
+})
 
 
 router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
@@ -27,7 +125,7 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
         });
 
         let party = user.person || null;
-        if(!user.person){
+        if (!user.person) {
             party = await drizzleDb.query.party.findFirst({
                 where: (party, {and, eq}) => and(
                     eq(party.email, user.username.trim()),
@@ -35,7 +133,7 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
                 ),
             })
 
-            if(party != null){
+            if (party != null) {
                 await drizzleDb.update(schema.user).set({
                     personId: party.id,
                 }).where(eq(schema.user.id, userId));
@@ -62,7 +160,7 @@ router.post("/:domainId/account/avatar", upload.single('image'), validateJWT, as
 
         // 2. Check if file exists
         if (!file) {
-            return res.status(400).json({ error: "No image file provided." });
+            return res.status(400).json({error: "No image file provided."});
         }
 
         const avatar = {
@@ -76,13 +174,13 @@ router.post("/:domainId/account/avatar", upload.single('image'), validateJWT, as
         // 3. Pass the file to your service
         const resp = await uploadImagesAilooCDN([avatar], domainId);
 
-        if(resp.uploads?.length > 0) {
+        if (resp.uploads?.length > 0) {
             const imageId = resp.uploads[0].imageId
 
             await drizzleDb
                 .update(schema.user)
-                .set({ avatar: imageId })
-                .where(eq( schema.user.id, req.user.id ))
+                .set({avatar: imageId})
+                .where(eq(schema.user.id, req.user.id))
             // save to db
 
         }
@@ -91,7 +189,7 @@ router.post("/:domainId/account/avatar", upload.single('image'), validateJWT, as
     } catch (e) {
         // 4. Forward error to Express error handler
         console.error("Upload error:", e);
-        res.status(500).json({ error: "Internal server error during upload." });
+        res.status(500).json({error: "Internal server error during upload."});
     }
 });
 
