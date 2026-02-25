@@ -39,9 +39,12 @@ app.use(productsRoutes);
 import settingsRoutes from "./routes/account/settings/settings.routes.js";
 app.use(settingsRoutes);
 
+import profileRoutes from "./routes/account/profile/profile.routes.js";
+app.use(profileRoutes);
 
 import productsSearchRoutes from "./routes/products/search.routes.js";
 app.use(productsSearchRoutes);
+
 import blogRoutes from "./routes/blog-routes.js";
 app.use(blogRoutes);
 

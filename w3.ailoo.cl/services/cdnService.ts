@@ -2,6 +2,7 @@ import FormData from "form-data";
 import axios from "axios";
 
 const railsAdminUrl = `${process.env.ADMIN_URL || 'http://admin'}/Product/UploadImage.rails`;
+// const railsAdminUrl = `http://admin/Product/UploadImage.rails`;
 
 export async function uploadImagesAilooCDN(images, domainId) {
 
