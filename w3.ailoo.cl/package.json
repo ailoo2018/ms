@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsx watch app.ts",
     "start": "node dist/app.js",
-    "build": "tsc && cp -r templates dist/w3.ailoo.cl/templates",
+    "build": "tsc && mkdir -p dist/templates && cp -r templates/. dist/templates/",
     "debug": "node --inspect --import tsx app.ts"
   },
   "keywords": [],
