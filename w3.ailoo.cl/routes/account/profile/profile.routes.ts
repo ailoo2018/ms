@@ -24,7 +24,12 @@ const ridingStyles = {
     rsSportTouring: "TOURING"
 }
 
-
+const Gender = {
+    "undisclosed": 0,
+    "male": 1,
+    "female": 2,
+    "other": 3
+}
 router.get("/:domainId/account/profile", validateJWT, async (req, res, next) => {
     try {
         const user = await drizzleDb.query.user.findFirst({
@@ -40,13 +45,23 @@ router.get("/:domainId/account/profile", validateJWT, async (req, res, next) => 
             return res.status(400).json({message: 'User not found'});
         }
 
-        let firstName, lastName, phone, gender, dateOfBirth;
+        let firstName = '', lastName = '', phone = '', gender = 0, dateOfBirth = null;
+        let genderId = 0;
         let ridingStyle = []
         if (user.person) {
             firstName = user.person.firstName;
             lastName = user.person.lastName;
             phone = user.person.phone;
-            gender = user.person.gender;
+            genderId = user.person.gender || 0;
+
+            gender = "undisclosed"
+            for(var key in Gender) {
+                if(Gender[key] == genderId) {
+                    gender = key;
+                }
+            }
+
+
             dateOfBirth = user.person.birthDay?.toISOString()?.substring(0, 10) || null;
 
 
@@ -110,6 +125,9 @@ router.post("/:domainId/account/password", validateJWT, async (req, res, next) =
     }
 })
 
+
+
+
 router.post("/:domainId/account/profile", validateJWT, async (req, res, next) => {
 
     try {
@@ -122,6 +140,12 @@ router.post("/:domainId/account/profile", validateJWT, async (req, res, next) =>
         });
 
 
+        let gender = 0;
+        if(req.body.gender?.length > 0) {
+            gender = Gender[req.body.gender] || 0
+        }
+
+
         await drizzleDb
             .update(schema.party)
             .set({
@@ -130,7 +154,7 @@ router.post("/:domainId/account/profile", validateJWT, async (req, res, next) =>
                 birthDay: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : null,
                 ridingStyles: req.body.ridingStyles?.join(",") || null,
                 phone: req.body.phone,
-
+                gender: gender,
             })
             .where(eq(schema.party.id, user.personId));
 
@@ -143,7 +167,6 @@ router.post("/:domainId/account/profile", validateJWT, async (req, res, next) =>
         next(e)
     }
 })
-
 
 router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
     try {
