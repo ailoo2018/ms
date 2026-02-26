@@ -153,6 +153,7 @@ export const reviewsStats = async function (productId, domainId) {
 
   try {
 
+
     const sql = `
  
 select 

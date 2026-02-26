@@ -30,7 +30,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
         return { success: false, message: `Invoice no encontrada` }
     }
     const invoiceTotal = invoiceHelper.getTotal(invoice)
-    if(transactionAmount !== invoiceTotal){
+    if(Math.abs(transactionAmount - invoiceTotal) > 1){
    //     throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
     }
 
@@ -62,7 +62,7 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
         throw new Error( `Orden de compra ${referenceId} no encontrada` )
     }
     const orderTotal = ordersHelper.getTotal(order)
-    if(transactionAmount !== orderTotal){
+    if(Math.abs(transactionAmount - orderTotal) > 1){
         throw new Error( `Montos de orden de compra no coinciden: ${transactionAmount} vs ${orderTotal}` )
     }
 
