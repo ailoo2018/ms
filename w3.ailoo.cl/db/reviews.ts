@@ -164,7 +164,7 @@ from Review as r
          left outer join model m on p.ModelId = m.Id
          left outer join Party pty on pty.Id = u.PersonId
 where r.DomainId = ?
-  and r.IsEvaluation = 1
+ -- and r.IsEvaluation = 1
   and r.State = 2
   and r.ProductId = ?
 group by  RatingGroup;`;
