@@ -130,7 +130,7 @@ export const listReviews = async function (rq, domainId) {
       LEFT OUTER JOIN model m ON p.ModelId = m.Id
       LEFT OUTER JOIN Party pty ON pty.Id = u.PersonId
       WHERE r.DomainId = ?
-        AND r.IsEvaluation = 1
+     --   AND r.IsEvaluation = 1
         AND r.State = 2
         AND r.ProductId = ?
         ${ratingSql}
