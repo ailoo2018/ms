@@ -91,7 +91,14 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
     }
 
 
-    const stocks = await stockByStore(facilityId, pitIds, domainId);
+    const stocks : any = await stockByStore(facilityId, pitIds, domainId);
+
+    let availableIn2Hours = false;
+    if(stocks?.length > 0){
+      availableIn2Hours = !stocks.some(s => parseInt(s.Quantity) < 0)
+    }
+
+
 
     var avlDate = addBusinessDays(new Date(), 2);
     var nextDate = new Date()
@@ -107,7 +114,7 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
 
     res.json({
-      "availableIn2Hours": false,
+      "availableIn2Hours": availableIn2Hours,
       "avlFromDate": nextDate,
       "avlToDate": avlDate,
       "description": description,

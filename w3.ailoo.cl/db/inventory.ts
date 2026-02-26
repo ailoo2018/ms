@@ -36,7 +36,7 @@ export const stockByStore = async function (facilityId, productItemIds, domainId
   const connection = await pool.getConnection();
 
   try {
-    const [rows] = await connection.execute(
+    const [rows] = await connection.query(
         `   select ii.Id, ii.ProductItemId, ii.Quantity, f.Id as FacilityId, f.Name as FacilityName
     from InventoryItem ii
     join Facility f on ii.FacilityId = f.Id
