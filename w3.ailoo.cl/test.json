@@ -1,21 +1,167 @@
 {
-  "transaction_id": "191896",
-  "affiliation": "store",
-  "value": "10.00",
-  "currency": "CLP",
-  "tax": "2.00",
-  "shipping": "0.00",
+  "wuid": "c8ed34a3-2ea7-40ac-ac00-0bf093b7c607",
+  "addresses": {
+    "selectedShipping": {
+      "name": "Juan",
+      "surnames": "Carlos",
+      "phone": "56977741034",
+      "rut": "153203008",
+      "address": "Charles Hammilton 13731",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": null,
+      "id": 803745,
+      "default": false,
+      "comuna_id": 316,
+      "nif": "153203008",
+      "alias": "Casa"
+    },
+    "shipping": {
+      "name": "Juan",
+      "surnames": "Carlos",
+      "phone": "56977741034",
+      "rut": "153203008",
+      "address": "Charles Hammilton 13731",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": null,
+      "id": 803745,
+      "default": false,
+      "comuna_id": 316,
+      "nif": "153203008",
+      "alias": "Casa"
+    },
+    "billing": {}
+  },
+  "customerInformation": {
+    "phone": "996794009",
+    "email": "jcfuentes@lava.cl",
+    "address": {
+      "name": "Juan",
+      "surnames": "Carlos",
+      "phone": "56977741034",
+      "rut": "153203008",
+      "address": "Charles Hammilton 13731",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": null,
+      "id": 803745,
+      "default": false,
+      "comuna_id": 316,
+      "nif": "153203008",
+      "alias": "Casa"
+    }
+  },
+  "shipmentInformation": {
+    "method": 1,
+    "address": {
+      "name": "Juan",
+      "surnames": "Carlos",
+      "phone": "56977741034",
+      "rut": "153203008",
+      "address": "Charles Hammilton 13731",
+      "address2": null,
+      "legalName": "",
+      "type": "shipping",
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      },
+      "postal_code": null,
+      "id": 803745,
+      "default": false,
+      "comuna_id": 316,
+      "nif": "153203008",
+      "alias": "Casa"
+    },
+    "store": {
+      "id": 1,
+      "title": "LAS TRANQUERAS (LAS CONDES)",
+      "name": "LAS TRANQUERAS",
+      "address": "LAS TRANQUERAS 56",
+      "latitude": -33400898749676830,
+      "longitude": -7055551688038699,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      }
+    },
+    "pickupOption": "pickup_in_2_hours",
+    "modifiedDate": "2026-02-26T17:20:25.231Z",
+    "carrierId": 9,
+    "comments": "",
+    "remarks": ""
+  },
+  "createAccount": false,
+  "subscribe": true,
+  "notifyWhatsApp": true,
+  "selectedCarrier": 9,
+  "paymentMethod": {
+    "gateway": 8
+  },
+  "pickupStore": {
+    "id": 1,
+    "title": "LAS TRANQUERAS (LAS CONDES)",
+    "name": "LAS TRANQUERAS",
+    "address": "LAS TRANQUERAS 56",
+    "latitude": -33400898749676830,
+    "longitude": -7055551688038699,
+    "comuna": {
+      "id": 316,
+      "name": "LAS CONDES"
+    }
+  },
+  "selectedMapData": {
+    "store_id": 1
+  },
   "items": [
     {
-      "id": "331533",
-      "name": "XENA test webpay",
-      "list_name": "Cart Items",
-      "brand": "XENA",
-      "category": "",
-      "variant": "XENA test webpay Tamaño Unico",
-      "list_position": 1,
-      "quantity": "1",
-      "price": "10.00"
+      "image": "c7d9938e976b48d2b760ef678dbda8bf.jpg",
+      "product": {
+        "image": "c7d9938e976b48d2b760ef678dbda8bf.jpg",
+        "productItemId": 3440780,
+        "name": "AGV K1 S (2023) Fastlap Negro/Gris/Rojo M",
+        "type": 0,
+        "url": "/motocicleta/2993400-cascos-integrales-agv-k1-s-2023-fastlap"
+      },
+      "quantity": 1,
+      "color": {
+        "name": "Negro/Rojo/Azul",
+        "orderWeight": 0,
+        "id": 5411,
+        "type": 1
+      },
+      "oldPrice": 249900,
+      "description": "K1 S (2023) Fastlap",
+      "discount": 0,
+      "type": 0,
+      "packId": 0,
+      "size": {
+        "name": "M",
+        "orderWeight": 50,
+        "id": 986,
+        "type": 0
+      },
+      "price": 249900,
+      "name": "AGV K1 S (2023) Fastlap Negro/Gris/Rojo M",
+      "id": "66afe57f-ee4e-44fd-84cc-9975f039cb43",
+      "loading": false
     }
-  ]
+  ],
+  "mercadoPagoPaymentData": null
 }

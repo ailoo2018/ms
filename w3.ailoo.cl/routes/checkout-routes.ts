@@ -178,6 +178,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
             name = fname?.trim() + " " + lname?.trim()
           }
+
+
+
           const [result] = await tx.insert(party).values({
             name: name || null,
             firstName: fname || null,
@@ -264,6 +267,12 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
         logger.info("drizzleDb.transaction 7")
 
+        let facilityId : any = null
+        if(rq.selectedCarrier === 9){
+          facilityId = rq.pickupStore?.id || null;
+        }
+
+
         const [orderResult] = await tx.insert(saleOrder).values({
           orderDate: new Date(),
           expectedDeliveryDate: new Date(),
@@ -272,6 +281,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
           paymentMethodTypeId: rq.paymentMethod.gateway,
           shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
           orderedBy: person.id,
+          destinationFacilityId: facilityId,
           invoicedTo: null, // todo datos de factura
           domainId: domainId
         });
