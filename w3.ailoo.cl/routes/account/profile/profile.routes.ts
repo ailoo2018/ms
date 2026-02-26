@@ -45,7 +45,7 @@ router.get("/:domainId/account/profile", validateJWT, async (req, res, next) => 
             return res.status(400).json({message: 'User not found'});
         }
 
-        let firstName = '', lastName = '', phone = '', gender = 0, dateOfBirth = null;
+        let firstName = '', lastName = '', phone = '', gender = 'undisclosed', dateOfBirth = null;
         let genderId = 0;
         let ridingStyle = []
         if (user.person) {
