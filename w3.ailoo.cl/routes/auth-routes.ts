@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'url';
 import logger from "@ailoo/shared-libs/logger";
 import sgMail from "@sendgrid/mail";
 import {Router} from "express";
@@ -321,7 +322,10 @@ router.post("/:domainId/auth/recover", async (req, res, next) => {
         }
 
 
-        const templatePath = path.join(process.cwd(), '/templates/recover-account.ejs');
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        const templatePath = path.join("..", __dirname, 'templates', 'recover-account.ejs');
+        // const templatePath = path.join(process.cwd(), '/templates/recover-account.ejs');
         const template = await fs.readFile(templatePath, 'utf-8');
         let person = user.person
         const html = ejs.render(template, await resetPasswordEmailData(person, email, domainId));
