@@ -306,7 +306,7 @@ router.post("/:domainId/auth/recover", async (req, res, next) => {
         const user = await drizzleDb.query.user.findFirst({
                 where: (user, {eq, and}) => {
                     return and(
-                        eq(user.email, email),
+                        eq(user.username, email),
                         eq(user.domainId, domainId),
                     )
                 },
