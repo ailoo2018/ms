@@ -107,7 +107,9 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
 
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
     if (cachedData) {
-      return res.json(JSON.parse(cachedData.toString()));
+      const cacheProd = JSON.parse(cachedData.toString())
+      cacheProd.origin = "cache"
+      return res.json(cacheProd);
     }
 
 
@@ -123,10 +125,13 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
       p.sizeChart = charts[0]
     }
 
-    await redisDb.set(productCacheKey(productId, domainId), JSON.stringify(p), {
+
+
+    await redisDb.set(productCacheKey(productId, domainId), JSON.stringify({...p, cachedAt: new Date, }), {
       EX: CACHE_TTL
     });
 
+    p.origin = "db"
     res.json(p);
   } catch (e) {
     logger.error("product not found: " + JSON.stringify(req.params));
