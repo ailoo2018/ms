@@ -6,3 +6,5 @@ npm-debug.log
 logs/
 package-lock.json
 /generated/prisma
+/dist/
+/.idea/jsLibraryMappings.xml

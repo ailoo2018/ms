@@ -4,3 +4,4 @@ npm-debug.log
 .env
 .env.local
 logs/
+/.idea/shared-libs.iml
