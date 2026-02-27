@@ -1,4 +1,6 @@
 import {getElClient} from "../connections/el.js";
+import * as cartHelper from "../helpers/cart-helper.js";
+import {Cart} from "../models/cart-models.js";
 
 
 let INDEX = "shopping-cart";
@@ -23,15 +25,13 @@ export async function updateCartUserId(cartId, userId){
   });
 }
 
-export async function updateCart(existingCart) {
-  const result = await getElClient().update({
+export async function updateCart(cart: Partial<Cart>) {
+  return await getElClient().update({
     index: INDEX,
-    id: existingCart.id,
-    doc: existingCart,
+    id: cart.id,
+    doc: cart,
     refresh: true
   });
-
-  return result;
 }
 
 export async function findCart(id) {

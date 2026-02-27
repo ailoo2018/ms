@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {contactsClient} from "../services/contactsClient.js";
-import schema, {Coupon} from "../db/schema.js";
+import schema, {Coupon, SaleOrderItem} from "../db/schema.js";
 import {PbxRepository} from "../el/pbx.js";
 import {
     CouponContextType,
@@ -14,7 +14,7 @@ import {
 import {and, eq, sql} from "drizzle-orm";
 import logger from "@ailoo/shared-libs/logger";
 import {db as drizzleDb} from "../db/drizzle.js";
-import {Cart, CartItemType} from "../models/cart-models.js";
+import {Cart, CartCoupon, CartItemType} from "../models/cart-models.js";
 import {findCart} from "../services/cartService.js";
 import {stockByStore} from "../db/inventory.js";
 import container from "../container/index.js";
@@ -22,6 +22,7 @@ import * as couponHelper from "../helpers/coupon-helper.js"
 import * as cartHelper from "../helpers/cart-helper.js"
 import {CouponConfig} from "../models/coupon.types.js";
 import {updateCart} from "../el/cart.js";
+import {applyCoupon} from "../helpers/cart-helper.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -144,6 +145,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const domainId = parseInt(req.params.domainId);
 
 
+
         const result = await drizzleDb.transaction(async (tx) => {
 
             try {
@@ -222,6 +224,13 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 logger.info("drizzleDb.transaction 6")
                 let postalAddressId = null;
                 const cart = await findCart(rq.wuid, domainId)
+
+                let appliedCoupon = null
+                if(rq.coupon?.id > 0){
+                    appliedCoupon = await cartHelper.applyCoupon(rq.coupon.name, cart, domainId);
+                }
+
+
                 if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
                     const facilityDb = await drizzleDb.query.facility.findFirst({
                         where: (productItem) => eq(facility.id, rq.pickupStore.id),
@@ -354,6 +363,12 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
                 }
 
+                if(appliedCoupon){
+                    const orderItemDb = createCouponSaleOrderItem(newOrderId, appliedCoupon, domainId)
+                    await tx.insert(saleOrderItem).values(orderItemDb);
+                    orderTotal += (-1*appliedCoupon.discount)
+                }
+
                 logger.info("drizzleDb.transaction 9: " + orderResult.insertId);
 
                 return {id: orderResult.insertId, total: orderTotal, addressId: postalAddressId};
@@ -410,97 +425,10 @@ router.post("/:domainId/checkout/coupon", async (req, res, next) => {
 
         const cart: Partial<Cart> = await findCart(wuid, domainId);
 
-        let user = null;
-        if (cart.userId > 0) {
-            user = await drizzleDb.query.user.findFirst({
-                where: (user, {eq, and}) => and(eq(user.id, cart.userId), eq(user.domainId, domainId)),
-                with: {
-                    person: {
-                        with: {
-                            partyTags: {
-                                with: {
-                                    tag: true
-                                }
-                            }
-                        }
-                    },
-
-                }
-            })
-        }
-
-
-        const coupon : Coupon = await drizzleDb.query.coupon.findFirst({
-            where: (coupon, {eq, like, and}) => {
-                return and(
-                    like(coupon.name, code),
-                    eq(coupon.domainId, domainId),
-                    eq(coupon.deleted, 0)
-                )
-            }
-        })
-
-        if (!coupon) {
-            return res.status(400).json({message: `Cupón '${code} no encontrado'`})
-        }
-
-        const today = new Date(new Date().toISOString().split('T')[0]);
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        if (coupon.validUntil != null && !(coupon.validUntil >= today) ) {
-            return res.status(410).json({message: `El cupon expiro el ${coupon.validUntil} ${tomorrow}`})
-        }
-
-
-        if (coupon.isMultiUse > 0 && user != null && user.person != null && couponHelper.isUsed(coupon, user.person.id))
-            return res.status(409).json({message: "Cupón ya fue utilizado"});
-
-
-        const couponConfig : CouponConfig = JSON.parse(coupon.config);
-        const context = await cartHelper.createCouponContext(cart, domainId)
-
-        if (user && user.person && user.person.partyTags != null) {
-            for (var ptag of user.person.partyTags)
-                context.context.push({
-                    name: ptag.tag?.description || null,
-                    value: ptag.tag?.id,
-                    type: CouponContextType.PartyTag,
-                    typeName: "PartyTag"
-                });
-        }
-
-        if (!couponHelper.applies(coupon, context)) {
-            throw new Error("Cupón no aplica a su compra actual.")
-
-        }
-
-        var totalDiscount = new Money( 0,  cart.currency );
-        if (coupon.discountType == DiscountType.Percent)
-            for (var si of cart.items.filter(i1 => i1.product?.productItemId)) {
-                var itemCtx = await couponHelper.createCouponContext(si, domainId);
-
-                if (itemCtx != null && couponHelper.appliesToSaleItem(couponConfig, itemCtx))
-                    totalDiscount.amount = couponHelper
-                        .applyDiscount(coupon, new Money(si.price * si.quantity, cart.currency))
-                        .amount;
-            }
-        else
-            totalDiscount = {amount: coupon.discountAmount, currency: "CLP"};
-
-        var coupons = cart.items.filter(i => i.coupon != null).map(c => c.id);
-
-        // remove existing coupon with same id
-        cart.items = cart.items.filter(ci => !coupons.some(ci2 => ci2 == ci.id));
-
-        cartHelper.addCoupon(cart, "Cupón " + coupon.name, totalDiscount.amount * -1, coupon);
-
-        await updateCart(cart)
+        const cartCoupon = await cartHelper.applyCoupon(code, cart, domainId);
 
         res.json({
-            discount: totalDiscount.amount,
-            coupon,
-            cart
+            coupon: cartCoupon,
         })
     } catch (e) {
         next(e)
@@ -579,7 +507,7 @@ function validateRequestPrice(item, rq) {
     }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) {
+function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) : Partial<SaleOrderItem> {
 
     return {
         orderId: orderId,
@@ -590,6 +518,22 @@ function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) {
         unitCurrency: "CLP",           // Default as per your table schema
         type: OrderItemType.Product,
         orderItemId: orderItemId ? orderItemId : null,
+    }
+}
+
+function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId: number) : Partial<SaleOrderItem> {
+
+    return {
+        orderId: orderId,
+        productId: null,
+        productItemId: null,
+        couponId: coupon.id,
+        description: coupon.name?.trim() + " " + coupon.description.trim(),
+        quantity: "1",
+        unitPrice: coupon.discount * -1,
+        unitCurrency: "CLP",           // Default as per your table schema
+        type: OrderItemType.Coupon,
+        orderItemId: null,
     }
 }
 

@@ -16,6 +16,8 @@ export interface Cart {
   currency: string;
   userId: number;
   domainId: number;
+  promoCodes: string[];
+  coupons: CartCoupon[]
   items: CartItem[];
   totalItems: number;
   oldPrice: number;
@@ -27,6 +29,15 @@ export interface Cart {
   financing: FinancingInfo;
   netTotal: number;
   shipmentMethod: ShipmentMethod;
+}
+
+export interface CartCoupon {
+  id: number,
+  name: string,
+  discount: number,
+  description: string,
+  validFrom?: Date,
+  validUntil?: Date
 }
 
 export interface CartItem {

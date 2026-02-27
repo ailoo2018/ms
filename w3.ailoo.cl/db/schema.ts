@@ -1215,6 +1215,8 @@ const partyTagRelations = relations(partyTag, ({ one }) => ({
 }));
 
 export type Coupon = InferSelectModel<typeof coupon>;
+export type SaleOrder = InferSelectModel<typeof saleOrder>;
+export type SaleOrderItem = InferSelectModel<typeof saleOrderItem>;
 
 export default {
     brand,
