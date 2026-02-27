@@ -1,0 +1,68 @@
+* pueden comprar sin stock (permite seleccionar variante en gris)
+* mensaje VAlert al tratar de comprar sin seleccionar variante
+* whatsapp on page
+* click twice in home iphone
+* add pack not working in iphone (does not refresh)
+* search icon not centered in search dropdown should also have a spinner
+* payment quick checkout
+* producto con combo aun se pueden comprar
+* accounts menu
+* evaluacion de productos no llega
+* events page
+* payoneer
+* facturar compra
+* ver todo home not working
+* google sitemap
+* size guide
+* yt latest cache
+* oc 191748 shippetTo velocity error 
+* account/orders
+* gtm added to website
+* /checkout/recover.rails?id=xex_cpwBeLAK3Wjm1Yg_&hash=20CED963C93334AB55046BDEE8993EFF
+* blog next prev
+* account/addresses
+* create account1!!
+* account/reviews show reviews
+* account/favorites
+* add remove to wishlist
+* recover password 
+* marcas in mobile
+* unable to delete bike
+* wishlist in deteail
+* permite comprar producto sin stock
+* google merchant list
+* problemas stock
+* category search product list title on page
+* meta and title for analytics in blog entreies and list
+* promociones no funciona al agregar al carrito de compra // faltaba realizar un publicar
+* blog search
+* blog categories
+* products appear with 100% discount
+* when i delete discount it does not sync
+* add google tag manager
+* account/configuration
+* mobile blog search
+* review de reso no aparece en la pagina
+* ONE SIZE product no muestra stock disponible
+* seleccionar productdo disponible luego cambiar color permite comprar
+* recoge tienda en 2 horas no disponible si producto está en la tienda
+* recoge tienda checkout no funciona despues de la primera seleccion de tienda
+* retiro en tienda dejo de funcionar
+* enable coupon on checkout
+
+
+- venta internacionales
+
+- blog article show realted products
+- blog entry in product detail
+- filter drawer mobile
+- account/gear
+- store survey
+- maintain cookie department when selecting logo
+- show seen cheaper
+- al seleccionar pack no sale el descuento bien
+- view widget in nuxt
+- cdn dedicated in iis
+- q&a
+- finish reviews in product detail page
+- cart change quantity manually
