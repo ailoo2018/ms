@@ -3,7 +3,7 @@ import { Router } from "express";
 import {v4 as uuidv4} from "uuid";
 import container from "../container/index.js";
 import {getProductImage, getProductItemDescription} from "../helpers/product-helper.js";
-import {CartItemType} from "../models/cart-models.js";
+import {Cart, CartItemType} from "../models/cart-models.js";
 import {addCart, findCartByWuid, updateCart} from "../el/cart.js";
 import {ProductType} from "../models/domain.js";
 const router = Router(); // Create a router instead of using 'app'
@@ -13,6 +13,24 @@ const router = Router(); // Create a router instead of using 'app'
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 
+router.post("/:domainId/cart/set-user", async(req, res, next) => {
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const { userId, wuid } = req.body;
+
+    const cart : Partial<Cart> = await findCart(wuid, domainId);
+    if(cart.userId > 0 && userId !== cart.userId)
+      throw new Error("Carro de compra ya tiene usuario");
+
+    cart.userId = userId
+
+    await updateCart(cart)
+
+    res.json(cart)
+  }catch(e){
+    next(e)
+  }
+})
 
 router.get("/:domainId/cart/comuna", async (req, res, next) => {
 
@@ -246,7 +264,6 @@ router.get("/:domainId/cart/find", async (req, res, next) => {
     next(err);
   }
 })
-
 
 router.get("/:domainId/cart/:wuid", async (req, res, next) => {
   try {

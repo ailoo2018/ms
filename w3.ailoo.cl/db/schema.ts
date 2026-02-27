@@ -14,6 +14,7 @@ import {
     unique,
     varchar
 } from "drizzle-orm/mysql-core";
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 
 // Defining the schema namespace
 const motomundiSchema = mysqlSchema("motomundi");
@@ -246,6 +247,25 @@ const facility = motomundiSchema.table("facility", {
         foreignColumns: [table.id], // Placeholder: Replace with facilityDeliveryTime.id
         name: "FK_FACILITY_DELTIME"
     }).onDelete("set null"),
+}));
+
+const coupon = motomundiSchema.table("coupon", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", { length: 45 }),
+    description: varchar("Description", { length: 255 }),
+    discountAmount: double("DiscountAmount"),
+    discountType: smallint("DiscountType"), // e.g., 1 for Percentage, 2 for Fixed Amount
+    validFrom: datetime("ValidFrom"),
+    validUntil: datetime("ValidUntil"),
+    isFreeShipping: smallint("IsFreeShipping"),
+    config: text("Config"),
+    domainId: int("DomainId").notNull().default(0),
+    userId: int("UserId"), // The creator of the coupon
+    deleted: smallint("Deleted").notNull().default(0),
+    isMultiUse: smallint("IsMultiUse"),
+}, (table) => ({
+    userIdx: index("FK_COUPON_USER_idx").on(table.userId),
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
 }));
 
 const saleOrder = motomundiSchema.table("saleorder", {
@@ -712,7 +732,6 @@ const website = motomundiSchema.table("website", {
     }),
 }));
 
-// --- Wishlist Table ---
 const wishList = motomundiSchema.table("wishlist", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     name: varchar("Name", { length: 100 }),
@@ -730,7 +749,6 @@ const wishList = motomundiSchema.table("wishlist", {
     }).onDelete("cascade"),
 }));
 
-// --- WishlistItem Table ---
 const wishListItem = motomundiSchema.table("wishlistitem", {
     id: int("Id").primaryKey().autoincrement().notNull(),
     productId: int("ProductId"),
@@ -761,7 +779,58 @@ const wishListItem = motomundiSchema.table("wishlistitem", {
     }),
 }));
 
+const tagCategory = motomundiSchema.table("tagcategory", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    name: varchar("Name", { length: 80 }),
+    domainId: int("DomainId"),
+    orderWeight: int("OrderWeight"),
+    useInFilter: smallint("UseInFilter"),
+    type: smallint("Type"),
+}, (table) => ({
+    domainIdx: index("IDX_DOMAIN").on(table.domainId),
+}));
 
+const tag = motomundiSchema.table("tag", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    description: varchar("Description", { length: 100 }),
+    tagCategoryId: int("TagCategoryId"),
+    html: text("Html"),
+    parentTagId: int("ParentTagId"),
+    image: varchar("Image", { length: 45 }),
+    yearFrom: smallint("YearFrom").default(0),
+    yearThru: smallint("YearThru").default(0),
+    domainId: int("DomainId"),
+    deleted: smallint("Deleted"),
+}, (table) => ({
+    descriptionDomainIdx: index("IDX_TAG_NAMEDOM").on(table.description, table.domainId),
+    parentTagIdx: index("FK_TAG_TAGPARENT_idx").on(table.parentTagId),
+    // Self-referencing Foreign Key
+    parentFk: foreignKey({
+        columns: [table.parentTagId],
+        foreignColumns: [table.id],
+        name: "FK_TAG_TAGPARENT"
+    }).onDelete("set null"),
+}));
+
+const partyTag = motomundiSchema.table("partytag", {
+    id: int("Id").primaryKey().autoincrement().notNull(),
+    partyId: int("PartyId").notNull(),
+    tagId: int("TagId").notNull(),
+}, (table) => ({
+    tagIdx: index("fk_partytag_tagid").on(table.tagId),
+    partyIdx: index("fk_partytag_partyid").on(table.partyId),
+    // Foreign Keys with Cascade
+    partyFk: foreignKey({
+        columns: [table.partyId],
+        foreignColumns: [party.id],
+        name: "fk_partytag_partyid"
+    }).onDelete("cascade"),
+    tagFk: foreignKey({
+        columns: [table.tagId],
+        foreignColumns: [tag.id],
+        name: "fk_partytag_tagid"
+    }).onDelete("cascade"),
+}));
 
 // --- RELATIONS ---
 const reviewRelations = relations(review, ({one}) => ({
@@ -845,6 +914,7 @@ const postalAddressRelations = relations(postalAddress, ({one, many}) => ({
 const partyRelations = relations(party, ({many}) => ({
     orders: many(saleOrder),
     contactMechanisms: many(partyContactMechanism),
+    partyTags: many(partyTag),
 }));
 
 const orderJournal = motomundiSchema.table("orderjournal", {
@@ -1117,9 +1187,38 @@ const wishListItemRelations = relations(wishListItem, ({ one }) => ({
     }),
 }));
 
+const tagRelations = relations(tag, ({ one, many }) => ({
+    category: one(tagCategory, {
+        fields: [tag.tagCategoryId],
+        references: [tagCategory.id],
+    }),
+    parent: one(tag, {
+        fields: [tag.parentTagId],
+        references: [tag.id],
+        relationName: "tag_hierarchy",
+    }),
+    children: many(tag, {
+        relationName: "tag_hierarchy",
+    }),
+    parties: many(partyTag),
+}));
+
+const partyTagRelations = relations(partyTag, ({ one }) => ({
+    party: one(party, {
+        fields: [partyTag.partyId],
+        references: [party.id],
+    }),
+    tag: one(tag, {
+        fields: [partyTag.tagId],
+        references: [tag.id],
+    }),
+}));
+
+export type Coupon = InferSelectModel<typeof coupon>;
 
 export default {
     brand,
+    coupon,
     model,
     product,
     productRelations,
@@ -1143,7 +1242,10 @@ export default {
     userConfiguration,
     userConfigurationRelations,
     party,
+    partyTag,
+
     partyRelations,
+    partyTagRelations,
     partyContactMechanism,
     partyContactMechanismRelations,
     contactMechanism,
@@ -1157,6 +1259,8 @@ export default {
     contactMechanismRelations,
     review,
     reviewRelations,
+    tag,
+    tagCategory,
     geographicBoundary,
     geographicBoundaryAssociation,
     geographicBoundaryAssociationRelations,

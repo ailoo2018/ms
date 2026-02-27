@@ -111,13 +111,14 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
                 return res.status(401).json({message: "order not found"})
 
             partyDb = saleOrderDb.customer
-        } else if (type === "cart") {
+        }
+        else if (type === "cart") {
             const cart = await findCart(pid)
             if (cart) {
 
             }
-        } else {
-
+        }
+        else {
             partyDb = await drizzleDb.query.party.findFirst({
                 where: (party, {eq}) => eq(party.id, pid)
             })

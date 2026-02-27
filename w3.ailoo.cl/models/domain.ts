@@ -63,8 +63,8 @@ export const ProductFeatureType = Object.freeze({
 })
 
 export class Money {
-  private amount: any;
-  private currency: any;
+  amount: number;
+  currency: string;
   constructor(amount: any, currency: any) {
     this.amount = amount || 0;
     this.currency = currency || 'CLP';
@@ -188,6 +188,24 @@ export const PaymentMethodType = Object.freeze({
   DLocal: 19,
 })
 
+export const DiscountType = Object.freeze({
+  Percent: 0,
+  FixedAmount: 1,
+})
+
+
+export enum CouponContextType
+{
+  Product = 0,
+  Facility = 1,
+  Brand = 2,
+  ProductTag = 3,
+  ProductCategory = 4,
+  SaleType = 5,
+  SubTotal = 6,
+  PartyTag = 7
+}
+
 /*
 export  {
   PriceComponentType,
@@ -201,3 +219,4 @@ export  {
   ProductFeatureType,
   ShipmentMethodType,
 }*/
+
