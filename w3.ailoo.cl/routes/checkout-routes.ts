@@ -528,7 +528,7 @@ function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId
         productId: null,
         productItemId: null,
         couponId: coupon.id,
-        description: coupon.name?.trim() + " " + coupon.description.trim(),
+        comment: coupon.name?.trim() + " " + coupon.description.trim(),
         quantity: "1",
         unitPrice: coupon.discount * -1,
         unitCurrency: "CLP",           // Default as per your table schema
