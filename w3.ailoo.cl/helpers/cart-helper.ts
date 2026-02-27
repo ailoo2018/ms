@@ -7,7 +7,6 @@ import {Coupon} from "../db/schema.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import * as couponHelper from "./coupon-helper.js";
 import * as cartHelper from "../helpers/cart-helper.js"
-import {CouponConfig} from "../models/coupon.types.js";
 
 const productService = container.resolve('productsService');
 
@@ -149,10 +148,7 @@ export async function applyCoupon(code: string, cart: Partial<Cart>, domainId: n
     else
         totalDiscount = {amount: coupon.discountAmount, currency: "CLP"};
 
-    var coupons = cart.items.filter(i => i.coupon != null).map(c => c.id);
 
-    // remove existing coupon with same id
-    cart.coupons = cart.coupons.filter(ci => !coupons.some(ci2 => ci2 == ci.id));
 
 
 
