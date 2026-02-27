@@ -95,6 +95,8 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
 })
 
 
+
+
 const CACHE_TTL = 60 * 60 * 1; // 1 hours in seconds
 router.get("/:domainId/products/:productId", async (req, res, next) => {
 

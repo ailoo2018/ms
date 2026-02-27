@@ -66,6 +66,10 @@ import brandsRoutes from "./routes/products/brands.routes.js";
 app.use(brandsRoutes);
 
 
+import cacheRoutes from "./routes/cache/cache.routes.js";
+app.use(cacheRoutes);
+
+
 import sitemapProductRoutes from "./routes/sitemaps/products.sitemap.route.js";
 app.use(sitemapProductRoutes);
 
