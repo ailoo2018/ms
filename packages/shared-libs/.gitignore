@@ -5,3 +5,6 @@ npm-debug.log
 .env.local
 logs/
 /.idea/shared-libs.iml
+/dist/services/products/SizeChartService.d.ts
+/dist/services/products/SizeChartService.js
+/dist/

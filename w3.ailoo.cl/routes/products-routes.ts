@@ -10,6 +10,7 @@ import logger from "@ailoo/shared-libs/logger";
 import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
 import {db as redisDb} from "../connections/rdb.js";
 import {productCacheKey} from "../utils/cache-utils.js";
+import cmsClient from "../services/cmsClient.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -106,7 +107,7 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     const productId = parseInt(req.params.productId)
 
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
-    if (cachedData) {
+    if (cachedData && req.query.refresh !== "true") {
       const cacheProd = JSON.parse(cachedData.toString())
       cacheProd.origin = "cache"
       return res.json(cacheProd);
@@ -124,6 +125,13 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     if(charts && charts.length > 0){
       p.sizeChart = charts[0]
     }
+
+    const blogContent = await cmsClient.findBlogEntriesByProduct(p.id, domainId)
+    p.relatedBlogContent = null;
+    if(blogContent?.entries?.length > 0) {
+      p.relatedBlogContent = blogContent.entries[0];
+    }
+
 
 
 

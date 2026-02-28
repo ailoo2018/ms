@@ -15,6 +15,25 @@ const cmsClient = {
     if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
     return response.json();
   },
+  findBlogEntriesByProduct: async (productId : number, domainId: number) => {
+    const url = new URL("/" + domainId + "/blog/_find_by_prductId?productId=" + productId, CMS_BASE_URL);
+
+    const response = await fetch(url, {
+      method: "GET",// 5-second timeout
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' // Usually required for POST bodies
+      },
+
+    });
+
+    if (!response.ok)
+      throw new Error(`CMS Error: ${response.status}`);
+
+    return response.json();
+
+  },
+
   search: async (query, domainId) => {
     const url = new URL(`${domainId}/blog/search`, CMS_BASE_URL);
 
