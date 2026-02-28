@@ -96,6 +96,23 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
 })
 
 
+router.post("/:domainId/products/list", async (req, res, next) => {
+  try {
+    const domainId = parseInt(req.params.domainId);
+    const  ids  = req.body.ids;
+
+    const products = await productService.findProducts(ids, domainId);
+
+
+    res.json({
+      products: products
+    })
+
+  }catch(e){
+    next(e);
+  }
+})
+
 
 
 const CACHE_TTL = 60 * 60 * 10; // 1 hours in seconds
@@ -129,7 +146,15 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     const blogContent = await cmsClient.findBlogEntriesByProduct(p.id, domainId)
     p.relatedBlogContent = null;
     if(blogContent?.entries?.length > 0) {
-      p.relatedBlogContent = blogContent.entries[0];
+      p.relatedBlogArticle =  {
+        id: blogContent.entries[0].id,
+        title: blogContent.entries[0].title,
+        createDate: blogContent.entries[0].createDate,
+        previewText: blogContent.entries[0].metaDescription,
+        previewImage: blogContent.entries[0].previewImage,
+        friendlyUrl: blogContent.entries[0].friendlyUrl,
+
+      };
     }
 
 
