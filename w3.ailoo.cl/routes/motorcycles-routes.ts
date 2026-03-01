@@ -5,7 +5,7 @@ import {validateJWT} from "../server.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {and, eq, sql} from "drizzle-orm";
 import container from "../container/index.js";
-
+import logger from "@ailoo/shared-libs/logger";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.get("/motorcycles/manufacturers", async (req, res, next) => {
 
   try{
 
-    console.log("Called motorcycles/manufacturers")
+    logger.info("Called motorcycles/manufacturers")
 
     const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
     const brands = await bikeClient.listBrands(filterBikeWithProducts);
