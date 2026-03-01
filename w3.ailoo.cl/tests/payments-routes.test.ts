@@ -11,10 +11,14 @@ import wishlistRoutes from "../routes/account/wishlist/wishlist.routes.js";
 
 
 
+
 describe('User API', () => {
 
 
     it('GET /:domainId/wishlist composite product', async () => {
+
+
+
         app.use(wishlistRoutes);
         app.use(settingsRoutes);
 

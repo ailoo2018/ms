@@ -49,12 +49,14 @@
 * recoge tienda checkout no funciona despues de la primera seleccion de tienda
 * retiro en tienda dejo de funcionar
 * enable coupon on checkout
-
+* blog entry in product detail
+* blog article show realted products
 
 - venta internacionales
-
-- blog article show realted products
-- blog entry in product detail
+- empty cart not sending
+- cache pages in nuxt
+- related blog articles
+- blog comment form
 - filter drawer mobile
 - account/gear
 - store survey

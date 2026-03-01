@@ -15,6 +15,9 @@ const motorcylcesService = container.resolve('motorcyclesService');
 router.get("/motorcycles/manufacturers", async (req, res, next) => {
 
   try{
+
+    console.log("Called motorcycles/manufacturers")
+
     const filterBikeWithProducts = Boolean(req.query.filterBikeWithProducts)
     const brands = await bikeClient.listBrands(filterBikeWithProducts);
     res.json(brands.filter(b => b.name !== "*"))
