@@ -193,6 +193,7 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
   // Check for non-product specific discounts
 
 //  const discountRuleService = new DiscountRuleService(treeMap);
+/*
   const nonProdSpecificDiscount = await discountRuleService.nonProductSpecificDiscount(
       null,
       product.brand.id,
@@ -203,9 +204,19 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
       quantity,
       product.id
   );
+*/
 
-  if (nonProdSpecificDiscount) {
-    price.priceComponents.push(nonProdSpecificDiscount);
+  if (product.discounts?.length > 0) {
+    const discount = product.discounts.find(d => !d.saleTypes || d.saleTypes.length === 0 || d.saleTypes.some(st => st.id === saleTypeId));
+    if(discount) {
+      price.priceComponents.push({
+        type: PriceComponentType.DISCOUNT,
+        percent: discount.percent || 0,
+        price: {
+          amount: discount.amount || 0,
+        }
+      });
+    }
   }
 
 

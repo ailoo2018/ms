@@ -147,6 +147,10 @@ select * from Discount where ValidFrom <= ? and ValidThru >= ? and DomainId = ? 
 	}
 
 	Applies(pack, rule, brand, saleTypeId, categoryIds, tagsIds, domainId, productId = 0) {
+
+		if(rule.id === 2133)
+			console.log("here")
+
 		if (!this.appliesSaleType(rule, saleTypeId))
 			return false;
 
