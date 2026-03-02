@@ -52,6 +52,8 @@
 * blog entry in product detail
 * blog article show realted products
 
+
+- filter categories should be ordered
 - venta internacionales
 - empty cart not sending
 - cache pages in nuxt

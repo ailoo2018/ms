@@ -456,7 +456,7 @@ function processCategories(aggs) {
       data: {}
     })
   }
-  return {name: "Categorías", type: "categories", buckets: filteredBuckets};
+  return {name: "Categorías", type: "categories", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))};
 
 }
 
