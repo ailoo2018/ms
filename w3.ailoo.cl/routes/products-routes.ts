@@ -137,10 +137,15 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
     }
 
     const p = await findProduct(productId, domainId);
-    const charts  = await sizeChartService.findAllThatApplyToProduct(p, domainId)
-    p.sizeChart = null
-    if(charts && charts.length > 0){
-      p.sizeChart = charts[0]
+
+    try {
+      const charts = await sizeChartService.findAllThatApplyToProduct(p, domainId)
+      p.sizeChart = null
+      if (charts && charts.length > 0) {
+        p.sizeChart = charts[0]
+      }
+    }catch(e){
+      logger.error("Error trying to recover size chart. Will continue process")
     }
 
     const blogContent = await cmsClient.findBlogEntriesByProduct(p.id, domainId)
