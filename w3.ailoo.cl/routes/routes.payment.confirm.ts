@@ -198,7 +198,6 @@ router.post("/:domainId/checkout/payment-result", async (req, res) => {
 
 })
 
-
 router.post("/currency", async (req, res, next) => {
     try {
         const dlocalApiKey = process.env.DLOCAL_GO_API_KEY;    // Tu X-Login

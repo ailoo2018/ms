@@ -101,6 +101,10 @@ export const listReviews = async function (rq, domainId) {
     const limit = parseInt(rq.limit) || 10;
     const offset = parseInt(rq.offset) || 0;
     const productId = parseInt(rq.productId);
+    let modelId = 0;
+
+    if(rq.modelId > 0)
+      modelId = rq.modelId;
 
     // 1. Safe Rating Logic
     let ratingSql = "";
@@ -132,12 +136,14 @@ export const listReviews = async function (rq, domainId) {
       WHERE r.DomainId = ?
      --   AND r.IsEvaluation = 1
         AND r.State = 2
-        AND r.ProductId = ?
+        AND r.ProductId in (
+            select Id from Product where Id = ? or ModelId = ?
+            )
         ${ratingSql}
       ORDER BY ${sortColumn} ${sortDir}
       LIMIT ${offset}, ${limit}`;
 
-    const [rows] = await connection.execute(sql, [domainId, productId]);
+    const [rows] = await connection.execute(sql, [domainId, productId, modelId]);
     return rows;
 
   } catch (error) {

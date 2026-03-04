@@ -9,6 +9,7 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
     const domainId = parseInt(req.params.domainId);
     const {
       productId,
+      modelId,
       rating,
       orderBy,
       orderDir,
@@ -16,7 +17,7 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
       offset,
     } = req.query
 
-    const rows : any = await listReviews({productId, rating, orderBy, orderDir, limit, offset}, domainId)
+    const rows : any = await listReviews({productId, modelId, rating, orderBy, orderDir, limit, offset}, domainId)
 
     res.json({
       "reviews": rows.map(r => {

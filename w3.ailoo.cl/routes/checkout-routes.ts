@@ -416,7 +416,6 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     }
 })
 
-
 router.post("/:domainId/checkout/coupon", async (req, res, next) => {
     try {
         const domainId = parseInt(req.params.domainId);
