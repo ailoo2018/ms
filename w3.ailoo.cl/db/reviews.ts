@@ -109,11 +109,11 @@ export const listReviews = async function (rq, domainId) {
     // 1. Safe Rating Logic
     let ratingSql = "";
     const ratingMap = {
-      5: "(9, 10)",
-      4: "(7, 8)",
-      3: "(5, 6)",
-      2: "(3, 4)",
-      1: "(1, 2)"
+      5: "(10)",
+      4: "(8, 9)",
+      3: "(6, 7)",
+      2: "(4, 5)",
+      1: "(0, 3)"
     };
     if (rq.rating && ratingMap[rq.rating]) {
       ratingSql = ` AND r.Rating in ${ratingMap[rq.rating]} `;
@@ -125,7 +125,7 @@ export const listReviews = async function (rq, domainId) {
     const sortDir = rq.orderDir?.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
 
     const sql = `
-      SELECT r.Id, r.Comments as Comment, r.Rating, r.Date, r.Likes, r.Dislikes,
+      SELECT r.Id, r.ProductId, r.ProductItemId, r.Comments as Comment, r.Rating, r.Date, r.Likes, r.Dislikes,
              m.id as ModelId, m.name as ModelName, u.Id as UserId, u.Username,
              pty.Id as PartyId, pty.Name as PartyName
       FROM Review as r
@@ -154,7 +154,7 @@ export const listReviews = async function (rq, domainId) {
   }
 };
 
-export const reviewsStats = async function (productId, domainId) {
+export const reviewsStats = async function (productId, modelId, domainId) {
   const connection = await pool.getConnection();
 
   try {
@@ -171,12 +171,15 @@ from Review as r
          left outer join model m on p.ModelId = m.Id
          left outer join Party pty on pty.Id = u.PersonId
 where r.DomainId = ?
- -- and r.IsEvaluation = 1
   and r.State = 2
-  and r.ProductId = ?
+     AND r.ProductId in (select Id
+                      from Product
+                      where Id = ? or ModelId = ?
+  )
+
 group by  RatingGroup;`;
 
-    const [rows] = await connection.execute(sql, [domainId, productId]);
+    const [rows] = await connection.execute(sql, [domainId, productId, modelId]);
     return rows;
 
   } catch (error) {

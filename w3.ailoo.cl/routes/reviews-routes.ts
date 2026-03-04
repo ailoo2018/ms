@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {listReviews,  reviewsStats} from "../db/reviews.js";
+import container from "../container/index.js";
 
 
 const router = Router(); // Create a router instead of using 'app'
@@ -19,22 +20,47 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
 
     const rows : any = await listReviews({productId, modelId, rating, orderBy, orderDir, limit, offset}, domainId)
 
+     var pids = rows.map(r => r.ProductId);
+    const productService = container.resolve('productsService');
+    const products = await productService.findProducts(pids, domainId);
+
+    const map = new Map()
+
+    products.forEach(p => { map.set(p.id, p) })
+
+
+
     res.json({
       "reviews": rows.map(r => {
+
+
+        let product= null;
+        if(map.has(r.ProductId))
+          product = map.get(r.ProductId)
+
+
         return {
-          "comment": r.Comment,
-          "rating": r.Rating,
-          "id": r.Id,
-          "date": r.Date,
+          comment: r.Comment,
+          rating: r.Rating,
+          id: r.Id,
+          date: r.Date,
           "likes": r.Likes,
           "dislikes": r.Dislikes,
           "model": r.ModelName,
           "modelId": r.ModelId,
-          "user": r.Username,
-          "party": {
+          user: r.Username,
+          party: {
             "id": r.PartyId,
             "name": r.PartyName
-          }
+          },
+          product: product ? {
+            id: product.id,
+            image: product.image,
+            name: product.name,
+            brand: product.brand,
+            fullName: product.fullName,
+          } : null,
+
         };
       })
 
@@ -51,6 +77,7 @@ router.get("/:domainId/reviews/stats", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.query.productId);
+    const modelId = req.query.modelId || 0
 
     let avgRating = 0
 
@@ -64,7 +91,7 @@ router.get("/:domainId/reviews/stats", async (req, res, next) => {
       "totalReviews": 0,
       "avgRating": 5.0
     }
-    const reviews: any = await reviewsStats(productId, domainId)
+    const reviews: any = await reviewsStats(productId, modelId, domainId)
     for (var review of reviews)
     {
       rs.groups.push({
