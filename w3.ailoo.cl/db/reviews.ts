@@ -120,7 +120,7 @@ export const listReviews = async function (rq, domainId) {
     }
 
     // 2. DEFEND AGAINST SQL INJECTION (Whitelist)
-    const allowedSortColumns = ['Date', 'Rating', 'Likes'];
+    const allowedSortColumns = ['date', 'rating', 'likes'];
     const sortColumn = allowedSortColumns.includes(rq.orderBy) ? rq.orderBy : 'Date';
     const sortDir = rq.orderDir?.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
 
