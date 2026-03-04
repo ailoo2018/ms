@@ -126,7 +126,7 @@ export const listReviews = async function (rq, domainId) {
 
     const sql = `
       SELECT r.Id, r.ProductId, r.ProductItemId, r.Comments as Comment, r.Rating, r.Date, r.Likes, r.Dislikes,
-             m.id as ModelId, m.name as ModelName, u.Id as UserId, u.Username,
+             m.id as ModelId, m.name as ModelName, u.Id as UserId, u.Username, r.Model as Config,
              pty.Id as PartyId, pty.Name as PartyName
       FROM Review as r
       JOIN User u ON r.UserId = u.Id

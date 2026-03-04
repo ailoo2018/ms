@@ -38,6 +38,10 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
         if(map.has(r.ProductId))
           product = map.get(r.ProductId)
 
+        let configuration = null
+        if(r.Config?.length > 0){
+          configuration = JSON.parse(r.Config)
+        }
 
         return {
           comment: r.Comment,
@@ -53,6 +57,7 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
             "id": r.PartyId,
             "name": r.PartyName
           },
+          configuration,
           product: product ? {
             id: product.id,
             image: product.image,
