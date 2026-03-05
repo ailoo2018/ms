@@ -26,6 +26,7 @@ class ProductsService {
               and f.IsAvailableForInternet = 1
               and pit.Deleted = 0
               and pit.ProductId in (?)
+              and f.Deleted = 0
               and f.DomainId = ?
             group by pit.Id;
 `, [ids, domainId]);
