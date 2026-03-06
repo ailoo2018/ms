@@ -98,7 +98,7 @@ router.post("/:domainId/blog/posts/:postId/comments", async (req, res, next) => 
             to: "jcfuentes@motomundi.net",
             from: 'ventas@motomundi.cl', // Change to your verified sender
             subject: `MOTOMUNDI - COMENTARIO A BLOG POST`,
-            text: `Se recibio un comentario para post ${postId}: ${comment}`,
+            text: `Se recibio un comentario para post ${postId}: ${JSON.stringify(comment)}`,
         })
 
         res.json(comment);

@@ -59,14 +59,13 @@
 * next page list products shoud scroll to top
 * when filtering go to page then back, should keep state
 * related blog articles
+* blog comment form
 
-- blog comment form
-
-- maintain cookie department when selecting logo
 - venta internacionales
+- maintain cookie department when selecting logo
 - filter drawer mobile
 - account/gear
-
+- mercado pago acredita 2 veces
 
 - store survey
 - show seen cheaper
