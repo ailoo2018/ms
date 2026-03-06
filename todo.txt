@@ -51,12 +51,18 @@
 * enable coupon on checkout
 * blog entry in product detail
 * blog article show realted products
+* filter categories should be ordered
+* cache pages in nuxt
+* empty cart not sending
 
 
-- filter categories should be ordered
+
+- finish reviews in product detail page
+- review por modelo no solo producto
+
+- when filtering go to page then back, should keep state
 - venta internacionales
-- empty cart not sending
-- cache pages in nuxt
+
 - related blog articles
 - blog comment form
 - filter drawer mobile
@@ -68,5 +74,4 @@
 - view widget in nuxt
 - cdn dedicated in iis
 - q&a
-- finish reviews in product detail page
 - cart change quantity manually

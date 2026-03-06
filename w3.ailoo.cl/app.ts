@@ -45,8 +45,9 @@ app.use(profileRoutes);
 import productsSearchRoutes from "./routes/products/search.routes.js";
 app.use(productsSearchRoutes);
 
-import blogRoutes from "./routes/blog-routes.js";
+import blogRoutes from "./routes/blog/blog.routes.js";
 app.use(blogRoutes);
+
 import imagesRoutes from "./routes/images/images.routes.js";
 app.use(imagesRoutes);
 
