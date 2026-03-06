@@ -54,21 +54,21 @@
 * filter categories should be ordered
 * cache pages in nuxt
 * empty cart not sending
+* finish reviews in product detail page
+* review por modelo no solo producto
+* next page list products shoud scroll to top
+* when filtering go to page then back, should keep state
+* related blog articles
 
-
-
-- finish reviews in product detail page
-- review por modelo no solo producto
-
-- when filtering go to page then back, should keep state
-- venta internacionales
-
-- related blog articles
 - blog comment form
+
+- maintain cookie department when selecting logo
+- venta internacionales
 - filter drawer mobile
 - account/gear
+
+
 - store survey
-- maintain cookie department when selecting logo
 - show seen cheaper
 - al seleccionar pack no sale el descuento bien
 - view widget in nuxt
