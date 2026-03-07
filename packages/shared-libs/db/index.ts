@@ -1,6 +1,4 @@
 import mysql from "mysql2/promise";
-import { loadConfig } from "@ailoo/shared-libs/config";
-loadConfig()
 
 console.log("about to create pool: " + process.env.DB_HOST);
 

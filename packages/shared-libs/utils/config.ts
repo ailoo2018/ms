@@ -1,7 +1,7 @@
-const dotenv = require('dotenv');
+import dotenv from "dotenv";
 
-function loadConfig() {
-    dotenv.config();
+export  function loadConfig() {
+
 
     if (!process.env.SHARED_ENV_PATH)
         process.env.SHARED_ENV_PATH = "../.env";
@@ -14,7 +14,5 @@ function loadConfig() {
     return process.env;
 }
 
-loadConfig();
 
-module.exports = process.env
 

@@ -1,12 +1,12 @@
-const crypto = require("crypto");
+import crypto from "crypto";
 
-class FormatUtils{
+export class FormatUtils{
 
-    static calculateMD5(input) {
+    static calculateMD5(input : any) {
         return crypto.createHash('md5').update(input).digest('hex');
     }
 
-    static isStringWholeNumber(str) {
+    static isStringWholeNumber(str: string) {
         if (typeof str !== 'string') return false;
         if (str.trim() === '') return false;
 
@@ -14,7 +14,7 @@ class FormatUtils{
         return !isNaN(num) && Number.isInteger(num) && isFinite(num);
     }
 
-    static formatChileanRUT(rut) {
+    static formatChileanRUT(rut: string) {
         // Remove all non-alphanumeric characters
         rut = rut.replace(/[^0-9kK]/g, '');
 
@@ -39,7 +39,7 @@ class FormatUtils{
         return `${formattedRUT}-${verificationDigit}`;
     }
 
-    static formatToCLP(number) {
+    static formatToCLP(number: number) {
         if(!number)
             return "$0";
         return new Intl.NumberFormat('es-CL', {
@@ -50,7 +50,7 @@ class FormatUtils{
         }).format(number);
     }
 
-    static formatPhoneNumber(phoneNumber, countryCode = '56') {
+    static formatPhoneNumber(phoneNumber: any, countryCode = '56') {
         if (!phoneNumber) return '';
 
         // Remove all non-digit characters
@@ -68,7 +68,7 @@ class FormatUtils{
         return `+${countryCode} ${formatted}`;
     }
 
-    static convertGuidToPath(guidString, width) {
+    static convertGuidToPath(guidString : string, width : any) {
         // Validate input types
         if (typeof guidString !== 'string' || typeof width !== 'number') {
             return "/Content/images/no-image_150.jpg"
@@ -101,4 +101,3 @@ class FormatUtils{
 
 }
 
-module.exports.FormatUtils=FormatUtils;

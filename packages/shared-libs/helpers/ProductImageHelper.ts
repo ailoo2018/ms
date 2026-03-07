@@ -1,15 +1,16 @@
-const path = require("path");
-const {promises: fs} = require("fs");
-const fs1 = require("fs");
-const axios = require('axios');
-const { randomUUID } = require('crypto');
-const logger = require("../utils/logger");
-const sharp = require("sharp");
-const {FormatUtils} = require("../utils/utils");
+import path from "path";
+import {promises as fs} from "fs";
+import fs1 from "fs";
+import axios from "axios";
+import {randomUUID} from "crypto";
+import logger from "../utils/logger";
+import sharp from "sharp";
+import {FormatUtils} from "../utils/utils";
+
 
 const basePath = process.env.PRODUCT_IMAGE_BASE_PATH;
 
-async function resizeToSquare(inputPath, outputPath, squareSize, options = {}) {
+async function resizeToSquare(inputPath: any, outputPath: any, squareSize: any, options = {}) {
     try {
         const {
             backgroundColor = { r: 255, g: 255, b: 255, alpha: 1 }, // White background
@@ -17,7 +18,7 @@ async function resizeToSquare(inputPath, outputPath, squareSize, options = {}) {
             position = 'center',
             quality = 90,
             preserveTransparency = false // New option to preserve transparency
-        } = options;
+        }:any = options;
 
         const image = sharp(inputPath);
         const metadata = await image.metadata();
@@ -63,7 +64,7 @@ async function resizeToSquare(inputPath, outputPath, squareSize, options = {}) {
 }
 
 // Enhanced multiple square sizes with transparency handling
-async function createMultipleSquares(inputPath, outputDir, sizes) {
+async function createMultipleSquares(inputPath: any, outputDir: any, sizes: any) {
     try {
         const inputImage = sharp(inputPath);
         const metadata = await inputImage.metadata();
@@ -71,7 +72,7 @@ async function createMultipleSquares(inputPath, outputDir, sizes) {
         console.log(`Original dimensions: ${metadata.width}x${metadata.height}`);
         console.log(`Original format: ${metadata.format}, Channels: ${metadata.channels}, Has Alpha: ${metadata.hasAlpha}`);
 
-        const createPromises = sizes.map(async (config) => {
+        const createPromises = sizes.map(async (config: any) => {
             const { size, name, backgroundColor, preserveTransparency = false } = config;
             const outputPath = path.join(outputDir, `${name}_${size}x${size}.jpg`);
 
@@ -93,13 +94,10 @@ async function createMultipleSquares(inputPath, outputDir, sizes) {
     }
 }
 
-module.exports.resizeToSquare = resizeToSquare;
-module.exports.createMultipleSquares = createMultipleSquares;
-
-class ProductImageHelper {
+export default class ProductImageHelper {
 
 
-    getUrl(imageId, size, domainId){
+    getUrl(imageId: any, size: any, domainId: any){
         if(!imageId){
             return null;
         }
@@ -111,7 +109,7 @@ class ProductImageHelper {
         return `/content/products/${domainId}/${firstChar}/${secondThirdChars}/${guid}_${size}.${ext}`;
     }
 
-    isValidImageIdentifier(imageIdentifier) {
+    isValidImageIdentifier(imageIdentifier: any) {
         if (typeof imageIdentifier !== 'string') return false;
 
         const parts = imageIdentifier.split('.');
@@ -128,7 +126,7 @@ class ProductImageHelper {
         return true;
     }
 
-    async downloadImage(url, domainId) {
+    async downloadImage(url: any, domainId: any) {
 
         const guid = randomUUID().replace(/-/g, '');
         const firstChar = guid.charAt(0);
@@ -156,7 +154,7 @@ class ProductImageHelper {
         const contentType = response.headers['content-type'];
 
         if (contentType) {
-            const mimeToExt = {
+            const mimeToExt: any = {
                 'image/jpeg': '.jpg',
                 'image/jpg': '.jpg',
                 'image/png': '.png',
@@ -195,7 +193,7 @@ class ProductImageHelper {
             writer.on('error', reject);
         });
     }
-    async getImagePath(imageId, domainId, size = "org") {
+    async getImagePath(imageId: any, domainId: any, size = "org") {
         if (!this.isValidImageIdentifier(imageId)) {
             throw new Error(`Invalid image identifier format: ${imageId}. Expected format: 32-character guid + image extension (e.g., 4bfda563b915425ca596e5b2455f6fa0.jpg)`);
         }
@@ -230,7 +228,7 @@ class ProductImageHelper {
                 domainId: domainId,
                 originalPath: `${guid}_org.${ext}`,
             };
-        } catch (error) {
+        } catch (error: any) {
             logger.error(`Error getImagePath ${error.message}. BasePath: ${basePath}`);
             return {
                 exists: false,
@@ -244,13 +242,13 @@ class ProductImageHelper {
         }
     }
 
-    async getImageUrl(imageId, size, domainId, options = {}) {
+    async getImageUrl(imageId: any, size: any, domainId: any, options = {}) {
         if (!imageId) return;
 
         const {
             backgroundColor = { r: 255, g: 255, b: 255, alpha: 1 },
             preserveTransparency = false
-        } = options;
+        }: any = options;
 
         var imgPath = await this.getImagePath(imageId, domainId, size);
 
@@ -280,7 +278,7 @@ class ProductImageHelper {
         return "/content/products/" + domainId + FormatUtils.convertGuidToPath(imageId, size);
     }
 
-    async exists(imageId, size, domainId) {
+    async exists(imageId: any, size: any, domainId: any) {
         if (!this.isValidImageIdentifier(imageId)) {
             return false;
         }
@@ -293,7 +291,7 @@ class ProductImageHelper {
         }
     }
 
-    async copyImageToDomain(imageId, fromDomainId, toDomainId) {
+    async copyImageToDomain(imageId: any, fromDomainId: any, toDomainId: any) {
         var toPath = await this.getImagePath(imageId, toDomainId);
         if (toPath.exists) {
             return {
@@ -320,10 +318,9 @@ class ProductImageHelper {
                 success: true,
                 targetPath: toPath
             };
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(`Failed to copy image from domain ${fromDomainId} to ${toDomainId}: ${error.message}`);
         }
     }
 }
 
-module.exports = ProductImageHelper;

@@ -1,10 +1,6 @@
-/**
- * Recursively finds all leaf nodes under a specific branch.
- * @param {Object} node - The current node being traversed.
- * @returns {Array} - Array of leaf nodes.
- */
-function getLeafs(node) {
-  let leafs = [];
+
+function getLeafs(node: any) : any {
+  let leafs : any[] = [];
 
   if (node.isLeaf || !node.children || node.children.length === 0) {
     leafs.push(node);
@@ -22,11 +18,11 @@ function getLeafs(node) {
  * @param {Object} tree - The full tree object.
  * @param {Array<number>} parentIds - List of IDs to get leafs for.
  */
-function getAllLeafsFromParents(tree, parentIds) {
-  let results = [];
+export function getAllLeafsFromParents(tree :any, parentIds :any) {
+  let results : any[] = [];
 
   // Helper to find the parent nodes first
-  function findNodesAndCollectLeafs(currentNode) {
+  function findNodesAndCollectLeafs(currentNode: any) {
     if (parentIds.includes(currentNode.id)) {
       // Once we find a target parent, we get all its leafs
       results = results.concat(getLeafs(currentNode));
@@ -47,9 +43,3 @@ function getAllLeafsFromParents(tree, parentIds) {
   return results;
 }
 
-// Example Usage:
-// const leafNodes = getAllLeafsFromParents(treeData, [90292, 89528]);
-// console.log(leafNodes.map(l => l.name));
-
-
-module.exports = { getAllLeafsFromParents };

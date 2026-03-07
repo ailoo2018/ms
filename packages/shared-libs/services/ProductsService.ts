@@ -1,16 +1,20 @@
-const {getIndexName} = require("../el");
-const {getPrice} = require("../products/price");
-const {SaleType} = require("../models");
+import {getIndexName} from "../el";
+import {getPrice} from "../products/price";
+import {SaleType} from "../models";
 
-class ProductsService {
 
-  constructor({elClient, discountRuleService, db}) {
+export default class ProductsService {
+  private elClient: any;
+  private discountRuleService: any;
+  private db  : any;
+
+  constructor({elClient, discountRuleService, db}: {elClient:any, discountRuleService:any, db:any}) {
     this.elClient = elClient;
     this.discountRuleService = discountRuleService;
     this.db = db
   }
 
-  async productStock(ids, domainId) {
+  async productStock(ids:any, domainId:any) {
 
     const connection = await this.db.getConnection();
 
@@ -41,7 +45,7 @@ class ProductsService {
 
   }
 
-  async findProduct(productId, domainId) {
+  async findProduct(productId:any, domainId:any) {
     if(!productId)
       return null
 
@@ -55,7 +59,7 @@ class ProductsService {
     return response._source;
   }
 
-  async findProducts(productIds, domainId) {
+  async findProducts(productIds:any, domainId:any) {
     const response = await this.elClient.search({
       index: getIndexName(domainId),
       body: {
@@ -82,10 +86,10 @@ class ProductsService {
     });
 
 
-    return response.hits.hits.map(h => h._source);
+    return response.hits.hits.map((h:any) => h._source);
   }
 
-  async findProductsByProductItems(pitIds, domainId) {
+  async findProductsByProductItems(pitIds:any, domainId:any) {
     const response = await this.elClient.search({
       index: getIndexName(domainId),
       body: {
@@ -117,13 +121,13 @@ class ProductsService {
       return [];
     }
 
-    return response.hits.hits.map(h => {
+    return response.hits.hits.map((h:any) => {
       return h._source
     });
 
   }
 
-  async findAssociations(productId, domainId) {
+  async findAssociations(productId:any, domainId:any) {
     const connection = await this.db.getConnection();
 
     try {
@@ -141,7 +145,7 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     }
   }
 
-  async findProductByProductItem(pitId, domainId) {
+  async findProductByProductItem(pitId:any, domainId:any) {
     const products = await this.findProductsByProductItems([pitId], domainId)
     if (products.length > 0) {
       return products[0];
@@ -150,19 +154,19 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     return null
   }
 
-  getProductItemDescription(product, pit) {
+  getProductItemDescription(product:any, pit:any) {
     let desc = product.name;
 
     if (product.fullName)
       desc = product.fullName;
 
     if (pit.colorId > 0) {
-      const color = product.features.find(f => f.id === pit.colorId)
+      const color = product.features.find((f:any) => f.id === pit.colorId)
       desc += " " + color.name
     }
 
     if (pit.sizeId > 0) {
-      const size = product.features.find(f => f.id === pit.sizeId)
+      const size = product.features.find((f:any) => f.id === pit.sizeId)
       desc += " " + size.name
     }
 
@@ -170,33 +174,33 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
 
   }
 
-  getColor(product, pit) {
+  getColor(product:any, pit:any) {
     if (pit.colorId === 0)
       return null
 
-    return product.features.find(f => f.id === pit.colorId)
+    return product.features.find((f:any) => f.id === pit.colorId)
   }
 
-  getSize(product, pit) {
+  getSize(product:any, pit:any) {
     if (pit.sizeId === 0)
       return null
 
-    return product.features.find(f => f.id === pit.sizeId)
+    return product.features.find((f:any) => f.id === pit.sizeId)
 
   }
 
-  async getPrice(product, pit, saleTypeId, currency = "CLP") {
+  async getPrice(product:any, pit:any, saleTypeId:any, currency = "CLP") {
     return await getPrice(product, pit, saleTypeId, currency, 0, 1, this.discountRuleService);
   }
 
-  async price(product, pit, saleTypeId, currency = "CLP") {
+  async price(product:any, pit:any, saleTypeId:any, currency = "CLP") {
     const priceComp = await getPrice(product, pit, saleTypeId, currency, 0, 1, this.discountRuleService);
 
     if (priceComp) {
       let price = priceComp.getPrice()
       return {
        price: price.price.amount,
-       oldPrice: price.discount ? price.price.aount - price.discount.amount : price.price.amount,
+       oldPrice: price.discount ? price.price.amount - price.discount.amount : price.price.amount,
        discount: price.discount ? price.discount.amount : 0,
       }
 
@@ -209,7 +213,7 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     }
   }
 
-  async findProductWithInventory(productId, domainId) {
+  async findProductWithInventory(productId:any, domainId:any, currency = "CLP") {
 
     if(!productId)
       return null
@@ -219,7 +223,9 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     const stock = await this.productStock([productId], domainId);
 
     for(var pit of p.productItems){
-      const priceComponent = await getPrice(p, pit, SaleType.Internet, "CLP", 0, 1, this.discountRuleService);
+      const priceComponent = await getPrice(p, pit, SaleType.Internet, currency, 0, 1, this.discountRuleService);
+      if(!priceComponent)
+        throw new Error("No pricecomponent")
       const { price, discount } = priceComponent.getPrice()
 
       pit.price = {
@@ -231,7 +237,7 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     }
 
     for (var s of stock) {
-      var prodItem = p.productItems.find(pit => pit.id === s.productItemId)
+      var prodItem = p.productItems.find((pit:any) => pit.id === s.productItemId)
 
       if (prodItem) {
         prodItem.quantityInStock = parseInt(s.quantity)
@@ -241,14 +247,14 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
     return p
   }
 
-  async findProductsWithInventory(prodsIds, domainId) {
+  async findProductsWithInventory(prodsIds:any, domainId:any) {
     const products = await this.findProducts(prodsIds, domainId)
 
     const stock = await this.productStock(prodsIds, domainId);
 
     for(var p of products) {
       for (var s of stock) {
-        var prodItem = p.productItems.find(pit => pit.id === s.productItemId)
+        var prodItem = p.productItems.find((pit:any) => pit.id === s.productItemId)
 
         if (prodItem) {
           prodItem.quantityInStock = parseInt(s.quantity)
@@ -261,4 +267,3 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
 
 }
 
-module.exports = ProductsService;

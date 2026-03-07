@@ -19,7 +19,7 @@ const db = redis.createClient({
   socket: {
     connectTimeout: 30000,  // Increase timeout to 30 seconds
     keepAlive: 30000,       // Keep connections alive
-    reconnectStrategy: (retries) => {
+    reconnectStrategy: (retries : any) => {
       if (retries > 10) return new Error('Max reconnection attempts reached');
       return Math.min(retries * 100, 3000); // Exponential backoff
     }

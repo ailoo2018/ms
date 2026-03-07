@@ -1,4 +1,4 @@
-const PriceComponentType =
+export const PriceComponentType =
     {
       BASE_PRICE: 0,
       SUPPLIER_PRICE: 1,
@@ -15,30 +15,39 @@ const PriceComponentType =
     };
 
 
-class Money {
-  constructor(amount, currency) {
+export class Money {
+  public amount: any;
+  public currency: any;
+  constructor(amount: any, currency: any) {
     this.amount = amount || 0;
     this.currency = currency || 'CLP';
   }
 }
 
-const SaleType = Object.freeze({
+export const SaleType = Object.freeze({
   Store: 1,
   Distribution: 2,
   Internet: 3,
 })
 
-const WebContentType = Object.freeze({
+export const WebContentType = Object.freeze({
   Page: 7
 })
-const WebContentSubtype = Object.freeze({
+export const WebContentSubtype = Object.freeze({
   BlogEntry: 6,
   ContentPage: 12,
 })
 
 // Missing Price class implementation
-class Price {
-  constructor(currency, saleTypeId) {
+export class Price {
+  public currency: any;
+  public saleTypeId: any;
+  public priceComponents: any[];
+  public domainId: number;
+  public fromQuantity: number;
+  public thruQuantity: number;
+  public finalPrice: { amount: number };
+  constructor(currency: any, saleTypeId:any) {
     this.currency = currency;
     this.saleTypeId = saleTypeId;
     this.priceComponents = [];
@@ -53,7 +62,7 @@ class Price {
         pc.type === PriceComponentType.BASE_PRICE);
   }
 
-  addSaleTaxes(taxes) {
+  addSaleTaxes(taxes:any) {
     // Implementation would go here
   }
 
@@ -67,15 +76,15 @@ class Price {
 
   }
 
-  getTotalDiscount(){
-    const dctComp = this.this.getDiscountPriceComponent()
+  getTotalDiscount = () => {
+    const dctComp = this.getDiscountPriceComponent()
     if(dctComp){
       return dctComp.priceComponents.length
     }
     return 0;
   }
 
-  getDiscountPriceComponent() {
+  getDiscountPriceComponent = () => {
     for (var pc of this.priceComponents) {
       if (pc.type === PriceComponentType.DISCOUNT)
         return pc;
@@ -85,7 +94,7 @@ class Price {
 
   }
 
-  getPrice(){
+  getPrice = () => {
     const basePrice = this.getBasePriceComponent();
     if (basePrice) {
       const discount = this.getDiscountPriceComponent();
@@ -107,7 +116,7 @@ class Price {
     return { price: new Money(0, "CLP"), discount: null };
   }
 
-  getFinalPrice() {
+  getFinalPrice = () => {
     const basePrice = this.getBasePriceComponent();
     if (basePrice) {
       const discount = this.getDiscountPriceComponent();
@@ -128,17 +137,8 @@ class Price {
 }
 
 
-const AppliesToEnum = Object.freeze(
+export const AppliesToEnum = Object.freeze(
 {
   InvoiceTotal: 0, CheapestItem: 1, TotalApplicableItems: 2, TotalApplicableItemsOneSale: 3
 })
 
-module.exports = {
-  PriceComponentType,
-  Price,
-  Money,
-  SaleType,
-  AppliesToEnum,
-  WebContentType,
-  WebContentSubtype
-};

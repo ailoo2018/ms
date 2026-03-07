@@ -28,8 +28,26 @@ const upload = multer({
   }
 });
 
+const currencyHandler = (req, res, next) => {
+  const currencyHeader = req.headers['x-currency'];
+  req.currency = currencyHeader || "CLP"
+  next()
+};
+
+const requiresApiKey = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+
+  const token = authHeader && authHeader.split(' ')[1];
+  if(process.env.AILOO_API_KEY !== token)
+    return res.sendStats(403)
+
+  next()
+
+}
 
 const validateJWT = (req, res, next) => {
+
+
 
   if(process.env.NODE_ENV === "test") {
     next();
@@ -65,4 +83,4 @@ const reviewsUpload = upload.fields([
   { name: 'images', maxCount: 10 }
 ]);
 
-export { app, validateJWT, reviewsUpload }
+export { app, validateJWT, reviewsUpload, currencyHandler, requiresApiKey }

@@ -1,7 +1,7 @@
-const {WebContentType, WebContentSubtype} = require("../models");
+import {WebContentSubtype, WebContentType} from "../models";
 
 
-function formatLink(str) {
+function formatLink(str:any) {
     if (str == null)
         return '';
 
@@ -24,20 +24,20 @@ function formatLink(str) {
     return str.length > 255 ? str.substring(0, 254) : str;
 }
 
-function startsWithNumbersAndHyphen2(text) {
+function startsWithNumbersAndHyphen2(text: any) {
     if (!text) return false;
     return /^\d+-/.test(text);
 }
 
 
-module.exports.getUrl=function(product){
+module.exports.getUrl=function(product: any){
     if(product.domainId === 1){
         return "/motocicleta/" + formatLink(product.linkName);
     }
     return formatLink(product.linkName);
 }
 
-module.exports.getCategoryUrl = function (category) {
+module.exports.getCategoryUrl = function (category: any) {
     let prefix = "/";
 
     if (category.linkName && category.linkName.length > 0) {
@@ -47,7 +47,7 @@ module.exports.getCategoryUrl = function (category) {
     return prefix + formatLink(category.name);
 }
 
-module.exports.getProductUrl= function(product){
+module.exports.getProductUrl= function(product: any){
     if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
         return "/motocicleta/" + product.linkName
     }
@@ -55,7 +55,7 @@ module.exports.getProductUrl= function(product){
     return "/motocicleta/" + product.id + "-" + product.linkName
 }
 
-module.exports.getWccUrl= function(wcc){
+module.exports.getWccUrl= function(wcc:any ){
 
     if (wcc.subtype === WebContentSubtype.BlogEntry && wcc.domainId === 1)
         return "moto-blog/" + formatLink(wcc.name);

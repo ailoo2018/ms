@@ -1,8 +1,8 @@
-const {DiscountRuleService} = require("../services/DiscountRuleService");
-const {Price, PriceComponentType, Money} = require("../models");
+import {DiscountRuleService} from "../services/DiscountRuleService.js";
+import { convert } from "../services/CurrencyService.js";
+import {Money, Price, PriceComponentType} from "../models";
 
-
-const getFeatures = (pit) => {
+const getFeatures = (pit:any) => {
   const ret = [];
 
   if (pit.colorId > 0) ret.push(pit.colorId);
@@ -11,7 +11,7 @@ const getFeatures = (pit) => {
   return ret;
 }
 
-const findProductItemByFeatures = (pSm, features) => {
+const findProductItemByFeatures = (pSm:any, features:any) => {
   for (const pit of pSm.productItems) {
     const pitFeatures = [...getFeatures(pit)].sort((a, b) => a - b);
     const compareFeatures = [...features].sort((a, b) => a - b);
@@ -36,22 +36,30 @@ const findProductItemByFeatures = (pSm, features) => {
 }
 
 
-const getPrice = async (prodSm, pit, saleTypeId, currency, packId = 0, quantity = 1,  discountRuleService) => {
+export const getPrice = async (prodSm:any, pit:any, saleTypeId:any, currency:any, packId = 0, quantity = 1,  discountRuleService:any) => {
   return await _getPriceByProductItem(prodSm, pit, saleTypeId, currency, packId, quantity,  discountRuleService);
 }
 
-function hasBasePrice(price) {
+function hasBasePrice(price:any) {
   if (!price.priceComponents) return false;
 
-  return price.priceComponents.some(pc => pc.type == PriceComponentType.BASE_PRICE || pc.type == PriceComponentType.BASE_NET_PRICE);
+  return price.priceComponents.some((pc:any) => pc.type == PriceComponentType.BASE_PRICE || pc.type == PriceComponentType.BASE_NET_PRICE);
 }
 
-function isQuantityWithin(pc, quantity) {
-  const thruQty = pc.thruQuantity <= 0 ? Number.MAX_VALUE : this.thruQuantity;
+function isQuantityWithin(pc:any, quantity:any) {
+  const thruQty = pc.thruQuantity <= 0 ? Number.MAX_VALUE : pc.thruQuantity;
   return quantity >= pc.fromQuantity && quantity <= thruQty;
 }
 
-const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId, quantity, discountRuleService) => {
+const _getPriceByProductItem = async (
+    product:any,
+    pit:any,
+    saleTypeId:any,
+    currency:any,
+    packId:any,
+    quantity:any,
+    discountRuleService:any
+) => {
   if (!product.priceComponents) return null;
 
   if (!currency) {
@@ -66,7 +74,7 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
 
   // Create new price object
   const price = new Price(currency || "CLP", saleTypeId);
-  price.domainId = this.domainId;
+  price.domainId = product.domainId;
 
   // Sort price components by saleTypeId descending
   const pcs = [...product.priceComponents].sort((a, b) => b.saleTypeId - a.saleTypeId);
@@ -80,27 +88,10 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
           thruQty = Math.min(pc.thruQuantity === 0 ? Number.MAX_VALUE : pc.thruQuantity, thruQty);
 
           price.priceComponents.push({
-            price: new Money(pc.amount, currency),
+            price: await convert("CLP", currency, pc.amount)  ,
             type: pc.typeId,
             fromQuantity: pc.fromQuantity,
             thruQuantity: pc.thruQuantity
-          });
-        } else {
-          if (pc.fromQuantity > quantity) {
-            thruQty = Math.min(pc.fromQuantity, thruQty);
-          }
-        }
-      } else if (this.domainId === 2093 && pc.productItemId === null) {
-        if (isQuantityWithin(pc, quantity)) {
-          fromQty = Math.max(pc.fromQuantity, fromQty);
-          thruQty = Math.min(pc.thruQuantity === 0 ? Number.MAX_VALUE : pc.thruQuantity, thruQty);
-
-          price.priceComponents.push({
-            price: new Money(pc.amount, currency),
-            type: pc.typeId,
-            fromQuantity: pc.fromQuantity,
-            thruQuantity: pc.thruQuantity,
-            saleType: SaleType.find(pc.saleTypeId)
           });
         } else {
           if (pc.fromQuantity > quantity) {
@@ -114,12 +105,12 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
   // If no productItem price, search for feature price
   if (!hasBasePrice(price)) {
     for (const pc of pcs) {
-      if (currency !== pc.currency) continue;
+  //    if (currency !== pc.currency) continue;
 
       if (pc.typeId === PriceComponentType.DISCOUNT &&
           (pc.packId > 0 && packId !== pc.packId)) continue;
 
-      if (pc.sizeId !== null && features.includes(pc.sizeId) &&
+      if (pc.sizeId && features.includes(pc.sizeId) &&
           (pc.saleTypeId === 0 || pc.saleTypeId === saleTypeId)) {
 
         if (isQuantityWithin(pc, quantity)) {
@@ -127,7 +118,7 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
           thruQty = Math.min(pc.thruQuantity === 0 ? Number.MAX_VALUE : pc.thruQuantity, thruQty);
 
           price.priceComponents.push({
-            price: new Money(pc.amount, currency),
+            price: await convert("CLP", currency, pc.amount)  ,
             type: pc.typeId,
             fromQuantity: pc.fromQuantity,
             thruQuantity: pc.thruQuantity
@@ -144,13 +135,13 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
   // Look for generic product base price
   if (!hasBasePrice(price)) {
     for (const pc of pcs) {
-      if (currency !== pc.currency) continue;
+  //    if (currency !== pc.currency) continue;
 
       if (pc.typeId === PriceComponentType.DISCOUNT &&
           (pc.packId > 0 && packId !== pc.packId)) continue;
 
       if (!pc.sizeId || pc.sizeId === null) {
-        if (pc.brandId !== 0 && pc.brandId !== this.brand.id) continue;
+        if (pc.brandId !== 0 && pc.brandId !== product.brand.id) continue;
 
         if (!(pc.saleTypeId === 0 || pc.saleTypeId === saleTypeId)) continue;
 
@@ -159,7 +150,7 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
           thruQty = Math.min(pc.thruQuantity === 0 ? Number.MAX_VALUE : pc.thruQuantity, thruQty);
 
           price.priceComponents.push({
-            price: new Money(pc.amount, currency),
+            price: await convert("CLP", currency, pc.amount) ,
             type: pc.typeId,
             fromQuantity: pc.fromQuantity,
             thruQuantity: pc.thruQuantity
@@ -174,13 +165,13 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
   }
 
   // Add sales taxes
-  price.addSaleTaxes(product.salesTaxes.map(s => {
+  price.addSaleTaxes(product.salesTaxes.map((s:any) => {
     return {
       id: s.id,
       name: s.name,
       code: s.code,
       percentage: s.percentage,
-      domainId: this.domainId
+      domainId: product.domainId
     }
   }));
 
@@ -190,24 +181,9 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
     categoryId = product.categories[0].id;
   }
 
-  // Check for non-product specific discounts
-
-//  const discountRuleService = new DiscountRuleService(treeMap);
-/*
-  const nonProdSpecificDiscount = await discountRuleService.nonProductSpecificDiscount(
-      null,
-      product.brand.id,
-      product.categories.map(c => c.id),
-      parseInt(saleTypeId),
-      product.tags.map(t => t.id),
-      product.domainId,
-      quantity,
-      product.id
-  );
-*/
 
   if (product.discounts?.length > 0) {
-    const discount = product.discounts.find(d => !d.saleTypes || d.saleTypes.length === 0 || d.saleTypes.some(st => st.id === saleTypeId));
+    const discount = product.discounts.find((d:any) => !d.saleTypes || d.saleTypes.length === 0 || d.saleTypes.some((st:any) => st.id === saleTypeId));
     if(discount) {
       price.priceComponents.push({
         type: PriceComponentType.DISCOUNT,
@@ -230,4 +206,3 @@ const _getPriceByProductItem = async (product, pit, saleTypeId, currency, packId
 }
 
 
-module.exports = { getPrice }

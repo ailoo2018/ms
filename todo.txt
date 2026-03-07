@@ -66,6 +66,7 @@
 - filter drawer mobile
 - account/gear
 - mercado pago acredita 2 veces
+- bike selector in home mobile not rows
 
 - store survey
 - show seen cheaper

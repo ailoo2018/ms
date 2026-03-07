@@ -1,6 +1,7 @@
 import logger from "@ailoo/shared-libs/logger";
-import generated from "@ailoo/shared-libs/config";
-console.log(generated)
+import { loadConfig } from "@ailoo/shared-libs/config";
+
+loadConfig()
 
 import authRoutes from "./routes/auth-routes.js";
 app.use(authRoutes);
@@ -15,6 +16,9 @@ import wccRoutes from "./routes/wcc-routes.js";
 app.use(wccRoutes);
 import friendlyUrlRoutes from "./routes/friendlyurl-routes.js";
 app.use(friendlyUrlRoutes);
+
+import exchangeRoutes from "./routes/exchange/exchange.routes.js";
+app.use(exchangeRoutes);
 
 
 

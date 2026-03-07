@@ -1,27 +1,30 @@
-const {promises: fs} = require("fs");
-const {redisClient} = require("../rdb");
-const path = require("path");
+import {promises as fs} from "fs";
+import logger from "../utils/logger.js"
+import { db as redisClient } from "../rdb/index.js";
+
+import path from "path";
+
 const WCC_EXPIRY = 24 * 60 * 60  // 5 hours in seconds (18000 seconds)
 
-function getWccKey(wccId, domainId) {
+function getWccKey(wccId : any, domainId : any) {
   return 'wcc:' + domainId + ':*' + wccId + '*';
 }
 
-function templatesDir(webSiteId, domainId) {
+function templatesDir(webSiteId : any, domainId : any) {
   return path.join(process.cwd(), 'templates', '' + domainId, '' + webSiteId);
 }
-function filePath(wccId, webSiteId, domainId) {
+function filePath(wccId : any, webSiteId : any, domainId : any) {
   return path.join(templatesDir(webSiteId, domainId), wccId + '.vm');
 
 }
-function removeCodeBlock(html) {
+function removeCodeBlock(html: any) {
   if (html == null)
     return null;
   const regex = /<script\s+type="application\/json"\s+id="ailoo-metadata">(.*?)<\/script>/gs;
   return html.replace(regex, '');
 }
 
-async function fileExists(filePath) {
+async function fileExists(filePath : any) {
   try {
     await fs.access(filePath);
     return true;
@@ -30,17 +33,20 @@ async function fileExists(filePath) {
   }
 }
 
+function getFragmentsNameFromTemplate(template: any) {
+  return ""
+}
 
-async function loadWccAux(wccId, domainId, db) {
+async function loadWccAux(wccId : any, domainId : any, db : any) {
 //  var db = new WebContentDb();
   var rows = await db.queryTree(wccId)
 
-  rows = rows.sort((a, b) => a.OrderWeight - b.OrderWeight);
+  rows = rows.sort((a : any, b : any) => a.OrderWeight - b.OrderWeight);
 
 
   var childrenIds = []
   var children = []
-  var wccaux = null;
+  var wccaux: any = null;
   for (var r of rows) {
 
 
@@ -168,7 +174,7 @@ async function loadWccAux(wccId, domainId, db) {
   return wccaux;
 }
 
-async function findWccAux(wccId, domainId, redisClient) {
+async function findWccAux(wccId : any, domainId : any, redisClient : any) {
   var val = await redisClient.get(getWccKey(wccId, domainId));
   if (val) {
     var wcc = JSON.parse(val);
@@ -180,14 +186,16 @@ async function findWccAux(wccId, domainId, redisClient) {
 
 
 class CmsService {
+  private redisClient: any;
+  private webContentDb: any;
 
 
-  constructor({ redisClient, webContentDb }) {
+  constructor({ redisClient, webContentDb }: { redisClient: any, webContentDb: any}) {
     this.redisClient = redisClient
     this.webContentDb = webContentDb
   }
 
-  async findOrLoadWccAux(wccId, domainId, force) {
+  async findOrLoadWccAux(wccId : any, domainId : any, force : any) {
     var wccAux = await findWccAux(wccId, domainId, this.redisClient);
     if (!wccAux || force) {
       await loadWccAux(wccId, domainId, this.webContentDb);

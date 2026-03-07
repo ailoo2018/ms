@@ -2,7 +2,7 @@ const PARAM_BASE_URL = process.env.PARAMETERS_URL || 'https://parameters.ailoo.c
 
 class ParametersClient {
 
-  async getParameter(category, key, domainId) {
+  async getParameter(category:any, key:any, domainId:any) {
     const url = new URL(`/parameter/${domainId}/${category}/${key}`, PARAM_BASE_URL);
 
     const response = await fetch(url, {

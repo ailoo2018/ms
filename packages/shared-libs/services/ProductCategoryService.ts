@@ -1,6 +1,6 @@
-const logger = require("../utils/logger");
-const {Mutex} = require('async-mutex');
-const treeUtils = require('../utils/tree-utils');
+import logger from '../utils/logger.js';
+import {Mutex} from "async-mutex";
+import {getAllLeafsFromParents} from "../utils/tree-utils";
 
 const mutex = new Mutex();
 
@@ -9,7 +9,7 @@ let _treeMap = {};
 
 
 
-function findNodeById(root, targetId) {
+function findNodeById(root:any, targetId:any) : any{
 	if (root.id === targetId) {
 		return root;
 	}
@@ -24,65 +24,71 @@ function findNodeById(root, targetId) {
 	return null;
 }
 
-class ProductCategoryService {
+// Helper function to traverse the tree and build the parent map
+function traverse(node:any, ancestors:any, parentMap: any) {
+	// For each ancestor, create a relationship entry
+	for (const ancestorId of ancestors) {
+		parentMap[`${node.id}_${ancestorId}`] = true;
+	}
 
-	constructor({ redisClient, productCategoryDb }) {
+	// If node has children, traverse each child
+	if (node.children && node.children.length > 0) {
+		// For each child, add current node and all ancestors to the ancestors array
+		const newAncestors = [node.id, ...ancestors];
+		for (const child of node.children) {
+			traverse(child, newAncestors, parentMap);
+		}
+	}
+}
+
+export class ProductCategoryService {
+	private redisClient: any;
+	private productCategoryDb: any;
+	private _treeMap: any
+	private parentMap: any
+
+	constructor({ redisClient, productCategoryDb }: { redisClient: any, productCategoryDb : any}) {
 		this.redisClient = redisClient
 		this.productCategoryDb = productCategoryDb
 	}
 
-	async isOrHasParent(childId, parentId, domainId) {
+	async isOrHasParent(childId :any, parentId:any, domainId:any) {
 		var map = await  this.getTreeMap(domainId)
 		return map.isOrHasAncestor(childId, parentId);
 	}
 
-	async getTreeMap(domainId) {
-		if(_treeMap["" + domainId] == null) {
-			_treeMap["" + domainId] = await this.createParentMap(domainId);
+	async getTreeMap(domainId:any) {
+		if(this._treeMap["" + domainId] == null) {
+			this._treeMap["" + domainId] = await this.createParentMap(domainId);
 		}
 		return {
-			isOrHasAncestor : (childId, parentId) => {
+			isOrHasAncestor : (childId :any, parentId:any) => {
 				if(childId === parentId )
 					return true;
 
-				return _treeMap["" + domainId][ `${childId}_${parentId}` ];
+				return this._treeMap["" + domainId][ `${childId}_${parentId}` ];
 			}
 		};
 	}
 
-	async findCategory(id, domainId){
+	async findCategory(id:any, domainId:any){
 		const tree =  await this.getCategoryTree(domainId)
 		return findNodeById(tree, id);
 	}
 
-	async createParentMap(domainId) {
+	async createParentMap(domainId:any) {
 		const tree = await this.getCategoryTree(domainId);
 		const parentMap = {};
 
-		// Helper function to traverse the tree and build the parent map
-		function traverse(node, ancestors = []) {
-			// For each ancestor, create a relationship entry
-			for (const ancestorId of ancestors) {
-				parentMap[`${node.id}_${ancestorId}`] = true;
-			}
 
-			// If node has children, traverse each child
-			if (node.children && node.children.length > 0) {
-				// For each child, add current node and all ancestors to the ancestors array
-				const newAncestors = [node.id, ...ancestors];
-				for (const child of node.children) {
-					traverse(child, newAncestors);
-				}
-			}
-		}
 
 		// Start traversal from the root node with empty ancestors
-		traverse(tree);
+		traverse(tree, [], this.parentMap);
 
 		return parentMap;
 	}
 
-	async getCategoryTree(domainId, forceReload = false) {
+	async getCategoryTree(domainId:any, forceReload = false) {
 
 		if (forceReload) {
 			logger.info("************* Reloading cache with force")
@@ -93,7 +99,7 @@ class ProductCategoryService {
 		return JSON.parse(val);
 	}
 
-	async doLoadCache(domainId) {
+	async doLoadCache(domainId:any) {
 
 		const release = await mutex.acquire();
 		try {
@@ -134,13 +140,10 @@ class ProductCategoryService {
 		}
 	}
 
-	async leafs(parentsIds, domainId){
+	async leafs(parentsIds:any, domainId:any){
 		const tree = await this.getCategoryTree(domainId)
-		return treeUtils.getAllLeafsFromParents(tree, parentsIds)
+		return getAllLeafsFromParents(tree, parentsIds)
 	}
 
 
 }
-
-
-module.exports.ProductCategoryService = ProductCategoryService;

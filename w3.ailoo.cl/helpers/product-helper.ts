@@ -160,8 +160,8 @@ export function getLink(product) {
   return "/motocicleta/" + product.id + "-" + product.linkName
 }
 
-export async function findProduct(productId, domainId) {
-  const p = await productService.findProductWithInventory(productId, domainId)
+export async function findProduct(productId, domainId, currency = "CLP") {
+  const p = await productService.findProductWithInventory(productId, domainId, currency)
   p.description = await productDescription(productId);
 
   p.type = p.productType

@@ -2,10 +2,10 @@ const db = require("../db");
 const logger = require("../utils/logger");
 const { redisClient} = require("../rdb");
 
-function findNodeAndChildren(tree, targetId) {
-	const result = [];
+function findNodeAndChildren(tree :any, targetId:any) {
+	const result :any[] = [];
 
-	function traverse(node) {
+	function traverse(node:any) {
 		if (node.id === targetId) {
 			collectIds(node);
 			return true;
@@ -18,7 +18,7 @@ function findNodeAndChildren(tree, targetId) {
 		return false;
 	}
 
-	function collectIds(node) {
+	function collectIds(node:any) {
 		result.push(node.id);
 		if (node.children) {
 			for (const child of node.children) {
@@ -31,13 +31,13 @@ function findNodeAndChildren(tree, targetId) {
 	return result;
 }
 
-class WebContentDb {
+export class WebContentDb {
 
 	constructor() {
 	}
 
 
-	getFragmentsNameFromTemplate(tmpl, includeParse = true) {
+	getFragmentsNameFromTemplate = (tmpl:any, includeParse = true) => {
 		const regexLayout = /\$[!]?[a-zA-Z_]+?Layout/g;
 		const regexParse = /#parse\(\s*["'](.*?)["']\s*\)/g;
 
@@ -45,7 +45,7 @@ class WebContentDb {
 
 		const matchesLayout = tmpl.match(regexLayout);
 		if (matchesLayout) {
-			fragments = matchesLayout.map((match) =>
+			fragments = matchesLayout.map((match:any) =>
 			  match.replace('$', '').replace('!', '')
 			);
 		}
@@ -54,7 +54,7 @@ class WebContentDb {
 			const matchesParse = tmpl.match(regexParse);
 			if (matchesParse) {
 				fragments = fragments.concat(
-				  matchesParse.map((match) =>
+				  matchesParse.map((match:any) =>
 					match.match(/#parse\(\s*["'](.*?)["']\s*\)/)[1].replace('.vm', '')
 				  )
 				);
@@ -65,7 +65,7 @@ class WebContentDb {
 	}
 
 
-	mapRow(r, parent) {
+	mapRow = (r:any, parent:any) => {
 
 		var config = null;
 		var isCacheable = false;
@@ -83,7 +83,7 @@ class WebContentDb {
 			//  console.log("here");
 		}
 
-		const children = [];
+		const children:any[] = [];
 
 
 		let isVisible = true;
@@ -140,7 +140,7 @@ class WebContentDb {
 		};
 	}
 
-	async addFragmentsToTemplate(wcc) {
+	addFragmentsToTemplate = async (wcc:any) => {
 		if (!wcc.isModified)
 			return;
 
@@ -149,7 +149,7 @@ class WebContentDb {
 
 		for (const f of fragments) {
 
-			const child = wcc.children.find(c => c.type === 11 && c.name === f);
+			const child = wcc.children.find( (c : any) => c.type === 11 && c.name === f);
 
 			if (child != null) {
 				continue
@@ -172,9 +172,9 @@ class WebContentDb {
 
 	}
 
-	async createTree(parent, rows) {
+	 createTree = async (parent:any, rows:any) => {
 
-		const rowChildren = rows.filter(c => c.ParentId === parent.id);
+		const rowChildren = rows.filter((c : any) => c.ParentId === parent.id);
 
 		const children = [];
 		for (var rChild of rowChildren) {
@@ -209,7 +209,7 @@ class WebContentDb {
 		return parent;
 	}
 
-	async findByType(type, websiteId, domainId) {
+	findByType = async (type : any, websiteId : any, domainId : any)  : Promise<any> => {
 		let connection = await db.pool.getConnection();
 
 		try {
@@ -258,7 +258,7 @@ SELECT
 
 	}
 
-	async createIdsTree(websiteId, domainId) {
+	createIdsTree = async (websiteId : any, domainId : any) => {
 
 		const connection = await db.pool.getConnection();
 		try {
@@ -281,11 +281,11 @@ SELECT
 
 
 			var websiteTemplate = await this.getWebSiteTemplate(websiteId, domainId);
-			var root = rows.find(r => r.ParentId === 0);
+			var root = rows.find((r : any) => r.ParentId === 0);
 			// some plugins are not attached to the website tree
 			var plugins = await this.findByType(6, websiteId, domainId /* type plugin*/);
 			if (plugins != null) {
-				var orphanPlugins = plugins.filter(c => c.ParentId == null || c.ParentId == 0);
+				var orphanPlugins = plugins.filter((c : any) => c.ParentId == null || c.ParentId == 0);
 				for (const op of orphanPlugins) {
 					op.ParentId = websiteTemplate.Id;
 					rows.push(op);
@@ -293,7 +293,7 @@ SELECT
 			}
 			logger.info("WebContentDb::createTree Total rows " + rows.length);
 
-			var root = {id: websiteTemplate.Id, children: []};
+			var root : any = {id: websiteTemplate.Id, children: []};
 			await this._recurseIdsTree(root, rows);
 
 			return root;
@@ -306,12 +306,12 @@ SELECT
 
 	}
 
-	async _recurseIdsTree(parent, rows) {
+	_recurseIdsTree = async (parent:any, rows:any) => {
 
 		if (!parent.children)
 			parent.children = [];
 
-		const rowChildren = rows.filter(c => c.ParentId === parent.id);
+		const rowChildren = rows.filter((c:any) => c.ParentId === parent.id);
 
 		for (var rChild of rowChildren) {
 			parent.children.push({id: rChild.Id, children: []});
@@ -322,7 +322,7 @@ SELECT
 		}
 	}
 
-	async getWebSiteTemplate(websiteId, domainId) {
+	getWebSiteTemplate = async (websiteId : any, domainId : any) => {
 		const connection = await db.pool.getConnection();
 		try {
 			const [websiteTemplate] = await connection.execute(`
@@ -366,7 +366,7 @@ where ws.Id = ?
 		}
 	}
 
-	async findWccAuxTree(id, websiteId, domainId) {
+	findWccAuxTree = async (id : any, websiteId : any, domainId : any) => {
 
 
 		const connection = await db.pool.getConnection();
@@ -418,7 +418,7 @@ WHERE
 `, [domainId, websiteId, ids]
 			);
 
-			const rootDb = await rows.find(r => r.Id === id);
+			const rootDb = await rows.find((r:any) => r.Id === id);
 			const root = this.mapRow(rootDb, null);
 
 			await this.createTree(root, rows);
@@ -432,7 +432,7 @@ WHERE
 	}
 
 
-	async createWebSiteTree(websiteId, domainId) {
+	createWebSiteTree = async (websiteId : any, domainId : any)  => {
 
 		const connection = await db.pool.getConnection();
 
@@ -487,7 +487,7 @@ WHERE
 			// some plugins are not attached to the website tree
 			var plugins = await this.findByType(6, websiteId, domainId /* type plugin*/);
 			if (plugins != null) {
-				var orphanPlugins = plugins.filter(c => c.ParentId == null || c.ParentId == 0);
+				var orphanPlugins = plugins.filter( (c : any)  => c.ParentId == null || c.ParentId == 0);
 				for (const op of orphanPlugins) {
 					op.ParentId = root.id;
 					rows.push(op);
@@ -509,12 +509,7 @@ WHERE
 		}
 	}
 
-
-	async findWccTree(wccId) {
-
-	}
-
-	async findWidgetTemplate(id, domainId) {
+	findWidgetTemplate = async (id :any, domainId:any) => {
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -536,7 +531,7 @@ select Template from WebContentConfiguration where DomainId = ? and Id = ?
 		}
 	}
 
-	async queryNavigation(wccId){
+	async queryNavigation(wccId:any){
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -594,8 +589,7 @@ ORDER BY Level, OrderWeight;
 		}
 	}
 
-
-	async queryTree(wccId) {
+	queryTree = async (wccId:any) => {
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -640,7 +634,7 @@ ORDER BY Path;
 		}
 	}
 
-	async findWebSite(webSiteId, domainId) {
+	async findWebSite(webSiteId:any, domainId:any) {
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -658,7 +652,7 @@ ORDER BY Path;
 
 	}
 
-	async listWccIdsBySubtype( webSiteId, subtype) {
+	async listWccIdsBySubtype( webSiteId:any, subtype:any) {
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -669,14 +663,14 @@ ORDER BY Path;
 			if(rows == null || rows.length == 0)
 				return null;
 
-			return rows.map(r => r.Id);
+			return rows.map((r:any) => r.Id);
 		} finally {
 			await connection.release();
 		}
 
 	}
 
-	async FindWccByWebContentId(webContentId, webSiteId, domainId) {
+	async FindWccByWebContentId(webContentId:any, webSiteId:any, domainId:any) {
 		const connection = await db.pool.getConnection();
 
 		try {
@@ -694,4 +688,3 @@ ORDER BY Path;
 	}
 }
 
-module.exports.WebContentDb = WebContentDb;

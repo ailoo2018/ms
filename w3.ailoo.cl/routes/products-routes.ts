@@ -11,6 +11,7 @@ import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
 import {db as redisDb} from "../connections/rdb.js";
 import {productCacheKey} from "../utils/cache-utils.js";
 import cmsClient from "../services/cmsClient.js";
+import {currencyHandler} from "../server.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -116,10 +117,10 @@ router.post("/:domainId/products/list", async (req, res, next) => {
 
 
 const CACHE_TTL = 60 * 60 * 10; // 1 hours in seconds
-router.get("/:domainId/products/:productId", async (req, res, next) => {
+router.get("/:domainId/products/:productId", currencyHandler, async (req, res, next) => {
 
   try {
-
+    const currency = req.currency || "CLP"
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
 
@@ -128,7 +129,7 @@ router.get("/:domainId/products/:productId", async (req, res, next) => {
       return res.status(404).json({message: "product not found"})
     }
 
-    const p = await findProduct(productId, domainId);
+    const p = await findProduct(productId, domainId, currency);
 
     try {
       const charts = await sizeChartService.findAllThatApplyToProduct(p, domainId)

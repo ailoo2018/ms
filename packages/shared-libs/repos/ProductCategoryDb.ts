@@ -1,8 +1,8 @@
-"use strict";
 
 
 
-function mapDbRow(r, parent){
+
+function mapDbRow(r:any, parent:any ){
     return {
         id: r.CategoryId,
         depth: parent.depth + 1,
@@ -24,14 +24,15 @@ function mapDbRow(r, parent){
 
 
 
-class ProductCategoryDb {
+export class ProductCategoryDb {
+    private db: any;
 
 
-    constructor({ db}) {
+    constructor({ db  } : { db: any })  {
         this.db = db
     }
 
-    createTree = async function(domainId) {
+    createTree = async (domainId: any) => {
 
         const connection = await this.db.pool.getConnection();
 
@@ -63,7 +64,7 @@ class ProductCategoryDb {
 
             const root = { id: 0, name: "Root", depth:0, count:0, children: [], parent: null};
 
-            const asRows = [];
+            const asRows :any[] = [];
             createTree(root, rows, domainId,  {},false, asRows)
 
             return {root, asRows};
@@ -75,7 +76,7 @@ class ProductCategoryDb {
     }
 
 
-    searchCategory = async function (sword, domainId) {
+    searchCategory = async (sword:any, domainId:any) => {
 
         const connection = await this.db.pool.getConnection();
         try {
@@ -94,7 +95,7 @@ class ProductCategoryDb {
         }
     };
 
-    findAllByDomainId = async function(domainId) {
+    findAllByDomainId = async (domainId:any) => {
 
         const connection = await this.db.pool.getConnection();
 
@@ -129,16 +130,19 @@ class ProductCategoryDb {
     }
 }
 
+function getCount(catId: any, mapCount: any){
+    return 0
+}
 
-function createTree(parent, cats, domainId, mapCount, onlyWithItems, asRows) {
-    const children = cats.filter(c =>
+function createTree(parent :any, cats:any, domainId:any, mapCount:any, onlyWithItems:any, asRows:any) {
+    const children = cats.filter((c:any) =>
         ((onlyWithItems && getCount(c.CategoryId, mapCount) > 0) || !onlyWithItems)
         && c.ParentId === parent.id
         && c.Deleted == 0
         && (c.CategoryName !== "Contabilidad" || domainId === 1)
-    ).map(r => {
+    ).map((r:any) => {
         return mapDbRow(r, parent);
-    }).sort((c1, c2) => c1.orderWeight - c2.orderWeight || c1.name.localeCompare(c2.name));
+    }).sort((c1:any, c2:any) => c1.orderWeight - c2.orderWeight || c1.name.localeCompare(c2.name));
 
     if(parent.children == null)
         parent.children =[];
@@ -165,5 +169,5 @@ function createTree(parent, cats, domainId, mapCount, onlyWithItems, asRows) {
 
 
 
-module.exports.ProductCategoryDb = ProductCategoryDb
+
 
