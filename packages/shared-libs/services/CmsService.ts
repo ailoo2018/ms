@@ -1,6 +1,6 @@
 import {promises as fs} from "fs";
 import logger from "../utils/logger.js"
-import { db as redisClient } from "../rdb/index.js";
+import { getRedisDb } from "../rdb/index.js";
 
 import path from "path";
 
@@ -168,7 +168,7 @@ async function loadWccAux(wccId : any, domainId : any, db : any) {
     wccaux.childrenIds = childrenIds;
     wccaux.children = children
     const key = getWccKey(wccaux.id, wccaux.domainId)
-    const redRes = await redisClient.set(key, JSON.stringify(wccaux), {EX: WCC_EXPIRY})
+    const redRes = await getRedisDb().set(key, JSON.stringify(wccaux), {EX: WCC_EXPIRY})
   }
 
   return wccaux;

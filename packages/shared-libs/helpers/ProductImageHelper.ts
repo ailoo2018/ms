@@ -8,7 +8,7 @@ import sharp from "sharp";
 import {FormatUtils} from "../utils/utils";
 
 
-const basePath = process.env.PRODUCT_IMAGE_BASE_PATH;
+const basePath : string = process.env.PRODUCT_IMAGE_BASE_PATH as string;
 
 async function resizeToSquare(inputPath: any, outputPath: any, squareSize: any, options = {}) {
     try {
