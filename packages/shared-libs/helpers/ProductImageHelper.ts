@@ -3,9 +3,9 @@ import {promises as fs} from "fs";
 import fs1 from "fs";
 import axios from "axios";
 import {randomUUID} from "crypto";
-import logger from "../utils/logger";
+import logger from "../utils/logger.js";
 import sharp from "sharp";
-import {FormatUtils} from "../utils/utils";
+import {FormatUtils} from "../utils/utils.js";
 
 
 const basePath : string = process.env.PRODUCT_IMAGE_BASE_PATH as string;

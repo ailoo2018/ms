@@ -4,7 +4,7 @@ import { productRepos} from "../el/products.js";
 import {getProductImage} from "../helpers/product-helper.js";
 import {SaleType} from "../models/domain.js";
 import container from "../container/index.js";
-import LinkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+import * as LinkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
 
 
 const productService = container.resolve('productsService');

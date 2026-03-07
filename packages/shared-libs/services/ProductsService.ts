@@ -1,6 +1,6 @@
-import {getIndexName} from "../el";
-import {getPrice} from "../products/price";
-import {SaleType} from "../models";
+import {getIndexName} from "../el/index.js";
+import {getPrice} from "../products/price.js";
+import {SaleType} from "../models/index.js";
 
 
 export default class ProductsService {

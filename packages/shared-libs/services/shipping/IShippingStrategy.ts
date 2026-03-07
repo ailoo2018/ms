@@ -1,4 +1,4 @@
-import {Money} from "../../models/universal.types";
+import {Money} from "../../models/universal.types.js";
 
 export interface ShippingQuote {
     cost: Money;

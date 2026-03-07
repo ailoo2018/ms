@@ -1,5 +1,5 @@
-import {IShippingStrategy, ShippingQuote} from "./IShippingStrategy";
-import {Money} from "../../models/universal.types";
+import {IShippingStrategy, ShippingQuote} from "./IShippingStrategy.js";
+import {Money} from "../../models/universal.types.js";
 
 
 export class StorePickup implements IShippingStrategy {

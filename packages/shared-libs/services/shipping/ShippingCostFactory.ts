@@ -1,7 +1,7 @@
-import {ShippingMethod} from "../../models/shipping.types";
-import {AlasXpress} from "./AlasXpress";
-import {IShippingStrategy} from "./IShippingStrategy";
-import {StorePickup} from "./StorePickup";
+import {ShippingMethod} from "../../models/shipping.types.js";
+import {AlasXpress} from "./AlasXpress.js";
+import {IShippingStrategy} from "./IShippingStrategy.js";
+import {StorePickup} from "./StorePickup.js";
 
 const STRATEGIES: Record<number, new () => IShippingStrategy> = {
     [ShippingMethod.AlasXpress]: AlasXpress,

@@ -1,6 +1,6 @@
 import {DiscountRuleService} from "../services/DiscountRuleService.js";
 import { convert } from "../services/CurrencyService.js";
-import {Money, Price, PriceComponentType} from "../models";
+import {Money, Price, PriceComponentType} from "../models/index.js";
 
 const getFeatures = (pit:any) => {
   const ret = [];

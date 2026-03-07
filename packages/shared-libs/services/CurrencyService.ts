@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {Money} from "../models/universal.types";
+import {Money} from "../models/universal.types.js";
 import { getRedisDb } from "../rdb/index.js";
 
 const API_KEY = process.env.EXCHANGE_RATE_API_KEY;

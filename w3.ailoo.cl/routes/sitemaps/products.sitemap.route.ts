@@ -5,7 +5,7 @@ import * as ProductHelper from "../../helpers/product-helper.js";
 import {db as drizzleDb} from "../../db/drizzle.js";
 import schema from "../../db/schema.js";
 import {and, eq} from "drizzle-orm";
-import linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+import * as linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
 
 
 const { webContentConfiguration } = schema;

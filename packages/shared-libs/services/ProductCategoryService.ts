@@ -1,6 +1,6 @@
 import logger from '../utils/logger.js';
 import {Mutex} from "async-mutex";
-import {getAllLeafsFromParents} from "../utils/tree-utils";
+import {getAllLeafsFromParents} from "../utils/tree-utils.js";
 
 const mutex = new Mutex();
 

@@ -1,6 +1,6 @@
 import {Router} from "express";
 import container from "../container/index.js";
-import linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+import * as linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
 
 const categoryService = container.resolve('productCategoryService');
 

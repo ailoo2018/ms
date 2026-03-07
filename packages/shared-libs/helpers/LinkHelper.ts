@@ -1,4 +1,4 @@
-import {WebContentSubtype, WebContentType} from "../models";
+import {WebContentSubtype, WebContentType} from "../models/index.js";
 
 
 function formatLink(str:any) {
@@ -30,14 +30,14 @@ function startsWithNumbersAndHyphen2(text: any) {
 }
 
 
-module.exports.getUrl=function(product: any){
+export const getUrl= (product: any) => {
     if(product.domainId === 1){
         return "/motocicleta/" + formatLink(product.linkName);
     }
     return formatLink(product.linkName);
 }
 
-module.exports.getCategoryUrl = function (category: any) {
+export const getCategoryUrl =  (category: any) =>  {
     let prefix = "/";
 
     if (category.linkName && category.linkName.length > 0) {
@@ -47,7 +47,7 @@ module.exports.getCategoryUrl = function (category: any) {
     return prefix + formatLink(category.name);
 }
 
-module.exports.getProductUrl= function(product: any){
+export const getProductUrl= (product: any) => {
     if (product.linkName && startsWithNumbersAndHyphen2(product.linkName)) {
         return "/motocicleta/" + product.linkName
     }
@@ -55,7 +55,7 @@ module.exports.getProductUrl= function(product: any){
     return "/motocicleta/" + product.id + "-" + product.linkName
 }
 
-module.exports.getWccUrl= function(wcc:any ){
+export const getWccUrl= (wcc:any ) => {
 
     if (wcc.subtype === WebContentSubtype.BlogEntry && wcc.domainId === 1)
         return "moto-blog/" + formatLink(wcc.name);

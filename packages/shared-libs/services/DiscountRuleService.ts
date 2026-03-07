@@ -1,4 +1,4 @@
-import {Money, PriceComponentType} from "../models";
+import {Money, PriceComponentType} from "../models/index.js";
 
 
 let rules: any = null;

@@ -1,4 +1,4 @@
-import {ShoppingCart} from "../models/cart.types";
+import {ShoppingCart} from "../models/cart.types.js";
 
 
 let INDEX = "shopping-cart";
