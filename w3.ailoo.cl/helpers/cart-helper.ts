@@ -8,6 +8,13 @@ import {db as drizzleDb} from "../db/drizzle.js";
 import * as couponHelper from "./coupon-helper.js";
 import * as cartHelper from "../helpers/cart-helper.js"
 
+export async function deleteCoupon(id: number, cart: Partial<Cart>, domainId: number) {
+
+    cart.items = cart.items.filter(item => item.type === CartItemType.Coupon)
+
+}
+
+
 const productService = container.resolve('productsService');
 
 

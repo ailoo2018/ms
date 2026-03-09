@@ -43,15 +43,47 @@ const cartService = container.resolve("cartService");
 
 router.get("/:domainId/shipping/methods", async (req, res, next) => {
     try {
+        const { comuna, country } = req.query;
         const domainId = parseInt(req.params.domainId);
         const wuid = req.query.wuid;
 
 
         const cart = await findCart(wuid, domainId)
-        if (!cart.destination)
-            throw new Error("Carro de compra aun not tiene destino no tiene destino")
 
-        const quotes = await cartService.listShippingQuotes(cart, cart.destination.comunaId, domainId);
+        let quotes = null
+        if(country && country !== "CL"){
+
+            quotes = [ {
+                "id": 1,
+                "name": "Correos de Chile",
+                "price": 30,
+                "currency" : "USD",
+                "oldPrice": 0,
+                freeShipping: {
+                    amount: 300,
+                    currency: "USD",
+                },
+                "preparationDays": {
+                    "from": 3,
+                    "to": 4
+                },
+                "estimatedDays": 14,
+                "eta": {
+                    "from": "2026-03-14T13:00:47.362Z",
+                    "to": "2026-03-15T13:00:47.362Z"
+                },
+                "type": 5
+            },]
+
+            return res.json(
+                {
+                    methods: quotes
+                }
+            )
+        }else{
+            quotes = await cartService.listShippingQuotes(cart, Number(comuna), domainId);
+        }
+
 
         res.json(quotes)
     } catch (e) {
@@ -391,6 +423,22 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
 router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     try {
+
+        const country = req.query.country || "CL"
+        if(country !== "CL")
+            return res.json({
+                "gateways": [
+                    {
+                        "id": 19,
+                        "driver": "dlocal",
+                        "description": null,
+                        "logo_class": "credit-cards",
+                        "name": "dlocal",
+                        "order": 1
+                    }]
+            });
+
+
         res.json({
             "gateways": [
                 {
@@ -411,6 +459,24 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                 }
             ]
         })
+    } catch (e) {
+        next(e)
+    }
+})
+
+router.post("/:domainId/checkout/delete-coupon", async (req, res, next) => {
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const id = parseInt( req.body.id );
+        const wuid = req.body.wuid
+
+        const cart: Partial<Cart> = await findCart(wuid, domainId);
+
+        await cartHelper.deleteCoupon(id, cart, domainId);
+
+        await updateCart(cart)
+
+        res.json(cart)
     } catch (e) {
         next(e)
     }
@@ -527,7 +593,7 @@ function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId
         productId: null,
         productItemId: null,
         couponId: coupon.id,
-        comment: coupon.name?.trim() + " " + coupon.description.trim(),
+        comment: (coupon.name?.trim() + " " + coupon.description?.trim()).trim(),
         quantity: "1",
         unitPrice: coupon.discount * -1,
         unitCurrency: "CLP",           // Default as per your table schema

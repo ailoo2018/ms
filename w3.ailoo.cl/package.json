@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsx watch app.ts",
     "start": "node dist/app.js",
-    "build": "tsc && mkdir -p dist/templates && cp -r templates/. dist/templates/",
+    "build": "tsc && shx mkdir -p dist/templates && shx cp -r templates/. dist/templates/",
     "debug": "node --inspect --import tsx app.ts"
   },
   "keywords": [],
@@ -24,7 +24,6 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "ejs": "^4.0.1",
-    "redis": "^5.10.0",
     "express": "^5.2.1",
     "form-data": "^4.0.5",
     "jsonwebtoken": "^9.0.3",
@@ -32,11 +31,13 @@
     "mercadopago": "^2.11.0",
     "multer": "^2.0.2",
     "mysql2": "^3.16.0",
+    "redis": "^5.10.0",
     "supertest": "^7.2.2",
     "transbank-sdk": "^6.1.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "shx": "^0.4.0",
     "tsx": "^4.21.0"
   }
 }
