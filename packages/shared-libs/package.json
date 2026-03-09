@@ -16,7 +16,6 @@
     "@elastic/elasticsearch": "^8.17.0",
     "async-mutex": "^0.5.0",
     "awilix": "^12.0.5",
-    "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "mysql2": "^3.16.1",
     "redis": "^5.10.0",
@@ -26,20 +25,20 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "exports": {
-    "./logger": "./utils/logger.js",
-    "./config": "./utils/config.js",
-    "./helpers/ProductImageHelper": "./helpers/ProductImageHelper.js",
-    "./helpers/LinkHelper": "./helpers/LinkHelper.js",
-    "./utils": "./utils/utils.js",
-    "./price": "./products/price.js",
-    "./ProductsService": "./services/ProductsService.js",
-    "./ProductCategoryService": "./services/ProductCategoryService.js",
-    "./SizeChartService": "./services/products/SizeChartService.js",
-    "./DiscountRuleService": "./services/DiscountRuleService.js",
-    "./CartService": "./services/CartService.js",
-    "./ShippingService": "./services/ShippingService.js",
-    "./CartRepos": "./repos/CartRepos.js",
-    "./ProductCategoryDb": "./repos/ProductCategoryDb.js"
+    "./logger": "./dist/utils/logger.js",
+    "./config": "./dist/utils/config.js",
+    "./helpers/ProductImageHelper": "./dist/helpers/ProductImageHelper.js",
+    "./helpers/LinkHelper": "./dist/helpers/LinkHelper.js",
+    "./utils": "./dist/utils/utils.js",
+    "./price": "./dist/products/price.js",
+    "./ProductsService": "./dist/services/ProductsService.js",
+    "./ProductCategoryService": "./dist/services/ProductCategoryService.js",
+    "./SizeChartService": "./dist/services/products/SizeChartService.js",
+    "./DiscountRuleService": "./dist/services/DiscountRuleService.js",
+    "./CartService": "./dist/services/CartService.js",
+    "./ShippingService": "./dist/services/ShippingService.js",
+    "./CartRepos": "./dist/repos/CartRepos.js",
+    "./ProductCategoryDb": "./dist/repos/ProductCategoryDb.js"
   },
 
   "devDependencies": {
