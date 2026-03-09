@@ -147,10 +147,12 @@ export async function applyCoupon(code: string, cart: Partial<Cart>, domainId: n
         for (var si of cart.items.filter(i1 => i1.product?.productItemId)) {
             var itemCtx = await couponHelper.createCouponContext(si, domainId);
 
-            if (itemCtx != null && couponHelper.appliesToSaleItem(couponConfig, itemCtx))
-                totalDiscount.amount = couponHelper
+            if (itemCtx != null && couponHelper.appliesToSaleItem(couponConfig, itemCtx)) {
+                let dsct = couponHelper
                     .applyDiscount(coupon, new Money(si.price * si.quantity, cart.currency))
                     .amount;
+                totalDiscount.amount = totalDiscount.amount + dsct
+            }
         }
     else
         totalDiscount = {amount: coupon.discountAmount, currency: "CLP"};
