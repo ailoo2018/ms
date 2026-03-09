@@ -307,7 +307,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         rut: rq.shipmentInformation.address.rut,
                         email: rq.customerInformation.email,
                         comment: rq.shipmentInformation.notes,
-                        comunaId: rq.shipmentInformation.address.comuna.id,
+                        comunaId: rq.shipmentInformation.address.comuna?.id || null,
                         postalCode: rq.shipmentInformation.address.postalCode,
                         domainId: domainId
                     });
