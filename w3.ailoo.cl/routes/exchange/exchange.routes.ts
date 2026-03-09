@@ -6,6 +6,7 @@ import {db as redisDb } from "../../connections/rdb.js";
 const router = Router();
 
 const API_KEY = process.env.EXCHANGE_RATE_API_KEY;
+
 router.get("/exchange/all/:from", requiresApiKey, async (req, res, next) => {
     try {
         const from = req.params.from;
