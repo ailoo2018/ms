@@ -91,7 +91,7 @@ app.use(reviewsRoutes);
 app.get('/', (req, res) => {
 
   res.json({
-    msg: "Welcome to the WcC App",
+    msg: "Welcome to the WcC App v123::::",
     /*
         DB_HOST: process.env.DB_HOST,
         DB_USER: process.env.DB_USER,
