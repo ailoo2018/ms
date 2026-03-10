@@ -1,165 +1,135 @@
 {
-  "wuid": "c8ed34a3-2ea7-40ac-ac00-0bf093b7c607",
+  "wuid": "bcef2295-b57e-41c2-887e-2af9bd19518f",
+  "country": "CL",
+  "currency": "CLP",
+  "exhangeRate": 1,
+  "coupon": null,
   "addresses": {
     "selectedShipping": {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "idType": "DNI",
+      "nif": "15.320.300-8",
       "name": "Juan",
       "surnames": "Carlos",
-      "phone": "56977741034",
-      "rut": "153203008",
       "address": "Charles Hammilton 13731",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": null,
-      "id": 803745,
-      "default": false,
-      "comuna_id": 316,
-      "nif": "153203008",
-      "alias": "Casa"
+      "address2": "Depto 10",
+      "state": "Buenos Aires",
+      "city": "Buenos Aires",
+      "comuna": null,
+      "postalCode": "900090",
+      "dialCode": "+54",
+      "phone": "977741303",
+      "comuna_id": 0
     },
     "shipping": {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "idType": "DNI",
+      "nif": "15.320.300-8",
       "name": "Juan",
       "surnames": "Carlos",
-      "phone": "56977741034",
-      "rut": "153203008",
       "address": "Charles Hammilton 13731",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": null,
-      "id": 803745,
-      "default": false,
-      "comuna_id": 316,
-      "nif": "153203008",
-      "alias": "Casa"
+      "address2": "Depto 10",
+      "state": "Buenos Aires",
+      "city": "Buenos Aires",
+      "comuna": null,
+      "postalCode": "900090",
+      "dialCode": "+54",
+      "phone": "977741303",
+      "comuna_id": 0
     },
     "billing": {}
   },
   "customerInformation": {
-    "phone": "996794009",
+    "phone": "977741303",
     "email": "jcfuentes@lava.cl",
     "address": {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "idType": "DNI",
+      "nif": "15.320.300-8",
       "name": "Juan",
       "surnames": "Carlos",
-      "phone": "56977741034",
-      "rut": "153203008",
       "address": "Charles Hammilton 13731",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": null,
-      "id": 803745,
-      "default": false,
-      "comuna_id": 316,
-      "nif": "153203008",
-      "alias": "Casa"
+      "address2": "Depto 10",
+      "state": "Buenos Aires",
+      "city": "Buenos Aires",
+      "comuna": null,
+      "postalCode": "900090",
+      "dialCode": "+54",
+      "phone": "977741303",
+      "comuna_id": 0
     }
   },
   "shipmentInformation": {
-    "method": 1,
+    "method": 5,
     "address": {
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "idType": "DNI",
+      "nif": "15.320.300-8",
       "name": "Juan",
       "surnames": "Carlos",
-      "phone": "56977741034",
-      "rut": "153203008",
       "address": "Charles Hammilton 13731",
-      "address2": null,
-      "legalName": "",
-      "type": "shipping",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postal_code": null,
-      "id": 803745,
-      "default": false,
-      "comuna_id": 316,
-      "nif": "153203008",
-      "alias": "Casa"
+      "address2": "Depto 10",
+      "state": "Buenos Aires",
+      "city": "Buenos Aires",
+      "comuna": null,
+      "postalCode": "900090",
+      "dialCode": "+54",
+      "phone": "977741303",
+      "comuna_id": 0
     },
-    "store": {
-      "id": 1,
-      "title": "LAS TRANQUERAS (LAS CONDES)",
-      "name": "LAS TRANQUERAS",
-      "address": "LAS TRANQUERAS 56",
-      "latitude": -33400898749676830,
-      "longitude": -7055551688038699,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      }
-    },
-    "pickupOption": "pickup_in_2_hours",
-    "modifiedDate": "2026-02-26T17:20:25.231Z",
-    "carrierId": 9,
+    "store": null,
+    "pickupOption": "",
+    "modifiedDate": "2026-03-10T19:13:24.586Z",
+    "carrierId": 1,
     "comments": "",
     "remarks": ""
   },
   "createAccount": false,
   "subscribe": true,
   "notifyWhatsApp": true,
-  "selectedCarrier": 9,
+  "selectedCarrier": 1,
   "paymentMethod": {
-    "gateway": 8
+    "gateway": 19
   },
-  "pickupStore": {
-    "id": 1,
-    "title": "LAS TRANQUERAS (LAS CONDES)",
-    "name": "LAS TRANQUERAS",
-    "address": "LAS TRANQUERAS 56",
-    "latitude": -33400898749676830,
-    "longitude": -7055551688038699,
-    "comuna": {
-      "id": 316,
-      "name": "LAS CONDES"
-    }
-  },
+  "pickupStore": null,
   "selectedMapData": {
-    "store_id": 1
+    "store_id": 0
   },
   "items": [
     {
-      "image": "c7d9938e976b48d2b760ef678dbda8bf.jpg",
+      "image": "d5201b01ec7544b0850e236e53efac42.jpg",
       "product": {
-        "image": "c7d9938e976b48d2b760ef678dbda8bf.jpg",
-        "productItemId": 3440780,
-        "name": "AGV K1 S (2023) Fastlap Negro/Gris/Rojo M",
+        "image": "d5201b01ec7544b0850e236e53efac42.jpg",
+        "productItemId": 2634768,
+        "name": "Alpinestars Casco SM5 Bond Negro/Rojo/Azul M",
         "type": 0,
-        "url": "/motocicleta/2993400-cascos-integrales-agv-k1-s-2023-fastlap"
+        "url": "/motocicleta/2276703-cascos-mx-enduro-alpinestars-casco-sm5-bond"
       },
       "quantity": 1,
       "color": {
+        "id": 5411,
         "name": "Negro/Rojo/Azul",
         "orderWeight": 0,
-        "id": 5411,
         "type": 1
       },
-      "oldPrice": 249900,
-      "description": "K1 S (2023) Fastlap",
+      "oldPrice": 199900,
+      "description": "Casco SM5 Bond",
       "discount": 0,
       "type": 0,
       "packId": 0,
       "size": {
+        "id": 2,
         "name": "M",
-        "orderWeight": 50,
-        "id": 986,
+        "orderWeight": 79,
         "type": 0
       },
-      "price": 249900,
-      "name": "AGV K1 S (2023) Fastlap Negro/Gris/Rojo M",
-      "id": "66afe57f-ee4e-44fd-84cc-9975f039cb43",
+      "price": 199900,
+      "name": "Alpinestars Casco SM5 Bond Negro/Rojo/Azul M",
+      "id": "6366e6e0-53eb-4ec6-ac12-2d9922b157a2",
       "loading": false
     }
   ],

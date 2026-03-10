@@ -23,6 +23,7 @@ import * as cartHelper from "../helpers/cart-helper.js"
 import {CouponConfig} from "../models/coupon.types.js";
 import {updateCart} from "../el/cart.js";
 import {applyCoupon} from "../helpers/cart-helper.js";
+import {convert, getCountryData} from "../services/exchangeService.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -52,16 +53,18 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
 
         let quotes = null
         if(country && country !== "CL"){
-
+            const countryData = getCountryData(country)
+            const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
+            const freeShippingThreshold = await convert(300, "USD", "CLP")
             quotes = [ {
                 "id": 1,
                 "name": "Correos de Chile",
-                "price": 30,
-                "currency" : "USD",
+                "price": shippingCostInLocalCurrency,
+                "currency" : countryData.currency,
                 "oldPrice": 0,
                 freeShipping: {
-                    amount: 300,
-                    currency: "USD",
+                    amount: freeShippingThreshold,
+                    currency: countryData.currency,
                 },
                 "preparationDays": {
                     "from": 3,
@@ -175,6 +178,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
         logger.info("create-order rq: " + JSON.stringify(rq));
         const domainId = parseInt(req.params.domainId);
+        const currency = req.body.currency || "CLP"
 
 
 
@@ -183,8 +187,6 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
             try {
                 let user = null
                 let person = null;
-
-                logger.info("drizzleDb.transaction 1")
 
                 if (rq.userId > 0) {
                     user = await drizzleDb.query.user.findFirst({
@@ -195,19 +197,13 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     });
                 }
 
-                logger.info("drizzleDb.transaction 2")
-
                 if (user != null && user.person != null)
                     person = user.person;
-
-                logger.info("drizzleDb.transaction 3")
 
                 if (person == null)
                     person = await getPartyPartial(rq.customerInformation.email, domainId);
 
 
-                logger.info("drizzleDb.transaction 4.0: " + person)
-                logger.info("drizzleDb.transaction 4.1: " + rq.customerInformation.phone)
                 if (!person) {
 
                     // try getting name and surname from customerInformation (db Party)
@@ -325,6 +321,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 const [orderResult] = await tx.insert(saleOrder).values({
                     orderDate: new Date(),
                     expectedDeliveryDate: new Date(),
+
                     shippedToId: postalAddressId, // Points to both tables via the shared ID
                     state: 1,
                     paymentMethodTypeId: rq.paymentMethod.gateway,
@@ -354,13 +351,13 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                         item.product.id = pitDb.productId
 
-                        let itemToInsert = createProductSaleOrderItem(newOrderId, item, null, domainId)
+                        let itemToInsert = createProductSaleOrderItem(newOrderId, item, null, domainId, currency)
 
                         const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
                         const orderItemId = orderItemResult.insertId;
                         if (item.packContents && item.packContents.length > 0) {
                             for (var packItem of item.packContents) {
-                                const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId)
+                                const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId, currency)
                                 await tx.insert(saleOrderItem).values(packItemDb);
                             }
                         }
@@ -425,7 +422,8 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     try {
 
         const country = req.query.country || "CL"
-        if(country !== "CL")
+        if(country !== "CL") {
+
             return res.json({
                 "gateways": [
                     {
@@ -437,6 +435,7 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                         "order": 1
                     }]
             });
+        }
 
 
         res.json({
@@ -572,7 +571,7 @@ function validateRequestPrice(item, rq) {
     }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) : Partial<SaleOrderItem> {
+function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: number, currency: string ) : Partial<SaleOrderItem> {
 
     return {
         orderId: orderId,
@@ -580,7 +579,7 @@ function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId) : 
         productItemId: cartItem.product.productItemId,
         quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
         unitPrice: cartItem.price,
-        unitCurrency: "CLP",           // Default as per your table schema
+        unitCurrency: currency || "CLP",           // Default as per your table schema
         type: OrderItemType.Product,
         orderItemId: orderItemId ? orderItemId : null,
     }

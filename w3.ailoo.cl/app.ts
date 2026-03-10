@@ -17,6 +17,8 @@ app.use(wccRoutes);
 import friendlyUrlRoutes from "./routes/friendlyurl-routes.js";
 app.use(friendlyUrlRoutes);
 
+
+
 import exchangeRoutes from "./routes/exchange/exchange.routes.js";
 app.use(exchangeRoutes);
 

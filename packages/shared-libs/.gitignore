@@ -8,3 +8,5 @@ logs/
 /dist/services/products/SizeChartService.d.ts
 /dist/services/products/SizeChartService.js
 /dist/
+dist/
+
