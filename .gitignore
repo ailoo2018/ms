@@ -7,3 +7,5 @@ npm-debug.log
 .env.local
 logs/
 dist/*
+w3.ailoo.cl/dist
+packages/shared-libs/dist
