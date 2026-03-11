@@ -1,5 +1,6 @@
 
 export interface PaymentValidation {
+    message?: string;
     responseCode?: string;
     success: boolean;
     referenceId: string;

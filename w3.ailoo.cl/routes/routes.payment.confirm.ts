@@ -3,7 +3,7 @@ import logger from "@ailoo/shared-libs/logger";
 import {and, eq, sql} from "drizzle-orm";
 import { confirmPayment } from "../payments/confirm.payments.t.js";
 import type {PaymentValidation} from "../clients/paymentValidator.js";
-import schema from "../db/schema.js";
+import schema, {SaleOrder} from "../db/schema.js";
 import {adminClient} from "../clients/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {OrderState, PaymentMethodType} from "../models/domain.js";
@@ -115,6 +115,8 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
         let authCode = ""
         let currency = "CLP"
         let amount = 0
+        let rs : PaymentValidation = null;
+        let referenceId = rq.referenceId
         let transactionDate: Date = null
         let paymentData = null
         if (rq.referenceType === "invoice") {
@@ -134,22 +136,59 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
                 paymentData = {date: payApp.payment.effectiveDate}
             }
 
+            rs = {
+                referenceType: rq.referenceType,
+                referenceId: rq.referenceId,
+                success: true,
+                authorizationCode: authCode,
+                currency: currency,
+                transactionAmount: amount,
+                responseData: paymentData,
+                responseCode: "",
+                paymentMethodId: rq.paymentMethodId,
+                transactionDate: transactionDate,
+
+            }
+
+        }else{ // order
+            const order : SaleOrder  = await drizzleDb.query.saleOrder.findFirst({
+                where: (saleOrder, { eq }) =>
+                    and(
+                        eq(saleOrder.id, parseInt(referenceId || 0)),
+                        eq(saleOrder.domainId, domainId),
+                    ),
+
+                with: {
+                    items: true,
+                },
+            });
+
+            rs = {
+                referenceType: rq.referenceType,
+                referenceId: rq.referenceId,
+                success: false,
+                authorizationCode: null,
+                currency: currency,
+                transactionAmount: amount,
+                responseData: paymentData,
+                responseCode: "",
+                paymentMethodId: rq.paymentMethodId,
+                transactionDate: transactionDate,
+
+            }
+
+            if(!order){
+                rs.success = false
+            }else{
+                rs.authorizationCode = order.authCode
+                rs.success = order.state == OrderState.Pagado
+
+                if(!rq.success)
+                    rs.message = "Orden está en estado " + order.state
+            }
         }
 
 
-        const rs: PaymentValidation = {
-            referenceType: rq.referenceType,
-            referenceId: rq.referenceId,
-            success: true,
-            authorizationCode: authCode,
-            currency: currency,
-            transactionAmount: amount,
-            responseData: paymentData,
-            responseCode: "",
-            paymentMethodId: rq.paymentMethodId,
-            transactionDate: transactionDate,
-
-        }
 
         res.json(rs)
     } catch (e) {
