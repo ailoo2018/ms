@@ -62,49 +62,79 @@ async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
 
 }
 
+const processingLocks = new Map<string, Promise<void>>();
+
 async function payInvoice(confirmRs: PaymentValidation, domainId: number) {
+    const lockKey = String(confirmRs.authorizationCode);
+
+    // If already processing this auth code, wait for it and return
+    if (processingLocks.has(lockKey)) {
+        await processingLocks.get(lockKey);
+        return;
+    }
+
+    let resolveLock!: () => void;
+    const lockPromise = new Promise<void>((resolve) => {
+        resolveLock = resolve;
+    });
+    processingLocks.set(lockKey, lockPromise);
+
+    try {
+        await _doPayInvoice(confirmRs, domainId);
+    } finally {
+        processingLocks.delete(lockKey);
+        resolveLock();
+    }
+}
+
+async function _doPayInvoice(confirmRs: PaymentValidation, domainId: number) {
     const invoiceId = parseInt(confirmRs.referenceId);
 
     const results = await drizzleDb
-        .select({
-            payment: payment,
-        })
+        .select({ payment: payment })
         .from(paymentApplication)
-        .innerJoin(
-            payment,
-            eq(paymentApplication.paymentId, payment.id)
-        )
+        .innerJoin(payment, eq(paymentApplication.paymentId, payment.id))
         .where(eq(paymentApplication.invoiceId, invoiceId));
 
-    const payments = results.map(r => r.payment);
-
-    if(payments.some(p => p.paymentRefNum === String(confirmRs.authorizationCode))) {
-        return
+    if (results.some(r => r.payment.paymentRefNum === String(confirmRs.authorizationCode))) {
+        logger.info(`Payment ${confirmRs.authorizationCode} already processed, skipping.`);
+        return;
     }
 
-
     try {
-        //     await sendOrderConfirmationEmail(confirmRs.orderId, domainId)
         logger.info("add payment adminClient: " + JSON.stringify({
-            invoiceId: invoiceId,
+            invoiceId,
             trxAmount: confirmRs.transactionAmount,
             currency: confirmRs.currency,
             authCode: confirmRs.authorizationCode,
             payMethodId: confirmRs.paymentMethodId,
-            domainId: domainId
+            domainId,
         }));
+
         await adminClient.addPayment(
             invoiceId,
             confirmRs.transactionAmount,
             confirmRs.authorizationCode,
             confirmRs.paymentMethodId,
             confirmRs.currency || "CLP",
-            domainId);
+            domainId
+        );
     } catch (e) {
-        logger.error("Error adding payment adminClient: " + e.message)
-        console.error(e.message, e)
+        // Unique constraint violation = already inserted by another process
+        if (isUniqueConstraintError(e)) {
+            logger.warn(`Duplicate payment skipped (DB constraint): ${confirmRs.authorizationCode}`);
+            return;
+        }
+        logger.error("Error adding payment adminClient: " + e.message);
+        console.error(e.message, e);
     }
 }
+
+function isUniqueConstraintError(e: any): boolean {
+    // Postgres error code for unique violation
+    return e?.code === '23505';
+}
+
 
 router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
 
