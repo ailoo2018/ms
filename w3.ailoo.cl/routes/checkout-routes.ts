@@ -54,17 +54,18 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
         let quotes = null
         if(country && country !== "CL"){
             const countryData = getCountryData(country)
-            const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
+           // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
+            const shippingCostInLocalCurrency = 100 // await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
             quotes = [ {
                 "id": 1,
                 "name": "Correos de Chile",
                 "price": shippingCostInLocalCurrency,
-                "currency" : countryData.currency,
+                "currency" : "CLP", // use CLP, webpage converts to selected country
                 "oldPrice": 0,
                 freeShipping: {
                     amount: freeShippingThreshold,
-                    currency: countryData.currency,
+                    currency: "CLP",
                 },
                 "preparationDays": {
                     "from": 3,
@@ -370,7 +371,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
 
                         for (var packItem of item.packContents) {
-                            const packItemDb = createProductSaleOrderItem(newOrderId, packItem, null, domainId)
+                            const packItemDb = createProductSaleOrderItem(newOrderId, packItem, null, domainId, currency)
                             await tx.insert(saleOrderItem).values(packItemDb);
 
                             orderTotal += packItem.quantity * packItem.price

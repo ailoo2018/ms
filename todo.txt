@@ -60,13 +60,21 @@
 * when filtering go to page then back, should keep state
 * related blog articles
 * blog comment form
+* marcas no se estan listando
+* bike selector in home mobile not rows
+* venta internacionales
+* coupon más de un producxto
+* 
+* envioe gratis internacional
+* provincia con [Object]
 
-- venta internacionales
+- orderby in product list
+- dlocal not working
+
+- mercado pago acredita 2 veces
 - maintain cookie department when selecting logo
 - filter drawer mobile
 - account/gear
-- mercado pago acredita 2 veces
-- bike selector in home mobile not rows
 
 - store survey
 - show seen cheaper

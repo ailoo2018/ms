@@ -9,3 +9,6 @@ package-lock.json
 /dist/
 dist/
 /.idea/jsLibraryMappings.xml
+/packages/shared-libs/dist
+packages/shared-libs/dist
+packages/shared-libs/dist*

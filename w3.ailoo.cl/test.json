@@ -1,8 +1,8 @@
 {
   "wuid": "bcef2295-b57e-41c2-887e-2af9bd19518f",
-  "country": "CL",
-  "currency": "CLP",
-  "exhangeRate": 1,
+  "country": "AR",
+  "currency": "ARS",
+  "exhangeRate": 1.5947,
   "coupon": null,
   "addresses": {
     "selectedShipping": {
@@ -57,13 +57,32 @@
       "city": "Buenos Aires",
       "comuna": null,
       "postalCode": "900090",
-      "dialCode": "+54",
-      "phone": "977741303",
-      "comuna_id": 0
+      "dialCode": "+54"
     }
   },
   "shipmentInformation": {
     "method": 5,
+    "shipmentMethod": {
+      "id": 1,
+      "name": "Correos de Chile",
+      "price": 27456.816000000003,
+      "currency": "ARS",
+      "oldPrice": 0,
+      "freeShipping": {
+        "amount": 274568.16000000003,
+        "currency": "ARS"
+      },
+      "preparationDays": {
+        "from": 3,
+        "to": 4
+      },
+      "estimatedDays": 14,
+      "eta": {
+        "from": "2026-03-14T13:00:47.362Z",
+        "to": "2026-03-15T13:00:47.362Z"
+      },
+      "type": 5
+    },
     "address": {
       "countryCode": "AR",
       "countryName": "Argentina",
@@ -83,7 +102,7 @@
     },
     "store": null,
     "pickupOption": "",
-    "modifiedDate": "2026-03-10T19:13:24.586Z",
+    "modifiedDate": "2026-03-10T21:31:06.749Z",
     "carrierId": 1,
     "comments": "",
     "remarks": ""

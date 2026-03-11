@@ -9,3 +9,4 @@ logs/
 dist/*
 w3.ailoo.cl/dist
 packages/shared-libs/dist
+/packages/shared-libs/dist/

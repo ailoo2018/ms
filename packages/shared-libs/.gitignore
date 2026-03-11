@@ -10,3 +10,7 @@ logs/
 /dist/
 dist/
 /dist/
+/packages/shared-libs/dist
+packages/shared-libs/dist
+packages/shared-libs/dist*
+/dist/
