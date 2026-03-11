@@ -67,11 +67,12 @@
 * 
 * envioe gratis internacional
 * provincia con [Object]
+* mercado pago acredita 2 veces
+* coupon nivem
 
 - orderby in product list
 - dlocal not working
 
-- mercado pago acredita 2 veces
 - maintain cookie department when selecting logo
 - filter drawer mobile
 - account/gear

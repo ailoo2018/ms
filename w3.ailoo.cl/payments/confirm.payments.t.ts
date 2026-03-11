@@ -43,7 +43,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
     }
 }
 
-export async function validateOrder(referenceId: string, transactionAmount: number, domainId : number) {
+export async function validateOrder(referenceId: string, transactionAmount: number, paymentMethodType: number, domainId : number) {
     const order :any  = await drizzleDb.query.saleOrder.findFirst({
         where: (saleOrder, { eq }) =>
             and(
@@ -62,7 +62,10 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
         throw new Error( `Orden de compra ${referenceId} no encontrada` )
     }
     const orderTotal = ordersHelper.getTotal(order)
-    if(Math.abs(transactionAmount - orderTotal) > 1){
+
+    if(paymentMethodType === PaymentMethodType.DLocal){
+        // TODO, I have to store exchangerate in Order and validate amount
+    }else if(Math.abs(transactionAmount - orderTotal) > 1){
         throw new Error( `Montos de orden de compra no coinciden: ${transactionAmount} vs ${orderTotal}` )
     }
 
@@ -95,7 +98,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
     if(response.referenceType === "invoice") {
         await validateInvoice(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
     }else{
-        await validateOrder(response.referenceId, response.transactionAmount, domainId)
+        await validateOrder(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
     }
 
     return response
