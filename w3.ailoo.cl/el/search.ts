@@ -6,682 +6,696 @@ import {getLink} from "../helpers/product-helper.js";
 
 
 const aggs = {
-  "brands_count": {
-    "aggs": {
-      "thits": {
-        "top_hits": {
-          "size": 1,
-          "_source": {
-            "includes": [
-              "brand.logo",
-              "brand.name",
-              "brand.id"
-            ]
-          }
-        }
-      }
-    },
-    "terms": {
-      "field": "brand.id",
-      "order": [
-        {
-          "_key": "asc"
-        }
-      ],
-      "size": 100
-    }
-  },
-  "categories_count": {
-    "nested": {
-      "path": "parentCategories"
-    },
-    "aggs": {
-      "categories_count": {
+    "brands_count": {
+        "aggs": {
+            "thits": {
+                "top_hits": {
+                    "size": 1,
+                    "_source": {
+                        "includes": [
+                            "brand.logo",
+                            "brand.name",
+                            "brand.id"
+                        ]
+                    }
+                }
+            }
+        },
         "terms": {
-          "field": "parentCategories.id",
-          "size": 200
+            "field": "brand.id",
+            "order": [
+                {
+                    "_key": "asc"
+                }
+            ],
+            "size": 100
+        }
+    },
+    "categories_count": {
+        "nested": {
+            "path": "parentCategories"
         },
         "aggs": {
-          "categories_metadata": {
-            "top_hits": {
-              "size": 1,
-              "_source": {
-                "includes": [
-                  "parentCategories.name"
-                ]
-              }
+            "categories_count": {
+                "terms": {
+                    "field": "parentCategories.id",
+                    "size": 200
+                },
+                "aggs": {
+                    "categories_metadata": {
+                        "top_hits": {
+                            "size": 1,
+                            "_source": {
+                                "includes": [
+                                    "parentCategories.name"
+                                ]
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  },
-  "tags_count": {
-    "terms": {
-      "field": "tags.filter.keyword",
-      "size": 200
-    }
-  },
-  "sizes_count": {
-    "terms": {
-      "field": "availableSizes.key.keyword",
-      "size": 200
-    }
-  },
-  "tirespec_count": {
-    "terms": {
-      "field": "tireSpecs.tireSpec.keyword",
-      "order": [
-        {
-          "_key": "asc"
-        }
-      ],
-      "size": 200
-    }
-  },
-  "motorcycle_count": {
-    "aggs": {
-      "motorcycle_count": {
+    },
+    "tags_count": {
         "terms": {
-          "field": "motorcycles.motorcycle.keyword",
-          "order": [
-            {
-              "_key": "asc"
+            "field": "tags.filter.keyword",
+            "size": 200
+        }
+    },
+    "sizes_count": {
+        "terms": {
+            "field": "availableSizes.key.keyword",
+            "size": 200
+        }
+    },
+    "tirespec_count": {
+        "terms": {
+            "field": "tireSpecs.tireSpec.keyword",
+            "order": [
+                {
+                    "_key": "asc"
+                }
+            ],
+            "size": 200
+        }
+    },
+    "motorcycle_count": {
+        "aggs": {
+            "motorcycle_count": {
+                "terms": {
+                    "field": "motorcycles.motorcycle.keyword",
+                    "order": [
+                        {
+                            "_key": "asc"
+                        }
+                    ],
+                    "size": 200
+                }
             }
-          ],
-          "size": 200
+        },
+        "nested": {
+            "path": "motorcycles"
         }
-      }
     },
-    "nested": {
-      "path": "motorcycles"
-    }
-  },
-  "models_count": {
-    "aggs": {
-      "thits": {
-        "top_hits": {
-          "size": 1,
-          "_source": {
-            "includes": [
-              "model",
-              "brand.id",
-              "brand.name"
-            ]
-          }
-        }
-      }
-    },
-    "terms": {
-      "field": "model.name.keyword",
-      "order": [
-        {
-          "_key": "asc"
-        }
-      ],
-      "size": 100
-    }
-  },
-  "colors_count": {
-    "aggs": {
-      "colors_count": {
+    "models_count": {
+        "aggs": {
+            "thits": {
+                "top_hits": {
+                    "size": 1,
+                    "_source": {
+                        "includes": [
+                            "model",
+                            "brand.id",
+                            "brand.name"
+                        ]
+                    }
+                }
+            }
+        },
         "terms": {
-          "field": "images.colorTagsIds",
-          "size": 50
+            "field": "model.name.keyword",
+            "order": [
+                {
+                    "_key": "asc"
+                }
+            ],
+            "size": 100
         }
-      }
     },
-    "nested": {
-      "path": "images"
+    "colors_count": {
+        "aggs": {
+            "colors_count": {
+                "terms": {
+                    "field": "images.colorTagsIds",
+                    "size": 50
+                }
+            }
+        },
+        "nested": {
+            "path": "images"
+        }
+    },
+    "isnew_stats": {
+        "stats": {
+            "field": "isNew"
+        }
+    },
+    "price_stats": {
+        "stats": {
+            "field": "maxPrice"
+        }
+    },
+    "hasdiscounts_stats": {
+        "stats": {
+            "field": "hasDiscount"
+        }
     }
-  },
-  "isnew_stats": {
-    "stats": {
-      "field": "isNew"
-    }
-  },
-  "price_stats": {
-    "stats": {
-      "field": "maxPrice"
-    }
-  },
-  "hasdiscounts_stats": {
-    "stats": {
-      "field": "hasDiscount"
-    }
-  }
 };
 
 const ignore =
     [
-      "a", "para", "como", "de", "con", "por", "hasta", "y"
+        "a", "para", "como", "de", "con", "por", "hasta", "y"
     ]
 
 function normalizeToken2(keyStr) {
 
-  if (keyStr == null)
-    return "";
-  keyStr = keyStr.toLowerCase();
-  keyStr = keyStr
-      .replace("á", "a")
-      .replace("é", "e")
-      .replace("í", "i")
-      .replace("ó", "o")
-      .replace("ú", "u")
-      .replace("ñ", "n")
-      .replace(",", " ")
-      .replace(".", "")
-      .replace(",", " ")
-      .replace("-", "")
-  return keyStr.trim();
+    if (keyStr == null)
+        return "";
+    keyStr = keyStr.toLowerCase();
+    keyStr = keyStr
+        .replace("á", "a")
+        .replace("é", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ú", "u")
+        .replace("ñ", "n")
+        .replace(",", " ")
+        .replace(".", "")
+        .replace(",", " ")
+        .replace("-", "")
+    return keyStr.trim();
 
 }
 
 
 function buildQueryByCriteria(criteria, domainId) {
-  let query: any;
-  query = {
-    bool: {
-      must: [
-        {term: {domainId: domainId}},
-        {term: {isAvailableForInternet: true}},
-        {range: {minPrice: {gt: 0}}},
-        {range: {universalQuantity: {gt: 0}}},
-      ]
+    let query: any;
+    query = {
+        bool: {
+            must: [
+                {term: {domainId: domainId}},
+                {term: {isAvailableForInternet: true}},
+                {range: {minPrice: {gt: 0}}},
+                {range: {universalQuantity: {gt: 0}}},
+            ]
+        }
     }
-  }
-  if (criteria.sword && criteria.sword.length > 0) {
-    let sword = criteria.sword;
+    if (criteria.sword && criteria.sword.length > 0) {
+        let sword = criteria.sword;
 
-    sword = normalizeToken2(sword.trim());
-    const words = sword.split(' ');
-    for (let i = 0; i < words.length; i++) {
-      const theWord = words[i].trim()
-      if (ignore.some(i => i === theWord))
-        continue;
+        sword = normalizeToken2(sword.trim());
+        const words = sword.split(' ');
+        for (let i = 0; i < words.length; i++) {
+            const theWord = words[i].trim()
+            if (ignore.some(i => i === theWord))
+                continue;
 
-      if (words[i].trim().length > 0 && !words[i].endsWith("*") && !words[i].endsWith("\"")) {
-        words[i] = "sword:'" + words[i] + "' OR sword:" + theWord + "*";
-      }
-      words[i] = "(" + words[i] + ")";
-    }
-
-    let s = words.join(" AND ")
-    if (!s.endsWith("\"") && !s.endsWith("*") && !s.endsWith(")"))
-      s += "*";
-
-
-    query.bool.must.push({
-      "query_string": {
-        "query": s,
-
-      }
-    })
-
-
-  }
-
-  if (criteria.categories && criteria.categories.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "categories.id": criteria.categories,
-      }
-    })
-  }
-  if (criteria.brands && criteria.brands.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "brand.id": criteria.brands,
-      }
-    })
-  }
-  if (criteria.models && criteria.models.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "model.id": criteria.models,
-      }
-    })
-  }
-  if (criteria.tags && criteria.tags.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "tags.id": criteria.tags,
-      }
-    })
-  }
-  if (criteria.products && criteria.products.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "id": criteria.products,
-      }
-    })
-  }
-
-  if (criteria.bike) {
-    query.bool.must.push({
-          nested: {
-            path: "motorcycles",
-            query: {
-              bool: {
-                must: [
-                  {terms: {"motorcycles.manufacturerId": [criteria.bike.manufacturer, 0]}},
-                  {terms: {"motorcycles.modelId": [criteria.bike.model, 0]}},
-                  {terms: {"motorcycles.from": [criteria.bike.year, 0]}},
-                ]
-              }
+            if (words[i].trim().length > 0 && !words[i].endsWith("*") && !words[i].endsWith("\"")) {
+                words[i] = "sword:'" + words[i] + "' OR sword:" + theWord + "*";
             }
-          }
+            words[i] = "(" + words[i] + ")";
         }
-    )
 
-  }
+        let s = words.join(" AND ")
+        if (!s.endsWith("\"") && !s.endsWith("*") && !s.endsWith(")"))
+            s += "*";
 
-  if (criteria.sizes && criteria.sizes.length > 0) {
-    query.bool.must.push({
-      terms: {
-        "availableSizes.name.keyword": criteria.sizes,
-      }
-    })
-  }
-  if (criteria.colors && criteria.colors.length > 0) {
-    query.bool.must.push({
-      "nested": {
-        "path": "images",
-        "query": {
-          "terms": {
-            "images.colorTagsIds": criteria.colors
-          }
-        }
-      }
-    })
-  }
-  if(criteria.minDiscount && criteria.minDiscount> 0) {
-    query.bool.must.push({
-      range: {
-        discountPercent : {
-          gte: criteria.minDiscount,
-        }
-      }
-    })
-  }
 
-  return query
+        query.bool.must.push({
+            "query_string": {
+                "query": s,
+
+            }
+        })
+
+
+    }
+
+    if (criteria.categories && criteria.categories.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "categories.id": criteria.categories,
+            }
+        })
+    }
+    if (criteria.brands && criteria.brands.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "brand.id": criteria.brands,
+            }
+        })
+    }
+    if (criteria.models && criteria.models.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "model.id": criteria.models,
+            }
+        })
+    }
+    if (criteria.tags && criteria.tags.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "tags.id": criteria.tags,
+            }
+        })
+    }
+    if (criteria.products && criteria.products.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "id": criteria.products,
+            }
+        })
+    }
+
+    if (criteria.bike) {
+        query.bool.must.push({
+                nested: {
+                    path: "motorcycles",
+                    query: {
+                        bool: {
+                            must: [
+                                {terms: {"motorcycles.manufacturerId": [criteria.bike.manufacturer, 0]}},
+                                {terms: {"motorcycles.modelId": [criteria.bike.model, 0]}},
+                                {terms: {"motorcycles.from": [criteria.bike.year, 0]}},
+                            ]
+                        }
+                    }
+                }
+            }
+        )
+
+    }
+
+    if (criteria.sizes && criteria.sizes.length > 0) {
+        query.bool.must.push({
+            terms: {
+                "availableSizes.name.keyword": criteria.sizes,
+            }
+        })
+    }
+    if (criteria.colors && criteria.colors.length > 0) {
+        query.bool.must.push({
+            "nested": {
+                "path": "images",
+                "query": {
+                    "terms": {
+                        "images.colorTagsIds": criteria.colors
+                    }
+                }
+            }
+        })
+    }
+    if (criteria.minDiscount && criteria.minDiscount > 0) {
+        query.bool.must.push({
+            range: {
+                discountPercent: {
+                    gte: criteria.minDiscount,
+                }
+            }
+        })
+    }
+
+    return query
 }
 
 
 function processNormalAggs(aggs, aggName) {
-  if (!aggs.buckets) {
-    return null
-  }
-  let elBuckets = aggs.buckets
-  const filteredBuckets = []
-  for (var b of elBuckets) {
+    if (!aggs.buckets) {
+        return null
+    }
+    let elBuckets = aggs.buckets
+    const filteredBuckets = []
+    for (var b of elBuckets) {
 
-    let data = { name: ""}
-    let key = b.key
-    let name = b.key;
-    let total = b.doc_count;
-    if (b.thits) {
-      data = b.thits.hits.hits[0]._source.brand
+        let data = {name: ""}
+        let key = b.key
+        let name = b.key;
+        let total = b.doc_count;
+        if (b.thits) {
+            data = b.thits.hits.hits[0]._source.brand
 
-      if (data.name)
-        name = data.name
+            if (data.name)
+                name = data.name
+        }
+
+
+        filteredBuckets.push({
+            id: key,
+            name: name,
+
+            total: total,
+            data: data,
+        })
     }
 
-
-    filteredBuckets.push({
-      id: key,
-      name: name,
-
-      total: total,
-      data: data,
-    })
-  }
-
-  return {
-    name: getFacetGroupName(aggName.replace("_count", "")),
-    type: aggName.replace("_count", ""),
-    buckets: filteredBuckets.sort((a, b) => (a.name + "").localeCompare(b.name + ""))
-  };
+    return {
+        name: getFacetGroupName(aggName.replace("_count", "")),
+        type: aggName.replace("_count", ""),
+        buckets: filteredBuckets.sort((a, b) => (a.name + "").localeCompare(b.name + ""))
+    };
 }
 
 function processSizes(aggs) {
-  let elBuckets = aggs.buckets
-  let filteredBuckets = []
-  for (var b of elBuckets) {
+    let elBuckets = aggs.buckets
+    let filteredBuckets = []
+    for (var b of elBuckets) {
 
-    try {
-      const arr = b.key.split("|")
+        try {
+            const arr = b.key.split("|")
 
-      if (filteredBuckets.some(fb => fb.name.toLowerCase() === arr[0].toLowerCase())) {
-        continue
-      }
+            if (filteredBuckets.some(fb => fb.name.toLowerCase() === arr[0].toLowerCase())) {
+                continue
+            }
 
-      filteredBuckets.push({
-        id: arr[0],
-        name: arr[0],
-        orderWeight: parseInt(arr[1]),
-        total: b.doc_count,
-        data: {}
-      })
-    } catch (err) {
-      logger.error("unable to process size " + JSON.stringify(b))
+            filteredBuckets.push({
+                id: arr[0],
+                name: arr[0],
+                orderWeight: parseInt(arr[1]),
+                total: b.doc_count,
+                data: {}
+            })
+        } catch (err) {
+            logger.error("unable to process size " + JSON.stringify(b))
+        }
     }
-  }
-  return {
-    name: "Tallas",
-    type: "sizes",
-    buckets: filteredBuckets.sort((a, b) => (a.orderWeight > b.orderWeight ? 1 : -1))
-  };
+    return {
+        name: "Tallas",
+        type: "sizes",
+        buckets: filteredBuckets.sort((a, b) => (a.orderWeight > b.orderWeight ? 1 : -1))
+    };
 
 }
 
 
 const colorMap = new Map([
-  [1, {code: "black", description: "Negro", tagCategoryId: 1, hex: "#000000"}],
-  [2, {code: "brown", description: "Cafe", tagCategoryId: 1, hex: "#a52a2a"}],
-  [3, {code: "white", description: "Blanco", tagCategoryId: 1, hex: "#ffffff"}],
-  [4, {code: "red", description: "Rojo", tagCategoryId: 1, hex: "#ff0000"}],
-  [5, {code: "silver", description: "Plateado", tagCategoryId: 1, hex: "#c0c0c0"}],
-  [6, {code: "blue", description: "Azul", tagCategoryId: 1, hex: "#0000ff"}],
-  [7, {code: "gray", description: "Gris", tagCategoryId: 1, hex: "#808080"}],
-  [8, {code: "yellow", description: "Amarillo", tagCategoryId: 1, hex: "#ffff00"}],
-  [9, {code: "green", description: "Verde", tagCategoryId: 1, hex: "#00ff00"}],
-  [10, {code: "pink", description: "Rosado", tagCategoryId: 1, hex: "#ffc0cb"}],
-  [11, {code: "orange", description: "Naranjo", tagCategoryId: 1, hex: "#ffa500"}],
-  [12, {code: "gold", description: "Dorado", tagCategoryId: 1, hex: "#ffd700"}],
-  [13, {code: "purple", description: "Purpura", tagCategoryId: 1, hex: "#800080"}],
-  [2058, {code: "sky_blue", description: "Celeste", tagCategoryId: 1, hex: "#ADD8E6"}]
+    [1, {code: "black", description: "Negro", tagCategoryId: 1, hex: "#000000"}],
+    [2, {code: "brown", description: "Cafe", tagCategoryId: 1, hex: "#a52a2a"}],
+    [3, {code: "white", description: "Blanco", tagCategoryId: 1, hex: "#ffffff"}],
+    [4, {code: "red", description: "Rojo", tagCategoryId: 1, hex: "#ff0000"}],
+    [5, {code: "silver", description: "Plateado", tagCategoryId: 1, hex: "#c0c0c0"}],
+    [6, {code: "blue", description: "Azul", tagCategoryId: 1, hex: "#0000ff"}],
+    [7, {code: "gray", description: "Gris", tagCategoryId: 1, hex: "#808080"}],
+    [8, {code: "yellow", description: "Amarillo", tagCategoryId: 1, hex: "#ffff00"}],
+    [9, {code: "green", description: "Verde", tagCategoryId: 1, hex: "#00ff00"}],
+    [10, {code: "pink", description: "Rosado", tagCategoryId: 1, hex: "#ffc0cb"}],
+    [11, {code: "orange", description: "Naranjo", tagCategoryId: 1, hex: "#ffa500"}],
+    [12, {code: "gold", description: "Dorado", tagCategoryId: 1, hex: "#ffd700"}],
+    [13, {code: "purple", description: "Purpura", tagCategoryId: 1, hex: "#800080"}],
+    [2058, {code: "sky_blue", description: "Celeste", tagCategoryId: 1, hex: "#ADD8E6"}]
 ]);
 
 function processColors(aggs) {
-  let elBuckets = aggs.colors_count.buckets
-  let filteredBuckets = []
-  for (var b of elBuckets) {
+    let elBuckets = aggs.colors_count.buckets
+    let filteredBuckets = []
+    for (var b of elBuckets) {
 
-    try {
-      const color = colorMap.get(b.key)
+        try {
+            const color = colorMap.get(b.key)
 
 
-      filteredBuckets.push({
-        id: b.key,
-        name: color.description,
-        code: color.code,
-        hex: color.hex,
-        total: b.doc_count,
-      })
-    } catch (err) {
-      logger.error("unable to process size " + JSON.stringify(b))
+            filteredBuckets.push({
+                id: b.key,
+                name: color.description,
+                code: color.code,
+                hex: color.hex,
+                total: b.doc_count,
+            })
+        } catch (err) {
+            logger.error("unable to process size " + JSON.stringify(b))
+        }
     }
-  }
-  return {name: "Colores", type: "colors", buckets: filteredBuckets};
+    return {name: "Colores", type: "colors", buckets: filteredBuckets};
 
 }
 
 function processModels(aggs) {
-  let elBuckets = aggs.buckets
-  let filteredBuckets = []
-  for (var b of elBuckets) {
+    let elBuckets = aggs.buckets
+    let filteredBuckets = []
+    for (var b of elBuckets) {
 
-    try {
-      var model = b.thits.hits.hits[0]._source.model
-      var brand = b.thits.hits.hits[0]._source.brand
+        try {
+            var model = b.thits.hits.hits[0]._source.model
+            var brand = b.thits.hits.hits[0]._source.brand
 
 
-      filteredBuckets.push({
-        id: model.id,
-        name: brand.name + " " + model.name,
-        total: b.doc_count,
-        data: {}
-      })
-    } catch (err) {
-      logger.error("unable to process size " + JSON.stringify(b))
+            filteredBuckets.push({
+                id: model.id,
+                name: brand.name + " " + model.name,
+                total: b.doc_count,
+                data: {}
+            })
+        } catch (err) {
+            logger.error("unable to process size " + JSON.stringify(b))
+        }
     }
-  }
-  return {name: "Modelos", type: "models", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))};
+    return {name: "Modelos", type: "models", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))};
 
 }
 
 function processCategories(aggs) {
-  let elBuckets = aggs.categories_count.buckets
-  let filteredBuckets = []
-  for (var b of elBuckets) {
+    let elBuckets = aggs.categories_count.buckets
+    let filteredBuckets = []
+    for (var b of elBuckets) {
 
-    let name = b.categories_metadata.hits.hits[0]._source.name
+        let name = b.categories_metadata.hits.hits[0]._source.name
 
-    filteredBuckets.push({
-      id: b.key,
-      name: name,
-      total: b.doc_count,
-      data: {}
-    })
-  }
-  return {name: "Categorías", type: "categories", buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))};
+        filteredBuckets.push({
+            id: b.key,
+            name: name,
+            total: b.doc_count,
+            data: {}
+        })
+    }
+    return {
+        name: "Categorías",
+        type: "categories",
+        buckets: filteredBuckets.sort((a, b) => a.name.localeCompare(b.name))
+    };
 
 }
 
 const namesMap = {
-  "brands": "Marcas",
-  "models": "Modelos",
-  "sizes": "Tallas",
-  "colors": "Colores",
-  "categories": "Categorías",
+    "brands": "Marcas",
+    "models": "Modelos",
+    "sizes": "Tallas",
+    "colors": "Colores",
+    "categories": "Categorías",
 }
 
 
 function getFacetGroupName(name) {
-  if (namesMap[name]) {
-    return namesMap[name]
-  }
-  return name
+    if (namesMap[name]) {
+        return namesMap[name]
+    }
+    return name
 }
 
 
 function processTags(tagCountAgg) {
 
-  const groupBy = new Map()
-  for (var b of tagCountAgg.buckets) {
-    let filter = b.key
-    if (!filter.includes("|True|")) {
-      continue;
+    const groupBy = new Map()
+    for (var b of tagCountAgg.buckets) {
+        let filter = b.key
+        if (!filter.includes("|True|")) {
+            continue;
+        }
+
+        var arr = filter.split("|")
+        if (arr.length !== 6) {
+            continue;
+        }
+
+        let key = arr[0]
+        let name = arr[1]
+        let catName = arr[5]
+
+        if (!groupBy.has(catName)) {
+            groupBy.set(catName, {name: catName, type: "tags", buckets: []})
+        }
+
+        groupBy.get(catName).buckets.push({
+            id: key,
+            name: name,
+            total: b.doc_count
+        })
+
+
     }
 
-    var arr = filter.split("|")
-    if (arr.length !== 6) {
-      continue;
-    }
-
-    let key = arr[0]
-    let name = arr[1]
-    let catName = arr[5]
-
-    if (!groupBy.has(catName)) {
-      groupBy.set(catName, {name: catName, type: "tags", buckets: []})
-    }
-
-    groupBy.get(catName).buckets.push({
-      id: key,
-      name: name,
-      total: b.doc_count
-    })
-
-
-  }
-
-  return [...groupBy.values()]
+    return [...groupBy.values()]
 }
-
 
 
 export async function search(criteria, domainId) {
 
-  let query
-  let limit
+    let query
+    let limit
 
-  let searchDescription = ""
-  let collection : any;
-  let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
-  if (criteria.collectionId && criteria.collectionId !== "") {
-    ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
-    if(collection)
-      criteria.collection = collection
+    let searchDescription = ""
+    let collection: any;
+    let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
 
-    if (criteria.limit > 0)
-      limit = criteria.limit
-  } else {
-    query = buildQueryByCriteria(criteria, domainId);
-    limit = criteria.limit ? parseInt(criteria.limit) : 60;
-  }
+    if (criteria.orderBy) {
+        if (criteria.orderBy === "bestseller") {
+            sort = [{"unitsSold": "desc"}]
+        }
+        else if (criteria.orderBy.includes("newest")) {
+            sort = [{"createDate": "desc"}]
+        }
+        else if (criteria.orderBy.includes("price")) {
 
-
-  let offset = criteria.offset ? parseInt(criteria.offset) : 0;
-
-
-  const response = await getElClient().search({
-    index: getIndexName(domainId),
-    aggs: aggs,
-    query: query,
-    from: offset,
-    size: limit,
-    sort: sort,
-    _source: {
-      excludes: [
-        "categories",
-        "parentCategories",
-        "features",
-        "sword",
-        "properties",
-        "propertiesMap",
-        "productItems",
-        "motorcycles",
-        "model",
-        "tags",
-        "priceComponents",
-        "discounts",
-        "salesTaxes",
-        "googleProductCategory",
-        "departments",
-        "mercadoLibre",
-        "summary"
-      ]
-    }
-
-  })
-
-  var imgHelper = new ProductImageHelper()
-  const products = response.hits.hits.map(h => {
-    const p = {...h._source}
-
-    p.url = getLink(p)
-    p.coverImages = {
-      "150": imgHelper.getUrl(p.image, 150, domainId),
-      "300": imgHelper.getUrl(p.image, 300, domainId),
-      "600": imgHelper.getUrl(p.image, 600, domainId),
-      "800": imgHelper.getUrl(p.image, 800, domainId),
+            sort = [{"minPrice": criteria.orderBy.includes("desc") ? "desc": "asc" }]
+        }
 
     }
-    p.price = {
-      discount: 0,
-      price: p.minPrice,
-    }
 
-    if (p.image) {
-      p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
-    }
+    if (criteria.collectionId && criteria.collectionId !== "") {
+        ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
+        if (collection)
+            criteria.collection = collection
 
-
-    return p
-  })
-
-  const totalItems = response.hits.total.value;
-
-  // process aggregates
-  const filters = []
-  for (var aggName in response.aggregations) {
-
-    if (!aggName.includes("_count")) {
-      continue;
-    }
-
-    if (aggName.includes("tags_count")) {
-      const filterByTags = processTags(response.aggregations[aggName])
-      filterByTags.forEach(tag => filters.push(tag))
-
-    } else if (aggName.includes("categories_count")) {
-      filters.push(processCategories(response.aggregations[aggName]))
-
-    } else if (aggName.includes("sizes_count")) {
-      filters.push(processSizes(response.aggregations[aggName]))
-
-    } else if (aggName.includes("colors_count")) {
-      filters.push(processColors(response.aggregations[aggName]))
-
-    } else if (aggName.includes("models_count")) {
-      filters.push(processModels(response.aggregations[aggName]))
-
+        if (criteria.limit > 0)
+            limit = criteria.limit
     } else {
-      const ret = processNormalAggs(response.aggregations[aggName], aggName);
-
-
-      if (ret && ret.buckets.length > 0)
-        filters.push(ret)
-
+        query = buildQueryByCriteria(criteria, domainId);
+        limit = criteria.limit ? parseInt(criteria.limit) : 60;
     }
-  }
 
 
+    let offset = criteria.offset ? parseInt(criteria.offset) : 0;
 
 
+    const response = await getElClient().search({
+        index: getIndexName(domainId),
+        aggs: aggs,
+        query: query,
+        from: offset,
+        size: limit,
+        sort: sort,
+        _source: {
+            excludes: [
+                "categories",
+                "parentCategories",
+                "features",
+                "sword",
+                "properties",
+                "propertiesMap",
+                "productItems",
+                "motorcycles",
+                "model",
+                "tags",
+                "priceComponents",
+                "discounts",
+                "salesTaxes",
+                "googleProductCategory",
+                "departments",
+                "mercadoLibre",
+                "summary"
+            ]
+        }
+
+    })
+
+    var imgHelper = new ProductImageHelper()
+    const products = response.hits.hits.map(h => {
+        const p = {...h._source}
+
+        p.url = getLink(p)
+        p.coverImages = {
+            "150": imgHelper.getUrl(p.image, 150, domainId),
+            "300": imgHelper.getUrl(p.image, 300, domainId),
+            "600": imgHelper.getUrl(p.image, 600, domainId),
+            "800": imgHelper.getUrl(p.image, 800, domainId),
+
+        }
+        p.price = {
+            discount: 0,
+            price: p.minPrice,
+        }
+
+        if (p.image) {
+            p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
+        }
 
 
-  return {
-    totalHits: totalItems,
-    query: {
-      description: getQueryDescription(criteria, filters, domainId)
-    },
-    offset: offset,
-    limit: limit,
-    filters,
-    products,
-  }
+        return p
+    })
+
+    const totalItems = response.hits.total.value;
+
+    // process aggregates
+    const filters = []
+    for (var aggName in response.aggregations) {
+
+        if (!aggName.includes("_count")) {
+            continue;
+        }
+
+        if (aggName.includes("tags_count")) {
+            const filterByTags = processTags(response.aggregations[aggName])
+            filterByTags.forEach(tag => filters.push(tag))
+
+        } else if (aggName.includes("categories_count")) {
+            filters.push(processCategories(response.aggregations[aggName]))
+
+        } else if (aggName.includes("sizes_count")) {
+            filters.push(processSizes(response.aggregations[aggName]))
+
+        } else if (aggName.includes("colors_count")) {
+            filters.push(processColors(response.aggregations[aggName]))
+
+        } else if (aggName.includes("models_count")) {
+            filters.push(processModels(response.aggregations[aggName]))
+
+        } else {
+            const ret = processNormalAggs(response.aggregations[aggName], aggName);
+
+
+            if (ret && ret.buckets.length > 0)
+                filters.push(ret)
+
+        }
+    }
+
+
+    return {
+        totalHits: totalItems,
+        query: {
+            description: getQueryDescription(criteria, filters, domainId)
+        },
+        offset: offset,
+        limit: limit,
+        filters,
+        products,
+    }
 
 }
 
 
-export function getQueryDescription(criteria, filters, domainId){
-  let  category, brand, collection;
+export function getQueryDescription(criteria, filters, domainId) {
+    let category, brand, collection;
 
-  let description = ""
+    let description = ""
 
-  if(criteria.categories?.length === 1 ){
-    category = getData(Number(criteria.categories[0]), "categories", filters)
+    if (criteria.categories?.length === 1) {
+        category = getData(Number(criteria.categories[0]), "categories", filters)
 
-  }
+    }
 
-  if(criteria.brands?.length === 1 ){
-    brand = getData(Number(criteria.brands[0]), "brands", filters)
+    if (criteria.brands?.length === 1) {
+        brand = getData(Number(criteria.brands[0]), "brands", filters)
 
-  }
+    }
 
-  if(criteria.collection)
-    return criteria.collection.name
+    if (criteria.collection)
+        return criteria.collection.name
 
-  if(category && brand)
-    return category.name + " " + brand.name
-  if(category)
-    return category.name + " "
-  if(brand)
-    return  "Equipamiento, ropa y accesorios para motociclistas de " + brand.name
-  if(criteria.sword)
-    description =  `Por '${criteria.sword}' hemos encontrado`;
+    if (category && brand)
+        return category.name + " " + brand.name
+    if (category)
+        return category.name + " "
+    if (brand)
+        return "Equipamiento, ropa y accesorios para motociclistas de " + brand.name
+    if (criteria.sword)
+        description = `Por '${criteria.sword}' hemos encontrado`;
 
-  return description.trim()
+    return description.trim()
 }
 
 function getData(id, type, filters) {
-  const filter = filters.find(f => f.type === type);
-  if(!filter)
-    return null
+    const filter = filters.find(f => f.type === type);
+    if (!filter)
+        return null
 
-  return filter.buckets.find(b => b.id === id)
+    return filter.buckets.find(b => b.id === id)
 }

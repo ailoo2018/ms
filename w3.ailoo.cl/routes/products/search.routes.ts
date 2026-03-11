@@ -62,6 +62,7 @@ router.post("/:domainId/products/search", async (req, res, next) => {
       bike: null,
       models: [],
       minDiscount: 0,
+      orderBy: "name:asc"
     }
 
 
@@ -87,6 +88,9 @@ router.post("/:domainId/products/search", async (req, res, next) => {
       criteria.colors = rq.colors;
     if (rq.bike)
       criteria.bike = rq.bike;
+
+    if(rq.orderBy)
+      criteria.orderBy = rq.orderBy
 
 
     const sRs : any = await search(criteria, domainId)
