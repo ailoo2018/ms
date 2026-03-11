@@ -523,7 +523,7 @@ export async function search(criteria, domainId) {
 
     let searchDescription = ""
     let collection: any;
-    let sort = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
+    let sort : any = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
 
     if (criteria.orderBy) {
         if (criteria.orderBy === "bestseller") {
