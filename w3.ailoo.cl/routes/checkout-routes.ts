@@ -1,17 +1,12 @@
 import {Router} from "express";
 import {contactsClient} from "../services/contactsClient.js";
-import schema, {Coupon, SaleOrderItem} from "../db/schema.js";
+import schema, {SaleOrderItem} from "../db/schema.js";
 import {PbxRepository} from "../el/pbx.js";
 import {
-    CouponContextType,
-    DiscountType, Money,
     OrderItemType,
-    OrderState,
-    PaymentMethodType,
-    SaleType,
     ShipmentMethodType
 } from "../models/domain.js";
-import {and, eq, sql} from "drizzle-orm";
+import {and, eq} from "drizzle-orm";
 import logger from "@ailoo/shared-libs/logger";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {Cart, CartCoupon, CartItemType} from "../models/cart-models.js";
@@ -44,7 +39,7 @@ const cartService = container.resolve("cartService");
 
 router.get("/:domainId/shipping/methods", async (req, res, next) => {
     try {
-        const { comuna, country } = req.query;
+        const {comuna, country} = req.query;
         const domainId = parseInt(req.params.domainId);
         const wuid = req.query.wuid;
 
@@ -52,16 +47,16 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
         const cart = await findCart(wuid, domainId)
 
         let quotes = null
-        if(country && country !== "CL"){
+        if (country && country !== "CL") {
             const countryData = getCountryData(country)
-           // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
+            // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
-            quotes = [ {
+            quotes = [{
                 "id": 1,
                 "name": "Correos de Chile",
                 "price": shippingCostInLocalCurrency,
-                "currency" : "CLP", // use CLP, webpage converts to selected country
+                "currency": "CLP", // use CLP, webpage converts to selected country
                 "oldPrice": 0,
                 freeShipping: {
                     amount: freeShippingThreshold,
@@ -84,8 +79,18 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
                     methods: quotes
                 }
             )
-        }else{
+        } else {
             quotes = await cartService.listShippingQuotes(cart, Number(comuna), domainId);
+
+            for (var q of quotes.methods) {
+                if (q.id === 13) {
+                    q.freeShipping = {
+                        amount: 150000,
+                        currency: "CLP",
+                    }
+                }
+            }
+
         }
 
 
@@ -182,7 +187,6 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const currency = req.body.currency || "CLP"
 
 
-
         const result = await drizzleDb.transaction(async (tx) => {
 
             try {
@@ -255,7 +259,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 const cart = await findCart(rq.wuid, domainId)
 
                 let appliedCoupon = null
-                if(rq.coupon?.id > 0){
+                if (rq.coupon?.id > 0) {
                     appliedCoupon = await cartHelper.applyCoupon(rq.coupon.name, cart, domainId);
                 }
 
@@ -284,9 +288,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
 
 
-                }
-                else
-                {
+                } else {
                     const [cmResult] = await tx.insert(contactMechanism).values({});
                     postalAddressId = cmResult.insertId;
 
@@ -396,7 +398,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 }
 
                 // todo should validate what is arriving
-                if(cart.shipmentMethod.id !== ShipmentMethodType.StorePickup) {
+                if (cart.shipmentMethod.id !== ShipmentMethodType.StorePickup) {
                     const cost = rq.shipmentInformation?.cost || 0
                     const shippingCostItem = createShippingCostItem(newOrderId, cost, domainId, currency)
                     await tx.insert(saleOrderItem).values(shippingCostItem);
@@ -404,10 +406,10 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     orderTotal += cost
                 }
 
-                if(appliedCoupon){
+                if (appliedCoupon) {
                     const orderItemDb = createCouponSaleOrderItem(newOrderId, appliedCoupon, domainId)
                     await tx.insert(saleOrderItem).values(orderItemDb);
-                    orderTotal += (-1*appliedCoupon.discount)
+                    orderTotal += (-1 * appliedCoupon.discount)
                 }
 
                 logger.info("drizzleDb.transaction 9: " + orderResult.insertId);
@@ -434,7 +436,7 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     try {
 
         const country = req.query.country || "CL"
-        if(country !== "CL") {
+        if (country !== "CL") {
 
             return res.json({
                 "gateways": [
@@ -486,7 +488,7 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
 router.post("/:domainId/checkout/delete-coupon", async (req, res, next) => {
     try {
         const domainId = parseInt(req.params.domainId);
-        const id = parseInt( req.body.id );
+        const id = parseInt(req.body.id);
         const wuid = req.body.wuid
 
         const cart: Partial<Cart> = await findCart(wuid, domainId);
@@ -591,7 +593,7 @@ function validateRequestPrice(item, rq) {
     }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: number, currency: string ) : Partial<SaleOrderItem> {
+function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: number, currency: string): Partial<SaleOrderItem> {
 
     return {
         orderId: orderId,
@@ -605,7 +607,7 @@ function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: nu
     }
 }
 
-function createShippingCostItem(orderId: number, cost: number, domainId: number, currency: string) : Partial<SaleOrderItem>  {
+function createShippingCostItem(orderId: number, cost: number, domainId: number, currency: string): Partial<SaleOrderItem> {
     return {
         orderId: orderId,
         productId: null,
@@ -619,7 +621,7 @@ function createShippingCostItem(orderId: number, cost: number, domainId: number,
     }
 }
 
-function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId: number) : Partial<SaleOrderItem> {
+function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId: number): Partial<SaleOrderItem> {
 
     return {
         orderId: orderId,
