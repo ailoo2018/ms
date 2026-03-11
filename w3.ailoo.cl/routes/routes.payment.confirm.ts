@@ -127,28 +127,32 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
                 },
             });
 
-            var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodId)
-            if (payApp) {
-                amount = payApp.payment.amount
-                currency = payApp.payment.currency
-                authCode = payApp.payment.paymentRefNum
-                transactionDate = payApp.payment.effectiveDate
-                paymentData = {date: payApp.payment.effectiveDate}
-            }
-
             rs = {
                 referenceType: rq.referenceType,
                 referenceId: rq.referenceId,
-                success: true,
-                authorizationCode: authCode,
-                currency: currency,
-                transactionAmount: amount,
-                responseData: paymentData,
-                responseCode: "",
                 paymentMethodId: rq.paymentMethodId,
-                transactionDate: transactionDate,
-
+                success: false,
+                authorizationCode: null,
+                currency: currency,
+                transactionAmount: 0,
+                responseCode: "",
+                responseData: null
             }
+
+            var payApp = payApplications.find(pa => pa.payment.paymentMethodType === rq.paymentMethodId)
+            if (payApp) {
+                rs.success = true
+                rs.transactionAmount = payApp.payment.amount
+                rs.currency = payApp.payment.currency
+                rs.authorizationCode = payApp.payment.paymentRefNum
+                rs.transactionDate = payApp.payment.effectiveDate
+                rs.responseData = {date: payApp.payment.effectiveDate}
+            }else{
+                rs.success = false
+                rs.message = "Pago no encontrado"
+            }
+
+
 
         }else{ // order
             const order : SaleOrder  = await drizzleDb.query.saleOrder.findFirst({
