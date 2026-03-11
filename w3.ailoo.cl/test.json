@@ -1,13 +1,18 @@
 {
   "wuid": "bcef2295-b57e-41c2-887e-2af9bd19518f",
-  "country": "AR",
-  "currency": "ARS",
-  "exhangeRate": 1.5947,
+  "country": "CL",
+  "total": 5740.336134453782,
+  "currency": "CLP",
+  "clp": {
+    "total": 840.3361344537816,
+    "shipping": 4900
+  },
+  "exhangeRate": 1,
   "coupon": null,
   "addresses": {
     "selectedShipping": {
-      "countryCode": "AR",
-      "countryName": "Argentina",
+      "countryCode": "CL",
+      "countryName": "Chile",
       "idType": "DNI",
       "nif": "15.320.300-8",
       "name": "Juan",
@@ -16,15 +21,27 @@
       "address2": "Depto 10",
       "state": "Buenos Aires",
       "city": "Buenos Aires",
-      "comuna": null,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES",
+        "region": "XIII Metropolitana",
+        "geocoding": null,
+        "lat": -33.4079424,
+        "lng": -70.5451063,
+        "parent": {
+          "id": 15,
+          "name": "XIII Metropolitana",
+          "type": "COMUNA"
+        }
+      },
       "postalCode": "900090",
-      "dialCode": "+54",
+      "dialCode": "+56",
       "phone": "977741303",
-      "comuna_id": 0
+      "comuna_id": 316
     },
     "shipping": {
-      "countryCode": "AR",
-      "countryName": "Argentina",
+      "countryCode": "CL",
+      "countryName": "Chile",
       "idType": "DNI",
       "nif": "15.320.300-8",
       "name": "Juan",
@@ -33,11 +50,23 @@
       "address2": "Depto 10",
       "state": "Buenos Aires",
       "city": "Buenos Aires",
-      "comuna": null,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES",
+        "region": "XIII Metropolitana",
+        "geocoding": null,
+        "lat": -33.4079424,
+        "lng": -70.5451063,
+        "parent": {
+          "id": 15,
+          "name": "XIII Metropolitana",
+          "type": "COMUNA"
+        }
+      },
       "postalCode": "900090",
-      "dialCode": "+54",
+      "dialCode": "+56",
       "phone": "977741303",
-      "comuna_id": 0
+      "comuna_id": 316
     },
     "billing": {}
   },
@@ -45,8 +74,8 @@
     "phone": "977741303",
     "email": "jcfuentes@lava.cl",
     "address": {
-      "countryCode": "AR",
-      "countryName": "Argentina",
+      "countryCode": "CL",
+      "countryName": "Chile",
       "idType": "DNI",
       "nif": "15.320.300-8",
       "name": "Juan",
@@ -55,37 +84,45 @@
       "address2": "Depto 10",
       "state": "Buenos Aires",
       "city": "Buenos Aires",
-      "comuna": null,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES",
+        "region": "XIII Metropolitana",
+        "geocoding": null,
+        "lat": -33.4079424,
+        "lng": -70.5451063,
+        "parent": {
+          "id": 15,
+          "name": "XIII Metropolitana",
+          "type": "COMUNA"
+        }
+      },
       "postalCode": "900090",
-      "dialCode": "+54"
+      "dialCode": "+56",
+      "phone": "977741303",
+      "comuna_id": 316
     }
   },
   "shipmentInformation": {
-    "method": 5,
+    "method": 2,
     "shipmentMethod": {
-      "id": 1,
-      "name": "Correos de Chile",
-      "price": 27456.816000000003,
-      "currency": "ARS",
-      "oldPrice": 0,
-      "freeShipping": {
-        "amount": 274568.16000000003,
-        "currency": "ARS"
-      },
+      "id": 13,
+      "price": 4900,
+      "oldPrice": 4900,
       "preparationDays": {
         "from": 3,
         "to": 4
       },
-      "estimatedDays": 14,
+      "estimatedDays": 2,
       "eta": {
-        "from": "2026-03-14T13:00:47.362Z",
-        "to": "2026-03-15T13:00:47.362Z"
+        "from": "2026-03-16T13:26:08.948Z",
+        "to": "2026-03-17T13:26:08.948Z"
       },
-      "type": 5
+      "type": 2
     },
     "address": {
-      "countryCode": "AR",
-      "countryName": "Argentina",
+      "countryCode": "CL",
+      "countryName": "Chile",
       "idType": "DNI",
       "nif": "15.320.300-8",
       "name": "Juan",
@@ -94,61 +131,90 @@
       "address2": "Depto 10",
       "state": "Buenos Aires",
       "city": "Buenos Aires",
-      "comuna": null,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES",
+        "region": "XIII Metropolitana",
+        "geocoding": null,
+        "lat": -33.4079424,
+        "lng": -70.5451063,
+        "parent": {
+          "id": 15,
+          "name": "XIII Metropolitana",
+          "type": "COMUNA"
+        }
+      },
       "postalCode": "900090",
-      "dialCode": "+54",
+      "dialCode": "+56",
       "phone": "977741303",
-      "comuna_id": 0
+      "comuna_id": 316
     },
-    "store": null,
-    "pickupOption": "",
-    "modifiedDate": "2026-03-10T21:31:06.749Z",
-    "carrierId": 1,
+    "store": {
+      "id": 1,
+      "title": "LAS TRANQUERAS (LAS CONDES)",
+      "name": "LAS TRANQUERAS",
+      "address": "LAS TRANQUERAS 56",
+      "latitude": -33400898749676830,
+      "longitude": -7055551688038699,
+      "comuna": {
+        "id": 316,
+        "name": "LAS CONDES"
+      }
+    },
+    "pickupOption": "pickup_in_2_hours",
+    "modifiedDate": "2026-03-11T13:42:03.811Z",
+    "carrierId": 13,
     "comments": "",
     "remarks": ""
   },
   "createAccount": false,
   "subscribe": true,
   "notifyWhatsApp": true,
-  "selectedCarrier": 1,
+  "selectedCarrier": 13,
   "paymentMethod": {
-    "gateway": 19
+    "gateway": 8
   },
-  "pickupStore": null,
+  "pickupStore": {
+    "id": 1,
+    "title": "LAS TRANQUERAS (LAS CONDES)",
+    "name": "LAS TRANQUERAS",
+    "address": "LAS TRANQUERAS 56",
+    "latitude": -33400898749676830,
+    "longitude": -7055551688038699,
+    "comuna": {
+      "id": 316,
+      "name": "LAS CONDES"
+    }
+  },
   "selectedMapData": {
-    "store_id": 0
+    "store_id": 1
   },
   "items": [
     {
-      "image": "d5201b01ec7544b0850e236e53efac42.jpg",
+      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
       "product": {
-        "image": "d5201b01ec7544b0850e236e53efac42.jpg",
-        "productItemId": 2634768,
-        "name": "Alpinestars Casco SM5 Bond Negro/Rojo/Azul M",
+        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
+        "productItemId": 503290,
+        "name": "XENA test webpay Tamaño Unico",
         "type": 0,
-        "url": "/motocicleta/2276703-cascos-mx-enduro-alpinestars-casco-sm5-bond"
+        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
       },
-      "quantity": 1,
-      "color": {
-        "id": 5411,
-        "name": "Negro/Rojo/Azul",
-        "orderWeight": 0,
-        "type": 1
-      },
-      "oldPrice": 199900,
-      "description": "Casco SM5 Bond",
+      "quantity": 100,
+      "color": null,
+      "oldPrice": 10,
+      "description": "test webpay",
       "discount": 0,
       "type": 0,
       "packId": 0,
       "size": {
-        "id": 2,
-        "name": "M",
-        "orderWeight": 79,
+        "id": 8,
+        "name": "Tamaño Unico",
+        "orderWeight": 0,
         "type": 0
       },
-      "price": 199900,
-      "name": "Alpinestars Casco SM5 Bond Negro/Rojo/Azul M",
-      "id": "6366e6e0-53eb-4ec6-ac12-2d9922b157a2",
+      "price": 10,
+      "name": "XENA test webpay Tamaño Unico",
+      "id": "6a4f999c-332b-4b21-be8f-d15a1755596c",
       "loading": false
     }
   ],

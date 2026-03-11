@@ -288,6 +288,7 @@ const saleOrder = motomundiSchema.table("saleorder", {
     invoicedTo: int("InvoicedTo"),
     expectedDeliveryDate: datetime("ExpectedDeliveryDate"),
     paymentData: text("PaymentData"),
+    currency: varchar("Currency", {length: 3}),
 }, (table) => ({
     idxDomain: index("IDX_DOMAIN").on(table.domainId),
     shippedToIdx: index("ShippedToId").on(table.shippedToId),

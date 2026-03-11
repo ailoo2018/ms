@@ -55,7 +55,7 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
         if(country && country !== "CL"){
             const countryData = getCountryData(country)
            // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
-            const shippingCostInLocalCurrency = 100 // await convert(30, "USD", "CLP")
+            const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
             quotes = [ {
                 "id": 1,
@@ -284,7 +284,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
 
 
-                } else {
+                }
+                else
+                {
                     const [cmResult] = await tx.insert(contactMechanism).values({});
                     postalAddressId = cmResult.insertId;
 
@@ -322,7 +324,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 const [orderResult] = await tx.insert(saleOrder).values({
                     orderDate: new Date(),
                     expectedDeliveryDate: new Date(),
-
+                    currency: currency,
                     shippedToId: postalAddressId, // Points to both tables via the shared ID
                     state: 1,
                     paymentMethodTypeId: rq.paymentMethod.gateway,
@@ -393,6 +395,15 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
                 }
 
+                // todo should validate what is arriving
+                if(cart.shipmentMethod.id !== ShipmentMethodType.StorePickup) {
+                    const cost = rq.shipmentInformation?.cost || 0
+                    const shippingCostItem = createShippingCostItem(newOrderId, cost, domainId, currency)
+                    await tx.insert(saleOrderItem).values(shippingCostItem);
+
+                    orderTotal += cost
+                }
+
                 if(appliedCoupon){
                     const orderItemDb = createCouponSaleOrderItem(newOrderId, appliedCoupon, domainId)
                     await tx.insert(saleOrderItem).values(orderItemDb);
@@ -456,6 +467,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "logo_class": "mercadopago",
                     "name": "mercadopago",
                     "order": 2
+                },
+                {
+                    "id": 19,
+                    "driver": "dlocal",
+                    "description": null,
+                    "logo_class": "credit-cards",
+                    "name": "dlocal",
+                    "order": 3
                 }
             ]
         })
@@ -583,6 +602,20 @@ function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: nu
         unitCurrency: currency || "CLP",           // Default as per your table schema
         type: OrderItemType.Product,
         orderItemId: orderItemId ? orderItemId : null,
+    }
+}
+
+function createShippingCostItem(orderId: number, cost: number, domainId: number, currency: string) : Partial<SaleOrderItem>  {
+    return {
+        orderId: orderId,
+        productId: null,
+        productItemId: null,
+        comment: "Costo de envío",
+        quantity: "1",
+        unitPrice: cost,
+        unitCurrency: currency,           // Default as per your table schema
+        type: OrderItemType.Shipping,
+        orderItemId: null,
     }
 }
 
