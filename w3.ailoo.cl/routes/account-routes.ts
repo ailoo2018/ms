@@ -1,9 +1,9 @@
 import {Router} from "express";
-import {reviewsUpload, validateJWT} from "../server.js";
+import { validateJWT} from "../server.js";
 import {listPartyPostalAddresses} from "../db/partyDb.js";
 import * as ProductHelper from "../helpers/product-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
-import {and, asc, desc, eq, ne} from "drizzle-orm";
+import {and,  eq, ne} from "drizzle-orm";
 
 import container from "../container/index.js";
 import {getProductImage} from "../helpers/product-helper.js";
@@ -12,7 +12,7 @@ const router = Router();
 
 import schema from "../db/schema.js";
 
-const {geographicBoundary, postalAddress, review, saleOrder, contactMechanism, partyContactMechanism, user, product, invoice, invoiceItem, party} = schema
+const { postalAddress,  saleOrder, contactMechanism, partyContactMechanism } = schema
 
 
 
@@ -106,7 +106,7 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
         const userReq = req.user;
 
         const userDb = await drizzleDb.query.user.findFirst({
-            where: (user, {eq, and}) => {
+            where: (user, { eq }) => {
                 return eq(user.id, userReq.id)
             },
             with: {
@@ -144,7 +144,7 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
         res.json({
             orders: results.map(r => {
                 const orderProducts = []
-                for (var oi of r.items) {
+                for (const oi of r.items) {
 
                     if (!oi.productItemId)
                         continue
@@ -189,7 +189,7 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
 
 router.delete("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
     try {
-        const {domainId, id} = req.params;
+        const { id} = req.params;
         const addressId = parseInt(id);
 
         await drizzleDb.delete(postalAddress)
@@ -207,7 +207,7 @@ router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req :
         const userId = req.user.id
 
         const userDb = await drizzleDb.query.user.findFirst({
-            where: (user, {eq }) => eq(user.id, req.user.id),
+            where: (user, {eq }) => eq(user.id, userId),
             with: {
                 person: {
                     with:  { contactMechanisms: true }
@@ -272,7 +272,7 @@ router.post("/:domainId/account/addresses/:id", validateJWT, async (req  : any, 
             const [cmResult] = await drizzleDb.insert(contactMechanism).values({});
             finalId = cmResult.insertId;
 
-            const [result] = await drizzleDb.insert(postalAddress).values({
+            await drizzleDb.insert(postalAddress).values({
                 ...data,
                 createDate: new Date(),
                 // If postalAddressId is NOT autoincrement, use rq.id or a generator
@@ -312,7 +312,7 @@ router.get("/:domainId/account/addresses/:id", validateJWT, async (req, res, nex
     try {
 
         const id = parseInt(req.params.id)
-        const domainId = parseInt(req.params.domainId)
+        // const domainId = parseInt(req.params.domainId)
 
         const address = await drizzleDb.query.postalAddress.findFirst({
             where: (postalAddress, {eq}) => {
