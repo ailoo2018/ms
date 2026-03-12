@@ -1,4 +1,4 @@
-
+import logger from "@ailoo/shared-libs/logger";
 
 const PRODS_URL = process.env.PRODUCTS_MS_URL;
 
@@ -23,7 +23,8 @@ export const productsClient = {
         });
 
         if (!response.ok){
-            console.log(response.text());
+            logger.error(`createImageSizes: ${imageId}, ${JSON.stringify(sizes)}, ${maintainAspectRatio}`)
+            logger.error(response.text());
             throw new Error(`PROD_URL Error: ${response.status} ${url.toString()}`);
         }
 
