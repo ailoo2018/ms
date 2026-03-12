@@ -130,6 +130,8 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     }
 
     const p = await findProduct(productId, domainId, currency);
+    if(!p)
+      return res.status(404).json({message: "product not found"})
 
     try {
       const charts = await sizeChartService.findAllThatApplyToProduct(p, domainId)

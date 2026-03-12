@@ -162,6 +162,8 @@ export function getLink(product) {
 
 export async function findProduct(productId, domainId, currency = "CLP") {
   const p = await productService.findProductWithInventory(productId, domainId, currency)
+  if(!p)
+    return null
   p.description = await productDescription(productId);
 
   p.type = p.productType

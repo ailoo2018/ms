@@ -1,4 +1,5 @@
 import {getIndexName} from "../el/index.js";
+import { errors } from '@elastic/elasticsearch'
 import {getPrice} from "../products/price.js";
 import {SaleType} from "../models/index.js";
 
@@ -45,20 +46,23 @@ export default class ProductsService {
 
   }
 
-  async findProduct(productId:any, domainId:any) {
-    if(!productId)
-      return null
+  async findProduct(productId: any, domainId: any) {
+    if (!productId) return null;
 
-    const response = await this.elClient.get({
-      index: getIndexName(domainId),
-      id: productId,
-      _source_excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath']
-    });
-
-
-    return response._source;
+    try {
+      const response = await this.elClient.get({
+        index: getIndexName(domainId),
+        id: productId,
+        _source_excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath']
+      });
+      return response._source;
+    } catch (err: any) {
+      if (err.meta?.statusCode === 404) {
+        return null;
+      }
+      throw err; // re-throw unexpected errors
+    }
   }
-
   async findProducts(productIds:any, domainId:any) {
 
     if(!productIds || productIds.length === 0)
@@ -223,6 +227,8 @@ where PartOfId = ? and AssociationType = 0 ;`, [productId]);
       return null
 
     const p = await this.findProduct(productId, domainId)
+    if(!p)
+      return null
 
     const stock = await this.productStock([productId], domainId);
 
