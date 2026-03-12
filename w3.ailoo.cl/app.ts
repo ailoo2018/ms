@@ -94,8 +94,6 @@ app.get('/', (req, res) => {
 
   logger.info("info: Called /: " );
   logger.error("error: Called /: " );
-  logger2.info("logger2: info: Called /: " );
-  logger2.error("logger2: error: Called /: " );
   res.json({
     msg: "Welcome to the WcC App v123:::: this has changed",
     /*

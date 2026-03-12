@@ -589,10 +589,10 @@ router.get("/:domainId/checkout/click-collect", async (req, res, next) => {
 function validateRequestPrice(item, rq) {
     const rqItem = rq.items.find(ri => ri.id === item.id)
     if (!rqItem)
-        throw Error(`Producto no esperado en carro compra: ${item.name}`)
+        throw new Error(`Producto no esperado en carro compra: ${item.name}`)
 
     if (rqItem.price !== rqItem.price) {
-        throw Error(`Precio se modifico para item ${rqItem.name}`)
+        throw new Error(`Precio se modifico para item ${rqItem.name}`)
     }
 }
 
