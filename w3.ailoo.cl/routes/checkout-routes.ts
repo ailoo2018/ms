@@ -6,7 +6,7 @@ import {
     OrderItemType,
     ShipmentMethodType
 } from "../models/domain.js";
-import {and, eq} from "drizzle-orm";
+import {and, eq, like} from "drizzle-orm";
 import logger from "@ailoo/shared-libs/logger";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {Cart, CartCoupon, CartItemType} from "../models/cart-models.js";
@@ -207,6 +207,8 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 if (person == null)
                     person = await getPartyPartial(rq.customerInformation.email, domainId);
 
+                if(person == null && rq.customerInformation.address?.nif?.length > 0)
+                    person = await getPartyPartialByRut(rq.customerInformation.address.nif, domainId);
 
                 if (!person) {
 
@@ -228,9 +230,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         firstName: fname || null,
                         lastName: lname || null,
                         email: rq.customerInformation.email,
-                        comuna: rq.customerInformation.address.comuna ? rq.customerInformation.address.comuna : null,
-                        rut: rq.customerInformation.address.rut,
-                        phone: rq.customerInformation.phone ? rq.customerInformation.phone : "",
+                        comuna: rq.customerInformation.address?.comuna?.name || null,
+                        rut: rq.customerInformation.address.nif || '',
+                        phone: rq.customerInformation.phone || "",
                         createDate: new Date(),
                         type: "PERSON", // Matches your varchar(20) 'Type' column
                         receiveNewsletter: 1,
@@ -689,5 +691,28 @@ async function getPartyPartial(email, domainId) {
 
     return result ?? null;
 }
+
+async function getPartyPartialByRut(rut, domainId) {
+
+    if (!rut) return null;
+
+    const [result] = await drizzleDb
+        .select({
+            id: party.id,
+            name: party.name,
+            rut: party.rut
+        })
+        .from(party)
+        .where(
+            and(
+                like(party.rut, rut),
+                eq(party.domainId, domainId)
+            )
+        )
+        .limit(1);
+
+    return result ?? null;
+}
+
 
 export default router

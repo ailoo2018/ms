@@ -125,7 +125,6 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     const productId = parseInt(req.params.productId)
 
     if(!productId || Number.isNaN(productId)) {
-      logger.error("product not found: " + (req.params.productId));
       return res.status(404).json({message: "product not found"})
     }
 
