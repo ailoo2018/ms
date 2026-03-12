@@ -1,5 +1,5 @@
 import {db as drizzleDb} from "../db/drizzle.js";
-import {and, asc, eq, inArray} from "drizzle-orm";
+import {and,  eq, inArray} from "drizzle-orm";
 import schema from "../db/schema.js";
 
 // Then use it like this:
@@ -40,7 +40,7 @@ router.get("/:domainId/stores/list", async (req, res, next) => {
     });
 
     let filteredFacilities : any = facilities.filter(f1 => {
-      return f1.contacts
+      return f1.id !== 4597 &&  f1.contacts
           && f1.contacts.length > 0
           && f1.contacts[0].contactMechanism
           && f1.contacts[0].contactMechanism.postalAddress
@@ -69,7 +69,7 @@ router.get("/:domainId/stores/list", async (req, res, next) => {
 router.get("/:domainId/stores/:facilityId/calendar", async (req, res, next) => {
 
   try {
-    const domainId = parseInt(req.params.domainId);
+//    const domainId = parseInt(req.params.domainId);
     const facilityId = parseInt(req.params.facilityId);
     const {from, to} = req.query;
 
