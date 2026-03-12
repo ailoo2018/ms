@@ -101,7 +101,7 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
 })
 
 
-router.get("/:domainId/account/latest-orders", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, res : any, next : any) => {
     try {
         const userReq = req.user;
 
@@ -201,7 +201,7 @@ router.delete("/:domainId/account/addresses/:id", validateJWT, async (req, res, 
     }
 })
 
-router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req, res, next) => {
+router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req : any, res : any, next : any) => {
     try {
         const id = parseInt(req.params.id);
         const userId = req.user.id
@@ -233,7 +233,7 @@ router.get("/:domainId/account/addresses/:id/default", validateJWT, async (req, 
     }
 })
 
-router.post("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
+router.post("/:domainId/account/addresses/:id", validateJWT, async (req  : any, res  : any, next  : any) => {
     try {
         const {domainId, id} = req.params;
         const rq = req.body;
