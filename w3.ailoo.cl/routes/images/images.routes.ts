@@ -32,6 +32,7 @@ router.post("/:domainId/images/sizes", async (req, res, next) => {
 
         return res.json(response);
     } catch (e) {
+        console.error(`Error calling /:domainId/images/sizes : body is ${JSON.stringify(req.body)}`)
         next(e)
     }
 
