@@ -72,11 +72,15 @@
 * orderby in product list
 * dlocal not working
 
+- flag stays in cache
+- combinalo con 
+- NuxtLink not working in departments menu
 - usd show cents
 - maintain cookie department when selecting logo
 - filter drawer mobile
 - account/gear
 - currency dropdown in mobile
+- save and show order in other currencies
 
 - store survey
 - show seen cheaper

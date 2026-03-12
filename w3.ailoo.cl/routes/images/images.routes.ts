@@ -4,10 +4,26 @@ import {productsClient} from "../../clients/productsClient.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
+const path = require('path');
+
+function extractGuid(input) {
+    // 1. Get just the filename (works whether 'input' is a URL or just a filename)
+    const filename = path.basename(input);
+
+    // 2. Separate extension (.jpg) from the name (55fe1374..._300)
+    const ext = path.extname(filename);
+    const nameOnly = path.basename(filename, ext);
+
+    // 3. Split by underscore and take the first part
+    const guid = nameOnly.split('_')[0];
+
+    return `${guid}${ext}`;
+}
+
 router.post("/:domainId/images/sizes", async (req, res, next) => {
     try {
         const domainId = parseInt(req.params.domainId);
-        const imageId = req.body.imageId;
+        const imageId = extractGuid(req.body.imageId);
         const maintainAspectRatio = req.body.maintainAspectRatio || true;
         const sizes = req.body.sizes || [150, 300, 600];
 
