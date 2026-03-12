@@ -470,14 +470,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "name": "mercadopago",
                     "order": 2
                 },
-                {
+/*                {
                     "id": 19,
                     "driver": "dlocal",
                     "description": null,
                     "logo_class": "credit-cards",
                     "name": "dlocal",
                     "order": 3
-                }
+                }*/
             ]
         })
     } catch (e) {
