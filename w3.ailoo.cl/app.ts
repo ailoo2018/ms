@@ -92,6 +92,8 @@ app.use(reviewsRoutes);
 
 app.get('/', (req, res) => {
 
+  logger.info("info: Called /: " );
+  logger.error("error: Called /: " );
   res.json({
     msg: "Welcome to the WcC App v123:::: this has changed",
     /*
