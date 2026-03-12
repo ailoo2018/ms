@@ -60,6 +60,10 @@ export default class ProductsService {
   }
 
   async findProducts(productIds:any, domainId:any) {
+
+    if(!productIds || productIds.length === 0)
+      return []
+
     const response = await this.elClient.search({
       index: getIndexName(domainId),
       body: {
