@@ -4,7 +4,7 @@ import {getAllLeafsFromParents} from "../utils/tree-utils.js";
 
 const mutex = new Mutex();
 
-let _treeMap = {};
+let _treeMap : any = {};
 
 
 
@@ -44,7 +44,7 @@ function traverse(node:any, ancestors:any, parentMap: any) {
 export class ProductCategoryService {
 	private redisClient: any;
 	private productCategoryDb: any;
-	private _treeMap: any
+
 	private parentMap: any
 
 	constructor({ redisClient, productCategoryDb }: { redisClient: any, productCategoryDb : any}) {
@@ -58,15 +58,15 @@ export class ProductCategoryService {
 	}
 
 	async getTreeMap(domainId:any) {
-		if(this._treeMap["" + domainId] == null) {
-			this._treeMap["" + domainId] = await this.createParentMap(domainId);
+		if(_treeMap["" + domainId] == null) {
+			_treeMap["" + domainId] = await this.createParentMap(domainId);
 		}
 		return {
 			isOrHasAncestor : (childId :any, parentId:any) => {
 				if(childId === parentId )
 					return true;
 
-				return this._treeMap["" + domainId][ `${childId}_${parentId}` ];
+				return _treeMap["" + domainId][ `${childId}_${parentId}` ];
 			}
 		};
 	}
@@ -78,14 +78,12 @@ export class ProductCategoryService {
 
 	async createParentMap(domainId:any) {
 		const tree = await this.getCategoryTree(domainId);
-		const parentMap = {};
-
-
+		this.parentMap = {};
 
 		// Start traversal from the root node with empty ancestors
 		traverse(tree, [], this.parentMap);
 
-		return parentMap;
+		return this.parentMap;
 	}
 
 	async getCategoryTree(domainId:any, forceReload = false) {
