@@ -1,4 +1,5 @@
 import logger from "@ailoo/shared-libs/logger";
+import logger2 from "./utils/logger.js"
 import { loadConfig } from "@ailoo/shared-libs/config";
 
 loadConfig()
@@ -94,6 +95,8 @@ app.get('/', (req, res) => {
 
   logger.info("info: Called /: " );
   logger.error("error: Called /: " );
+  logger2.info("logger2: info: Called /: " );
+  logger2.error("logger2: error: Called /: " );
   res.json({
     msg: "Welcome to the WcC App v123:::: this has changed",
     /*
@@ -112,7 +115,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   logger.error("Error in express handler: " + err);
   if (err.stack != null)
     logger.error(err.stack);

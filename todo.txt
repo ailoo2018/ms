@@ -69,13 +69,14 @@
 * provincia con [Object]
 * mercado pago acredita 2 veces
 * coupon nivem
+* orderby in product list
+* dlocal not working
 
-- orderby in product list
-- dlocal not working
-
+- usd show cents
 - maintain cookie department when selecting logo
 - filter drawer mobile
 - account/gear
+- currency dropdown in mobile
 
 - store survey
 - show seen cheaper

@@ -34,7 +34,8 @@
     "redis": "^5.10.0",
     "supertest": "^7.2.2",
     "transbank-sdk": "^6.1.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "shx": "^0.4.0",
