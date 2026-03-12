@@ -1,5 +1,4 @@
 import logger from "@ailoo/shared-libs/logger";
-import logger2 from "./utils/logger.js"
 import { loadConfig } from "@ailoo/shared-libs/config";
 
 loadConfig()
