@@ -1,5 +1,4 @@
 import {Router} from "express";
-import cmsClient from "../../services/cmsClient.js";
 import {productsClient} from "../../clients/productsClient.js";
 
  // Create a router instead of using 'app'
@@ -7,7 +6,7 @@ import path from "path";
 
 const router = Router();
 
-function extractGuid(input) {
+function extractGuid(input: string) {
     // 1. Get just the filename (works whether 'input' is a URL or just a filename)
     const filename = path.basename(input);
 
@@ -21,7 +20,7 @@ function extractGuid(input) {
     return `${guid}${ext}`;
 }
 
-router.post("/:domainId/images/sizes", async (req, res, next) => {
+router.post("/:domainId/images/sizes", async (req : any, res : any, next : any) => {
     try {
         const domainId = parseInt(req.params.domainId);
         const imageId = extractGuid(req.body.imageId);
