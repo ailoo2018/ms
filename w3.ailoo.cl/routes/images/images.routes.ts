@@ -2,9 +2,10 @@ import {Router} from "express";
 import cmsClient from "../../services/cmsClient.js";
 import {productsClient} from "../../clients/productsClient.js";
 
-const router = Router(); // Create a router instead of using 'app'
+ // Create a router instead of using 'app'
+import path from "path";
 
-const path = require('path');
+const router = Router();
 
 function extractGuid(input) {
     // 1. Get just the filename (works whether 'input' is a URL or just a filename)

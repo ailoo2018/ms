@@ -186,7 +186,6 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const domainId = parseInt(req.params.domainId);
         const currency = req.body.currency || "CLP"
 
-
         const result = await drizzleDb.transaction(async (tx) => {
 
             try {
@@ -423,7 +422,11 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         })
 
         // logger.error("drizzleDb.transaction result: " + JSON.stringify(result))
-        res.json({id: result.id, total: Math.round(Number(result.total)), addressId: result.addressId})
+        res.json({
+            id: result.id,
+            total: ((!currency || currency === "CLP") ? Math.round(Number(result.total)) : result.total),
+            addressId: result.addressId
+        })
     } catch (err) {
         logger.error("CHECKOUT ERROR!!!!! " + err.message);
         logger.error("CHECKOUT ERROR!!!!! " + err.stack);
