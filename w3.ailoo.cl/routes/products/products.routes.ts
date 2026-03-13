@@ -173,6 +173,18 @@ router.get("/:domainId/products/:productId/complements", async (req, res, next) 
 
     const products = await productService.findProducts(pids, domainId)
 
+    var imgHelper = new ProductImageHelper()
+    products.forEach(p => {
+      p.url = getLink(p)
+
+      if (p.image) {
+        p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
+      }
+
+      return p
+    })
+
+
     res.json({
       products
     })
