@@ -171,9 +171,10 @@ router.get("/:domainId/products/:productId/complements", async (req, res, next) 
     const domainId = parseInt(req.params.domainId)
     const pids = await productComplements(productId)
 
-    const products = await productService.findProducts(pids, domainId)
+    let products = await productService.findProducts(pids, domainId)
 
     var imgHelper = new ProductImageHelper()
+    products = products.filter(p1 => p1.universalQuantity > 0)
     products.forEach(p => {
       p.url = getLink(p)
 
