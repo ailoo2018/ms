@@ -53,6 +53,13 @@ export async function buildQueryByCollectionId(criteria : any,  domainId: number
           domainId: domainId,
         },
       },
+      {
+        "range": {
+          "orderWeight": {
+            "gte": -1
+          }
+        }
+      }
   )
 
 
@@ -170,8 +177,8 @@ export async function buildQueryByCollectionId(criteria : any,  domainId: number
     }
   }
 
-  const r = c.rules.find(r => r.type === EntityType.AvailableForInternet)
-  if (true || (r && r.numericValue === 1)) {
+//  const r = c.rules.find(r => r.type === EntityType.AvailableForInternet)
+//  if (true || (r && r.numericValue === 1)) {
     must.push({
       range: {
         minPrice: {gt: 0}
@@ -192,13 +199,13 @@ export async function buildQueryByCollectionId(criteria : any,  domainId: number
         directCategoryisAvailableForInternet: true
       }
     })
-  }
+ // }
 
 
 
   if (must.length > 0) {
     query.bool.should.push({bool: {must: must}});
-    must = []
+
   }
 
   let sort : any;

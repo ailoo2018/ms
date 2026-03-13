@@ -187,6 +187,13 @@ function buildQueryByCriteria(criteria, domainId) {
                 {term: {isAvailableForInternet: true}},
                 {range: {minPrice: {gt: 0}}},
                 {range: {universalQuantity: {gt: 0}}},
+                {
+                    "range": {
+                        "orderWeight": {
+                            "gte": -1
+                        }
+                    }
+                }
             ]
         }
     }
@@ -521,22 +528,25 @@ export async function search(criteria, domainId) {
     let query
     let limit
 
-    let searchDescription = ""
+
     let collection: any;
-    let sort : any = [{"brand.name.keyword": "asc"}, {'name.keyword': 'asc'}];
+    let sort : any = [{ orderWeight: "desc" }];
 
     if (criteria.orderBy) {
         if (criteria.orderBy === "bestseller") {
-            sort = [{"unitsSold": "desc"}]
+            sort.push({"unitsSold": "desc"})
         }
         else if (criteria.orderBy.includes("newest")) {
-            sort = [{"createDate": "desc"}]
+            sort.push({"createDate": "desc"})
         }
         else if (criteria.orderBy.includes("price")) {
-
-            sort = [{"minPrice": criteria.orderBy.includes("desc") ? "desc": "asc" }]
+            sort.push({"minPrice": criteria.orderBy.includes("desc") ? "desc": "asc" })
+        }else{
+            sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
         }
 
+    }else{
+        sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
     }
 
     if (criteria.collectionId && criteria.collectionId !== "") {
@@ -651,7 +661,7 @@ export async function search(criteria, domainId) {
     return {
         totalHits: totalItems,
         query: {
-            description: getQueryDescription(criteria, filters, domainId)
+            description: getQueryDescription(criteria, filters)
         },
         offset: offset,
         limit: limit,
@@ -662,8 +672,8 @@ export async function search(criteria, domainId) {
 }
 
 
-export function getQueryDescription(criteria, filters, domainId) {
-    let category, brand, collection;
+export function getQueryDescription(criteria, filters) {
+    let category, brand ;
 
     let description = ""
 

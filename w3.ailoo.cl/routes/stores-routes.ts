@@ -31,7 +31,11 @@ router.get("/:domainId/stores/list", async (req, res, next) => {
           with: {
             contactMechanism: {
               with: {
-                postalAddress: true
+                postalAddress: {
+                  with: {
+                    comuna: true
+                  }
+                }
               }
             }
           }
