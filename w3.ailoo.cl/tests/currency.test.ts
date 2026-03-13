@@ -6,7 +6,7 @@ import request from "supertest";
 import {describe, it} from "node:test";
 
 import {app} from "../server.js"; // Import the main app, not just the routes
-import productRoutes from "../routes/products-routes.js";
+import productRoutes from "../routes/products/products.routes.js";
 
 
 
