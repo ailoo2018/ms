@@ -1,17 +1,16 @@
 import { Router } from "express";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
-import {search} from "../el/search.js";
-import {ProductType, SaleType} from "../models/domain.js";
-import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../helpers/product-helper.js";
-import {getElClient, getIndexName} from "../connections/el.js";
-import container from "../container/index.js";
-import {stockAllStores} from "../db/inventory.js";
+import {search} from "../../el/search.js";
+import {ProductType, SaleType} from "../../models/domain.js";
+import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../../helpers/product-helper.js";
+import {getElClient, getIndexName} from "../../connections/el.js";
+import container from "../../container/index.js";
+import {stockAllStores} from "../../db/inventory.js";
 import logger from "@ailoo/shared-libs/logger";
 import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
-import {db as redisDb} from "../connections/rdb.js";
-import {productCacheKey} from "../utils/cache-utils.js";
-import cmsClient from "../services/cmsClient.js";
-import {currencyHandler} from "../server.js";
+import cmsClient from "../../services/cmsClient.js";
+import {currencyHandler} from "../../server.js";
+import {productComplements} from "../../db/product.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -160,6 +159,24 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     res.json(p);
   } catch (e) {
     logger.error("product not found: " + JSON.stringify(req.params));
+    next(e)
+  }
+})
+
+
+router.get("/:domainId/products/:productId/complements", async (req, res, next) => {
+
+  try{
+    const productId = parseInt(req.params.productId)
+    const domainId = parseInt(req.params.domainId)
+    const pids = await productComplements(productId)
+
+    const products = await productService.findProducts(pids, domainId)
+
+    res.json({
+      products
+    })
+  }catch(e){
     next(e)
   }
 })

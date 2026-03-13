@@ -39,7 +39,7 @@ import ordersRoutes from "./routes/orders-routes.js";
 app.use(ordersRoutes);
 import motorcyclesRoutes from "./routes/motorcycles-routes.js";
 app.use(motorcyclesRoutes);
-import productsRoutes from "./routes/products-routes.js";
+import productsRoutes from "./routes/products/products.routes.js";
 app.use(productsRoutes);
 
 import settingsRoutes from "./routes/account/settings/settings.routes.js";

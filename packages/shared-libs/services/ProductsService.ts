@@ -1,5 +1,4 @@
 import {getIndexName} from "../el/index.js";
-import { errors } from '@elastic/elasticsearch'
 import {getPrice} from "../products/price.js";
 import {SaleType} from "../models/index.js";
 
@@ -89,7 +88,7 @@ export default class ProductsService {
         }
       },
       _source: {
-        excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath']
+        excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath', 'categories']
       }
     });
 
