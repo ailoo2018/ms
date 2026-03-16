@@ -28,3 +28,34 @@ order by
   }
 
 }
+
+export const listAddressesByOrders = async partyId => {
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows ] = await connection.execute(
+        `
+          select pa.*,
+                 comuna.Name  as ComunaName,
+                 country.Name as CountryName,
+                 country.Code as CountryCode
+          from saleorder so
+                 join postaladdress pa on so.ShippedToId = pa.PostalAddressId
+                 left outer join geographicboundary comuna on pa.ComunaId = comuna.Id
+                 left outer join geographicboundary country on pa.CountryId = comuna.Id
+          where OrderedBy = ?;
+
+
+`, [ partyId ]
+    );
+
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+
+}

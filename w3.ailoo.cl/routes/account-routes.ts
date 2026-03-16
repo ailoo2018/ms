@@ -1,6 +1,6 @@
 import {Router} from "express";
 import { validateJWT} from "../server.js";
-import {listPartyPostalAddresses} from "../db/partyDb.js";
+import {listAddressesByOrders, listPartyPostalAddresses} from "../db/partyDb.js";
 import * as ProductHelper from "../helpers/product-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {and,  eq, ne} from "drizzle-orm";
@@ -348,12 +348,21 @@ router.get("/:domainId/account/addresses", validateJWT, async (req, res, next) =
     try {
         const user = req.user;
 
-        const addresses: any = await listPartyPostalAddresses(user.partyId)
+
+        const party = await drizzleDb.query.party.findFirst({
+            where: (party, {eq}) => eq(party.id, req.user.partyId),
+        })
+
+        let addresses: any = await listPartyPostalAddresses(user.partyId)
+
+        if(addresses.length === 0) {
+            addresses = await listAddressesByOrders(user.partyId)
+        }
 
         res.json({
             addresses: addresses.map(addr => {
 
-                const nameObj = parseFullName(addr.Name);
+                const nameObj = parseFullName(addr.Name || party?.name);
 
                 return {
                     "id": addr.PostalAddressId,
