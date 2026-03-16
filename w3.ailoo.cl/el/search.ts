@@ -530,7 +530,7 @@ export async function search(criteria, domainId) {
 
 
     let collection: any;
-    let sort : any = [{ orderWeight: "desc" }];
+    let sort : any = [];
 
     if (criteria.orderBy) {
         if (criteria.orderBy === "bestseller") {
@@ -548,6 +548,8 @@ export async function search(criteria, domainId) {
     }else{
         sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
     }
+
+    sort.push({ orderWeight: "desc" })
 
     if (criteria.collectionId && criteria.collectionId !== "") {
         ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
