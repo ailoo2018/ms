@@ -1,11 +1,18 @@
 * boton de pago lento
 * combinalo con 
+* currency dropdown in mobile
+* title of page is Loading...
+* recover cart link is not working
+* validate product can have retiro en tienda ahora muestra retiro en 2 horas
+* when clicking in drawer or main menu it should close
+* cart change quantity manually
 
-
- - filter drawer mobile
+- filter drawer mobile
 - account/gear
-- currency dropdown in mobile
 - save and show order in other currencies
+- influencers link create
+
+
 
 - store survey
 - show seen cheaper
@@ -13,4 +20,3 @@
 - view widget in nuxt
 - cdn dedicated in iis
 - q&a
-- cart change quantity manually

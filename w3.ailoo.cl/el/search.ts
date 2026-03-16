@@ -3,7 +3,7 @@ import {buildQueryByCollectionId} from "./collections.js";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import logger from "@ailoo/shared-libs/logger";
 import {getLink} from "../helpers/product-helper.js";
-
+import categoryTreeService from "../services/categoryTreeService.js";
 
 const aggs = {
     "brands_count": {
@@ -663,7 +663,7 @@ export async function search(criteria, domainId) {
     return {
         totalHits: totalItems,
         query: {
-            description: getQueryDescription(criteria, filters)
+            description: await getQueryDescription(criteria, filters, domainId)
         },
         offset: offset,
         limit: limit,
@@ -674,14 +674,13 @@ export async function search(criteria, domainId) {
 }
 
 
-export function getQueryDescription(criteria, filters) {
+export async function getQueryDescription(criteria, filters, domainId) {
     let category, brand ;
 
     let description = ""
 
     if (criteria.categories?.length === 1) {
-        category = getData(Number(criteria.categories[0]), "categories", filters)
-
+        category = await categoryTreeService.findCategory(parseInt(criteria.categories[0]), domainId)
     }
 
     if (criteria.brands?.length === 1) {
