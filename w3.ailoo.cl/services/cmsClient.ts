@@ -150,6 +150,10 @@ const cmsClient = {
       return "BrandsBlockMx"
     }
 
+    if (w.name === "OutletPromo" || w.id === 123252) {
+      return "OutletPromo"
+    }
+
     if (w.name === "Seo") {
       return "Seo2"
     }
@@ -159,6 +163,7 @@ const cmsClient = {
     if (w.name === "YoutubeLatest") {
       return "YoutubeLatest"
     }
+
     if(w.name === "EmbajadoresHome" || w.name === "Html_Embajadores")
       return "EmbajadoresHome"
 
