@@ -25,7 +25,7 @@ router.post("/:domainId/images/sizes", async (req : any, res : any, next : any) 
         const domainId = parseInt(req.params.domainId);
         const imageId = extractGuid(req.body.imageId);
         const maintainAspectRatio = req.body.maintainAspectRatio || true;
-        const sizes = req.body.sizes || [150, 300, 600];
+        const sizes = req.body.sizes || [150, 300, 600, 800];
 
         const response = await productsClient.createImageSizes(imageId, sizes, maintainAspectRatio, domainId)
 
