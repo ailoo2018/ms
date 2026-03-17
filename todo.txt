@@ -7,6 +7,8 @@
 * when clicking in drawer or main menu it should close
 * cart change quantity manually
 
+- newletter
+- ambassadors
 - filter drawer mobile
 - account/gear
 - save and show order in other currencies

@@ -159,6 +159,8 @@ const cmsClient = {
     if (w.name === "YoutubeLatest") {
       return "YoutubeLatest"
     }
+    if(w.name === "EmbajadoresHome" || w.name === "Html_Embajadores")
+      return "EmbajadoresHome"
 
 
     return "Dummy"

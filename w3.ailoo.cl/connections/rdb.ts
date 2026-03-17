@@ -7,6 +7,7 @@ const db = redis.createClient({
         keepAlive: true,       // Keep connections alive
         reconnectStrategy: (retries) => {
             if (retries > 10) return new Error('Max reconnection attempts reached');
+            console.log("redis connect Retries " + retries);
             return Math.min(retries * 100, 3000); // Exponential backoff
         }
     }
