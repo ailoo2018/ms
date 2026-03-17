@@ -1,5 +1,5 @@
 import {db as drizzleDb} from "../db/drizzle.js";
-import {and,  eq, inArray} from "drizzle-orm";
+import {and, or, eq, inArray} from "drizzle-orm";
 import schema from "../db/schema.js";
 
 // Then use it like this:
@@ -20,7 +20,7 @@ router.get("/:domainId/stores/list", async (req, res, next) => {
     const facilities = await drizzleDb.query.facility.findMany({
       where: and(
           eq(facility.domainId, domainId),
-          eq(facility.isAvailableForInternet, 1),
+          or(eq(facility.isAvailableForInternet, 1), eq(facility.id, 5700)),
           eq(facility.deleted, 0),
           inArray(facility.type, [0]),
       ),
