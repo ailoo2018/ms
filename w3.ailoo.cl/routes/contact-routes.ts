@@ -28,7 +28,7 @@ router.post("/:domainId/contact", async (req, res, next) => {
     const msg = {
       to: "ventas@motomundi.cl",
       bcc: "jcfuentes@motomundi.net",
-      from: 'motohub@motohub.cl', // Change to your verified sender
+      from: 'ventas@motomundi.cl', // Change to your verified sender
       subject: `MOTOMUNDI - CONSULTA CLIENTE`,
       html: `
 
