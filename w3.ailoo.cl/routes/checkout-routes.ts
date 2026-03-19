@@ -332,9 +332,20 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                 let desc = null
                 let exchangeRate = 1
+
+
+
                 if(currency !== "CLP" && rq.country !== "CL") {
-                    exchangeRate = await convert(1, "CLP", currency)
-                    desc = `Exchange rate: CLP>${currency} ${exchangeRate}`
+                    const newRate = await convert(1, "CLP", currency)
+                    const oldRate = rq.exchangeRate;
+
+                    const percentChange = Math.abs(newRate - oldRate) / oldRate;
+
+                    if(percentChange > 0.10){
+                        throw new Error("Tasa de cambio sufrio un cambio mayor a 10%")
+                    }
+
+                    exchangeRate = rq.exchangeRate;
                 }
 
                 const [orderResult] = await tx.insert(saleOrder).values({

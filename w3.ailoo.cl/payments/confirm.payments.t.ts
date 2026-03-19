@@ -31,7 +31,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
     }
     const invoiceTotal = invoiceHelper.getTotal(invoice)
     if(Math.abs(transactionAmount - invoiceTotal) > 1){
-   //     throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
+        throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
     }
 
 
