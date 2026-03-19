@@ -103,11 +103,13 @@ app.get('/', (req, res) => {
         DB_DATABASE: process.env.DB_DATABASE,
     */
 
-    CMS_URL: process.env.CMS_URL,
-    MERCADO_PAGO_ACCESS_TOKEN: process.env.MERCADO_PAGO_ACCESS_TOKEN,
-    WEBPAY_COMMERCE_CODE: process.env.WEBPAY_COMMERCE_CODE,
+    DLOCAL_GO_BASE_URL: process.env.DLOCAL_GO_BASE_URL || null,
+    DLOCAL_GO_API_KEY: process.env.DLOCAL_GO_API_KEY || null,
+    CMS_URL: process.env.CMS_URL || null,
+    MERCADO_PAGO_ACCESS_TOKEN: process.env.MERCADO_PAGO_ACCESS_TOKEN || null,
+    WEBPAY_COMMERCE_CODE: process.env.WEBPAY_COMMERCE_CODE || null,
     //  AILOO_TOKEN: process.env.AILOO_ACCESS_TOKEN,
-    ADMIN_URL: process.env.ADMIN_URL,
+    ADMIN_URL: process.env.ADMIN_URL || null,
   });
 });
 

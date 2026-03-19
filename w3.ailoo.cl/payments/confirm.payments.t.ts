@@ -63,9 +63,7 @@ export async function validateOrder(referenceId: string, transactionAmount: numb
     }
     const orderTotal = ordersHelper.getTotal(order)
 
-    if(paymentMethodType === PaymentMethodType.DLocal){
-        // TODO, I have to store exchangerate in Order and validate amount
-    }else if(Math.abs(transactionAmount - orderTotal) > 1){
+    if(Math.abs(transactionAmount - orderTotal) > 1){
         throw new Error( `Montos de orden de compra no coinciden: ${transactionAmount} vs ${orderTotal}` )
     }
 

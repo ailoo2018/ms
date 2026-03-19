@@ -271,6 +271,7 @@ const coupon = motomundiSchema.table("coupon", {
 const saleOrder = motomundiSchema.table("saleorder", {
     id: int("Id").autoincrement().primaryKey(),
     orderDate: datetime("OrderDate"),
+    exchangeRate: double("ExchangeRate"),
     shippedToId: int("ShippedToId"),
     state: int("State").notNull().default(0),
     paymentMethodTypeId: int("PaymentMethodTypeId"),

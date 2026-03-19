@@ -7,6 +7,7 @@ import schema, {SaleOrder} from "../db/schema.js";
 import {adminClient} from "../clients/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {OrderState, PaymentMethodType} from "../models/domain.js";
+import {ordersHelper} from "../helpers/order-helper.js";
 
 const {saleOrder, orderJournal, payment, paymentApplication} = schema
 
@@ -197,17 +198,19 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
                 },
             });
 
+            amount = ordersHelper.getTotal(order)
+
             rs = {
                 referenceType: rq.referenceType,
                 referenceId: rq.referenceId,
                 success: false,
-                authorizationCode: null,
-                currency: currency,
+                authorizationCode: order.authCode,
+                currency: order.currency,
                 transactionAmount: amount,
                 responseData: paymentData,
                 responseCode: "",
                 paymentMethodId: rq.paymentMethodId,
-                transactionDate: transactionDate,
+                transactionDate: order.orderDate,
 
             }
 

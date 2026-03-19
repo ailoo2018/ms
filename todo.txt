@@ -6,13 +6,20 @@
 * validate product can have retiro en tienda ahora muestra retiro en 2 horas
 * when clicking in drawer or main menu it should close
 * cart change quantity manually
+* store pickup mail problems
+* influencers link create
+* ambassadors
+* paypal integration
+
+
+- dlocal testing
+- solicitar factura
+
 
 - newletter
-- ambassadors
 - filter drawer mobile
 - account/gear
 - save and show order in other currencies
-- influencers link create
 
 
 
@@ -22,3 +29,8 @@
 - view widget in nuxt
 - cdn dedicated in iis
 - q&a
+
+
+
+
+Chief Strategy Officer or Consultant

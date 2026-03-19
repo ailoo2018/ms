@@ -341,6 +341,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     orderDate: new Date(),
                     expectedDeliveryDate: new Date(),
                     comment: desc || "",
+                    exchangeRate: exchangeRate,
                     currency: currency,
                     shippedToId: postalAddressId, // Points to both tables via the shared ID
                     state: 1,
@@ -662,7 +663,7 @@ function createShippingCostItem(orderId: number, cost: number, domainId: number,
         productItemId: null,
         comment: "Costo de envío",
         quantity: "1",
-        unitPrice: convertUnitPrice( cost, currency, exchangeRate ),
+        unitPrice: cost * exchangeRate, // valor es sin iva
         unitCurrency: currency,           // Default as per your table schema
         type: OrderItemType.Shipping,
         orderItemId: null,
