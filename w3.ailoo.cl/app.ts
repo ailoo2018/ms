@@ -57,6 +57,9 @@ app.use(blogRoutes);
 import imagesRoutes from "./routes/images/images.routes.js";
 app.use(imagesRoutes);
 
+import newsletterRoutes from "./routes/newsletter/newsletter.routes.js";
+app.use(newsletterRoutes);
+
 import storesRoutes from "./routes/stores-routes.js";
 app.use(storesRoutes);
 import reviewRoutes from "./routes/reviews-routes.js";

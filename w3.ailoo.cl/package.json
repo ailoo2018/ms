@@ -35,6 +35,7 @@
     "supertest": "^7.2.2",
     "transbank-sdk": "^6.1.1",
     "uuid": "^8.3.2",
+    "validator": "^13.15.26",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {

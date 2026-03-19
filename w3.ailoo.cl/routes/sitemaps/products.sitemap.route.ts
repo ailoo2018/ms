@@ -1,4 +1,3 @@
-import cmsClient from "../../services/cmsClient.js";
 import router from "../events-routes.js";
 import {getElClient, getIndexName, getProductCollectionsIndexName} from "../../connections/el.js";
 import * as ProductHelper from "../../helpers/product-helper.js";
