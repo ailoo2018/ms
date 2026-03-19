@@ -37,7 +37,7 @@ export async function allCurrencies(from: string) : Promise<ExchangeRateResponse
     return data
 }
 
-export async function convert(amount : number, from: string, to: string){
+export async function convert(amount : number, from: string, to: string) : Promise<number> {
     const data = await allCurrencies(from);
 
     return amount * data.conversion_rates[to]

@@ -2,7 +2,7 @@ import {db as drizzleDb} from "../db/drizzle.js";
 import {and, eq} from "drizzle-orm";
 import { ordersHelper} from "../helpers/order-helper.js";
 import { invoiceHelper}  from "../helpers/invoice-helper.js";
-import {OrderState, PaymentMethodType} from "../models/domain.js";
+import { PaymentMethodType} from "../models/domain.js";
 import type {PaymentValidation, PaymentValidator} from "../clients/paymentValidator.js";
 import container from "../container/index.js";
 import schema from "../db/schema.js"
@@ -43,7 +43,7 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
     }
 }
 
-export async function validateOrder(referenceId: string, transactionAmount: number, paymentMethodType: number, domainId : number) {
+export async function validateOrder(referenceId: string, transactionAmount: number, currency: string, paymentMethodType: number, domainId : number) {
     const order :any  = await drizzleDb.query.saleOrder.findFirst({
         where: (saleOrder, { eq }) =>
             and(
@@ -78,6 +78,7 @@ const validatorMap: Record<PaymentMethodValues, string> = {
     [PaymentMethodType.Webpay]: "webPayValidator",
     [PaymentMethodType.MercadoPago]: "mercadoPagoValidator",
     [PaymentMethodType.DLocal]: "dlocalValidator",
+    [PaymentMethodType.Paypal]: "paypalValidator",
 };
 
 export async function confirmPayment(authId: string, paymentMethodType: number,  domainId: number) {
@@ -98,7 +99,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
     if(response.referenceType === "invoice") {
         await validateInvoice(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
     }else{
-        await validateOrder(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
+        await validateOrder(response.referenceId, response.transactionAmount, response.currency, paymentMethodType, domainId)
     }
 
     return response
@@ -133,7 +134,7 @@ export async function addPaymentToInvoice(invoiceId: number, amount: number, pay
 
     let paymentId: number = result.insertId
 
-    const [paRs] = await drizzleDb.insert(paymentApplication).values({
+    await drizzleDb.insert(paymentApplication).values({
         amountApplied: amount,
         paymentId: paymentId,
         invoiceId: invoiceId,

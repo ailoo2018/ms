@@ -13,21 +13,16 @@ import {Cart, CartCoupon, CartItemType} from "../models/cart-models.js";
 import {findCart} from "../services/cartService.js";
 import {stockByStore} from "../db/inventory.js";
 import container from "../container/index.js";
-import * as couponHelper from "../helpers/coupon-helper.js"
 import * as cartHelper from "../helpers/cart-helper.js"
-import {CouponConfig} from "../models/coupon.types.js";
 import {updateCart} from "../el/cart.js";
-import {applyCoupon} from "../helpers/cart-helper.js";
-import {convert, getCountryData} from "../services/exchangeService.js";
+import {convert } from "../services/exchangeService.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
 const {
-    user,
     contactMechanism,
-    facility,
-    orderJournal,
     party,
+    geographicBoundary,
     postalAddress,
     saleOrder,
     saleOrderItem
@@ -46,9 +41,9 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
 
         const cart = await findCart(wuid, domainId)
 
-        let quotes = null
+        let quotes
         if (country && country !== "CL") {
-            const countryData = getCountryData(country)
+            //const countryData = getCountryData(country)
             // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
@@ -155,7 +150,7 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
         var nextDate = new Date()
         nextDate.setDate(avlDate.getDate() + 1);
 
-        let description = "";
+        let description;
 
         if (avlDate.getMonth() === nextDate.getMonth()) {
             description = `${avlDate.getDate()} y ${nextDate.getDate()} de ${avlDate.toLocaleDateString('es-CL', {month: 'long'})}`;
@@ -194,7 +189,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                 if (rq.userId > 0) {
                     user = await drizzleDb.query.user.findFirst({
-                        where: eq(user.id, rq.userId),
+                        where: eq(schema.user.id, rq.userId),
                         with: {
                             person: true, // This joins the 'party' table
                         },
@@ -267,7 +262,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                 if (cart.shipmentMethod.id === ShipmentMethodType.StorePickup) {
                     const facilityDb = await drizzleDb.query.facility.findFirst({
-                        where: (productItem) => eq(facility.id, rq.pickupStore.id),
+                        where: (facility) => eq(facility.id, rq.pickupStore.id),
                         with: {
                             contacts: {
                                 with: {
@@ -298,9 +293,19 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         phone = rq.customerInformation.phone
                     }
 
+                    let countryId = null
+                    if(rq.country?.length >0){
+                        const country = await getCountryByCode(rq.country)
+                        if(country)
+                            countryId = country.id
+                    }
+
                     await tx.insert(postalAddress).values({
                         postalAddressId: postalAddressId, // Use the shared ID
                         phone: phone,
+                        countryId: countryId,
+                        city: rq.shipmentInformation.address?.city || null,
+                        region: rq.shipmentInformation.address?.state || null,
                         name: rq.shipmentInformation.address.name.trim(),
                         surname: rq.shipmentInformation.address.surnames,
                         address: rq.shipmentInformation.address.address,
@@ -323,10 +328,19 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     facilityId = rq.pickupStore?.id || null;
                 }
 
+                // convert from CLP
+
+                let desc = null
+                let exchangeRate = 1
+                if(currency !== "CLP" && rq.country !== "CL") {
+                    exchangeRate = await convert(1, "CLP", currency)
+                    desc = `Exchange rate: CLP>${currency} ${exchangeRate}`
+                }
 
                 const [orderResult] = await tx.insert(saleOrder).values({
                     orderDate: new Date(),
                     expectedDeliveryDate: new Date(),
+                    comment: desc || "",
                     currency: currency,
                     shippedToId: postalAddressId, // Points to both tables via the shared ID
                     state: 1,
@@ -357,13 +371,15 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                         item.product.id = pitDb.productId
 
-                        let itemToInsert = createProductSaleOrderItem(newOrderId, item, null, domainId, currency)
+                        let itemToInsert = createProductSaleOrderItem(
+                            newOrderId, item, null, domainId, currency, exchangeRate)
 
                         const [orderItemResult] = await tx.insert(saleOrderItem).values(itemToInsert);
                         const orderItemId = orderItemResult.insertId;
                         if (item.packContents && item.packContents.length > 0) {
                             for (var packItem of item.packContents) {
-                                const packItemDb = createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId, currency)
+                                const packItemDb =
+                                    createProductSaleOrderItem(newOrderId, packItem, orderItemId, domainId, currency, exchangeRate)
                                 await tx.insert(saleOrderItem).values(packItemDb);
                             }
                         }
@@ -375,11 +391,12 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         validateRequestPrice(item, rq)
 
 
-                        for (var packItem of item.packContents) {
-                            const packItemDb = createProductSaleOrderItem(newOrderId, packItem, null, domainId, currency)
+                        for (const pitem of item.packContents) {
+                            const packItemDb =
+                                createProductSaleOrderItem(newOrderId, pitem, null, domainId, currency, exchangeRate)
                             await tx.insert(saleOrderItem).values(packItemDb);
 
-                            orderTotal += packItem.quantity * packItem.price
+                            orderTotal += pitem.quantity * pitem.price
                         }
 
                         // add discount of pack a separate line
@@ -401,14 +418,16 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 // todo should validate what is arriving
                 if (cart.shipmentMethod.id !== ShipmentMethodType.StorePickup) {
                     const cost = rq.shipmentInformation?.cost || 0
-                    const shippingCostItem = createShippingCostItem(newOrderId, cost, domainId, currency)
+                    const shippingCostItem =
+                        createShippingCostItem(newOrderId, cost, domainId, currency, exchangeRate)
                     await tx.insert(saleOrderItem).values(shippingCostItem);
 
                     orderTotal += cost
                 }
 
                 if (appliedCoupon) {
-                    const orderItemDb = createCouponSaleOrderItem(newOrderId, appliedCoupon, domainId)
+                    const orderItemDb =
+                        createCouponSaleOrderItem(newOrderId, appliedCoupon, currency, exchangeRate)
                     await tx.insert(saleOrderItem).values(orderItemDb);
                     orderTotal += (-1 * appliedCoupon.discount)
                 }
@@ -441,19 +460,33 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     try {
 
         const country = req.query.country || "CL"
+        const rs = { gateways: [] }
         if (country !== "CL") {
 
-            return res.json({
-                "gateways": [
-                    {
-                        "id": 19,
-                        "driver": "dlocal",
-                        "description": null,
-                        "logo_class": "credit-cards",
-                        "name": "dlocal",
-                        "order": 1
-                    }]
-            });
+            if(country === "ES" ||  country === "US"){
+                rs.gateways.push( {
+                    "id": 10,
+                    "driver": "paypal",
+                    "description": null,
+                    "logo_class": "credit-cards",
+                    "name": "paypal",
+                    "order": 2
+                })
+
+            }else{
+                rs.gateways.push({
+                    "id": 19,
+                    "driver": "dlocal",
+                    "description": null,
+                    "logo_class": "credit-cards",
+                    "name": "dlocal",
+                    "order": 1
+                })
+
+            }
+
+
+            return res.json(rs);
         }
 
 
@@ -598,35 +631,45 @@ function validateRequestPrice(item, rq) {
     }
 }
 
-function createProductSaleOrderItem(orderId, cartItem, orderItemId, domainId: number, currency: string): Partial<SaleOrderItem> {
+function convertUnitPrice(price: number, currency: string, exchangeRate: number){
+    let unitPrice = price
+    if(currency != "CLP")
+        unitPrice = unitPrice/1.19 * exchangeRate
+    return unitPrice
+}
+
+function createProductSaleOrderItem(orderId, cartItem,
+                                    orderItemId, domainId: number,
+                                    currency: string, exchangeRate: number): Partial<SaleOrderItem> {
+
 
     return {
         orderId: orderId,
         productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId
         productItemId: cartItem.product.productItemId,
         quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
-        unitPrice: cartItem.price,
+        unitPrice: convertUnitPrice( cartItem.price, currency, exchangeRate ),
         unitCurrency: currency || "CLP",           // Default as per your table schema
         type: OrderItemType.Product,
         orderItemId: orderItemId ? orderItemId : null,
     }
 }
 
-function createShippingCostItem(orderId: number, cost: number, domainId: number, currency: string): Partial<SaleOrderItem> {
+function createShippingCostItem(orderId: number, cost: number, domainId: number, currency: string, exchangeRate: number): Partial<SaleOrderItem> {
     return {
         orderId: orderId,
         productId: null,
         productItemId: null,
         comment: "Costo de envío",
         quantity: "1",
-        unitPrice: cost,
+        unitPrice: convertUnitPrice( cost, currency, exchangeRate ),
         unitCurrency: currency,           // Default as per your table schema
         type: OrderItemType.Shipping,
         orderItemId: null,
     }
 }
 
-function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId: number): Partial<SaleOrderItem> {
+function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, currency: string, exchangeRate: number): Partial<SaleOrderItem> {
 
     return {
         orderId: orderId,
@@ -635,7 +678,7 @@ function createCouponSaleOrderItem(orderId: number, coupon: CartCoupon, domainId
         couponId: coupon.id,
         comment: (coupon.name?.trim() + " " + coupon.description?.trim()).trim(),
         quantity: "1",
-        unitPrice: coupon.discount * -1,
+        unitPrice: convertUnitPrice(coupon.discount, currency, exchangeRate) * -1,
         unitCurrency: "CLP",           // Default as per your table schema
         type: OrderItemType.Coupon,
         orderItemId: null,
@@ -685,6 +728,23 @@ async function getPartyPartial(email, domainId) {
             and(
                 eq(party.email, email),
                 eq(party.domainId, domainId)
+            )
+        )
+        .limit(1);
+
+    return result ?? null;
+}
+
+async function getCountryByCode(code: string){
+    const [result] = await drizzleDb
+        .select({
+            id: geographicBoundary.id,
+            name: geographicBoundary.name,
+        })
+        .from(geographicBoundary)
+        .where(
+            and(
+                like(geographicBoundary.code, code),
             )
         )
         .limit(1);

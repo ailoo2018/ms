@@ -21,14 +21,18 @@ import {getElClient} from "../connections/el.js";
 import {db as redisDb} from "../connections/rdb.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {DlocalValidator} from "../clients/dlocalValidator.js";
+import {PaypalValidator} from "../clients/paypalValidator.js";
 
 const container = createContainer();
 
 container.register({
-  webPayValidator: asClass(WebPayValidator).singleton(),
   sizeChartService: asClass(SizeChartService).singleton(),
+
+  webPayValidator: asClass(WebPayValidator).singleton(),
   dlocalValidator: asClass(DlocalValidator).singleton(),
   mercadoPagoValidator: asClass(MercadoPagoValidator).singleton(),
+  paypalValidator: asClass(PaypalValidator).singleton(),
+
   productsService: asClass(ProductsService).singleton(),
   productCategoryService: asClass(ProductCategoryService).singleton(),
   discountRuleService: asClass(DiscountRuleService).singleton(),

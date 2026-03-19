@@ -137,9 +137,7 @@ export class Price {
         pc.type === PriceComponentType.BASE_PRICE);
   }
 
-  addSaleTaxes(taxes) {
-    // Implementation would go here
-  }
+
 
   getBasePriceComponent() {
     for (var pc of this._priceComponents) {
@@ -185,6 +183,7 @@ export class Price {
 export const PaymentMethodType = Object.freeze({
   MercadoPago: 15,
   Webpay: 8,
+  Paypal: 10,
   DLocal: 19,
 })
 
