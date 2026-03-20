@@ -404,7 +404,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
                     orderedBy: person.id,
                     destinationFacilityId: facilityId,
-                    invoicedTo: organizacion.id, // todo datos de factura
+                    invoicedTo: organizacion?.id || null, // todo datos de factura
                     domainId: domainId
                 });
 
