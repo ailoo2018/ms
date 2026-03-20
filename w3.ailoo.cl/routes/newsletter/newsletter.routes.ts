@@ -1,11 +1,10 @@
 import router from "../events-routes.js";
-import {getElClient, getIndexName, getProductCollectionsIndexName} from "../../connections/el.js";
-import * as ProductHelper from "../../helpers/product-helper.js";
 import {db as drizzleDb} from "../../db/drizzle.js";
 import schema, {Party} from "../../db/schema.js";
-import {and, eq} from "drizzle-orm";
-import * as linkHelper from "@ailoo/shared-libs/helpers/LinkHelper";
+import {eq} from "drizzle-orm";
 import validator from 'validator';
+import sgMail from "../../connections/sendmail.js";
+
 
 router.post('/:domainId/newsletter/subscribe', async (req, res, next) => {
 
@@ -45,7 +44,14 @@ router.post('/:domainId/newsletter/subscribe', async (req, res, next) => {
                 })
             }
 
-
+            // notify me about subscription
+            await sgMail.send( {
+                to: email,
+                bcc: "jcfuentes@motomundi.net",
+                from: 'ventas@motomundi.cl', // Change to your verified sender
+                subject: `Motomundi - Client suscribed to newsletter`,
+                html: `isNew=${isNew}, email=${email}, name=${name}`,
+            })
 
         }
 

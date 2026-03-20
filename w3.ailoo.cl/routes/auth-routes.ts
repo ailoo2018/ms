@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 import logger from "@ailoo/shared-libs/logger";
-import sgMail from "@sendgrid/mail";
+
 import {Router} from "express";
 import {authenticate} from "../services/authService.js";
 import {db as drizzleDb} from "../db/drizzle.js";
@@ -13,13 +13,11 @@ import {findCart} from "../el/cart.js";
 import path from "path";
 import {promises as fs} from "fs";
 import parametersClient from "../services/parametersClient.js";
-import {orderConfirmationHtml} from "../services/emailsService.js";
-
+import sgMail from "../connections/sendmail.js";
 
 const router = Router();
-const {user, party} = schema
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const {user } = schema
 
 router.get("/:domainId/auth/test", async (req, res, next) => {
     try {
@@ -76,6 +74,7 @@ router.post("/:domainId/auth/login", async (req, res, next) => {
             username: dbUser.username,
             partyId: party.id,
             partyName: party.name,
+            userWithoutPassword,
             accessToken: createToken({
                 id: dbUser.id,
                 username: dbUser.username,
@@ -92,7 +91,7 @@ router.post("/:domainId/auth/login", async (req, res, next) => {
 router.post("/:domainId/auth/hash-login", async (req, res, next) => {
     try {
         const domainId = parseInt(req.params.domainId);
-        const {hash, pid, wuid, type} = req.body;
+        const {hash, pid,  type} = req.body;
 
         if (hash !== doHash(pid)) {
             return res.status(401).json({error: "Invalid credentials", message: "Invalid credentials"});
@@ -124,7 +123,8 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
             })
         }
 
-        let dbUser = null
+        let dbUser
+
 
         dbUser = await drizzleDb.query.user.findFirst({
             where: (user) => and(
@@ -143,7 +143,7 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
             });
         }
 
-        if (!dbUser) {
+        if (!dbUser && partyDb) {
             const [result] = await drizzleDb.insert(user).values({
                 username: "" + partyDb.email,
                 password: "mx000006",
@@ -166,8 +166,8 @@ router.post("/:domainId/auth/hash-login", async (req, res, next) => {
         res.json({
             userId: dbUser.id,
             username: dbUser.username,
-            partyId: partyDb.id,
-            partyName: partyDb.name,
+            partyId: partyDb?.id || 0,
+            partyName: partyDb?.name || '',
             accessToken: createToken({
                 id: dbUser.id,
                 username: dbUser.username,
@@ -204,7 +204,6 @@ router.get("/:domainId/auth/google", async (req, res, next) => {
 
         const bodyString = params.toString();
 
-        const buffer = Buffer.from(bodyString, 'utf-8');
 
         const tokenRs = await fetch("https://accounts.google.com/o/oauth2/token", {
             method: 'POST',
@@ -360,7 +359,7 @@ router.get("/test-recover", async (req, res, next) => {
         const template = await fs.readFile(templatePath, 'utf-8');
 
         const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
-        let logo = logoParam ? logoParam.value : {};
+
         let person = {firstName: "Juan", lastName: "Perez", "name": "Juan Perez", "email": "juanperez@motomundi.net"}
         const html = ejs.render(template, await resetPasswordEmailData(person, "jeperez@test.com", domainId));
         res.send(html);
