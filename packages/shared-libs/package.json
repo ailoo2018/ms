@@ -24,8 +24,26 @@
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
+  "exports-dev": {
+    "./logger": "./utils/logger.js",
+    "./config": "./utils/config.js",
+    "./models/rut": "./models/rut.js",
+    "./helpers/ProductImageHelper": "./helpers/ProductImageHelper.js",
+    "./helpers/LinkHelper": "./helpers/LinkHelper.js",
+    "./utils": "./utils/utils.js",
+    "./price": "./products/price.js",
+    "./ProductsService": "./services/ProductsService.js",
+    "./ProductCategoryService": "./services/ProductCategoryService.js",
+    "./SizeChartService": "./services/products/SizeChartService.js",
+    "./DiscountRuleService": "./services/DiscountRuleService.js",
+    "./CartService": "./services/CartService.js",
+    "./ShippingService": "./services/ShippingService.js",
+    "./CartRepos": "./repos/CartRepos.js",
+    "./ProductCategoryDb": "./repos/ProductCategoryDb.js"
+  },
   "exports": {
     "./logger": "./dist/utils/logger.js",
+    "./models/rut": "./dist/models/rut.js",
     "./config": "./dist/utils/config.js",
     "./helpers/ProductImageHelper": "./dist/helpers/ProductImageHelper.js",
     "./helpers/LinkHelper": "./dist/helpers/LinkHelper.js",
@@ -40,7 +58,6 @@
     "./CartRepos": "./dist/repos/CartRepos.js",
     "./ProductCategoryDb": "./dist/repos/ProductCategoryDb.js"
   },
-
   "devDependencies": {
     "tsx": "^4.21.0"
   },

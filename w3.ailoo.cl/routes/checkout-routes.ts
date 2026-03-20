@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {contactsClient} from "../services/contactsClient.js";
-import schema, {SaleOrderItem} from "../db/schema.js";
+import {contactsClient} from "../clients/contactsClient.js";
+import schema, {Party, SaleOrderItem} from "../db/schema.js";
 import {PbxRepository} from "../el/pbx.js";
 import {
     OrderItemType,
@@ -15,7 +15,9 @@ import {stockByStore} from "../db/inventory.js";
 import container from "../container/index.js";
 import * as cartHelper from "../helpers/cart-helper.js"
 import {updateCart} from "../el/cart.js";
-import {convert } from "../services/exchangeService.js";
+import {convert} from "../services/exchangeService.js";
+
+import { Rut } from "@ailoo/shared-libs/models/rut"
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -181,6 +183,49 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const domainId = parseInt(req.params.domainId);
         const currency = req.body.currency || "CLP"
 
+        let organizacion : Partial<Party> = null
+        if (rq.addresses.askForInvoice) {
+
+            var orgRut : Rut = new Rut(rq.addresses.billing.rut);
+
+            organizacion = await drizzleDb.query.party.findFirst({
+                where: (party, { eq, and }) => {
+                    return and(
+                        eq(party.rut, orgRut.format("#.###-#")),
+                        eq(party.type, "ORGANIZATION"),
+                        eq(party.domainId, domainId)
+                    )
+                },
+            })
+
+            if(!organizacion){
+
+                organizacion = {
+                    name: rq.addresses.billing.name,
+                    createDate: new Date(),
+                    domainId: domainId,
+                    email: rq.addresses.billing.email,
+                    rut: orgRut.format("#.###-#"),
+                    address: rq.addresses.billing.address,
+                    phone: rq.addresses.billing.phone,
+                    giro: rq.addresses.billing.giro,
+                    comunaId: rq.addresses.billing.comuna.id,
+                    type: "ORGANIZATION",
+                };
+
+                const [result] = await drizzleDb.insert(schema.party).values(organizacion as Party);
+
+                organizacion.id = result.insertId
+
+                try {
+                    await contactsClient.index(organizacion.id, domainId)
+                }catch(e){
+                    logger.error("Error indexing contact: " + e.message + " " + JSON.stringify(organizacion));
+                }
+            }
+        }
+
+
         const result = await drizzleDb.transaction(async (tx) => {
 
             try {
@@ -202,7 +247,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 if (person == null)
                     person = await getPartyPartial(rq.customerInformation.email, domainId);
 
-                if(person == null && rq.customerInformation.address?.nif?.length > 0)
+                if (person == null && rq.customerInformation.address?.nif?.length > 0)
                     person = await getPartyPartialByRut(rq.customerInformation.address.nif, domainId);
 
                 if (!person) {
@@ -294,9 +339,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
 
                     let countryId = null
-                    if(rq.country?.length >0){
+                    if (rq.country?.length > 0) {
                         const country = await getCountryByCode(rq.country)
-                        if(country)
+                        if (country)
                             countryId = country.id
                     }
 
@@ -334,14 +379,13 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 let exchangeRate = 1
 
 
-
-                if(currency !== "CLP" && rq.country !== "CL") {
+                if (currency !== "CLP" && rq.country !== "CL") {
                     const newRate = await convert(1, "CLP", currency)
                     const oldRate = rq.exchangeRate;
 
                     const percentChange = Math.abs(newRate - oldRate) / oldRate;
 
-                    if(percentChange > 0.10){
+                    if (percentChange > 0.10) {
                         throw new Error("Tasa de cambio sufrio un cambio mayor a 10%")
                     }
 
@@ -351,7 +395,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 const [orderResult] = await tx.insert(saleOrder).values({
                     orderDate: new Date(),
                     expectedDeliveryDate: new Date(),
-                    comment: desc || "",
+                    comment: "",
                     exchangeRate: exchangeRate,
                     currency: currency,
                     shippedToId: postalAddressId, // Points to both tables via the shared ID
@@ -360,7 +404,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     shipmentMethodTypeId: cart.shipmentMethod ? cart.shipmentMethod.id : null,
                     orderedBy: person.id,
                     destinationFacilityId: facilityId,
-                    invoicedTo: null, // todo datos de factura
+                    invoicedTo: organizacion.id, // todo datos de factura
                     domainId: domainId
                 });
 
@@ -472,11 +516,11 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
     try {
 
         const country = req.query.country || "CL"
-        const rs = { gateways: [] }
+        const rs = {gateways: []}
         if (country !== "CL") {
 
-            if(country === "ES" ||  country === "US"){
-                rs.gateways.push( {
+            if (country === "ES" || country === "US") {
+                rs.gateways.push({
                     "id": 10,
                     "driver": "paypal",
                     "description": null,
@@ -485,7 +529,7 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "order": 2
                 })
 
-            }else{
+            } else {
                 rs.gateways.push({
                     "id": 19,
                     "driver": "dlocal",
@@ -520,14 +564,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "name": "mercadopago",
                     "order": 2
                 },
-/*                {
-                    "id": 19,
-                    "driver": "dlocal",
-                    "description": null,
-                    "logo_class": "credit-cards",
-                    "name": "dlocal",
-                    "order": 3
-                }*/
+                /*                {
+                                    "id": 19,
+                                    "driver": "dlocal",
+                                    "description": null,
+                                    "logo_class": "credit-cards",
+                                    "name": "dlocal",
+                                    "order": 3
+                                }*/
             ]
         })
     } catch (e) {
@@ -643,10 +687,10 @@ function validateRequestPrice(item, rq) {
     }
 }
 
-function convertUnitPrice(price: number, currency: string, exchangeRate: number){
+function convertUnitPrice(price: number, currency: string, exchangeRate: number) {
     let unitPrice = price
-    if(currency != "CLP")
-        unitPrice = unitPrice/1.19 * exchangeRate
+    if (currency != "CLP")
+        unitPrice = unitPrice / 1.19 * exchangeRate
     return unitPrice
 }
 
@@ -660,7 +704,7 @@ function createProductSaleOrderItem(orderId, cartItem,
         productId: cartItem.product.id,            // Based on your mapping 'id' is the ProductId
         productItemId: cartItem.product.productItemId,
         quantity: cartItem.quantity.toString(), // Decimal columns expect strings in Drizzle/MySQL2
-        unitPrice: convertUnitPrice( cartItem.price, currency, exchangeRate ),
+        unitPrice: convertUnitPrice(cartItem.price, currency, exchangeRate),
         unitCurrency: currency || "CLP",           // Default as per your table schema
         type: OrderItemType.Product,
         orderItemId: orderItemId ? orderItemId : null,
@@ -747,7 +791,7 @@ async function getPartyPartial(email, domainId) {
     return result ?? null;
 }
 
-async function getCountryByCode(code: string){
+async function getCountryByCode(code: string) {
     const [result] = await drizzleDb
         .select({
             id: geographicBoundary.id,
