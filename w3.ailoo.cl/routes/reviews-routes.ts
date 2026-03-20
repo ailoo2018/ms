@@ -18,7 +18,7 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
       offset,
     } = req.query
 
-    const rows : any = await listReviews({productId, modelId, rating, orderBy, orderDir, limit, offset}, domainId)
+    const { rows, total } : any = await listReviews({productId, modelId, rating, orderBy, orderDir, limit, offset}, domainId)
 
      var pids = rows.map(r => r.ProductId);
     const productService = container.resolve('productsService');
@@ -31,6 +31,9 @@ router.get("/:domainId/reviews/list", async (req, res, next) => {
 
 
     res.json({
+      total: total,
+      offset: offset,
+      limit: limit,
       "reviews": rows.map(r => {
 
 

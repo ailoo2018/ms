@@ -1,4 +1,5 @@
 import {pool} from "../connections/mysql.js";
+import {RowDataPacket} from "mysql2";
 
 
 export const partyPendingReviews = async function (partyId, domainId) {
@@ -94,7 +95,9 @@ order by r.Id desc;
 }
 
 
-export const listReviews = async function (rq, domainId) {
+
+
+export const listReviews = async function (rq, domainId)  : Promise<any> {
   const connection = await pool.getConnection();
 
   try {
@@ -125,7 +128,7 @@ export const listReviews = async function (rq, domainId) {
     const sortDir = rq.orderDir?.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
 
     const sql = `
-      SELECT r.Id, r.ProductId, r.ProductItemId, r.Comments as Comment, r.Rating, r.Date, r.Likes, r.Dislikes,
+      SELECT SQL_CALC_FOUND_ROWS r.Id, r.ProductId, r.ProductItemId, r.Comments as Comment, r.Rating, r.Date, r.Likes, r.Dislikes,
              m.id as ModelId, m.name as ModelName, u.Id as UserId, u.Username, r.Model as Config,
              pty.Id as PartyId, pty.Name as PartyName
       FROM Review as r
@@ -143,8 +146,13 @@ export const listReviews = async function (rq, domainId) {
       ORDER BY ${sortColumn} ${sortDir}
       LIMIT ${offset}, ${limit}`;
 
-    const [rows] = await connection.execute(sql, [domainId, productId, modelId]);
-    return rows;
+    const [rows] = await connection.execute(sql, [domainId, productId, modelId]) ;
+
+    const [countResult] = await connection.execute("SELECT FOUND_ROWS() as total");
+    const total = countResult[0].total;
+
+
+    return {  rows, total };
 
   } catch (error) {
     console.error("Database Error:", error);
@@ -180,6 +188,7 @@ where r.DomainId = ?
 group by  RatingGroup;`;
 
     const [rows] = await connection.execute(sql, [domainId, productId, modelId]);
+
     return rows;
 
   } catch (error) {
