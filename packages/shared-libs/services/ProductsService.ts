@@ -52,7 +52,7 @@ export default class ProductsService {
       const response = await this.elClient.get({
         index: getIndexName(domainId),
         id: productId,
-        _source_excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath']
+        _source_excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath', 'productItems.sword', 'productItems.description']
       });
       return response._source;
     } catch (err: any) {
@@ -88,7 +88,7 @@ export default class ProductsService {
         }
       },
       _source: {
-        excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath', 'categories']
+        excludes: ['sword', 'properties', 'departments', 'tags2', 'categoryPath', 'categories', 'productItems.sword', 'productItems.description']
       }
     });
 

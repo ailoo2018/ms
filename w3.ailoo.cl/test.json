@@ -1,222 +1,1283 @@
 {
-  "wuid": "bcef2295-b57e-41c2-887e-2af9bd19518f",
-  "country": "CL",
-  "total": 5740.336134453782,
-  "currency": "CLP",
-  "clp": {
-    "total": 840.3361344537816,
-    "shipping": 4900
+  "totalReviews": 0,
+  "discounts": [],
+  "videos": [],
+  "motorbikeVersion": [],
+  "id": 3212224,
+  "directCategories": [
+    42755
+  ],
+  "directCategoryisAvailableForInternet": true,
+  "name": "Fluid Haul - Azul/Blanco",
+  "brand": {
+    "linkName": "Alpinestars",
+    "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
+    "id": 130,
+    "name": "Alpinestars",
+    "showNameInWeb": true,
+    "featured": true,
+    "isAvailableForInternet": true
   },
-  "exhangeRate": 1,
-  "coupon": null,
-  "addresses": {
-    "selectedShipping": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "DNI",
-      "nif": "15.320.300-8",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": "Depto 10",
-      "state": "Buenos Aires",
-      "city": "Buenos Aires",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postalCode": "900090",
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "shipping": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "DNI",
-      "nif": "15.320.300-8",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": "Depto 10",
-      "state": "Buenos Aires",
-      "city": "Buenos Aires",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postalCode": "900090",
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "billing": {}
-  },
-  "customerInformation": {
-    "phone": "977741303",
-    "email": "jcfuentes@lava.cl",
-    "address": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "DNI",
-      "nif": "15.320.300-8",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": "Depto 10",
-      "state": "Buenos Aires",
-      "city": "Buenos Aires",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postalCode": "900090",
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    }
-  },
-  "shipmentInformation": {
-    "method": 2,
-    "shipmentMethod": {
-      "id": 13,
-      "price": 4900,
-      "oldPrice": 4900,
-      "preparationDays": {
-        "from": 3,
-        "to": 4
-      },
-      "estimatedDays": 2,
-      "eta": {
-        "from": "2026-03-16T13:26:08.948Z",
-        "to": "2026-03-17T13:26:08.948Z"
-      },
-      "type": 2
-    },
-    "address": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "DNI",
-      "nif": "15.320.300-8",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": "Depto 10",
-      "state": "Buenos Aires",
-      "city": "Buenos Aires",
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES",
-        "region": "XIII Metropolitana",
-        "geocoding": null,
-        "lat": -33.4079424,
-        "lng": -70.5451063,
-        "parent": {
-          "id": 15,
-          "name": "XIII Metropolitana",
-          "type": "COMUNA"
-        }
-      },
-      "postalCode": "900090",
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "store": {
-      "id": 1,
-      "title": "LAS TRANQUERAS (LAS CONDES)",
-      "name": "LAS TRANQUERAS",
-      "address": "LAS TRANQUERAS 56",
-      "latitude": -33400898749676830,
-      "longitude": -7055551688038699,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      }
-    },
-    "pickupOption": "pickup_in_2_hours",
-    "modifiedDate": "2026-03-11T13:42:03.811Z",
-    "carrierId": 13,
-    "comments": "",
-    "remarks": ""
-  },
-  "createAccount": false,
-  "subscribe": true,
-  "notifyWhatsApp": true,
-  "selectedCarrier": 13,
-  "paymentMethod": {
-    "gateway": 8
-  },
-  "pickupStore": {
-    "id": 1,
-    "title": "LAS TRANQUERAS (LAS CONDES)",
-    "name": "LAS TRANQUERAS",
-    "address": "LAS TRANQUERAS 56",
-    "latitude": -33400898749676830,
-    "longitude": -7055551688038699,
-    "comuna": {
-      "id": 316,
-      "name": "LAS CONDES"
-    }
-  },
-  "selectedMapData": {
-    "store_id": 1
-  },
-  "items": [
+  "tags": [
     {
-      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-      "product": {
-        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-        "productItemId": 503290,
-        "name": "XENA test webpay Tamaño Unico",
-        "type": 0,
-        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
-      },
-      "quantity": 100,
-      "color": null,
-      "oldPrice": 10,
-      "description": "test webpay",
-      "discount": 0,
-      "type": 0,
-      "packId": 0,
-      "size": {
-        "id": 8,
-        "name": "Tamaño Unico",
-        "orderWeight": 0,
-        "type": 0
-      },
-      "price": 10,
-      "name": "XENA test webpay Tamaño Unico",
-      "id": "6a4f999c-332b-4b21-be8f-d15a1755596c",
-      "loading": false
+      "categoryId": 746,
+      "categoryName": "Estilo Piloto",
+      "categoryOrderWeight": 0,
+      "id": 13672,
+      "name": "Motocross / Enduro",
+      "type": "attribute",
+      "useInFilter": true,
+      "filter": "13672|Motocross / Enduro|True|attribute|0|Estilo Piloto"
     }
   ],
-  "mercadoPagoPaymentData": null
+  "maxPrice": 159800,
+  "minPrice": 159800,
+  "unitsSold": 0,
+  "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
+  "rating": 0,
+  "availableInStore": false,
+  "hasDiscount": false,
+  "isNew": false,
+  "isReserved": false,
+  "model": {
+    "id": 10489,
+    "name": "Fluid"
+  },
+  "fullName": "Alpinestars Fluid Haul - Azul/Blanco",
+  "linkName": "3212224-conjuntos-alpinestars-fluid-haul---azul-blanco",
+  "createDate": "2025-03-07T10:16:30",
+  "modifiedDate": "2025-03-07T10:16:30",
+  "domainId": 1,
+  "tireSpecs": [],
+  "motorcycles": [],
+  "isAvailableForInternet": true,
+  "universalQuantity": 1,
+  "discountAmount": 0,
+  "priceComponents": [
+    {
+      "isCalculated": false,
+      "id": 9933246,
+      "brandId": 0,
+      "categoryId": 0,
+      "country": "CL",
+      "fromQuantity": 0,
+      "thruQuantity": 0,
+      "tagId": 0,
+      "typeId": 0,
+      "saleTypeId": 0,
+      "productId": 3212224,
+      "productItemId": 0,
+      "amount": 159800,
+      "percent": 0,
+      "currency": "CLP",
+      "packId": 0,
+      "type": 0,
+      "price": {
+        "amount": 159800,
+        "unit": "CLP"
+      },
+      "isDiscount": false,
+      "ruleId": 0,
+      "isBasePrice": true
+    }
+  ],
+  "salesTaxes": [
+    {
+      "id": 7495341,
+      "name": "I.V.A. 19%",
+      "percentage": 19,
+      "code": 14
+    }
+  ],
+  "mercadoLibre": {},
+  "orderWeight": 0,
+  "googleProductCategory": 0,
+  "inventoryControl": 0,
+  "isTaxExempt": false,
+  "requiresLot": false,
+  "discountPercent": 0,
+  "preOrder": false,
+  "code": "",
+  "quantityInStock": 0,
+  "features": [
+    {
+      "id": 8,
+      "name": "Tamaño Unico",
+      "orderWeight": 0,
+      "type": 0
+    }
+  ],
+  "productItems": [
+    {
+      "codes": "",
+      "id": 3717453,
+      "barcode1": "",
+      "barcode2": "",
+      "colorId": 0,
+      "sizeId": 8,
+      "productId": 3212224,
+      "price": {
+        "price": 159800,
+        "oldPrice": 159800,
+        "discount": 0
+      }
+    }
+  ],
+  "availableSizes": [],
+  "images": [
+    {
+      "id": 1926803,
+      "image": "92c24aa85ae742ee9a2e9ec3ee9f6555.jpg",
+      "orderWeight": 0,
+      "colorId": 0,
+      "colorTagsIds": []
+    },
+    {
+      "id": 1926804,
+      "image": "52e341631e91491799095581818e8db0.jpg",
+      "orderWeight": 1,
+      "colorId": 0,
+      "colorTagsIds": []
+    }
+  ],
+  "parentCategories": [
+    {
+      "id": 42755,
+      "name": "Conjuntos",
+      "isDirectCategory": true
+    }
+  ],
+  "categories": [
+    {
+      "id": 42755,
+      "name": "Conjuntos",
+      "isDirectCategory": true
+    },
+    {
+      "id": 67,
+      "name": "Ropa MX",
+      "isDirectCategory": false
+    },
+    {
+      "id": 82141,
+      "name": "Motocicleta",
+      "isDirectCategory": false
+    }
+  ],
+  "summary": "",
+  "hasColor": false,
+  "hasSize": true,
+  "isSimpleProduct": true,
+  "requiresFeaturedSelect": true,
+  "productType": 1,
+  "motoOrderWeight": 0,
+  "description": "<div><font face=\"Verdana\" size=\"2\"><b>Alpinestars Fluid Haul</b></font></div><div><font face=\"Verdana\" size=\"2\"><br></font></div><font face=\"Verdana\" size=\"2\">Conjunto Jersey + Pantalón&nbsp;</font>",
+  "type": 1,
+  "composite": [
+    {
+      "product": {
+        "totalReviews": 0,
+        "discounts": [],
+        "videos": [],
+        "motorbikeVersion": [],
+        "id": 2992941,
+        "directCategories": [
+          72
+        ],
+        "directCategoryisAvailableForInternet": true,
+        "name": "Jersey Fluid Haul",
+        "brand": {
+          "linkName": "Alpinestars",
+          "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
+          "id": 130,
+          "name": "Alpinestars",
+          "showNameInWeb": true,
+          "featured": true,
+          "isAvailableForInternet": true
+        },
+        "tags": [
+          {
+            "categoryId": 746,
+            "categoryName": "Estilo Piloto",
+            "categoryOrderWeight": 0,
+            "id": 13672,
+            "name": "Motocross / Enduro",
+            "type": "attribute",
+            "useInFilter": true,
+            "filter": "13672|Motocross / Enduro|True|attribute|0|Estilo Piloto"
+          }
+        ],
+        "maxPrice": 39900,
+        "minPrice": 39900,
+        "unitsSold": 4,
+        "image": "420a4d792c324303b2ad61b5d22b3237.jpg",
+        "rating": 0,
+        "availableInStore": true,
+        "hasDiscount": false,
+        "isNew": false,
+        "isReserved": false,
+        "model": {
+          "id": 10489,
+          "name": "Fluid"
+        },
+        "fullName": "Alpinestars Jersey Fluid Haul",
+        "linkName": "2992941-jerseys-alpinestars-jersey-fluid-haul",
+        "createDate": "2024-10-18T11:47:32",
+        "modifiedDate": "2025-04-19T22:30:35",
+        "domainId": 1,
+        "tireSpecs": [],
+        "motorcycles": [],
+        "isAvailableForInternet": true,
+        "universalQuantity": 17,
+        "discountAmount": 0,
+        "priceComponents": [
+          {
+            "isCalculated": false,
+            "id": 10002961,
+            "brandId": 0,
+            "categoryId": 0,
+            "country": "CL",
+            "fromQuantity": 0,
+            "thruQuantity": 0,
+            "tagId": 0,
+            "typeId": 0,
+            "saleTypeId": 0,
+            "productId": 2992941,
+            "productItemId": 0,
+            "amount": 39900,
+            "percent": 0,
+            "currency": "CLP",
+            "packId": 0,
+            "type": 0,
+            "price": {
+              "amount": 39900,
+              "unit": "CLP"
+            },
+            "isDiscount": false,
+            "ruleId": 0,
+            "isBasePrice": true
+          }
+        ],
+        "salesTaxes": [
+          {
+            "id": 7542458,
+            "name": "I.V.A. 19%",
+            "percentage": 19,
+            "code": 14
+          }
+        ],
+        "mercadoLibre": {},
+        "orderWeight": 0,
+        "googleProductCategory": 0,
+        "inventoryControl": 0,
+        "isTaxExempt": false,
+        "requiresLot": false,
+        "discountPercent": 0,
+        "preOrder": false,
+        "code": "3760525",
+        "quantityInStock": 14,
+        "features": [
+          {
+            "id": 985,
+            "name": "S",
+            "orderWeight": 40,
+            "type": 0
+          },
+          {
+            "id": 986,
+            "name": "M",
+            "orderWeight": 50,
+            "type": 0
+          },
+          {
+            "id": 987,
+            "name": "L",
+            "orderWeight": 80,
+            "type": 0
+          },
+          {
+            "id": 988,
+            "name": "XL",
+            "orderWeight": 90,
+            "type": 0
+          },
+          {
+            "id": 992,
+            "name": "2XL",
+            "orderWeight": 100,
+            "type": 0
+          },
+          {
+            "id": 42,
+            "name": "Azul/Blanco",
+            "orderWeight": 0,
+            "type": 1
+          },
+          {
+            "id": 41,
+            "name": "Negro/Blanco",
+            "orderWeight": 0,
+            "type": 1
+          },
+          {
+            "id": 166050,
+            "name": "Rojo Brillante/ Negro",
+            "orderWeight": 0,
+            "type": 1
+          }
+        ],
+        "productItems": [
+          {
+            "codes": "8059347431918",
+            "id": 3439757,
+            "barcode1": "8059347431918",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 985,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431765",
+            "id": 3439758,
+            "barcode1": "8059347431765",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 985,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431819",
+            "id": 3439759,
+            "barcode1": "8059347431819",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 985,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431925",
+            "id": 3439760,
+            "barcode1": "8059347431925",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 986,
+            "productId": 2992941,
+            "quantityInStock": 4
+          },
+          {
+            "codes": "8059347431772",
+            "id": 3439761,
+            "barcode1": "8059347431772",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 986,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431826",
+            "id": 3439762,
+            "barcode1": "8059347431826",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 986,
+            "productId": 2992941,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347431932",
+            "id": 3439763,
+            "barcode1": "8059347431932",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 987,
+            "productId": 2992941,
+            "quantityInStock": 2
+          },
+          {
+            "codes": "8059347431789",
+            "id": 3439764,
+            "barcode1": "8059347431789",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 987,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431833",
+            "id": 3439765,
+            "barcode1": "8059347431833",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 987,
+            "productId": 2992941,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347431949",
+            "id": 3439766,
+            "barcode1": "8059347431949",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 988,
+            "productId": 2992941,
+            "quantityInStock": 5
+          },
+          {
+            "codes": "8059347431796",
+            "id": 3439767,
+            "barcode1": "8059347431796",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 988,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431840",
+            "id": 3439768,
+            "barcode1": "8059347431840",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 988,
+            "productId": 2992941,
+            "quantityInStock": 3
+          },
+          {
+            "codes": "8059347431956",
+            "id": 3439769,
+            "barcode1": "8059347431956",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 992,
+            "productId": 2992941,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347431802",
+            "id": 3439770,
+            "barcode1": "8059347431802",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 992,
+            "productId": 2992941,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431857",
+            "id": 3439771,
+            "barcode1": "8059347431857",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 992,
+            "productId": 2992941,
+            "quantityInStock": 0
+          }
+        ],
+        "availableSizes": [
+          {
+            "id": "2XL",
+            "name": "2XL",
+            "orderWeight": 100,
+            "key": "2XL|100"
+          },
+          {
+            "id": "L",
+            "name": "L",
+            "orderWeight": 80,
+            "key": "L|80"
+          },
+          {
+            "id": "M",
+            "name": "M",
+            "orderWeight": 50,
+            "key": "M|50"
+          },
+          {
+            "id": "XL",
+            "name": "XL",
+            "orderWeight": 90,
+            "key": "XL|90"
+          }
+        ],
+        "images": [
+          {
+            "id": 1955625,
+            "image": "420a4d792c324303b2ad61b5d22b3237.jpg",
+            "orderWeight": 0,
+            "colorName": "Negro/Blanco",
+            "colorId": 41,
+            "colorTagsIds": [
+              3,
+              1,
+              4
+            ]
+          },
+          {
+            "id": 1955626,
+            "image": "48a383f6076f40c4beb66b6c5f81b58b.jpg",
+            "orderWeight": 1,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955627,
+            "image": "d5fec754788449f9a41620eaa6c5cd19.jpg",
+            "orderWeight": 2,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955628,
+            "image": "d933109b939f4cac9368033759d4386a.jpg",
+            "orderWeight": 3,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955629,
+            "image": "f8a22892b53a4277af6eb1af1c2a080b.jpg",
+            "orderWeight": 4,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955630,
+            "image": "1995a44a81f1413487f30beddbe40a22.jpg",
+            "orderWeight": 5,
+            "colorName": "Azul/Blanco",
+            "colorId": 42,
+            "colorTagsIds": [
+              6,
+              3
+            ]
+          },
+          {
+            "id": 1955631,
+            "image": "ac6170a5b85d495cb02b37ea002dcace.jpg",
+            "orderWeight": 6,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955632,
+            "image": "182216f165584e87ad2890ad42c684c5.jpg",
+            "orderWeight": 7,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955633,
+            "image": "f2347d83239042f6b0f93c233a56fa11.jpg",
+            "orderWeight": 8,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955634,
+            "image": "805f5fb904704c9a96b299ec4c64da77.jpg",
+            "orderWeight": 9,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955635,
+            "image": "5f846e19df7f42d7a054b5d34c6f1a4d.jpg",
+            "orderWeight": 10,
+            "colorName": "Rojo Brillante/ Negro",
+            "colorId": 166050,
+            "colorTagsIds": [
+              3,
+              1,
+              4
+            ]
+          },
+          {
+            "id": 1955636,
+            "image": "1950c6534382434ca8356afa84ccea08.jpg",
+            "orderWeight": 11,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955637,
+            "image": "59fd80b26d9d4ff7ae0e1bf438d3ae7d.jpg",
+            "orderWeight": 12,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955638,
+            "image": "d9dcfb6009c24e19bdd7f41a6fa8b177.jpg",
+            "orderWeight": 13,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1955639,
+            "image": "92fb552432144d5882b470fe43e431eb.jpg",
+            "orderWeight": 14,
+            "colorId": 0,
+            "colorTagsIds": []
+          }
+        ],
+        "parentCategories": [
+          {
+            "id": 72,
+            "name": "Jerseys",
+            "isDirectCategory": true
+          }
+        ],
+        "summary": "",
+        "hasColor": true,
+        "hasSize": true,
+        "isSimpleProduct": false,
+        "requiresFeaturedSelect": false,
+        "productType": 0,
+        "motoOrderWeight": 0
+      },
+      "colors": [
+        {
+          "id": 42,
+          "name": "Azul/Blanco",
+          "orderWeight": 0,
+          "type": 1
+        }
+      ],
+      "sizes": [
+        {
+          "id": 985,
+          "name": "S",
+          "orderWeight": 40,
+          "type": 0
+        },
+        {
+          "id": 986,
+          "name": "M",
+          "orderWeight": 50,
+          "type": 0
+        },
+        {
+          "id": 987,
+          "name": "L",
+          "orderWeight": 80,
+          "type": 0
+        },
+        {
+          "id": 988,
+          "name": "XL",
+          "orderWeight": 90,
+          "type": 0
+        },
+        {
+          "id": 992,
+          "name": "2XL",
+          "orderWeight": 100,
+          "type": 0
+        }
+      ]
+    },
+    {
+      "product": {
+        "totalReviews": 0,
+        "discounts": [],
+        "videos": [],
+        "motorbikeVersion": [],
+        "id": 2992944,
+        "directCategories": [
+          71
+        ],
+        "directCategoryisAvailableForInternet": true,
+        "name": "Pantalón Fluid Haul",
+        "brand": {
+          "linkName": "Alpinestars",
+          "logo": "3a8ae3f6d9374c0a8195d973dbf6d369.jpg",
+          "id": 130,
+          "name": "Alpinestars",
+          "showNameInWeb": true,
+          "featured": true,
+          "isAvailableForInternet": true
+        },
+        "tags": [
+          {
+            "categoryId": 746,
+            "categoryName": "Estilo Piloto",
+            "categoryOrderWeight": 0,
+            "id": 13672,
+            "name": "Motocross / Enduro",
+            "type": "attribute",
+            "useInFilter": true,
+            "filter": "13672|Motocross / Enduro|True|attribute|0|Estilo Piloto"
+          }
+        ],
+        "maxPrice": 119900,
+        "minPrice": 119900,
+        "unitsSold": 1,
+        "image": "eda4783fbbae44f8952cfd956a222a98.jpg",
+        "rating": 0,
+        "availableInStore": true,
+        "hasDiscount": false,
+        "isNew": false,
+        "isReserved": false,
+        "model": {
+          "id": 10489,
+          "name": "Fluid"
+        },
+        "fullName": "Alpinestars Pantalón Fluid Haul",
+        "linkName": "2992944-pantalones-mx-alpinestars-pantalon-fluid-haul",
+        "createDate": "2024-10-18T11:53:27",
+        "modifiedDate": "2024-10-18T11:53:27",
+        "domainId": 1,
+        "tireSpecs": [],
+        "motorcycles": [],
+        "isAvailableForInternet": true,
+        "universalQuantity": 23,
+        "discountAmount": 0,
+        "priceComponents": [
+          {
+            "isCalculated": false,
+            "id": 9151437,
+            "brandId": 0,
+            "categoryId": 0,
+            "country": "CL",
+            "fromQuantity": 0,
+            "thruQuantity": 0,
+            "tagId": 0,
+            "typeId": 0,
+            "saleTypeId": 0,
+            "productId": 2992944,
+            "productItemId": 0,
+            "amount": 119900,
+            "percent": 0,
+            "currency": "CLP",
+            "packId": 0,
+            "type": 0,
+            "price": {
+              "amount": 119900,
+              "unit": "CLP"
+            },
+            "isDiscount": false,
+            "ruleId": 0,
+            "isBasePrice": true
+          }
+        ],
+        "salesTaxes": [
+          {
+            "id": 6811087,
+            "name": "I.V.A. 19%",
+            "percentage": 19,
+            "code": 14
+          }
+        ],
+        "mercadoLibre": {},
+        "orderWeight": 0,
+        "googleProductCategory": 0,
+        "inventoryControl": 0,
+        "isTaxExempt": false,
+        "requiresLot": false,
+        "discountPercent": 0,
+        "preOrder": false,
+        "code": "3720525",
+        "quantityInStock": 16,
+        "features": [
+          {
+            "id": 123488,
+            "name": "28",
+            "orderWeight": 28,
+            "type": 0
+          },
+          {
+            "id": 396,
+            "name": "30",
+            "orderWeight": 30,
+            "type": 0
+          },
+          {
+            "id": 397,
+            "name": "32",
+            "orderWeight": 32,
+            "type": 0
+          },
+          {
+            "id": 398,
+            "name": "34",
+            "orderWeight": 34,
+            "type": 0
+          },
+          {
+            "id": 399,
+            "name": "36",
+            "orderWeight": 36,
+            "type": 0
+          },
+          {
+            "id": 400,
+            "name": "38",
+            "orderWeight": 38,
+            "type": 0
+          },
+          {
+            "id": 70264,
+            "name": "40",
+            "orderWeight": 40,
+            "type": 0
+          },
+          {
+            "id": 42,
+            "name": "Azul/Blanco",
+            "orderWeight": 0,
+            "type": 1
+          },
+          {
+            "id": 41,
+            "name": "Negro/Blanco",
+            "orderWeight": 0,
+            "type": 1
+          },
+          {
+            "id": 166050,
+            "name": "Rojo Brillante/ Negro",
+            "orderWeight": 0,
+            "type": 1
+          }
+        ],
+        "productItems": [
+          {
+            "codes": "",
+            "id": 3439774,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 123488,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430782",
+            "id": 3439775,
+            "barcode1": "8059347430782",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 123488,
+            "productId": 2992944,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "",
+            "id": 3439776,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 123488,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "",
+            "id": 3439777,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 396,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430799",
+            "id": 3439778,
+            "barcode1": "8059347430799",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 396,
+            "productId": 2992944,
+            "quantityInStock": 3
+          },
+          {
+            "codes": "8059347430867",
+            "id": 3439779,
+            "barcode1": "8059347430867",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 396,
+            "productId": 2992944,
+            "quantityInStock": 8
+          },
+          {
+            "codes": "8059347431017",
+            "id": 3439780,
+            "barcode1": "8059347431017",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 397,
+            "productId": 2992944,
+            "quantityInStock": 3
+          },
+          {
+            "codes": "8059347430805",
+            "id": 3439781,
+            "barcode1": "8059347430805",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 397,
+            "productId": 2992944,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347430874",
+            "id": 3439782,
+            "barcode1": "8059347430874",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 397,
+            "productId": 2992944,
+            "quantityInStock": 2
+          },
+          {
+            "codes": "8059347431024",
+            "id": 3439783,
+            "barcode1": "8059347431024",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 398,
+            "productId": 2992944,
+            "quantityInStock": 2
+          },
+          {
+            "codes": "8059347430812",
+            "id": 3439784,
+            "barcode1": "8059347430812",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 398,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430881",
+            "id": 3439785,
+            "barcode1": "8059347430881",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 398,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347431031",
+            "id": 3439786,
+            "barcode1": "8059347431031",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 399,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430829",
+            "id": 3439787,
+            "barcode1": "8059347430829",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 399,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430898",
+            "id": 3439788,
+            "barcode1": "8059347430898",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 399,
+            "productId": 2992944,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347431048",
+            "id": 3439789,
+            "barcode1": "8059347431048",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 400,
+            "productId": 2992944,
+            "quantityInStock": 1
+          },
+          {
+            "codes": "8059347430836",
+            "id": 3439790,
+            "barcode1": "8059347430836",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 400,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "",
+            "id": 3439791,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 400,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "",
+            "id": 3439792,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 42,
+            "sizeId": 70264,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8059347430843",
+            "id": 3439793,
+            "barcode1": "8059347430843",
+            "barcode2": "",
+            "colorId": 41,
+            "sizeId": 70264,
+            "productId": 2992944,
+            "quantityInStock": 0
+          },
+          {
+            "codes": "",
+            "id": 3439794,
+            "barcode1": "",
+            "barcode2": "",
+            "colorId": 166050,
+            "sizeId": 70264,
+            "productId": 2992944,
+            "quantityInStock": 0
+          }
+        ],
+        "availableSizes": [
+          {
+            "id": "28",
+            "name": "28",
+            "orderWeight": 28,
+            "key": "28|28"
+          },
+          {
+            "id": "30",
+            "name": "30",
+            "orderWeight": 30,
+            "key": "30|30"
+          },
+          {
+            "id": "32",
+            "name": "32",
+            "orderWeight": 32,
+            "key": "32|32"
+          },
+          {
+            "id": "34",
+            "name": "34",
+            "orderWeight": 34,
+            "key": "34|34"
+          },
+          {
+            "id": "36",
+            "name": "36",
+            "orderWeight": 36,
+            "key": "36|36"
+          },
+          {
+            "id": "38",
+            "name": "38",
+            "orderWeight": 38,
+            "key": "38|38"
+          }
+        ],
+        "images": [
+          {
+            "id": 1816301,
+            "image": "eda4783fbbae44f8952cfd956a222a98.jpg",
+            "orderWeight": 0,
+            "colorName": "Negro/Blanco",
+            "colorId": 41,
+            "colorTagsIds": [
+              3,
+              1,
+              4
+            ]
+          },
+          {
+            "id": 1816302,
+            "image": "4b6f3a7425f84a589dfc8a8259fa3353.jpg",
+            "orderWeight": 1,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816303,
+            "image": "a821963bb86b426fb0a529bdf960eb77.jpg",
+            "orderWeight": 2,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816304,
+            "image": "4bbce23d4db24ea9ac45068595d5f08a.jpg",
+            "orderWeight": 3,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816305,
+            "image": "502e25e13d5b4e7f8200da66c54fa8a5.jpg",
+            "orderWeight": 4,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816306,
+            "image": "8ffeab4803e940a98e56bd627d70a22c.jpg",
+            "orderWeight": 5,
+            "colorName": "Rojo Brillante/ Negro",
+            "colorId": 166050,
+            "colorTagsIds": [
+              1,
+              4
+            ]
+          },
+          {
+            "id": 1816307,
+            "image": "eaab6fc1163548eebdd303161e4a1a42.jpg",
+            "orderWeight": 6,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816308,
+            "image": "10d6b22f9a2a4c22877cdb9d578ae16b.jpg",
+            "orderWeight": 7,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816309,
+            "image": "39369ffeab964fbf9ec122d4dc4b0088.jpg",
+            "orderWeight": 8,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816310,
+            "image": "1e19e765b2d64debadc9e72cb615b347.jpg",
+            "orderWeight": 9,
+            "colorName": "Azul/Blanco",
+            "colorId": 42,
+            "colorTagsIds": [
+              6,
+              3
+            ]
+          },
+          {
+            "id": 1816311,
+            "image": "0a6a5564258343e6a79b4a0505b87eca.jpg",
+            "orderWeight": 10,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816312,
+            "image": "58aad93a35684cd680c09ebf9133db2e.jpg",
+            "orderWeight": 11,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816313,
+            "image": "5b4ae72c5cbe4bdca2f6d7a7249ff5fe.jpg",
+            "orderWeight": 12,
+            "colorId": 0,
+            "colorTagsIds": []
+          },
+          {
+            "id": 1816314,
+            "image": "f486b91fc51144b3a1d6499c854c05d8.jpg",
+            "orderWeight": 13,
+            "colorId": 0,
+            "colorTagsIds": []
+          }
+        ],
+        "parentCategories": [
+          {
+            "id": 71,
+            "name": "Pantalones MX",
+            "isDirectCategory": true
+          }
+        ],
+        "summary": "",
+        "hasColor": true,
+        "hasSize": true,
+        "isSimpleProduct": false,
+        "requiresFeaturedSelect": false,
+        "productType": 0,
+        "motoOrderWeight": 0
+      },
+      "colors": [
+        {
+          "id": 42,
+          "name": "Azul/Blanco",
+          "orderWeight": 0,
+          "type": 1
+        }
+      ],
+      "sizes": [
+        {
+          "id": 123488,
+          "name": "28",
+          "orderWeight": 28,
+          "type": 0
+        },
+        {
+          "id": 396,
+          "name": "30",
+          "orderWeight": 30,
+          "type": 0
+        },
+        {
+          "id": 397,
+          "name": "32",
+          "orderWeight": 32,
+          "type": 0
+        },
+        {
+          "id": 398,
+          "name": "34",
+          "orderWeight": 34,
+          "type": 0
+        },
+        {
+          "id": 399,
+          "name": "36",
+          "orderWeight": 36,
+          "type": 0
+        },
+        {
+          "id": 400,
+          "name": "38",
+          "orderWeight": 38,
+          "type": 0
+        },
+        {
+          "id": 70264,
+          "name": "40",
+          "orderWeight": 40,
+          "type": 0
+        }
+      ]
+    }
+  ],
+  "sizeChart": null,
+  "relatedBlogContent": null,
+  "origin": "db"
 }
