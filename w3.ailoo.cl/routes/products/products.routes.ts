@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import {search} from "../../el/search.js";
-import {ProductType, SaleType} from "../../models/domain.js";
+import { SaleType} from "../../models/domain.js";
 import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../../helpers/product-helper.js";
 import {getElClient, getIndexName} from "../../connections/el.js";
 import container from "../../container/index.js";
@@ -130,8 +130,10 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
       return res.status(404).json({message: "product not found"})
     }
 
+
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
     if (cachedData?.length > 0) {
+      logger.info(`find product: ${productId} origin: redis`);
       const p = JSON.parse(cachedData.toString());
       p.origin = "redis"
       return res.json(p);
@@ -172,6 +174,8 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     });
 
     p.origin = "db"
+
+    logger.info(`find product: ${productId} origin: db`);
     res.json(p);
   } catch (e) {
     logger.error("product not found: " + JSON.stringify(req.params));
