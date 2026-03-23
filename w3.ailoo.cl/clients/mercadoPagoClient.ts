@@ -22,7 +22,7 @@ export class MercadoPagoValidator implements PaymentValidator {
 
         const isApproved = paymentData.status === "approved";
 
-        return Promise.resolve({
+        const rs = {
             referenceId: "" + getReferenceId( paymentData.external_reference ),
             referenceType: getReferenceType(paymentData.external_reference),
             transactionAmount: paymentData.transaction_amount,
@@ -33,6 +33,10 @@ export class MercadoPagoValidator implements PaymentValidator {
             authorizationCode: token,
             success: isApproved,
 
-        });
+        }
+
+        console.log("MercadoPagoValidator: payment data result: " + JSON.stringify(paymentData));
+
+        return Promise.resolve(rs);
     }
 }
