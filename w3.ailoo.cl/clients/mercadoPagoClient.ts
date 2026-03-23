@@ -36,6 +36,7 @@ export class MercadoPagoValidator implements PaymentValidator {
         }
 
         console.log("MercadoPagoValidator: payment data result: " + JSON.stringify(paymentData));
+        logger.info("MercadoPagoValidator: payment data result: " + JSON.stringify(paymentData));
 
         return Promise.resolve(rs);
     }
