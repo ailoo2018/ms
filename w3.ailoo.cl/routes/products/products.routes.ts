@@ -2,7 +2,13 @@ import { Router } from "express";
 import ProductImageHelper from "@ailoo/shared-libs/helpers/ProductImageHelper";
 import {search} from "../../el/search.js";
 import { SaleType} from "../../models/domain.js";
-import {findProduct, getLink, getProductSalesRules, isApplicableSalesRule} from "../../helpers/product-helper.js";
+import {
+  findProduct,
+  getLink,
+  getProductItemDescription,
+  getProductSalesRules,
+  isApplicableSalesRule
+} from "../../helpers/product-helper.js";
 import {getElClient, getIndexName} from "../../connections/el.js";
 import container from "../../container/index.js";
 import {stockAllStores} from "../../db/inventory.js";
@@ -13,11 +19,16 @@ import {currencyHandler} from "../../server.js";
 import {productComplements} from "../../db/product.js";
 import {productCacheKey} from "../../utils/cache-utils.js";
 import { db as redisDb } from "../../connections/rdb.js";
-
+import sgMail from "../../connections/sendmail.js";
+import {fileURLToPath} from "url";
+import path from "path";
+import {promises as fs} from "fs";
+import ejs from "ejs";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 const sizeChartService = container.resolve('sizeChartService') as SizeChartService;
+const CACHE_TTL = 60 * 60 * 12;
 
 
 router.get("/:domainId/products/stock", async (req, res, next) => {
@@ -98,7 +109,6 @@ router.get("/:domainId/products/:productId/create-images", async (req, res, next
   }
 })
 
-
 router.post("/:domainId/products/list", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
@@ -116,9 +126,6 @@ router.post("/:domainId/products/list", async (req, res, next) => {
   }
 })
 
-
-
-const CACHE_TTL = 60 * 60 * 3;
 router.get("/:domainId/products/:productId", currencyHandler, async (req, res, next) => {
 
   try {
@@ -183,7 +190,6 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
   }
 })
 
-
 router.get("/:domainId/products/:productId/complements", async (req, res, next) => {
 
   try{
@@ -213,35 +219,6 @@ router.get("/:domainId/products/:productId/complements", async (req, res, next) 
     next(e)
   }
 })
-
-async function GetPackProducts(prule, domainId) {
-
-  const criteria = {
-    categories: [],
-    colors: [],
-    products: [],
-    brands: [],
-    sizes: [],
-    tags: [],
-    limit: 10,
-    offset: 0,
-  }
-
-  if (prule.brands != null)
-    criteria.brands = prule.brands.map(b => b.id);
-  if (prule.tags != null)
-    criteria.tags = prule.tags.map(t => t.id);
-  if (prule.products != null)
-    criteria.products = prule.products.map(p => p.id);
-  if (prule.categories != null)
-    criteria.categories = prule.categories.map(c => c.id);
-
-
-  const sRs = await search(criteria, domainId)
-
-  return sRs.products
-}
-
 
 router.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
@@ -361,7 +338,6 @@ router.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
 })
 
-
 router.get("/:domainId/recommend", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
@@ -458,5 +434,84 @@ router.get("/:domainId/recommend", async (req, res, next) => {
   }
 })
 
+router.post("/:domainId/products/notify-when-available", async (req, res, next) => {
+
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const rq = req.body;
+
+    if(!rq.productItemId)
+      return res.status(400).send({ message: "ProductItemId not received"})
+
+    const p = await productService.findProductByProductItem(rq.productItemId, domainId)
+    const pit = p.productItems.find(pi => pi.id === rq.productItemId)
+    const desc = getProductItemDescription(p, pit)
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const templatePath = path.join( __dirname, "../..", 'templates', 'notify-when-available.ejs');
+    // const templatePath = path.join(process.cwd(), '/templates/recover-account.ejs');
+    const template = await fs.readFile(templatePath, 'utf-8');
+
+    const html = ejs.render(template, {
+      product: p,
+      productItem: pit,
+      productName: desc,
+      size: p.features?.find(f => f.id === pit.sizeId)?.name || null,
+      color: p.features?.find(f => f.id === pit.colorId)?.name || null,
+      description: desc,
+      storeUrl: "https://www.motomundi.cl",
+      email: rq.email,
+      unsubscribeUrl: "https://www.motomundi.cl",
+    });
+
+
+    await sgMail.send({
+      to: rq.email,
+      bcc: "jcfuentes@motomundi.cl",
+      from: 'ventas@motomundi.cl', // Change to your verified sender
+      subject: `📋 Apuntado. Te avisamos cuando vuelva tu talla`,
+      html: html,
+    })
+
+
+    res.json({
+      pit,
+      desc
+    })
+
+  }catch(e){
+    next(e)
+  }
+
+})
+
+async function GetPackProducts(prule, domainId) {
+
+  const criteria = {
+    categories: [],
+    colors: [],
+    products: [],
+    brands: [],
+    sizes: [],
+    tags: [],
+    limit: 10,
+    offset: 0,
+  }
+
+  if (prule.brands != null)
+    criteria.brands = prule.brands.map(b => b.id);
+  if (prule.tags != null)
+    criteria.tags = prule.tags.map(t => t.id);
+  if (prule.products != null)
+    criteria.products = prule.products.map(p => p.id);
+  if (prule.categories != null)
+    criteria.categories = prule.categories.map(c => c.id);
+
+
+  const sRs = await search(criteria, domainId)
+
+  return sRs.products
+}
 
 export default router
