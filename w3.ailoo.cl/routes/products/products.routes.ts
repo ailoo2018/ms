@@ -127,16 +127,14 @@ router.post("/:domainId/products/list", async (req, res, next) => {
 })
 
 router.get("/:domainId/products/:productId", currencyHandler, async (req, res, next) => {
-
   try {
     const currency = req.currency || "CLP"
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
 
-    if(!productId || Number.isNaN(productId)) {
-      return res.status(404).json({message: "product not found"})
+    if (!productId || Number.isNaN(productId)) {
+      return res.status(404).json({ message: "product not found" })
     }
-
 
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
     if (cachedData?.length > 0) {
@@ -146,10 +144,11 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
       return res.json(p);
     }
 
+    const dbStart = Date.now(); // <-- start timer after cache miss
 
     const p = await findProduct(productId, domainId, currency);
-    if(!p)
-      return res.status(404).json({message: "product not found"})
+    if (!p)
+      return res.status(404).json({ message: "product not found" })
 
     try {
       const charts = await sizeChartService.findAllThatApplyToProduct(p, domainId)
@@ -157,24 +156,22 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
       if (charts && charts.length > 0) {
         p.sizeChart = charts[0]
       }
-    }catch(e){
+    } catch (e) {
       logger.error("Error trying to recover size chart. Will continue process")
     }
 
     const blogContent = await cmsClient.findBlogEntriesByProduct(p.id, domainId)
     p.relatedBlogContent = null;
-    if(blogContent?.entries?.length > 0) {
-      p.relatedBlogArticle =  {
+    if (blogContent?.entries?.length > 0) {
+      p.relatedBlogArticle = {
         id: blogContent.entries[0].id,
         title: blogContent.entries[0].title,
         createDate: blogContent.entries[0].createDate,
         previewText: blogContent.entries[0].metaDescription,
         previewImage: blogContent.entries[0].previewImage,
         friendlyUrl: blogContent.entries[0].friendlyUrl,
-
       };
     }
-
 
     await redisDb.set(productCacheKey(productId, domainId), JSON.stringify(p), {
       EX: CACHE_TTL
@@ -182,7 +179,7 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
 
     p.origin = "db"
 
-    logger.info(`find product: ${productId} origin: db`);
+    logger.info(`find product: ${productId} origin: db duration: ${Date.now() - dbStart}ms`); // <-- log delta
     res.json(p);
   } catch (e) {
     logger.error("product not found: " + JSON.stringify(req.params));
@@ -466,8 +463,9 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
     });
 
 
+    const email = rq.email;
     await sgMail.send({
-      to: rq.email,
+      to: email,
       bcc: "jcfuentes@motomundi.cl",
       from: 'ventas@motomundi.cl', // Change to your verified sender
       subject: `📋 Apuntado. Te avisamos cuando vuelva tu talla`,
