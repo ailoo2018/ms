@@ -157,6 +157,11 @@ const cmsClient = {
     if (w.name === "Seo") {
       return "Seo2"
     }
+
+    if(w.name === "Html" && w.config?.title && w.id > 123310){
+      return w.config.title
+    }
+
     if (w.name === "Html") {
       return "HtmlWidget"
     }
@@ -166,6 +171,8 @@ const cmsClient = {
 
     if(w.name === "EmbajadoresHome" || w.name === "Html_Embajadores")
       return "EmbajadoresHome"
+
+
 
 
     return "Dummy"
