@@ -27,7 +27,7 @@ router.post("/:domainId/images/sizes", async (req : any, res : any, next : any) 
         const imageId = req.body.imageId ? extractGuid(req.body.imageId) : null;
         const productId = parseInt(req.body.productId);
         const maintainAspectRatio = req.body.maintainAspectRatio || false;
-        const sizes = req.body.sizes || [150, 300, 600, 800];
+        const sizes = req.body.sizes || [50, 150, 300, 600, 800];
 
         if(productId > 0){
             const imagesIds = await productImagesIds(productId);
