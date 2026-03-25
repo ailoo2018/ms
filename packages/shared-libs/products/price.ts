@@ -199,7 +199,6 @@ const _getPriceByProductItem = async (
   price.fromQuantity = fromQty;
   price.thruQuantity = thruQty;
 
-  console.log(price.getFinalPrice().amount)
 
   return price;
 
