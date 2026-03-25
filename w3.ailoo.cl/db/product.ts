@@ -59,7 +59,7 @@ HAVING COUNT(DISTINCT f1.Type) >= COUNT(DISTINCT f2.Type);
 `, [ productId, productId, productId ]);
 
         if(rows.length > 0) {
-            return rows.map(r => r.ProductId)
+            return rows.filter(r1 => r1.ProductId > 0).map(r => r.ProductId)
         }
 
         return [];
