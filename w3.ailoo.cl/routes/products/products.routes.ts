@@ -355,6 +355,9 @@ router.get("/:domainId/recommend", async (req, res, next) => {
             }
           }
         ],
+        must_not: [
+          { term: { "id": productId } }
+        ],
         should: []
       }
     };
