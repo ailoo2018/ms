@@ -13,8 +13,29 @@ export const contactsClient = {
       }
     });
 
-    if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
-      return response.json();
+    if (!response.ok) {
+      let errorDetail = ''
+
+      try {
+        const contentType = response.headers.get('content-type') ?? ''
+
+        if (contentType.includes('application/json')) {
+          const body = await response.json()
+          // Different APIs use different fields
+          errorDetail = body.message || body.error || body.detail || JSON.stringify(body)
+        } else {
+          // Plain text or HTML error page
+          errorDetail = await response.text()
+        }
+      } catch {
+        errorDetail = '(could not parse error body)'
+      }
+
+      throw new Error(
+          `Contacts API error: ${response.status} ${response.statusText} — ${errorDetail} | url: ${url}`
+      )
+    }
+    return response.json();
   }
 
 

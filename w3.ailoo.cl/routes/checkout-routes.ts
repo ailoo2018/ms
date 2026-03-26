@@ -184,7 +184,9 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const domainId = parseInt(req.params.domainId);
         const currency = req.body.currency || "CLP"
 
+        let newPartyId = 0;
         let organizacion : Partial<Party> = null
+
         if (rq.addresses.askForInvoice) {
 
             var orgRut : Rut = new Rut(rq.addresses.billing.rut);
@@ -286,14 +288,11 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         domainId: domainId,
                     });
 
-                    person = result
-                    logger.info("Person does not exist. Creating person for email " + rq.customerInformation.email +
-                        ". The partyId is " + person.id);
-                    try {
-                        await contactsClient.index(person.id, domainId);
-                    }catch(e){
-                        logger.error("Error indexing contact: " + e.message + " " + JSON.stringify(person));
-                    }
+                    newPartyId = result.insertId
+                    person = await tx.query.party.findFirst({
+                        where: (party) => eq(party.id, newPartyId)
+                    })
+
                 } else {
 
 
@@ -515,6 +514,16 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 throw txerro;
             }
         })
+
+
+        if(newPartyId > 0) {
+            try {
+                await contactsClient.index(newPartyId, domainId);
+            } catch (e) {
+                logger.error("Error indexing contact: " + e.message );
+            }
+        }
+
 
         // logger.error("drizzleDb.transaction result: " + JSON.stringify(result))
         res.json({
