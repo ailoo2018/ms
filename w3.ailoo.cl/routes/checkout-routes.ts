@@ -289,7 +289,11 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     person = result
                     logger.info("Person does not exist. Creating person for email " + rq.customerInformation.email +
                         ". The partyId is " + person.id);
-                    await contactsClient.index(person.id, domainId);
+                    try {
+                        await contactsClient.index(person.id, domainId);
+                    }catch(e){
+                        logger.error("Error indexing contact: " + e.message + " " + JSON.stringify(person));
+                    }
                 } else {
 
 
