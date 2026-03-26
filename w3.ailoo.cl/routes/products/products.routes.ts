@@ -101,7 +101,7 @@ router.post("/:domainId/seen-cheaper", async (req, res, next) => {
     const email = rq.email;
     const rs = await sgMail.send({
       to: email,
-      bcc: "jcfuentes@motomundi.cl;edson@motomundi.cl;rcachana@motomundi.cl",
+      bcc: ["jcfuentes@motomundi.cl", "edson@motomundi.cl", "rcachana@motomundi.cl"],
       from: 'ventas@motomundi.cl', // Change to your verified sender
       subject: `🏷️ Solicitud de precio mínimo recibida — te contactamos pronto`,
       html: html,
