@@ -221,7 +221,7 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     }
 
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
-    if (cachedData?.length > 0) {
+    if (false && cachedData?.length > 0) {
       logger.info(`find product: ${productId} origin: redis`);
       const p = JSON.parse(cachedData.toString());
       p.origin = "redis"

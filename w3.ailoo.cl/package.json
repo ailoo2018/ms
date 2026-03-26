@@ -26,6 +26,7 @@
     "ejs": "^4.0.1",
     "express": "^5.2.1",
     "form-data": "^4.0.5",
+    "jsdom": "^29.0.1",
     "jsonwebtoken": "^9.0.3",
     "juice": "^11.1.0",
     "mercadopago": "^2.11.0",

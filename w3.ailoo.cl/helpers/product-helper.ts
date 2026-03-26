@@ -2,6 +2,7 @@ import {productDescription} from "../db/product.js";
 import categoryTreeService from "../services/categoryTreeService.js";
 import  {ProductFeatureType, ProductType} from "../models/domain.js";
 import container from "../container/index.js";
+import {stripInlineStyles} from "../utils/formatters.js";
 
 const baseUrl = process.env.PRODUCTS_MS_URL
 
@@ -165,6 +166,7 @@ export async function findProduct(productId, domainId, currency = "CLP") {
   if(!p)
     return null
   p.description = await productDescription(productId);
+  p.description = stripInlineStyles(p.description);
 
   p.type = p.productType
   if (p.productType === ProductType.Composite) {
