@@ -251,6 +251,8 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 if (person == null && rq.customerInformation.address?.nif?.length > 0)
                     person = await getPartyPartialByRut(rq.customerInformation.address.nif, domainId);
 
+
+
                 if (!person) {
 
                     // try getting name and surname from customerInformation (db Party)
@@ -265,6 +267,10 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         name = fname?.trim() + " " + lname?.trim()
                     }
 
+                    let rut = rq.customerInformation?.address?.nif
+                            || rq.shipping?.nif
+                            || ''
+
 
                     const [result] = await tx.insert(party).values({
                         name: name || null,
@@ -272,7 +278,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         lastName: lname || null,
                         email: rq.customerInformation.email,
                         comuna: rq.customerInformation.address?.comuna?.name || null,
-                        rut: rq.customerInformation.address.nif || '',
+                        rut: rut,
                         phone: rq.customerInformation.phone || "",
                         createDate: new Date(),
                         type: "PERSON", // Matches your varchar(20) 'Type' column
@@ -285,10 +291,17 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         ". The partyId is " + person.id);
                     await contactsClient.index(person.id, domainId);
                 } else {
+
+
+                    let rut = person?.rut
+                        || rq.customerInformation?.address?.nif
+                        || rq.shipping?.nif
+                        || ''
+
                     // update phone
                     await tx
                         .update(party)
-                        .set({phone: rq.customerInformation.phone})
+                        .set({phone: rq.customerInformation.phone, rut: rut})
                         .where(eq(party.id, person.id));
                 }
 
