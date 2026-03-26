@@ -63,6 +63,8 @@ export const stockAllStores = async function (productItemId, domainId) {
     const [rows] = await connection.execute(
         `  select f.Id   as FacilityId,
        f.Name as FacilityName,
+       f.IsAvailableForInternet,
+       f.AllowPickup,
        ii.Id     InventoryItemId,
        ii.ProductItemId,
        sum(ifnull(ii.Quantity, 0)) as Quantity,

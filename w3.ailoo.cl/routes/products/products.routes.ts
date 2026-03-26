@@ -127,6 +127,7 @@ router.get("/:domainId/products/stock", async (req, res, next) => {
           "name": s.FacilityName,
           "address": s.Address + ", " + s.ComunaName,
           "stock": s.Quantity,
+          "allowPickup": s.AllowPickup === 1,
           "pickup": "Recogelo en 2 horas"
 
         }
