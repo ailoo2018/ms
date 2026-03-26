@@ -24,12 +24,95 @@ import {fileURLToPath} from "url";
 import path from "path";
 import {promises as fs} from "fs";
 import ejs from "ejs";
+import parametersClient from "../../services/parametersClient.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 const sizeChartService = container.resolve('sizeChartService') as SizeChartService;
 const CACHE_TTL = 60 * 60 * 12;
 
+router.post("/:domainId/seen-cheaper", async (req, res, next) => {
+  try{
+    const domainId = parseInt(req.params.domainId);
+
+    const rq = req.body;
+
+    if(!rq.productId)
+      return res.status(400).send({ message: "ProductId not received"})
+
+    const p = await productService.findProduct(rq.productId, domainId)
+    const pit = p.productItems.find(pi => pi.colorId === rq.color && pi.sizeId == rq.size)
+    const desc = getProductItemDescription(p, pit)
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const templatePath = path.join( __dirname, "../..", 'templates', 'seen-cheaper.ejs');
+    // const templatePath = path.join(process.cwd(), '/templates/recover-account.ejs');
+    const template = await fs.readFile(templatePath, 'utf-8');
+
+    const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)
+    let logo = logoParam ? logoParam.value : {};
+
+    const html = ejs.render(template, {
+      name: rq.name,       // ← add this
+      price: rq.price,     // ← add this too (used in formatMoney)
+      product: p,
+      productItem: pit,
+      productName: desc,
+      size: p.features?.find(f => f.id === pit.sizeId)?.name || null,
+      color: p.features?.find(f => f.id === pit.colorId)?.name || null,
+      url: rq.url,
+      phone: rq.phone,
+      email: rq.email,
+      unsubscribeUrl: "https://www.motomundi.cl",
+      formatHelper: {
+        toTitleCase: (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
+        formatMoney: (amount) => `$${amount.toLocaleString()}`,
+        encodeUrl: (str) => encodeURIComponent(str)
+      },
+      domain: {id: 1, name: "MotoMundi", party: {name: "MotoMundi SPA"}},
+      domainHelper: {
+        getLogo: () => logo,
+        getSiteRoot: () => 'https://www.motomundi.cl'
+      },
+
+      webSite: {
+        templateInstance: {
+          getConfigValue: key => {
+            if(key === "facebook-url"){
+              return "https://www.facebook.com/motomundi.la"
+            }
+            if(key === "instagram-url"){
+              return "https://www.instagram.com/motomundi"
+            }
+            if(key === "youtube-url"){
+              return "https://www.youtube.com/motomunditv"
+            }
+            if(key === "tiktok-url"){
+              return "https://www.tiktok.com/motomundicl"
+            }
+            return "";
+          }
+        }
+      }
+    });
+
+
+    const email = rq.email;
+    const rs = await sgMail.send({
+      to: email,
+      bcc: "jcfuentes@motomundi.cl;edson@motomundi.cl;rcachana@motomundi.cl",
+      from: 'ventas@motomundi.cl', // Change to your verified sender
+      subject: `🏷️ Solicitud de precio mínimo recibida — te contactamos pronto`,
+      html: html,
+    })
+
+    res.json(rs)
+
+  }catch(e){
+    next(e)
+  }
+})
 
 router.get("/:domainId/products/stock", async (req, res, next) => {
   try {
@@ -486,6 +569,7 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
   }
 
 })
+
 
 async function GetPackProducts(prule, domainId) {
 
