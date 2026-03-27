@@ -221,9 +221,9 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     }
 
     const cachedData = await redisDb.get(productCacheKey(productId, domainId));
-    if (false && cachedData?.length > 0) {
-      logger.info(`find product: ${productId} origin: redis`);
+    if (cachedData?.length > 0) {
       const p = JSON.parse(cachedData.toString());
+      logger.info(`find product: ${productId} ${p.name} origin: redis`);
       p.origin = "redis"
       return res.json(p);
     }
@@ -263,7 +263,7 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
 
     p.origin = "db"
 
-    logger.info(`find product: ${productId} origin: db duration: ${Date.now() - dbStart}ms`); // <-- log delta
+    logger.info(`find product: ${productId} ${p.name} origin: db duration: ${Date.now() - dbStart}ms`); // <-- log delta
     res.json(p);
   } catch (e) {
     logger.error("product not found: " + JSON.stringify(req.params));

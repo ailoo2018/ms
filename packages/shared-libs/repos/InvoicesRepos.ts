@@ -3,7 +3,7 @@ import * as console from "node:console";
 
 
 
-export class InvoicesRepos {
+export default class InvoicesRepos {
 	private productsService: any;
 	get elClient(): any {
 		return this._elClient;
