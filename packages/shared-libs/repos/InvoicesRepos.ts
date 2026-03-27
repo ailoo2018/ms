@@ -3,7 +3,7 @@ import * as console from "node:console";
 
 
 
-class InvoicesRepos {
+export class InvoicesRepos {
 	private productsService: any;
 	get elClient(): any {
 		return this._elClient;
@@ -208,4 +208,3 @@ class InvoicesRepos {
 
 }
 
-module.exports = InvoicesRepos;
