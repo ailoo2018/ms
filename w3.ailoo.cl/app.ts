@@ -51,6 +51,7 @@ app.use(profileRoutes);
 import productsSearchRoutes from "./routes/products/search.routes.js";
 app.use(productsSearchRoutes);
 
+
 import blogRoutes from "./routes/blog/blog.routes.js";
 app.use(blogRoutes);
 
@@ -66,7 +67,7 @@ import reviewRoutes from "./routes/reviews-routes.js";
 app.use(reviewRoutes);
 import contactRoutes  from "./routes/contact-routes.js";
 app.use(contactRoutes);
-import invoicesRoutes from "./routes/invoices-routes.js";
+import invoicesRoutes from "./routes/invoices/invoices.routes.js";
 app.use(invoicesRoutes);
 import paymentsRoutes from "./routes/routes.payment.confirm.js";
 app.use(paymentsRoutes);

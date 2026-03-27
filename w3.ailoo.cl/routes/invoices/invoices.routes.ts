@@ -1,9 +1,12 @@
-import {db as drizzleDb} from "../db/drizzle.js";
+import {db as drizzleDb} from "../../db/drizzle.js";
 import {and, eq, sql} from "drizzle-orm";
-import container from "../container/index.js";
-import {SaleType} from "../models/domain.js";
+import container from "../../container/index.js";
+import {SaleType} from "../../models/domain.js";
 import { Router } from "express";
-import {getFeaturesDescription, getProductImage} from "../helpers/product-helper.js";
+import {getFeaturesDescription, getProductImage} from "../../helpers/product-helper.js";
+import {validateJWT} from "../../server.js";
+
+const invoicesRepos = container.resolve("invoicesRepos");
 
 const router = Router(); // Create a router instead of using 'app'
 const productsService = container.resolve("productsService");
@@ -104,5 +107,35 @@ router.get("/:domainId/invoices/:invoiceId", async (req, res, next) => {
     next(e)
   }
 })
+
+router.post("/:domainId/invoices", validateJWT, async (req, res, next) => {
+
+  const domainId = req.params.domainId;
+  const user = req.user
+
+  try{
+
+    //      const domainId = req.user.domainId;
+    const receivedById = user.partyId;
+    const filters: any = req.body.filters;
+    filters.receivedByIds = [ receivedById ]
+    const itemsPerPage = (req.body.itemsPerPage ? req.body.itemsPerPage : 6);
+    const page = req.body.page ? req.body.page : 1;
+
+//        const rq = req.body;
+
+    var {totalCount, invoices, query} = await invoicesRepos.listSales(domainId, filters, page, itemsPerPage);
+
+    res.json({
+      totalCount: totalCount,
+      invoices: invoices,
+      query,
+    });
+
+  }catch(e){
+    next(e);
+  }
+})
+
 
 export default router;

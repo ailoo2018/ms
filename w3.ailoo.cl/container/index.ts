@@ -3,6 +3,7 @@ import {WebPayValidator} from "../clients/webPayClient.js";
 import {asClass, asValue, createContainer} from "awilix";
 import {MercadoPagoValidator} from "../clients/mercadoPagoClient.js";
 import ProductsService from "@ailoo/shared-libs/ProductsService";
+import InvoicesRepos from "@ailoo/shared-libs/InvoicesRepos";
 import {DiscountRuleService} from "@ailoo/shared-libs/DiscountRuleService";
 import {ProductCategoryService} from "@ailoo/shared-libs/ProductCategoryService";
 import {CartService} from "@ailoo/shared-libs/CartService";
@@ -34,6 +35,7 @@ container.register({
   paypalValidator: asClass(PaypalValidator).singleton(),
 
   productsService: asClass(ProductsService).singleton(),
+  invoicesRepos: asClass(InvoicesRepos).singleton(),
   productCategoryService: asClass(ProductCategoryService).singleton(),
   discountRuleService: asClass(DiscountRuleService).singleton(),
   cartService: asClass(CartService).singleton(),

@@ -1,27 +1,11 @@
-* boton de pago lento
-* combinalo con 
-* currency dropdown in mobile
-* title of page is Loading...
-* recover cart link is not working
-* validate product can have retiro en tienda ahora muestra retiro en 2 horas
-* when clicking in drawer or main menu it should close
-* cart change quantity manually
-* store pickup mail problems
-* influencers link create
-* ambassadors
-* paypal integration
-* dlocal testing
-* save and show order in other currencies
-* newletter
-* solicitar factura
+* listar invoices tambien
 
-- filter drawer mobile
+
+- product detail when i select color should show product in carrusel
+
 - account/gear
-
-
 - google merchant
 - store survey
-- show seen cheaper
 - al seleccionar pack no sale el descuento bien
 - view widget in nuxt
 - cdn dedicated in iis
