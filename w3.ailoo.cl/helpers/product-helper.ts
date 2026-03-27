@@ -3,10 +3,11 @@ import categoryTreeService from "../services/categoryTreeService.js";
 import  {ProductFeatureType, ProductType} from "../models/domain.js";
 import container from "../container/index.js";
 import {stripInlineStyles} from "../utils/formatters.js";
+import ProductsService from "@ailoo/shared-libs/ProductsService";
 
 const baseUrl = process.env.PRODUCTS_MS_URL
 
-const productService = container.resolve('productsService');
+const productService : ProductsService = container.resolve('productsService');
 container.resolve('cartService');
 
 export function getProductItemDescription(product, pit) {

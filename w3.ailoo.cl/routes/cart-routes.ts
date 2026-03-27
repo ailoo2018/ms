@@ -1,11 +1,12 @@
 import {findCart, findCartById} from "../services/cartService.js";
-import { Router } from "express";
+import {Router} from "express";
 import {v4 as uuidv4} from "uuid";
 import container from "../container/index.js";
 import {getProductImage, getProductItemDescription} from "../helpers/product-helper.js";
 import {Cart, CartItemType} from "../models/cart-models.js";
 import {addCart, findCartByWuid, updateCart} from "../el/cart.js";
 import {ProductType} from "../models/domain.js";
+
 const router = Router(); // Create a router instead of using 'app'
 
 
@@ -19,14 +20,35 @@ router.post("/:domainId/cart/set-user", async(req, res, next) => {
     const { userId, wuid } = req.body;
 
     const cart : Partial<Cart> = await findCart(wuid, domainId);
-    if(cart.userId > 0 && userId !== cart.userId)
-      throw new Error("Carro de compra ya tiene usuario");
+    if(!cart){
 
-    cart.userId = userId
+      const newCart = {
+        "id": null,
+        "wuid": wuid,
+        "notificationsCount": 0,
+        "lastNotified": "0001-01-01T00:00:00",
+        "webSiteId": 0,
+        "createDate": new Date(),
+        "modifiedDate": new Date(),
+        "currency":  "CLP",
+        "userId": 0,
+        "domainId": domainId,
+        items: []
+      };
 
-    await updateCart(cart)
+      newCart.id = await addCart(newCart);
 
-    res.json(cart)
+      res.json(newCart)
+    }else {
+      if (cart.userId > 0 && userId !== cart.userId)
+        throw new Error("Carro de compra ya tiene usuario");
+
+      cart.userId = userId
+
+      await updateCart(cart)
+
+      res.json(cart)
+    }
   }catch(e){
     next(e)
   }
