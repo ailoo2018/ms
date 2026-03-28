@@ -1,180 +1,1269 @@
 {
-  "wuid": "a12674fb-0293-4c83-8694-c846a4cdd924",
-  "country": "CL",
-  "total": 8.403361344537815,
-  "shippingCost": 0,
-  "currency": "CLP",
-  "clp": {
-    "total": 8.403361344537815,
-    "shipping": 0
-  },
-  "exchangeRate": 1,
-  "coupon": null,
-  "addresses": {
-    "selectedShipping": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "RUT",
-      "nif": "153203008",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": null,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postalCode": null,
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "shipping": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "RUT",
-      "nif": "153203008",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": null,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postalCode": null,
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "billing": {}
-  },
-  "customerInformation": {
-    "phone": "977741303",
-    "email": "jcfuentes@lava.cl",
-    "address": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "RUT",
-      "nif": "153203008",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": null,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postalCode": null,
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    }
-  },
-  "shipmentInformation": {
-    "method": 1,
-    "shipmentMethod": {
-      "id": 9,
-      "price": 0,
-      "oldPrice": 0,
-      "preparationDays": {
-        "from": 3,
-        "to": 4
-      },
-      "estimatedDays": 2,
-      "eta": {
-        "from": "2026-03-31T20:29:47.133Z",
-        "to": "2026-04-01T20:29:47.133Z"
-      },
-      "type": 1
-    },
-    "address": {
-      "countryCode": "CL",
-      "countryName": "Chile",
-      "idType": "RUT",
-      "nif": "153203008",
-      "name": "Juan",
-      "surnames": "Carlos",
-      "address": "Charles Hammilton 13731",
-      "address2": null,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
-      },
-      "postalCode": null,
-      "dialCode": "+56",
-      "phone": "977741303",
-      "comuna_id": 316
-    },
-    "store": {
+  "facilities": [
+    {
       "id": 1,
-      "title": "LAS TRANQUERAS (LAS CONDES)",
       "name": "LAS TRANQUERAS",
-      "address": "LAS TRANQUERAS 56",
-      "latitude": -33400898749676830,
-      "longitude": -7055551688038699,
-      "comuna": {
-        "id": 316,
-        "name": "LAS CONDES"
+      "code": "74505665",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 1,
+      "phone": "2666.0690 anexo 91",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "11:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 105,
+          "image": null,
+          "url": "/Content/uploads/1/aaa/4b701dfc-a9e1-4397-90df-222654b18cb5.png",
+          "facilityId": 1
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 10207,
+        "address": "LAS TRANQUERAS 56",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 316,
+        "rut": null,
+        "comment": "",
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "7561040",
+        "latitude": "-33.400898749676834",
+        "longitude": "-70.55551688038699",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3330.851525434797!2d-70.55773238480204!3d-33.40103758078807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cec686245531:0x680f69d96310d9e0!2sLas Tranqueras 56, Las Condes, Región Metropolitana!5e0!3m2!1ses!2scl!4v1613576639385!5m2!1ses!2scl",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 316,
+          "name": "LAS CONDES",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.4079424,
+          "longitude": -70.5451063
+        }
       }
     },
-    "pickupOption": "pickup_in_2_hours",
-    "modifiedDate": "2026-03-26T20:29:47.139Z",
-    "carrierId": 9,
-    "comments": "",
-    "remarks": "",
-    "cost": 0
-  },
-  "createAccount": false,
-  "subscribe": true,
-  "notifyWhatsApp": true,
-  "selectedCarrier": 9,
-  "paymentMethod": {
-    "gateway": 8
-  },
-  "pickupStore": {
-    "id": 1,
-    "title": "LAS TRANQUERAS (LAS CONDES)",
-    "name": "LAS TRANQUERAS",
-    "address": "LAS TRANQUERAS 56",
-    "latitude": -33400898749676830,
-    "longitude": -7055551688038699,
-    "comuna": {
-      "id": 316,
-      "name": "LAS CONDES"
-    }
-  },
-  "selectedMapData": {
-    "store_id": 1
-  },
-  "items": [
     {
-      "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-      "product": {
-        "image": "7b223b74a494458c96fe3a19d5f140c7.jpg",
-        "productItemId": 503290,
-        "name": "XENA test webpay Tamaño Unico",
-        "type": 0,
-        "url": "/motocicleta/331533-soportes-de-gps-xena-test-webpay"
-      },
-      "quantity": 1,
-      "color": null,
-      "oldPrice": 10,
-      "description": "test webpay",
-      "discount": 0,
+      "id": 3,
+      "name": "LIRA",
+      "code": "76411858",
       "type": 0,
-      "packId": 0,
-      "size": {
-        "name": "Tamaño Unico",
-        "orderWeight": 0,
-        "id": 8,
-        "type": 0
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 1,
+      "phone": "2666.0690 anexo 92",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
       },
-      "price": 10,
-      "name": "XENA test webpay Tamaño Unico",
-      "id": "4ad431a4-29e9-495e-8c41-31e5ef1b900c",
-      "loading": false
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 90,
+          "image": null,
+          "url": "/Content/uploads/1/tiendas/20171020_153335.jpg",
+          "facilityId": 3
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 10208,
+        "address": "LIRA 689",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 344,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "8330553",
+        "latitude": "-33.4519330807735",
+        "longitude": "-70.64047278430553",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.8991816432217!2d-70.64047278430553!3d-33.4519330807735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c57175846e91:0x84e7e4eea5bb8877!2sMotoMundi!5e0!3m2!1sen!2scl!4v1511132655454",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 344,
+          "name": "SANTIAGO",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.4488897,
+          "longitude": -70.6692655
+        }
+      }
+    },
+    {
+      "id": 660,
+      "name": "VIÑA DEL MAR",
+      "code": "79416072",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 0,
+      "phone": "2666.0690 anexo 93",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "13:00"
+                },
+                {
+                  "open": "14:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "13:00"
+                },
+                {
+                  "open": "14:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "13:00"
+                },
+                {
+                  "open": "14:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "13:00"
+                },
+                {
+                  "open": "14:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "13:00"
+                },
+                {
+                  "open": "14:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 102,
+          "image": null,
+          "url": "/Content/uploads/1/aaa/unnamed.webp",
+          "facilityId": 660
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 16841,
+        "address": "Quillota 384, Local 3",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 94,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "2531114",
+        "latitude": "-33.01935658089953",
+        "longitude": "-71.54894408431429",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3345.408884356471!2d-71.54894408431429!3d-33.01935658089953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9689ddde69d62a29:0x91d28a8ba4823306!2sMotomundi!5e0!3m2!1sen!2scl!4v1511133162958",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 94,
+          "name": "VINA DEL MAR",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.0153481,
+          "longitude": -71.55002759999999
+        }
+      }
+    },
+    {
+      "id": 886,
+      "name": "CONCEPCION",
+      "code": "79734221",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 0,
+      "phone": "2666.0690 anexo 94",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 93,
+          "image": null,
+          "url": "https://www.motomundi.cl/Content/uploads/1/aaa/conce.png",
+          "facilityId": 886
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 16840,
+        "address": "Juan de Dios Rivera 1298, Loc 2",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 171,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "4060695",
+        "latitude": "-36.80884577994675",
+        "longitude": "-73.05393658423489",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3194.4036688487213!2d-73.05393658423489!3d-36.80884577994675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9669b5b0ad714f09:0xb5599ab4a7f42451!2sMotomundi!5e0!3m2!1sen!2scl!4v1511133315045",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 171,
+          "name": "CONCEPCION",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -36.8201352,
+          "longitude": -73.0443904
+        }
+      }
+    },
+    {
+      "id": 1501,
+      "name": "LA SERENA",
+      "code": "81020201",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 0,
+      "phone": "2666.0690 anexo 95",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "15:00"
+                },
+                {
+                  "open": "16:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "15:00"
+                },
+                {
+                  "open": "16:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "15:00"
+                },
+                {
+                  "open": "16:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "15:00"
+                },
+                {
+                  "open": "16:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "15:00"
+                },
+                {
+                  "open": "16:00",
+                  "close": "19:00"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:10",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2026-03-21",
+              "note": "Cerrado",
+              "closed": true,
+              "intervals": [
+                {
+                  "open": "09:00",
+                  "close": "18:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 119,
+          "image": null,
+          "url": "/Content/uploads/1/aaa/serena.webp",
+          "facilityId": 1501
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 14822,
+        "address": "Av. Balmaceda 3039",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 49,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "1710557",
+        "latitude": "-29.92840608192475",
+        "longitude": "-71.26122608437343",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13831.055178607956!2d-71.2586801!3d-29.9287016!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x681e89fcdcdf75a!2sMotomundi La Serena!5e0!3m2!1ses!2scl!4v1621291552532!5m2!1ses!2scl",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 49,
+          "name": "LA SERENA",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -29.9026691,
+          "longitude": -71.2519374
+        }
+      }
+    },
+    {
+      "id": 4228,
+      "name": "ARGOMEDO",
+      "code": "87203728",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 1,
+      "phone": "2666.0690 anexo 96",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:30",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 97,
+          "image": null,
+          "url": "/Content/uploads/1/tiendas/2021-11-25.jpg",
+          "facilityId": 4228
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 213747,
+        "address": "Lira 588",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 344,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": null,
+        "latitude": "-33.4501501",
+        "longitude": "-70.6407409",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.967620739511!2d-70.64074088462482!3d-33.4501501048832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c571444d566f:0xbaf3ede370ff1546!2sLira 588, Santiago, Región Metropolitana, Chile!5e0!3m2!1ses-419!2sar!4v1636381027785!5m2!1ses-419!2sar",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "0001-01-01T00:00:00.000Z",
+        "domainId": 0,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 344,
+          "name": "SANTIAGO",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.4488897,
+          "longitude": -70.6692655
+        }
+      }
+    },
+    {
+      "id": 5400,
+      "name": "LIRA MX",
+      "code": "91191443",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 1,
+      "isHeadquarters": 0,
+      "allowPickup": 1,
+      "phone": "2666.0690 anexo 97",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                },
+                {
+                  "open": "15:00",
+                  "close": "18:30"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "14:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": true,
+              "intervals": []
+            }
+          },
+          "special_hours": [
+            {
+              "date": "2025-12-24",
+              "note": "Navidad",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            },
+            {
+              "date": "2025-12-31",
+              "note": "Año Nuevo",
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "16:00"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 107,
+          "image": null,
+          "url": "/Content/uploads/1/aaa/liramx.webp",
+          "facilityId": 5400
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 679312,
+        "address": "Lira 616",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 344,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": "8330505",
+        "latitude": "-33.45044869012736",
+        "longitude": "-70.63848474302011",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.9513493668865!2d-70.63861348905547!3d-33.45057401442469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c571420d0bb5:0xd41d753c6c26d7a8!2sLira 616, 8330505 Santiago, Región Metropolitana!5e0!3m2!1ses!2scl!4v1742236797582!5m2!1ses!2scl",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "2025-03-07T12:04:04.000Z",
+        "domainId": 1,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 344,
+          "name": "SANTIAGO",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.4488897,
+          "longitude": -70.6692655
+        }
+      }
+    },
+    {
+      "id": 5700,
+      "name": "ARAUCO OUTLET BUENAVENTURA",
+      "code": "92485111",
+      "type": 0,
+      "deleted": 0,
+      "domainId": 1,
+      "isAvailableForInternet": 0,
+      "isHeadquarters": 0,
+      "allowPickup": 0,
+      "phone": "2666.0690 anexo 98",
+      "configuration": {
+        "storeHours": {
+          "regular_hours": {
+            "monday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "tuesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "wednesday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "thursday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "friday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "saturday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            },
+            "sunday": {
+              "closed": false,
+              "intervals": [
+                {
+                  "open": "10:00",
+                  "close": "20:00"
+                }
+              ]
+            }
+          },
+          "special_hours": []
+        }
+      },
+      "parentId": null,
+      "facilityDeliveryTimeId": null,
+      "linkedFacilityId": 0,
+      "images": [
+        {
+          "id": 118,
+          "image": null,
+          "url": "/Content/products/1/7/51/75190f7ffdcc4a599eb968b18636c9c3_org.jpeg",
+          "facilityId": 5700
+        }
+      ],
+      "postalAddress": {
+        "postalAddressId": 803429,
+        "address": "San Ignacio 500",
+        "commune": null,
+        "region": null,
+        "city": null,
+        "name": null,
+        "surname": null,
+        "phone": null,
+        "email": null,
+        "receiveInformation": 0,
+        "comunaId": 334,
+        "rut": null,
+        "comment": null,
+        "countryId": null,
+        "cityId": null,
+        "postalCode": null,
+        "latitude": "-33.33186386233682",
+        "longitude": "-70.70357683716188",
+        "gmapsUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5324.984470276135!2d-70.70356610000039!3d-33.331868347796465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c750af4802db%3A0x198edbaed2ba2e8f!2sArauco%20Premium%20Outlet%20Buenaventura!5e1!3m2!1sen!2scl!4v1773354078123!5m2!1sen!2scl",
+        "siiCode": null,
+        "notifyWhatsApp": 0,
+        "company": null,
+        "alias": null,
+        "createDate": "2026-02-24T13:59:13.000Z",
+        "domainId": 1,
+        "origin": 0,
+        "address2": null,
+        "comuna": {
+          "id": 334,
+          "name": "QUILICURA",
+          "code": null,
+          "type": "COMUNA",
+          "geocoding": null,
+          "latitude": -33.3576747,
+          "longitude": -70.72927179999999
+        }
+      }
     }
-  ],
-  "mercadoPagoPaymentData": null
+  ]
 }

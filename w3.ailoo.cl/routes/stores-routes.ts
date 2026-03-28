@@ -14,6 +14,14 @@ const router = Router(); // Create a router instead of using 'app'
 
 const calendarBaseUrl = process.env.CALENDAR_URL;
 
+
+const facilityWeights = new Map<number, number>([
+  [5700, 110], // arauco qulicura
+  [1, 100], // las condes
+  [4228, 95], // argomedo
+  [3, 90] // lira
+]);
+
 router.get("/:domainId/stores/list", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
@@ -57,12 +65,20 @@ router.get("/:domainId/stores/list", async (req, res, next) => {
         f.configuration = JSON.parse(f.configuration);
       f.postalAddress = f.contacts[0].contactMechanism.postalAddress;
       f.contacts = undefined
+
+      f.weight = 0
+      if(facilityWeights.has(f.id)){
+        f.weight = facilityWeights.get(f.id)
+      }
+
     })
 
-    filteredFacilities.filter(f => f.configuration)
+    filteredFacilities = filteredFacilities.filter(f => f.configuration).sort((a, b) => b.weight - a.weight);
+
+    console.log(filteredFacilities);
 
     res.json({
-      facilities: filteredFacilities,
+      facilities: filteredFacilities
     })
   } catch (e) {
     next(e)
