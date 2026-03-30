@@ -2,9 +2,9 @@
 * productos en inventario virtual no se pueden pagar
 * product detail when i select color should show product in carrusel
 
--
 
- account/gear
+
+- account/gear
 - google merchant
 - store survey
 - al seleccionar pack no sale el descuento bien

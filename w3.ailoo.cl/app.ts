@@ -31,6 +31,8 @@ import eventsRoutes from "./routes/events-routes.js";
 app.use(eventsRoutes);
 import cartRoutes from "./routes/cart-routes.js";
 app.use(cartRoutes);
+import csRoutes from "./routes/cs/cs.routes.js";
+app.use(csRoutes);
 import geoRoutes from "./routes/geo-routes.js";
 app.use(geoRoutes);
 import checkoutRoutes from "./routes/checkout-routes.js";
