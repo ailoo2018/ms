@@ -547,14 +547,19 @@ export async function search(criteria, domainId) {
 
     }else{
         sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
+        sort.push({ orderWeight: "desc" })
     }
 
-    sort.push({ orderWeight: "desc" })
+
 
     if (criteria.collectionId && criteria.collectionId !== "") {
-        ({query: query, limit: limit, sort: sort, collection} = await buildQueryByCollectionId(criteria, domainId));
+        let collectionSort: any = null;
+        ({query: query, limit: limit, sort: collectionSort, collection} = await buildQueryByCollectionId(criteria, domainId));
         if (collection)
             criteria.collection = collection
+
+        if(!criteria.orderBy)
+            sort = collectionSort
 
         if (criteria.limit > 0)
             limit = criteria.limit
