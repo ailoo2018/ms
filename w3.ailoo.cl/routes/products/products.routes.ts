@@ -215,6 +215,7 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
     const currency = req.currency || "CLP"
     const domainId = parseInt(req.params.domainId);
     const productId = parseInt(req.params.productId)
+    const force = req.query.force === "true" || false;
 
     if (!productId || Number.isNaN(productId)) {
       return res.status(404).json({ message: "product not found" })
@@ -224,7 +225,7 @@ router.get("/:domainId/products/:productId", currencyHandler, async (req, res, n
 
 
 
-    if (cachedData?.length > 0) {
+    if (!force && cachedData?.length > 0) {
       const p = JSON.parse(cachedData.toString());
       logger.info(`find product: ${productId} ${p.name} origin: redis`);
       p.origin = "redis"
