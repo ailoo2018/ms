@@ -102,7 +102,7 @@ app.get('/', (req, res) => {
   logger.error("error: Called /: " );
   res.json({
     msg: "Version 2.0.1",
-    KOMMO_ACCESS_TOKEN: process.env.KOMMO_ACCESS_TOKEN,
+    KOMMO_ACCESS_TOKEN: process.env.KOMMO_ACCESS_TOKEN || null,
     DLOCAL_GO_BASE_URL: process.env.DLOCAL_GO_BASE_URL || null,
     DLOCAL_GO_API_KEY: process.env.DLOCAL_GO_API_KEY || null,
     CMS_URL: process.env.CMS_URL || null,
