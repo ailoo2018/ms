@@ -17,7 +17,7 @@ import * as cartHelper from "../helpers/cart-helper.js"
 import {updateCart} from "../el/cart.js";
 import {convert} from "../services/exchangeService.js";
 
-import { Rut } from "@ailoo/shared-libs/models/rut"
+import {Rut} from "@ailoo/shared-libs/models/rut"
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -185,14 +185,14 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         const currency = req.body.currency || "CLP"
 
         let newPartyId = 0;
-        let organizacion : Partial<Party> = null
+        let organizacion: Partial<Party> = null
 
         if (rq.addresses.askForInvoice) {
 
-            var orgRut : Rut = new Rut(rq.addresses.billing.rut);
+            var orgRut: Rut = new Rut(rq.addresses.billing.rut);
 
             organizacion = await drizzleDb.query.party.findFirst({
-                where: (party, { eq, and }) => {
+                where: (party, {eq, and}) => {
                     return and(
                         eq(party.rut, orgRut.format("#.###-#")),
                         eq(party.type, "ORGANIZATION"),
@@ -201,7 +201,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 },
             })
 
-            if(!organizacion){
+            if (!organizacion) {
 
                 organizacion = {
                     name: rq.addresses.billing.name,
@@ -222,7 +222,7 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
 
                 try {
                     await contactsClient.index(organizacion.id, domainId)
-                }catch(e){
+                } catch (e) {
                     logger.error("Error indexing contact: " + e.message + " " + JSON.stringify(organizacion));
                 }
             }
@@ -254,7 +254,6 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     person = await getPartyPartialByRut(rq.customerInformation.address.nif, domainId);
 
 
-
                 if (!person) {
 
                     // try getting name and surname from customerInformation (db Party)
@@ -270,8 +269,8 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     }
 
                     let rut = rq.customerInformation?.address?.nif
-                            || rq.shipping?.nif
-                            || ''
+                        || rq.shipping?.nif
+                        || ''
 
 
                     const [result] = await tx.insert(party).values({
@@ -516,11 +515,11 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
         })
 
 
-        if(newPartyId > 0) {
+        if (newPartyId > 0) {
             try {
                 await contactsClient.index(newPartyId, domainId);
             } catch (e) {
-                logger.error("Error indexing contact: " + e.message );
+                logger.error("Error indexing contact: " + e.message);
             }
         }
 
@@ -591,14 +590,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "name": "mercadopago",
                     "order": 2
                 },
-                /*                {
-                                    "id": 19,
-                                    "driver": "dlocal",
-                                    "description": null,
-                                    "logo_class": "credit-cards",
-                                    "name": "dlocal",
-                                    "order": 3
-                                }*/
+                {
+                    "id": 19,
+                    "driver": "dlocal",
+                    "description": "Pago en efectivo o transferencia bancaria",
+                    "logo_class": "credit-cards",
+                    "name": "dlocal",
+                    "order": 3
+                }
             ]
         })
     } catch (e) {
