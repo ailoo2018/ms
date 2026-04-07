@@ -570,7 +570,7 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
     res.json({
       pit,
       desc,
-      kommo: data,
+      kommo: data || null,
     })
 
   }catch(e){

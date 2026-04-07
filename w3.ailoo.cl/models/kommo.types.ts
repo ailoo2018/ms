@@ -43,7 +43,7 @@ interface KommoComplexLead {
 }
 
 
-export async function createKommoLead(customerEmail: string, subject: string): Promise<void> {
+export async function createKommoLead(customerEmail: string, subject: string): Promise<any> {
     // 2. Set up your authentication and endpoint
     // You can find your subdomain in your Kommo URL (e.g., https://yourbrand.kommo.com)
     const subdomain = process.env.KOMMO_SUBDOMAIN || 'motomundi';
