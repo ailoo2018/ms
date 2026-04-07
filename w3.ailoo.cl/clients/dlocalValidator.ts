@@ -15,7 +15,13 @@ export class DlocalValidator implements PaymentValidator {
 
         const paymentData : any = await fetchPaymentDetails(token)
 
-        if(paymentData.status !== "PAID"){
+        let status = null
+
+        if(paymentData.status === "PAID") {
+            status = "PAID"
+        }if(paymentData.status === "PENDING") {
+            status = "PENDING"
+        }else if(paymentData.status !== "PAID"){
             throw new Error("DLocal payment status is not paid: " + paymentData.status)
         }
 
@@ -31,6 +37,7 @@ export class DlocalValidator implements PaymentValidator {
             responseData: paymentData,
             transactionDate: new Date(),
             authorizationCode: token,
+            status: status,
             success: true,
 
         });

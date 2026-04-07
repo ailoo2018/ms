@@ -11,6 +11,7 @@ export interface PaymentValidation {
     authorizationCode: string;
     paymentMethodId: number;
     transactionDate?: Date;
+    status?: string;
 }
 
 export interface PaymentValidator {

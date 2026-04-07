@@ -13,6 +13,20 @@ const {saleOrder, orderJournal, payment, paymentApplication} = schema
 
 const router = Router(); // Create a router instead of using 'app'
 
+async function updateSaleOrderToPending(confirmRs: PaymentValidation, domainId: number) {
+    await drizzleDb
+        .update(saleOrder)
+        .set({
+            authCode: confirmRs.authorizationCode, // Ensure property name matches your req
+            state: OrderState.PendientePago, // Ensure property name matches your req
+        })
+        .where(
+            and(
+                eq(saleOrder.id, parseInt(confirmRs.referenceId)),
+                eq(saleOrder.domainId, domainId)
+            )
+        );
+}
 async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
 
     const order: any = await drizzleDb.query.saleOrder.findFirst({
@@ -218,7 +232,8 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
                 rs.success = false
             }else{
                 rs.authorizationCode = order.authCode
-                rs.success = order.state == OrderState.Pagado
+                rs.status = getStatus(order.state)
+                rs.success = order.state == OrderState.Pagado || order.state == OrderState.PendientePago
 
                 if(!rq.success)
                     rs.message = "Orden está en estado " + order.state
@@ -233,6 +248,14 @@ router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
     }
 })
 
+function getStatus(state){
+    if(state == OrderState.Pagado )
+        return "PAID"
+    if(state == OrderState.PendientePago)
+        return "PENDING"
+    return "UNKNOWN"
+}
+
 router.post("/:domainId/checkout/payment-result", async (req, res) => {
 
     try {
@@ -245,8 +268,13 @@ router.post("/:domainId/checkout/payment-result", async (req, res) => {
             logger.info("payInvoice")
             await payInvoice(confirmRs, domainId)
         } else if (confirmRs.success) {
-            logger.info("paySaleOrder")
-            await paySaleOrder(confirmRs, domainId)
+
+            if(confirmRs.status === "PENDING"){
+                await updateSaleOrderToPending(confirmRs, domainId)
+            }else{
+                await paySaleOrder(confirmRs, domainId)
+            }
+
         }
 
 
