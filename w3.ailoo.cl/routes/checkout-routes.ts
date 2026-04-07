@@ -590,14 +590,14 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
                     "name": "mercadopago",
                     "order": 2
                 },
-                {
+/*                {
                     "id": 19,
                     "driver": "dlocal",
                     "description": "Pago en efectivo o transferencia bancaria",
                     "logo_class": "credit-cards",
                     "name": "dlocal",
                     "order": 3
-                }
+                }*/
             ]
         })
     } catch (e) {
