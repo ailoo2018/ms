@@ -573,8 +573,6 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
       kommo: data,
     })
 
-
-
   }catch(e){
     next(e)
   }
