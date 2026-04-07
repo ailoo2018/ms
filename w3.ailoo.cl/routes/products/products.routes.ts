@@ -565,7 +565,7 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
     })
 
     const subject = `Notificar cuando esté disponible ${desc}`
-    const data = await createKommoLead(email, subject)
+    const data = await createKommoLead(email, subject, 13485780)
 
     res.json({
       pit,

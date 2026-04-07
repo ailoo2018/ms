@@ -43,7 +43,7 @@ interface KommoComplexLead {
 }
 
 
-export async function createKommoLead(customerEmail: string, subject: string): Promise<any> {
+export async function createKommoLead(customerEmail: string, subject: string, pipelineId: number): Promise<any> {
     // 2. Set up your authentication and endpoint
     // You can find your subdomain in your Kommo URL (e.g., https://yourbrand.kommo.com)
     const subdomain = process.env.KOMMO_SUBDOMAIN || 'motomundi';
@@ -59,7 +59,7 @@ export async function createKommoLead(customerEmail: string, subject: string): P
         {
             name: subject,
             price: 0, // Optional: useful if the query is about a specific product value
-            pipeline_id: 13485780,
+            pipeline_id: pipelineId,
 
             _embedded: {
                 contacts: [

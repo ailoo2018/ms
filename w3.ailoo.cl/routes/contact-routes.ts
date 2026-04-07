@@ -3,6 +3,7 @@ import {errors} from "@elastic/elasticsearch";
 import paramClient from "../services/parametersClient.js";
 
 import {Router} from "express";
+import {createKommoLead} from "../models/kommo.types.js";
 const router = Router(); // Create a router instead of using 'app'
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -209,6 +210,13 @@ router.post("/:domainId/contact", async (req, res, next) => {
                     </a>
                   </span>
                 </div>
+
+                <div class="info-row">
+                  <span class="label">Categoría</span>
+                  <span class="value">
+                      ${body.categoria}
+                  </span>
+                </div>
               </div>
 
               <!-- Mensaje -->
@@ -219,7 +227,7 @@ router.post("/:domainId/contact", async (req, res, next) => {
 
               <!-- CTA Button -->
               <div style="text-align: center;">
-                <a href="mailto:${body.email}" class="cta-button">
+                <a href="mailto:${body.email}" class="cta-button" style="color:white;">
                   Responder al Cliente
                 </a>
               </div>
@@ -240,7 +248,15 @@ router.post("/:domainId/contact", async (req, res, next) => {
 
     const sgRs = await sgMail.send(msg)
 
-    res.json(sgRs)
+    const subject = `Formulario de Contacto: ${body.categoria}`
+    const data = await createKommoLead(body.email, subject, 13497788)
+
+
+
+    res.json({
+      sendmail: sgRs,
+      kommo: data,
+    })
   } catch (error) {
     next(error)
   }

@@ -2,6 +2,9 @@
 * productos en inventario virtual no se pueden pagar
 * product detail when i select color should show product in carrusel
 
+- login wrong password does not show nice message
+- use redis ssl
+
 - invite a friend
 
 - account/gear
