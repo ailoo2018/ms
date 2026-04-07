@@ -101,14 +101,7 @@ app.get('/', (req, res) => {
   logger.info("info: Called /: " );
   logger.error("error: Called /: " );
   res.json({
-    msg: "Welcome to the WcC App v123:::: this has changed",
-    /*
-        DB_HOST: process.env.DB_HOST,
-        DB_USER: process.env.DB_USER,
-        DB_PORT: process.env.DB_PORT,
-        DB_DATABASE: process.env.DB_DATABASE,
-    */
-
+    KOMMO_ACCESS_TOKEN: process.env.KOMMO_ACCESS_TOKEN,
     DLOCAL_GO_BASE_URL: process.env.DLOCAL_GO_BASE_URL || null,
     DLOCAL_GO_API_KEY: process.env.DLOCAL_GO_API_KEY || null,
     CMS_URL: process.env.CMS_URL || null,

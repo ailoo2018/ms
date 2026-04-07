@@ -1,225 +1,69 @@
 {
-  "totalHits": 1,
-  "query": {
-    "description": "Por 'agv k3 rod' hemos encontrado"
+  "id": 1987,
+  "name": "Pack EXO-391 + Pinlock",
+  "discount": {
+    "amount": 5.0,
+    "type": "%"
   },
-  "offset": 0,
-  "limit": 20,
-  "filters": [
+  "tags": [],
+  "saleTypes": [
     {
-      "name": "Marcas",
-      "type": "brands",
-      "buckets": [
-        {
-          "id": 136,
-          "name": "AGV",
-          "total": 1,
-          "data": {
-            "name": "AGV",
-            "logo": "946661483a4f4f0b8ea2db16121f0380.jpg",
-            "id": 136
-          },
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
+      "id": 1,
+      "name": "Tienda",
+      "description": "Tienda"
     },
     {
-      "name": "Categorías",
-      "type": "categories",
-      "buckets": [
-        {
-          "id": 41,
-          "name": "Cascos Integrales",
-          "total": 1,
-          "data": {},
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
-    },
-    {
-      "name": "Estilo Piloto",
-      "type": "tags",
-      "buckets": [
-        {
-          "id": "29591",
-          "name": "Touring",
-          "total": 1,
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
-    },
-    {
-      "name": "Tallas",
-      "type": "sizes",
-      "buckets": [
-        {
-          "id": "XL",
-          "name": "XL",
-          "orderWeight": 90,
-          "total": 1,
-          "data": {},
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
-    },
-    {
-      "name": "Modelos",
-      "type": "models",
-      "buckets": [
-        {
-          "id": 10221,
-          "name": "AGV K3",
-          "total": 1,
-          "data": {},
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
-    },
-    {
-      "name": "Colores",
-      "type": "colors",
-      "buckets": [
-        {
-          "id": 7,
-          "name": "Gris",
-          "code": "gray",
-          "hex": "#808080",
-          "total": 1,
-          "checked": false
-        }
-      ],
-      "expanded": false,
-      "showExtraContent": false
+      "id": 3,
+      "name": "Internet",
+      "description": "Internet"
     }
   ],
-  "products": [
+  "validFrom": "2025-08-22T00:00:00-04:00",
+  "validThru": null,
+  "rules": [
     {
-      "unitsSold": 4,
-      "rating": 10,
-      "discountAmount": 0,
-      "videos": [
+      "minPrice": 0.0,
+      "products": [
         {
-          "url": "R7pjv2CjrbU"
+          "id": 2759357,
+          "name": "SCORPION EXO-391 SPADA",
+          "description": null
+        },
+        {
+          "id": 2759358,
+          "name": "SCORPION EXO-391 HAUT",
+          "description": null
+        },
+        {
+          "id": 2759356,
+          "name": "SCORPION EXO-391 AROK",
+          "description": null
+        },
+        {
+          "id": 2759355,
+          "name": "SCORPION EXO-391 NEGRO MATE",
+          "description": null
+        },
+        {
+          "id": 3277855,
+          "name": "SCORPION EXO-391 SPADA CAMALEON",
+          "description": null
+        },
+        {
+          "id": 3278295,
+          "name": "Pinlock 120 Scorpion EXO-391/520 DKS213",
+          "description": null
         }
       ],
-      "availableInStore": true,
-      "linkName": "2716741-cascos-integrales-agv-k3-2023-rodio-grey",
-      "totalReviews": 21,
-      "tireSpecs": [],
-      "preOrder": false,
-      "id": 2716741,
-      "motoOrderWeight": 0,
-      "brand": {
-        "featured": true,
-        "isAvailableForInternet": true,
-        "name": "AGV",
-        "logo": "946661483a4f4f0b8ea2db16121f0380.jpg",
-        "id": 136,
-        "linkName": "Cascos AGV",
-        "showNameInWeb": true
-      },
-      "image": "3e8ab85cba364cc4a303c79f4d1c4daa.png",
-      "images": [
-        {
-          "colorTagsIds": [
-            7
-          ],
-          "image": "3e8ab85cba364cc4a303c79f4d1c4daa.png",
-          "colorName": "Gris Oscuro",
-          "colorId": 84,
-          "orderWeight": 0,
-          "id": 1929240
-        },
-        {
-          "colorTagsIds": [],
-          "image": "7c23fec7201448ed9bd51dd78007593a.png",
-          "colorId": 0,
-          "orderWeight": 1,
-          "id": 1929241
-        },
-        {
-          "colorTagsIds": [],
-          "image": "c81bb2c426364da08c3b3a3da9dc1302.png",
-          "colorId": 0,
-          "orderWeight": 2,
-          "id": 1929242
-        },
-        {
-          "colorTagsIds": [],
-          "image": "20627fa7676d4d4a9b9b98019c992cca.png",
-          "colorId": 0,
-          "orderWeight": 3,
-          "id": 1929243
-        },
-        {
-          "colorTagsIds": [],
-          "image": "2590133282214583be6f0e49d773be02.png",
-          "colorId": 0,
-          "orderWeight": 4,
-          "id": 1929244
-        }
-      ],
-      "isAvailableForInternet": true,
-      "categoryPath": "/Motocicleta/Cascos/Cascos Integrales",
-      "isSimpleProduct": false,
-      "isReserved": false,
-      "tags2": [],
-      "availableSizes": [
-        {
-          "name": "XL",
-          "orderWeight": 90,
-          "id": "XL",
-          "key": "XL|90"
-        }
-      ],
-      "domainId": 1,
-      "hasColor": true,
-      "hasSize": true,
-      "minPrice": 259900,
-      "name": "K3 (2023) Rodio Grey",
-      "modifiedDate": "2025-03-11T16:17:27",
-      "maxPrice": 259900,
-      "directCategories": [
-        41
-      ],
-      "code": "",
-      "directCategoryisAvailableForInternet": true,
-      "orderWeight": 1,
-      "inventoryControl": 0,
-      "motorbikeVersion": [],
-      "productType": 0,
-      "createDate": "2023-10-31T11:55:09",
-      "requiresFeaturedSelect": false,
-      "quantityInStock": 9,
-      "discountPercent": 0,
-      "hasDiscount": false,
-      "isTaxExempt": false,
-      "requiresLot": false,
-      "fullName": "AGV K3 (2023) Rodio Grey",
-      "isNew": false,
-      "universalQuantity": 9,
-      "url": "/motocicleta/2716741-cascos-integrales-agv-k3-2023-rodio-grey",
-      "coverImages": {
-        "150": "/content/products/1/3/e8/3e8ab85cba364cc4a303c79f4d1c4daa_150.png",
-        "300": "/content/products/1/3/e8/3e8ab85cba364cc4a303c79f4d1c4daa_300.png",
-        "600": "/content/products/1/3/e8/3e8ab85cba364cc4a303c79f4d1c4daa_600.png",
-        "800": "/content/products/1/3/e8/3e8ab85cba364cc4a303c79f4d1c4daa_800.png"
-      },
-      "price": {
-        "discount": 0,
-        "price": 259900
-      },
-      "imageUrl": "/content/products/1/3/e8/3e8ab85cba364cc4a303c79f4d1c4daa_300.png"
+      "brands": null,
+      "tags": null,
+      "categories": null,
+      "quantity": 1,
+      "currentCount": 0
     }
-  ]
+  ],
+  "appliesTo": 1,
+  "HasProductTags": false,
+  "HasProductRules": true,
+  "code": null
 }

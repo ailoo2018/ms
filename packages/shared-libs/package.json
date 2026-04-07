@@ -24,7 +24,7 @@
     "winston": "^3.9.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
-  "exports-dev": {
+  "exports": {
     "./logger": "./utils/logger.js",
     "./config": "./utils/config.js",
     "./models/rut": "./models/rut.js",
@@ -42,7 +42,7 @@
     "./CartRepos": "./repos/CartRepos.js",
     "./ProductCategoryDb": "./repos/ProductCategoryDb.js"
   },
-  "exports": {
+  "exports-prod": {
     "./logger": "./dist/utils/logger.js",
     "./models/rut": "./dist/models/rut.js",
     "./config": "./dist/utils/config.js",

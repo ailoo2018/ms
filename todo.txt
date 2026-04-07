@@ -2,7 +2,7 @@
 * productos en inventario virtual no se pueden pagar
 * product detail when i select color should show product in carrusel
 
-
+- invite a friend
 
 - account/gear
 - google merchant
@@ -11,6 +11,9 @@
 - view widget in nuxt
 - cdn dedicated in iis
 - q&a
+
+
+
 
 
 

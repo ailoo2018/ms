@@ -25,6 +25,7 @@ import path from "path";
 import {promises as fs} from "fs";
 import ejs from "ejs";
 import parametersClient from "../../services/parametersClient.js";
+import {createKommoLead} from "../../models/kommo.types.js";
 const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
@@ -557,17 +558,22 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
     const email = rq.email;
     await sgMail.send({
       to: email,
-      bcc: "jcfuentes@motomundi.cl",
+      bcc: ["jcfuentes@motomundi.cl", "patrick@motomundi.net"],
       from: 'ventas@motomundi.cl', // Change to your verified sender
       subject: `📋 Apuntado. Te avisamos cuando vuelva tu talla`,
       html: html,
     })
 
+    const subject = `Notificar cuando esté disponible ${desc}`
+    const data = await createKommoLead(email, subject)
 
     res.json({
       pit,
-      desc
+      desc,
+      kommo: data,
     })
+
+
 
   }catch(e){
     next(e)
