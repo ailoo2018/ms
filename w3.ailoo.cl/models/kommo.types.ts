@@ -42,15 +42,18 @@ interface KommoComplexLead {
     }[];
 }
 
+interface KommoNote {
+    entity_id: number;
+    note_type: 'common'; // 'common' is the standard text note
+    params: {
+        text: string;
+    };
+}
+
+const subdomain = process.env.KOMMO_SUBDOMAIN || 'motomundi';
+const accessToken = process.env.KOMMO_ACCESS_TOKEN;
 
 export async function createKommoLead(customerEmail: string, subject: string, pipelineId: number): Promise<any> {
-    // 2. Set up your authentication and endpoint
-    // You can find your subdomain in your Kommo URL (e.g., https://yourbrand.kommo.com)
-    const subdomain = process.env.KOMMO_SUBDOMAIN || 'motomundi';
-
-    // Kommo supports long-lived tokens for private integrations, which are much easier
-    // to manage than OAuth if this is just an internal script!
-    const accessToken = process.env.KOMMO_ACCESS_TOKEN
 
     const endpoint = `https://${subdomain}.kommo.com/api/v4/leads/complex`;
 
@@ -114,4 +117,41 @@ export async function createKommoLead(customerEmail: string, subject: string, pi
     }
 }
 
+
+export async function createKommoNote(leadId: number, message: string): Promise<any> {
+
+
+    // Endpoint for adding notes to a specific lead
+    const endpoint = `https://${subdomain}.kommo.com/api/v4/leads/${leadId}/notes`;
+
+    const notePayload: KommoNote[] = [
+        {
+            entity_id: leadId,
+            note_type: 'common',
+            params: {
+                text: `Consulta del cliente:\n${message}`
+            }
+        }
+    ];
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(notePayload)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Failed to create note: ${JSON.stringify(errorData)}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Error adding note to lead ${leadId}:`, error);
+    }
+}
 // Execute the function

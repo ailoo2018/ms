@@ -3,7 +3,8 @@ import {errors} from "@elastic/elasticsearch";
 import paramClient from "../services/parametersClient.js";
 
 import {Router} from "express";
-import {createKommoLead} from "../models/kommo.types.js";
+import {createKommoLead, createKommoNote} from "../models/kommo.types.js";
+import logger from "../utils/logger.js";
 const router = Router(); // Create a router instead of using 'app'
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -248,14 +249,22 @@ router.post("/:domainId/contact", async (req, res, next) => {
 
     const sgRs = await sgMail.send(msg)
 
-    const subject = `Formulario de Contacto: ${body.categoria}`
-    const data = await createKommoLead(body.email, subject, 13497788)
+    let data;
+    let noteRs;
+    try {
+      const subject = `Formulario de Contacto: ${body.categoria}`
+      data = await createKommoLead(body.email, subject, 13497788)
+      noteRs = await createKommoNote(data[0].id, body.categoria + ": " + body.consulta)
+    }catch(err){
+      logger.error(err)
+    }
 
 
 
     res.json({
       sendmail: sgRs,
       kommo: data,
+      note: noteRs,
     })
   } catch (error) {
     next(error)
