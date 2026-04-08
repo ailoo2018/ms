@@ -1,69 +1,175 @@
 {
-  "id": 1987,
-  "name": "Pack EXO-391 + Pinlock",
-  "discount": {
-    "amount": 5.0,
-    "type": "%"
-  },
-  "tags": [],
-  "saleTypes": [
+  "tasks": [
     {
-      "id": 1,
-      "name": "Tienda",
-      "description": "Tienda"
+      "id": 18,
+      "description": "Entrega Quilicura a Lira",
+      "entityId": 1,
+      "cronDescription": "A las 07:40 AM, sólo el lunes",
+      "cronExpression": "0 40 7 ? * MON *",
+      "className": null,
+      "config": "{\"description\":\"Entrega Quilicura a Lira\", \"originId\":4065, \"originName\":\"QUILICURA\", \"destinationId\":3, \"destinationName\":\"LIRA\", \"cronExpression\":\"0 40 7 ? * MON *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.cl;alexander@motomundi.cl;daniel@motomundi.net\"}",
+      "configObj": {
+        "description": "Entrega Quilicura a Lira",
+        "originId": 4065,
+        "originName": "QUILICURA",
+        "destinationId": 3,
+        "destinationName": "LIRA",
+        "cronExpression": "0 40 7 ? * MON *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.cl;alexander@motomundi.cl;daniel@motomundi.net"
+      }
     },
     {
-      "id": 3,
-      "name": "Internet",
-      "description": "Internet"
-    }
-  ],
-  "validFrom": "2025-08-22T00:00:00-04:00",
-  "validThru": null,
-  "rules": [
+      "id": 19,
+      "description": "Desde Lira a otras Tiendas",
+      "entityId": 1,
+      "cronDescription": "A las 08:10 AM, sólo el lunes",
+      "cronExpression": "0 10 8 ? * MON *",
+      "className": null,
+      "config": "{\"description\":\"Desde Lira a otras Tiendas\", \"originId\":3, \"originName\":\"LIRA\", \"destinationId\":0, \"destinationName\":\"Todos\", \"cronExpression\":\"0 10 8 ? * MON *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "Desde Lira a otras Tiendas",
+        "originId": 3,
+        "originName": "LIRA",
+        "destinationId": 0,
+        "destinationName": "Todos",
+        "cronExpression": "0 10 8 ? * MON *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.cl"
+      }
+    },
     {
-      "minPrice": 0.0,
-      "products": [
-        {
-          "id": 2759357,
-          "name": "SCORPION EXO-391 SPADA",
-          "description": null
-        },
-        {
-          "id": 2759358,
-          "name": "SCORPION EXO-391 HAUT",
-          "description": null
-        },
-        {
-          "id": 2759356,
-          "name": "SCORPION EXO-391 AROK",
-          "description": null
-        },
-        {
-          "id": 2759355,
-          "name": "SCORPION EXO-391 NEGRO MATE",
-          "description": null
-        },
-        {
-          "id": 3277855,
-          "name": "SCORPION EXO-391 SPADA CAMALEON",
-          "description": null
-        },
-        {
-          "id": 3278295,
-          "name": "Pinlock 120 Scorpion EXO-391/520 DKS213",
-          "description": null
-        }
-      ],
-      "brands": null,
-      "tags": null,
-      "categories": null,
-      "quantity": 1,
-      "currentCount": 0
+      "id": 22,
+      "description": "Quilicura a Viña",
+      "entityId": 1,
+      "cronDescription": "A las 07:25 AM, sólo el miércoles",
+      "cronExpression": "0 25 7 ? * WED *",
+      "className": null,
+      "config": "{\"description\":\"Quilicura a Viña\", \"originId\":4065, \"originName\":\"QUILICURA\", \"destinationId\":660, \"destinationName\":\"VIÑA DEL MAR\", \"cronExpression\":\"0 25 7 ? * WED *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "Quilicura a Viña",
+        "originId": 4065,
+        "originName": "QUILICURA",
+        "destinationId": 660,
+        "destinationName": "VIÑA DEL MAR",
+        "cronExpression": "0 25 7 ? * WED *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.cl"
+      }
+    },
+    {
+      "id": 23,
+      "description": "Desde Viña a otras tiendas",
+      "entityId": 1,
+      "cronDescription": "A las 06:45 AM, sólo el miércoles",
+      "cronExpression": "0 45 6 ? * WED *",
+      "className": null,
+      "config": "{\"description\":\"Desde Viña a otras tiendas\", \"originId\":660, \"originName\":\"VIÑA DEL MAR\", \"destinationId\":0, \"destinationName\":\"Todos\", \"cronExpression\":\"0 45 6 ? * WED *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jaime@motomundi.net;jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "Desde Viña a otras tiendas",
+        "originId": 660,
+        "originName": "VIÑA DEL MAR",
+        "destinationId": 0,
+        "destinationName": "Todos",
+        "cronExpression": "0 45 6 ? * WED *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jaime@motomundi.net;jcfuentes@motomundi.cl"
+      }
+    },
+    {
+      "id": 24,
+      "description": "Desde Conce a otras tiendas",
+      "entityId": 1,
+      "cronDescription": "A las 12:00 PM, en el primero martes del mes",
+      "cronExpression": "0 0 12 ? 1/1 TUE#1 *",
+      "className": null,
+      "config": "{\"description\":\"Desde Conce a otras tiendas\", \"originId\":886, \"originName\":\"CONCEPCION\", \"destinationId\":0, \"destinationName\":\"Todos\", \"cronExpression\":\"0 0 12 ? 1/1 TUE#1 *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jaime@motomundi.net;jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "Desde Conce a otras tiendas",
+        "originId": 886,
+        "originName": "CONCEPCION",
+        "destinationId": 0,
+        "destinationName": "Todos",
+        "cronExpression": "0 0 12 ? 1/1 TUE#1 *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jaime@motomundi.net;jcfuentes@motomundi.cl"
+      }
+    },
+    {
+      "id": 25,
+      "description": "Quilicura a Conce",
+      "entityId": 1,
+      "cronDescription": "A las 08:00 AM, en el primero martes del mes",
+      "cronExpression": "0 0 8 ? 1/1 TUE#1 *",
+      "className": null,
+      "config": "{\"description\":\"Quilicura a Conce\", \"originId\":4065, \"originName\":\"QUILICURA\", \"destinationId\":886, \"destinationName\":\"CONCEPCION\", \"cronExpression\":\"0 0 8 ? 1/1 TUE#1 *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jaime@motomundi.net;jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "Quilicura a Conce",
+        "originId": 4065,
+        "originName": "QUILICURA",
+        "destinationId": 886,
+        "destinationName": "CONCEPCION",
+        "cronExpression": "0 0 8 ? 1/1 TUE#1 *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jaime@motomundi.net;jcfuentes@motomundi.cl"
+      }
+    },
+    {
+      "id": 26,
+      "description": "Quilicura a La Serena",
+      "entityId": 1,
+      "cronDescription": "A las 07:18 AM, en el cuarto miércoles del mes",
+      "cronExpression": "0 18 7 ? 1/1 WED#4 *",
+      "className": null,
+      "config": "{\"description\":\"Quilicura a La Serena\", \"originId\":4065, \"originName\":\"QUILICURA\", \"destinationId\":1501, \"destinationName\":\"LA SERENA\", \"cronExpression\":\"0 18 7 ? 1/1 WED#4 *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.cl;\"}",
+      "configObj": {
+        "description": "Quilicura a La Serena",
+        "originId": 4065,
+        "originName": "QUILICURA",
+        "destinationId": 1501,
+        "destinationName": "LA SERENA",
+        "cronExpression": "0 18 7 ? 1/1 WED#4 *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.cl;"
+      }
+    },
+    {
+      "id": 27,
+      "description": "La Serena a Otras Tiendas",
+      "entityId": 1,
+      "cronDescription": "A las 08:40 AM, en el cuarto miércoles del mes",
+      "cronExpression": "0 40 8 ? 1/1 WED#4 *",
+      "className": null,
+      "config": "{\"description\":\"La Serena a Otras Tiendas\", \"originId\":1501, \"originName\":\"LA SERENA\", \"destinationId\":0, \"destinationName\":\"Todos\", \"cronExpression\":\"0 40 8 ? 1/1 WED#4 *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.cl\"}",
+      "configObj": {
+        "description": "La Serena a Otras Tiendas",
+        "originId": 1501,
+        "originName": "LA SERENA",
+        "destinationId": 0,
+        "destinationName": "Todos",
+        "cronExpression": "0 40 8 ? 1/1 WED#4 *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.cl"
+      }
+    },
+    {
+      "id": 92,
+      "description": "Entrega Las Tranqueras",
+      "entityId": 1,
+      "cronDescription": "A las 08:00 AM, sólo el martes",
+      "cronExpression": "0 0 8 ? * TUE *",
+      "className": null,
+      "config": "{\"description\":\"Entrega Las Tranqueras\", \"originId\":4065, \"originName\":\"QUILICURA\", \"destinationId\":1, \"destinationName\":\"LAS TRANQUERAS\", \"cronExpression\":\"0 0 8 ? * TUE *\", \"emailTo\":\"ornellav@motomundi.net\", \"emailCc\":\"jcfuentes@motomundi.net\"}",
+      "configObj": {
+        "description": "Entrega Las Tranqueras",
+        "originId": 4065,
+        "originName": "QUILICURA",
+        "destinationId": 1,
+        "destinationName": "LAS TRANQUERAS",
+        "cronExpression": "0 0 8 ? * TUE *",
+        "emailTo": "ornellav@motomundi.net",
+        "emailCc": "jcfuentes@motomundi.net"
+      }
     }
-  ],
-  "appliesTo": 1,
-  "HasProductTags": false,
-  "HasProductRules": true,
-  "code": null
+  ]
 }

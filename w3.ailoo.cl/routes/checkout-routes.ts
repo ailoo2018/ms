@@ -49,6 +49,17 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
             // const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
+
+            const now = new Date();
+
+// Create 'from' date by adding 7 days
+            const fromDate = new Date(now);
+            fromDate.setDate(now.getDate() + 7);
+
+// Create 'to' date by adding 15 days
+            const toDate = new Date(now);
+            toDate.setDate(now.getDate() + 15);
+
             quotes = [{
                 "id": 1,
                 "name": "Correos de Chile",
@@ -65,8 +76,8 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
                 },
                 "estimatedDays": 14,
                 "eta": {
-                    "from": "2026-03-14T13:00:47.362Z",
-                    "to": "2026-03-15T13:00:47.362Z"
+                    "from": fromDate.toISOString(),
+                    "to": toDate.toISOString(),
                 },
                 "type": 5
             },]
