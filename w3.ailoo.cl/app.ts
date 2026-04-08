@@ -22,6 +22,9 @@ app.use(friendlyUrlRoutes);
 import exchangeRoutes from "./routes/exchange/exchange.routes.js";
 app.use(exchangeRoutes);
 
+import kommoRoutes from "./routes/kommo/kommo.routes.js";
+app.use(kommoRoutes);
+
 
 
 import {app} from "./server.js";

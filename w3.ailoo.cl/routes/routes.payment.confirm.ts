@@ -8,6 +8,10 @@ import {adminClient} from "../clients/adminClient.js";
 import {db as drizzleDb} from "../db/drizzle.js";
 import {OrderState, PaymentMethodType} from "../models/domain.js";
 import {ordersHelper} from "../helpers/order-helper.js";
+import {listClientContactMechanisms, OrderContactMechanisms} from "../db/ordersDb.js";
+import {findLeadByPhone, getUserDetails} from "../models/kommo.types.js";
+import sgMail from "../connections/sendmail.js";
+import {notifySalesPerson} from "../services/ordersService.js";
 
 const {saleOrder, orderJournal, payment, paymentApplication} = schema
 
@@ -75,7 +79,12 @@ async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
         logger.error("Unable to notify payment validated to admin: " + e.message)
     }
 
+    await notifySalesPerson(order.id, domainId)
+
+
 }
+
+
 
 const processingLocks = new Map<string, Promise<void>>();
 

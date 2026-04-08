@@ -11,16 +11,22 @@ interface KommoContact {
 }
 
 interface KommoLead {
+    id?: number,
     name: string;
     price?: number;
     pipeline_id?: number;
     status_id?: number;
     created_by?: number;
+    created_at?: number;
     // This is where you map form data to custom fields in Kommo
     custom_fields_values?: {
         field_id: number;
         values: { value: string | number }[];
     }[];
+    responsible_user_id: number;
+    _embedded?: {
+        contacts?: Array<{ id: number; is_main: boolean }>;
+    };
 }
 
 interface KommoComplexLead {
@@ -155,3 +161,127 @@ export async function createKommoNote(leadId: number, message: string): Promise<
     }
 }
 // Execute the function
+
+
+import axios from 'axios';
+
+
+interface KommoSearchResponse {
+    _embedded?: {
+        leads: KommoLead[];
+    };
+}
+
+export async function findLeadByPhone(phoneNumber: string): Promise<KommoLead[] | null> {
+    const baseUrl = `https://${subdomain}.kommo.com/api/v4`;
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        // Step 1: Find contacts matching the phone number
+        const contactsResponse = await axios.get(`${baseUrl}/contacts`, {
+            headers,
+            params: {
+                query: phoneNumber,
+                with: 'leads' // Ask Kommo to embed associated leads in the response
+            }
+        });
+
+        if (contactsResponse.status === 204 || !contactsResponse.data._embedded?.contacts) {
+            console.log('No contacts found matching that phone number.');
+            return null;
+        }
+
+        const contacts = contactsResponse.data._embedded.contacts;
+
+        // Step 2: Collect all lead IDs from matched contacts
+        const leadIds: number[] = contacts.flatMap((contact: any) =>
+            contact._embedded?.leads?.map((l: any) => l.id) ?? []
+        );
+
+        if (leadIds.length === 0) {
+            console.log('Contacts found but no associated leads.');
+            return null;
+        }
+
+        // Step 3: Fetch full lead details by IDs
+        const leadsResponse = await axios.get(`${baseUrl}/leads`, {
+            headers,
+            params: {
+                'filter[id]': leadIds.join(','),
+                'order[created_at]': 'desc'
+            }
+        });
+
+        if (!leadsResponse.data._embedded?.leads) return null;
+
+        return leadsResponse.data._embedded.leads.map((lead: any) => ({
+            ...lead,
+            createDate: new Date(lead.created_at * 1000)
+        }));
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API Error:', error.response?.data || error.message);
+        }
+        throw error;
+    }
+}
+
+export async function findLeadByPhone_bak(phoneNumber: string): Promise<KommoLead[] | null > {
+
+    const url = `https://${subdomain}.kommo.com/api/v4/leads`;
+
+    try {
+        const response = await axios.get<KommoSearchResponse>(url, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            params: {
+                // The 'query' parameter searches across phone, email, and name
+                query: phoneNumber,
+                'order[created_at]': 'desc'
+            }
+        });
+
+        if (response.status === 204 || !response.data._embedded) {
+            console.log('No leads found matching that phone number.');
+            return null;
+        }
+
+        var leads =  response.data._embedded.leads;
+
+        const mappedLeads = leads.map( lead => {
+            return {createDate: new Date(lead.created_at * 1000), ...lead}
+        })
+
+        return mappedLeads;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API Error:', error.response?.data || error.message);
+        }
+        throw error;
+    }
+}
+
+export async function getUserDetails(userId: number): Promise<any> {
+
+    const url = `https://${subdomain}.kommo.com/api/v4/users/${userId}`;
+
+    try {
+        const response = await axios.get(url, {
+            headers: { 'Authorization': `Bearer ${accessToken}`, }
+        });
+
+        return response.data; // Contains name, email, role, etc.
+    } catch (error) {
+        console.error('User not found or API error');
+        return null;
+    }
+}
+
+// Example Usage:
+// findLeadByPhone('+1234567890').then(leads => console.log(leads));
