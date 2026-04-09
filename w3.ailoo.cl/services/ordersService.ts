@@ -1,7 +1,11 @@
 import {ordersHelper} from "../helpers/order-helper.js";
 import {db as drizzleDb} from "../db/drizzle.js";
-import {listClientContactMechanisms, OrderContactMechanisms} from "../db/ordersDb.js";
-import {findLatestLeadByContact, findLeadByPhone, getUserDetails} from "../models/kommo.types.js";
+import {
+    listClientContactMechanisms,
+    listClientContactMechanismsByInvoice,
+    OrderContactMechanisms
+} from "../db/ordersDb.js";
+import {findLatestLeadByContact, getUserDetails} from "../models/kommo.types.js";
 import sgMail from "../connections/sendmail.js";
 import logger from "@ailoo/shared-libs/logger";
 
@@ -48,51 +52,18 @@ export const findOrder = async (orderId, domainId) => {
 }
 
 
-export async function notifySalesPerson(orderId: number, domainId: number) {
-    try {
-        const rs: OrderContactMechanisms = await listClientContactMechanisms(orderId);
+async function sendMailToSalesPerson(lead: any, salesPersonName, orderId: number, to: string) {
+    const leadDate = new Date(lead.created_at * 1000).toLocaleDateString('es-CL', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+    const closedDate = new Date().toLocaleDateString('es-CL', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+    const leadUrl = `https://motomundi.kommo.com/leads/detail/${lead.id}`;
 
-        let lead = null;
-        if (rs?.phones?.length > 0) {
-
-            const email = rs?.emails?.[0] || null;
-            const phone = rs?.phones?.[0] || null;
-
-            const lead = await findLatestLeadByContact({email, phone});
-
-            if (!lead) return { status: false };
-
-            let kommoUser = null
-
-            if(lead.responsible_user_id > 0)
-                kommoUser = await getUserDetails(lead.responsible_user_id);
-
-            let to = "jcfuentes@motomundi.cl";
-
-            let ailooUser = null;
-            if(kommoUser) {
-                ailooUser = await drizzleDb.query.user.findFirst({
-                    where: (user, {eq, and}) =>
-                        and(eq(user.email, kommoUser.email), eq(user.domainId, domainId))
-                });
-            }
-
-            if (ailooUser && ailooUser?.email?.length > 0) {
-                to = ailooUser.email;
-            }
-
-            const salesPersonName = ailooUser?.username ?? kommoUser?.name ?? "Vendedor";
-            const leadDate = new Date(lead.created_at * 1000).toLocaleDateString('es-CL', {
-                year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            });
-            const closedDate = new Date().toLocaleDateString('es-CL', {
-                year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            });
-            const leadUrl = `https://motomundi.kommo.com/leads/detail/${lead.id}`;
-
-            const html = `
+    const html = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -195,20 +166,102 @@ export async function notifySalesPerson(orderId: number, domainId: number) {
 </body>
 </html>`;
 
-            const msg = {
-                to,
-                cc: "jcfuentes@motomundi.net",
-                from: 'ventas@motomundi.cl',
-                subject: `✅ Venta cerrada — Ticket #${lead.id} | Orden #${orderId}`,
-                html,
-            };
+    const msg = {
+        to,
+        cc: "jcfuentes@motomundi.net",
+        from: 'ventas@motomundi.cl',
+        subject: `✅ Venta cerrada — Ticket #${lead.id} | Orden #${orderId}`,
+        html,
+    };
 
-            await sgMail.send(msg);
+    await sgMail.send(msg);
+}
+
+
+export async function notifySalesPersonByInvoice(invoiceId: number, domainId: number) {
+    try {
+        const rs: OrderContactMechanisms = await listClientContactMechanismsByInvoice(invoiceId);
+
+        let lead = null;
+        if (rs?.phones?.length > 0) {
+
+            const email = rs?.emails?.[0] || null;
+            const phone = rs?.phones?.[0] || null;
+
+            const lead = await findLatestLeadByContact({email, phone});
+
+            if (!lead) return { status: false };
+
+            let kommoUser = null
+
+            if(lead.responsible_user_id > 0)
+                kommoUser = await getUserDetails(lead.responsible_user_id);
+
+            let to = "jcfuentes@motomundi.cl";
+
+            let ailooUser = null;
+            if(kommoUser) {
+                ailooUser = await drizzleDb.query.user.findFirst({
+                    where: (user, {eq, and}) =>
+                        and(eq(user.email, kommoUser.email), eq(user.domainId, domainId))
+                });
+            }
+
+            if (ailooUser && ailooUser?.email?.length > 0) {
+                to = ailooUser.email;
+            }
+
+            const salesPersonName = ailooUser?.username ?? kommoUser?.name ?? "Vendedor";
+            await sendMailToSalesPerson(lead, salesPersonName, invoiceId, to);
         }
 
         return { status: true, lead };
     } catch (e) {
         logger.error("Unable to notify salesperson: " + e.message);
-        return false;
+        return { status: false};
+    }
+}
+
+export async function notifySalesPerson(orderId: number, domainId: number) {
+    try {
+        const rs: OrderContactMechanisms = await listClientContactMechanisms(orderId);
+
+        let lead = null;
+        if (rs?.phones?.length > 0) {
+
+            const email = rs?.emails?.[0] || null;
+            const phone = rs?.phones?.[0] || null;
+
+            const lead = await findLatestLeadByContact({email, phone});
+
+            if (!lead) return { status: false };
+
+            let kommoUser = null
+
+            if(lead.responsible_user_id > 0)
+                kommoUser = await getUserDetails(lead.responsible_user_id);
+
+            let to = "jcfuentes@motomundi.cl";
+
+            let ailooUser = null;
+            if(kommoUser) {
+                ailooUser = await drizzleDb.query.user.findFirst({
+                    where: (user, {eq, and}) =>
+                        and(eq(user.email, kommoUser.email), eq(user.domainId, domainId))
+                });
+            }
+
+            if (ailooUser && ailooUser?.email?.length > 0) {
+                to = ailooUser.email;
+            }
+
+            const salesPersonName = ailooUser?.username ?? kommoUser?.name ?? "Vendedor";
+            await sendMailToSalesPerson(lead, salesPersonName, orderId, to);
+        }
+
+        return { status: true, lead };
+    } catch (e) {
+        logger.error("Unable to notify salesperson: " + e.message);
+        return { status: false};
     }
 }

@@ -346,7 +346,7 @@ export async function findLatestLeadByContact(params: {
         const phoneContacts: any[] = (phoneResponse?.data._embedded?.contacts ?? []).filter((c: any) =>
             c.custom_fields_values?.some((field: any) =>
                 field.field_code === 'PHONE' &&
-                field.values?.some((v: any) => normalize(v.value) === normalize(params.phone!))
+                field.values?.some((v: any) => normalize(v.value).includes( normalize(params.phone!) ))
             )
         );
 

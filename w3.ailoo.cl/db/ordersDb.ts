@@ -68,6 +68,67 @@ export const listClientContactMechanisms = async (orderId: number) : Promise<Ord
 
 }
 
+export const listClientContactMechanismsByInvoice = async (orderId: number) : Promise<OrderContactMechanisms> => {
+
+    const connection = await pool.getConnection();
+
+    try {
+        const [ rows ] = await connection.execute(
+            `
+
+                select so.Id,
+                       so.OrderedBy,
+                       so.State,
+                       p.Id,
+                       p.Email as Email1,
+                       p.Phone as Phone1,
+                       pa.Email as Email2,
+                       pa.Phone as Phone2
+                from saleorder so
+                         left join party p on p.Id = so.OrderedBy
+                         left outer join PostalAddress pa on pa.PostalAddressId = so.ShippedToId
+                where so.DomainId = 1
+                  and so.Id = ?
+                order by so.Id desc;
+
+`, [ orderId ]
+        );
+
+        let rs = rows as any;
+
+        const result : OrderContactMechanisms = {
+            phones: [],
+            emails: [],
+        }
+        if(rs.length > 0){
+            for(var r of rs){
+                if(r.Phone1 && r.Phone1.length > 0){
+                    result.phones.push(normalizeChileanPhone( r.Phone1));
+                }
+                if(r.Phone2 && r.Phone2.length > 0 && r.Phone2 !== r.Phone1){
+                    result.phones.push(normalizeChileanPhone( r.Phone2));
+                }
+
+                if(r.Email1 && r.Email1.length > 0){
+                    result.emails.push(r.Email1.toLowerCase());
+                }
+                if(r.Email2 && r.Email2.length > 0 && r.Email2 !== r.Email2){
+                    result.emails.push(r.Email2.toLowerCase());
+                }
+
+            }
+        }
+
+
+
+        return result;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await connection.release();
+    }
+
+}
 
 /**
  * Normalizes phone numbers to the format: 569XXXXXXXX
