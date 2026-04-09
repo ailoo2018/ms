@@ -172,6 +172,80 @@ interface KommoSearchResponse {
     };
 }
 
+export async function findLeadByEmail(email: string): Promise<KommoLead[] | null> {
+    const baseUrl = `https://${subdomain}.kommo.com/api/v4`;
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        // Step 1: Find contacts matching the email
+        const contactsResponse = await axios.get(`${baseUrl}/contacts`, {
+            headers,
+            params: {
+                query: email,
+                with: 'leads'
+            }
+        });
+
+        if (contactsResponse.status === 204 || !contactsResponse.data._embedded?.contacts) {
+            console.log('No contacts found matching that email.');
+            return null;
+        }
+
+        const contacts = contactsResponse.data._embedded.contacts;
+
+        // Step 2: Filter contacts that actually have a matching email custom field
+        // (Kommo's `query` param is a broad search, so we narrow it down here)
+        const matchingContacts = contacts.filter((contact: any) =>
+            contact.custom_fields_values?.some((field: any) =>
+                field.field_code === 'EMAIL' &&
+                field.values?.some((v: any) =>
+                    v.value?.toLowerCase() === email.toLowerCase()
+                )
+            )
+        );
+
+        if (matchingContacts.length === 0) {
+            console.log('No contacts with an exact matching email found.');
+            return null;
+        }
+
+        // Step 3: Collect all lead IDs from matched contacts
+        const leadIds: number[] = matchingContacts.flatMap((contact: any) =>
+            contact._embedded?.leads?.map((l: any) => l.id) ?? []
+        );
+
+        if (leadIds.length === 0) {
+            console.log('Contacts found but no associated leads.');
+            return null;
+        }
+
+        // Step 4: Fetch full lead details, ordered by most recent first
+        const leadsResponse = await axios.get(`${baseUrl}/leads`, {
+            headers,
+            params: {
+                ...leadIds.map(id => ['filter[id][]', String(id)]),
+                'order[created_at]': 'desc'
+            }
+        });
+
+        if (!leadsResponse.data._embedded?.leads) return null;
+
+        return leadsResponse.data._embedded.leads.map((lead: any) => ({
+            ...lead,
+            createDate: new Date(lead.created_at * 1000)
+        }));
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('API Error:', error.response?.data || error.message);
+        }
+        throw error;
+    }
+}
+
 export async function findLeadByPhone(phoneNumber: string): Promise<KommoLead[] | null> {
     const baseUrl = `https://${subdomain}.kommo.com/api/v4`;
     const headers = {
@@ -210,7 +284,7 @@ export async function findLeadByPhone(phoneNumber: string): Promise<KommoLead[] 
         const leadsResponse = await axios.get(`${baseUrl}/leads`, {
             headers,
             params: {
-                'filter[id]': leadIds.join(','),
+                ...leadIds.map(id => ['filter[id][]', String(id)]),
                 'order[created_at]': 'desc'
             }
         });
@@ -230,35 +304,90 @@ export async function findLeadByPhone(phoneNumber: string): Promise<KommoLead[] 
     }
 }
 
-export async function findLeadByPhone_bak(phoneNumber: string): Promise<KommoLead[] | null > {
+export async function findLatestLeadByContact(params: {
+    email?: string;
+    phone?: string;
+}): Promise<KommoLead | null> {
+    if (!params.email && !params.phone) {
+        throw new Error('At least one of email or phone must be provided.');
+    }
 
-    const url = `https://${subdomain}.kommo.com/api/v4/leads`;
+    const baseUrl = `https://${subdomain}.kommo.com/api/v4`;
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+    };
 
     try {
-        const response = await axios.get<KommoSearchResponse>(url, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            params: {
-                // The 'query' parameter searches across phone, email, and name
-                query: phoneNumber,
-                'order[created_at]': 'desc'
-            }
-        });
+        // Step 1: Run contact searches in parallel for each provided value
+        const searches = await Promise.all([
+            params.email ? axios.get(`${baseUrl}/contacts`, {
+                headers,
+                params: { query: params.email, with: 'leads' }
+            }).catch(() => null) : null,
+            params.phone ? axios.get(`${baseUrl}/contacts`, {
+                headers,
+                params: { query: params.phone, with: 'leads' }
+            }).catch(() => null) : null,
+        ]);
 
-        if (response.status === 204 || !response.data._embedded) {
-            console.log('No leads found matching that phone number.');
+        const [emailResponse, phoneResponse] = searches;
+
+        // Step 2: Exact-match filter for each result set
+        const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+
+        const emailContacts: any[] = (emailResponse?.data._embedded?.contacts ?? []).filter((c: any) =>
+            c.custom_fields_values?.some((field: any) =>
+                field.field_code === 'EMAIL' &&
+                field.values?.some((v: any) => normalize(v.value) === normalize(params.email!))
+            )
+        );
+
+        const phoneContacts: any[] = (phoneResponse?.data._embedded?.contacts ?? []).filter((c: any) =>
+            c.custom_fields_values?.some((field: any) =>
+                field.field_code === 'PHONE' &&
+                field.values?.some((v: any) => normalize(v.value) === normalize(params.phone!))
+            )
+        );
+
+        // Step 3: Merge contacts, deduplicate by contact ID
+        const allContacts = [...emailContacts, ...phoneContacts];
+        const uniqueContacts = allContacts.filter(
+            (contact, index, self) => self.findIndex(c => c.id === contact.id) === index
+        );
+
+        if (uniqueContacts.length === 0) {
+            console.log('No contacts found matching the provided email or phone.');
             return null;
         }
 
-        var leads =  response.data._embedded.leads;
+        // Step 4: Collect all lead IDs, deduplicated
+        const leadIds: number[] = [...new Set(
+            uniqueContacts.flatMap((contact: any) =>
+                contact._embedded?.leads?.map((l: any) => l.id) ?? []
+            )
+        )];
 
-        const mappedLeads = leads.map( lead => {
-            return {createDate: new Date(lead.created_at * 1000), ...lead}
-        })
+        if (leadIds.length === 0) {
+            console.log('Contacts found but no associated leads.');
+            return null;
+        }
 
-        return mappedLeads;
+        // Step 5: Fetch leads using bracket notation, return only the most recent
+        const leadsResponse = await axios.get(`${baseUrl}/leads`, {
+            headers,
+            params: new URLSearchParams([
+                ...leadIds.map(id => ['filter[id][]', String(id)]),
+                ['order[created_at]', 'desc'],
+                ['limit', '1']
+            ])
+        });
+
+        if (!leadsResponse.data._embedded?.leads) return null;
+
+        const lead = leadsResponse.data._embedded.leads[0];
+        return { ...lead, createDate: new Date(lead.created_at * 1000) };
+
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('API Error:', error.response?.data || error.message);

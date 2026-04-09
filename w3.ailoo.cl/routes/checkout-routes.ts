@@ -432,7 +432,8 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                     orderedBy: person.id,
                     destinationFacilityId: facilityId,
                     invoicedTo: organizacion?.id || null, // todo datos de factura
-                    domainId: domainId
+                    domainId: domainId,
+                    leadId: rq.kommoId || null,
                 });
 
                 const newOrderId = orderResult.insertId;

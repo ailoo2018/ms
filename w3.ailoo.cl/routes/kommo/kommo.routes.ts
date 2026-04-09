@@ -1,6 +1,6 @@
 import router from "../events-routes.js";
 import {db as drizzleDb} from "../../db/drizzle.js";
-import {findLeadByPhone, getUserDetails} from "../../models/kommo.types.js";
+import {findLatestLeadByContact, findLeadByEmail, findLeadByPhone, getUserDetails} from "../../models/kommo.types.js";
 import {notifySalesPerson} from "../../services/ordersService.js";
 
 
@@ -17,37 +17,17 @@ router.get('/:domainId/kommo/notify-lead-close', async (req, res, next) => {
     }
 })
 
+
 router.get('/:domainId/kommo/find-lead', async (req, res, next) => {
 
     try {
         const domainId = parseInt(req.params.domainId);
-        const {phone} = req.query;
+        const {phone, email} = req.query;
 
-        const leads = await findLeadByPhone(phone)
-
-        if (leads.length == 0) {
-            return res.json({})
-        }
-
-        let kommoUser = null
-        let lead = leads[0];
-
-        if (lead.responsible_user_id > 0)
-            kommoUser = await getUserDetails(lead.responsible_user_id)
+        const leads = await findLatestLeadByContact({email, phone})
 
 
-        let ailooUser = null
-        if (kommoUser) {
-            ailooUser = await drizzleDb.query.user.findFirst({
-                where: (user, {eq, and}) => {
-                    return and(
-                        eq(user.email, kommoUser.email),
-                        eq(user.domainId, domainId))
-                }
-            })
-
-        }
-        res.json({lead: leads[0], kommoUser, ailooUser: ailooUser});
+        res.json(leads);
     } catch (err) {
         next(err);
     }
