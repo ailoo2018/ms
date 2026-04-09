@@ -16,7 +16,7 @@ import logger from "@ailoo/shared-libs/logger";
 import {SizeChartService} from "@ailoo/shared-libs/SizeChartService";
 import cmsClient from "../../services/cmsClient.js";
 import {currencyHandler} from "../../server.js";
-import {productComplements} from "../../db/product.js";
+import {insertNotifyWhenAvailable, productComplements} from "../../db/product.js";
 import {productCacheKey} from "../../utils/cache-utils.js";
 import { db as redisDb } from "../../connections/rdb.js";
 import sgMail from "../../connections/sendmail.js";
@@ -566,6 +566,12 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
 
     const subject = `Notificar cuando esté disponible ${desc}`
     const data = await createKommoLead(email, subject, 13485780)
+
+    try {
+      await insertNotifyWhenAvailable(rq.productItemId, email)
+    }catch (e) {
+      logger.error("Error insertNotifyWhenAvailable::" + e)
+    }
 
     res.json({
       pit,

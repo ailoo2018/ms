@@ -1,6 +1,27 @@
 import {pool} from "../connections/mysql.js";
 import { RowDataPacket } from "mysql2"; // Optional: for better typing
 
+export const insertNotifyWhenAvailable = async function(productItemId: number, email: string) {
+
+    const connection = await pool.getConnection();
+
+    try {
+        const [result] = await connection.execute(
+            `INSERT INTO notifywhenavailable (ProductItemId, CreateDate, Email)
+       VALUES (?, NOW(), ?)`,
+            [productItemId, email]
+        );
+
+        return result;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        await connection.release();
+    }
+
+}
+
 export const productDescription = async function(productId) {
 
   const connection = await pool.getConnection();
