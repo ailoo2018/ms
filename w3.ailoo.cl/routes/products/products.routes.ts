@@ -554,6 +554,11 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
       unsubscribeUrl: "https://www.motomundi.cl",
     });
 
+    try {
+      await insertNotifyWhenAvailable(rq.productItemId, rq.email.toLowerCase().trim())
+    }catch (e) {
+      logger.error("Error insertNotifyWhenAvailable::" + e)
+    }
 
     const email = rq.email;
     await sgMail.send({
@@ -567,11 +572,7 @@ router.post("/:domainId/products/notify-when-available", async (req, res, next) 
     const subject = `Notificar cuando esté disponible ${desc}`
     const data = await createKommoLead(email, subject, 13485780)
 
-    try {
-      await insertNotifyWhenAvailable(rq.productItemId, email)
-    }catch (e) {
-      logger.error("Error insertNotifyWhenAvailable::" + e)
-    }
+
 
     res.json({
       pit,
