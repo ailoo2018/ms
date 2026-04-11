@@ -1,4 +1,5 @@
 import {pool} from "../connections/mysql.js";
+import mysql from "mysql2/promise";
 
 export interface OrderContactMechanisms {
     phones: string[];
@@ -68,30 +69,20 @@ export const listClientContactMechanisms = async (orderId: number) : Promise<Ord
 
 }
 
-export const listClientContactMechanismsByInvoice = async (orderId: number) : Promise<OrderContactMechanisms> => {
+export const listClientContactMechanismsByInvoice = async (invoiceId: number) : Promise<OrderContactMechanisms> => {
 
     const connection = await pool.getConnection();
 
     try {
         const [ rows ] = await connection.execute(
             `
+                select p.Email, p.Phone
+                from Invoice i
+                         left outer join Party p on p.Id = i.ReceivedById
+                where i.Id = ?;
 
-                select so.Id,
-                       so.OrderedBy,
-                       so.State,
-                       p.Id,
-                       p.Email as Email1,
-                       p.Phone as Phone1,
-                       pa.Email as Email2,
-                       pa.Phone as Phone2
-                from saleorder so
-                         left join party p on p.Id = so.OrderedBy
-                         left outer join PostalAddress pa on pa.PostalAddressId = so.ShippedToId
-                where so.DomainId = 1
-                  and so.Id = ?
-                order by so.Id desc;
 
-`, [ orderId ]
+`, [ invoiceId ]
         );
 
         let rs = rows as any;
@@ -102,24 +93,15 @@ export const listClientContactMechanismsByInvoice = async (orderId: number) : Pr
         }
         if(rs.length > 0){
             for(var r of rs){
-                if(r.Phone1 && r.Phone1.length > 0){
-                    result.phones.push(normalizeChileanPhone( r.Phone1));
+                if(r.Phone && r.Phone.length > 0){
+                    result.phones.push(normalizeChileanPhone( r.Phone));
                 }
-                if(r.Phone2 && r.Phone2.length > 0 && r.Phone2 !== r.Phone1){
-                    result.phones.push(normalizeChileanPhone( r.Phone2));
-                }
-
-                if(r.Email1 && r.Email1.length > 0){
-                    result.emails.push(r.Email1.toLowerCase());
-                }
-                if(r.Email2 && r.Email2.length > 0 && r.Email2 !== r.Email2){
-                    result.emails.push(r.Email2.toLowerCase());
+                if(r.Email && r.Email.length > 0){
+                    result.emails.push(r.Email.toLowerCase());
                 }
 
             }
         }
-
-
 
         return result;
     } catch (error) {
@@ -129,6 +111,39 @@ export const listClientContactMechanismsByInvoice = async (orderId: number) : Pr
     }
 
 }
+
+
+export async function insertInvoiceLead(invoiceId: number, leadId: number) {
+
+
+    const connection = await pool.getConnection();
+
+    try {
+        const [rows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT Id FROM invoicelead WHERE InvoiceId = ? AND LeadId = ?',
+            [invoiceId, leadId]
+        );
+
+        if (rows.length > 0) {
+            return
+        }
+
+        const [result] = await connection.execute(
+            'INSERT INTO invoicelead (InvoiceId, LeadId) VALUES (?, ?)',
+            [invoiceId, leadId]
+        );
+
+        return result;
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await connection.release();
+    }
+
+}
+
+
+
 
 /**
  * Normalizes phone numbers to the format: 569XXXXXXXX

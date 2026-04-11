@@ -52,7 +52,6 @@ router.post('/:domainId/newsletter/subscribe', async (req, res, next) => {
             const __filename = fileURLToPath(import.meta.url);
             const __dirname = path.dirname(__filename);
             const templatePath = path.join( __dirname, "../..", 'templates', 'newsletter.ejs');
-
             const template = await fs.readFile(templatePath, 'utf-8');
 
             const logoParam = await parametersClient.getParameter("DOMAIN", "LOGO", domainId)

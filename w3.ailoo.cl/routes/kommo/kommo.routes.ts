@@ -1,7 +1,7 @@
 import router from "../events-routes.js";
 import {db as drizzleDb} from "../../db/drizzle.js";
 import {findLatestLeadByContact, findLeadByEmail, findLeadByPhone, getUserDetails} from "../../models/kommo.types.js";
-import {notifySalesPerson} from "../../services/ordersService.js";
+import {notifySalesPerson, notifySalesPersonByInvoice} from "../../services/ordersService.js";
 import {and, eq, gt, inArray} from "drizzle-orm";
 import schema from "../../db/schema.js";
 
@@ -12,13 +12,13 @@ router.get('/:domainId/kommo/validate-leads', async (req, res, next) => {
 
     try {
         const domainId = parseInt(req.params.domainId);
-        const invoiceId = parseInt(req.query.orderId);
+        const invoiceId = parseInt(req.query.invoiceId);
 
-        const ret = await notifySalesPerson(invoiceId, domainId)
+        const ret = await notifySalesPersonByInvoice(invoiceId, domainId)
 
         res.json({status: ret})
     } catch (err) {
-
+        next(err)
     }
 })
 
