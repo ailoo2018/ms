@@ -101,6 +101,23 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
 })
 
 
+const shippingMethods = new Map<number, string>([
+    [1, "Correos de Chile"],
+    [2, "Starken"],
+    [3, "Starken Por Pagar"],
+    [4, "Envíos Dentro De Santiago"],
+    [5, "Chilexpress"],
+    [6, "UPS Worldwide Expedited"],
+    [7, "Blue Express"],
+    [8, "Envío Gratuito"],
+    [9, "Retiro en Tienda"],
+    [10, "TNT"],
+    [11, "DHL"],
+    [12, "MuvSmart"],
+    [13, "Alas Express"],
+    [14, "Envio propio"],
+]);
+
 router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, res : any, next : any) => {
     try {
         const userReq = req.user;
@@ -144,6 +161,7 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
         res.json({
             orders: results.map(r => {
                 const orderProducts = []
+                let total = 0;
                 for (const oi of r.items) {
 
                     if (!oi.productItemId)
@@ -160,24 +178,41 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
                         continue
 
                     var image = getProductImage(product, productItem)
+                    total = parseInt(oi.quantity) * oi.unitPrice
 
                     orderProducts.push({
                         id: product.id,
                         name: product.name,
+                        fullName: product.fullName,
                         brand: product.brand,
                         description: ProductHelper.getProductItemDescription(product, productItem),
                         productItemId: productItem.id,
                         image: image?.image || null,
                         quantity: oi.quantity,
+                        product: {
+                            id: product.id,
+                            fullName: product.fullName,
+                            image: product.image,
+                            brand: product.brand && {
+                                id: product.brand.id,
+                                name: product.brand.name,
+                                logo: product.brand.logo
+                            }
+                        },
                     })
                 }
                 return {
                     id: r.id,
+                    number: r.id,
+                    documentDate: r.orderDate,
+                    shipmentMethodType: getShippingMethod( r.shipmentMethodTypeId ),
                     date: r.orderDate,
-                    total: 0,
+                    total: total,
+                    netTotal: total / 1.19,
+                    iva: (total - total / 1.19),
                     statusId: r.state,
                     status: OrderStateDesc["" + r.state] ? OrderStateDesc["" + r.state] : "Desconocido",
-                    products: orderProducts,
+                    productItems: orderProducts,
 
                 }
             })
@@ -186,6 +221,13 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
         next(err);
     }
 });
+
+function getShippingMethod(type){
+    if(shippingMethods.has(type))
+        return shippingMethods.get(type);
+    return "Desconocido";
+}
+
 
 router.delete("/:domainId/account/addresses/:id", validateJWT, async (req, res, next) => {
     try {

@@ -2,9 +2,13 @@
 * productos en inventario virtual no se pueden pagar
 * product detail when i select color should show product in carrusel
 * no se esta solicitando email de cliente en caja
+* check saleorder.leadId when payment is received and send confirmation
 
+- manually add lead to admin
 - zonas extremas caclulo de dia
-- check saleorder.leadId when payment is received and send confirmation
+
+
+
 - add email check to payment received so that we can enlazar saleorder with leadId
 - update saleorder if lead is enlazado set leadId = komooLeadId 
 
@@ -21,6 +25,8 @@
 - view widget in nuxt
 - cdn dedicated in iis
 - q&a
+
+
 
 
 
