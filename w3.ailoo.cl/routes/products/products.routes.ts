@@ -30,7 +30,7 @@ const router = Router();
 const productService = container.resolve('productsService');
 const cartService = container.resolve('cartService');
 const sizeChartService = container.resolve('sizeChartService') as SizeChartService;
-const CACHE_TTL = 60 * 60 * 12;
+const CACHE_TTL = 60 * 60 * 3;
 
 router.post("/:domainId/seen-cheaper", async (req, res, next) => {
   try{

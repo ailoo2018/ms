@@ -3,9 +3,12 @@
 * product detail when i select color should show product in carrusel
 * no se esta solicitando email de cliente en caja
 * check saleorder.leadId when payment is received and send confirmation
+* fechas que sale en cuenta de usuario en la web no correcta
+* manually add lead to admin
 
-- manually add lead to admin
+- ventas con factura online no registra email
 - zonas extremas caclulo de dia
+- component OrderHistory
 
 
 
