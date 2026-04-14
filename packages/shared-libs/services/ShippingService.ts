@@ -6,6 +6,20 @@ export class ShippingService {
         this.db = db;
     }
 
+    async calculateEta(now: Date){
+        const fromDate = new Date(now);
+        fromDate.setDate(now.getDate() + 7);
+
+// Create 'to' date by adding 15 days
+        const toDate = new Date(now);
+        toDate.setDate(now.getDate() + 15);
+
+        return {
+            from: fromDate,
+            to: toDate,
+        }
+    }
+
     async listShippingMethods(domainId :number ) {
 
         let connection

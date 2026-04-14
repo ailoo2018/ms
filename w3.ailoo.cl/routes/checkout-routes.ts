@@ -18,6 +18,7 @@ import {updateCart} from "../el/cart.js";
 import {convert} from "../services/exchangeService.js";
 
 import {Rut} from "@ailoo/shared-libs/models/rut"
+import {ShippingService} from "@ailoo/shared-libs/ShippingService";
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -32,6 +33,7 @@ const {
 
 
 const cartService = container.resolve("cartService");
+const shippingService: ShippingService = container.resolve("shippingService");
 
 
 router.get("/:domainId/shipping/methods", async (req, res, next) => {
@@ -50,15 +52,7 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
             const shippingCostInLocalCurrency = await convert(30, "USD", "CLP")
             const freeShippingThreshold = await convert(300, "USD", "CLP")
 
-            const now = new Date();
-
-// Create 'from' date by adding 7 days
-            const fromDate = new Date(now);
-            fromDate.setDate(now.getDate() + 7);
-
-// Create 'to' date by adding 15 days
-            const toDate = new Date(now);
-            toDate.setDate(now.getDate() + 15);
+            const eta = await shippingService.calculateEta(new Date());
 
             quotes = [{
                 "id": 1,
@@ -75,10 +69,7 @@ router.get("/:domainId/shipping/methods", async (req, res, next) => {
                     "to": 4
                 },
                 "estimatedDays": 14,
-                "eta": {
-                    "from": fromDate.toISOString(),
-                    "to": toDate.toISOString(),
-                },
+                "eta": eta,
                 "type": 5
             },]
 

@@ -8,12 +8,14 @@ import {and,  eq, ne} from "drizzle-orm";
 import container from "../container/index.js";
 import {getProductImage} from "../helpers/product-helper.js";
 import {findOrder} from "../services/ordersService.js";
+import {ShippingService} from "@ailoo/shared-libs/ShippingService";
+
 const router = Router();
 
 import schema from "../db/schema.js";
 
 const { postalAddress,  saleOrder, contactMechanism, partyContactMechanism } = schema
-
+const shippingService: ShippingService = container.resolve("shippingService");
 
 
 const productService = container.resolve('productsService');
@@ -93,6 +95,9 @@ router.get("/:domainId/account/orders/:id", validateJWT, async (req, res, next) 
 
         const order = await findOrder(orderId, domainId)
 
+        const eta = await shippingService.calculateEta(order.orderDate);
+        order.eta = eta;
+
 
         res.json(order)
     } catch (e) {
@@ -159,11 +164,12 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
         const products = await productService.findProductsByProductItems(pitIds, domainId)
 
         res.json({
-            orders: results.map(r => {
+            orders: await Promise.all(results.map(async (r) => {
                 const orderProducts = []
+                const eta = await shippingService.calculateEta(r.orderDate)
                 let total = 0;
-                for (const oi of r.items) {
 
+                for (const oi of r.items) {
                     if (!oi.productItemId)
                         continue
 
@@ -201,21 +207,22 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
                         },
                     })
                 }
+
                 return {
                     id: r.id,
                     number: r.id,
                     documentDate: r.orderDate,
-                    shipmentMethodType: getShippingMethod( r.shipmentMethodTypeId ),
+                    eta,
+                    shipmentMethodType: getShippingMethod(r.shipmentMethodTypeId),
                     date: r.orderDate,
                     total: total,
                     netTotal: total / 1.19,
                     iva: (total - total / 1.19),
                     statusId: r.state,
-                    status: OrderStateDesc["" + r.state] ? OrderStateDesc["" + r.state] : "Desconocido",
+                    status: OrderStateDesc["" + r.state] ?? "Desconocido",
                     productItems: orderProducts,
-
                 }
-            })
+            }))
         })
     } catch (err) {
         next(err);
