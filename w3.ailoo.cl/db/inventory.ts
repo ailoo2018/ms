@@ -77,7 +77,7 @@ from InventoryItem ii
          join PostalAddress pa on fcm.ContactMechanismId = pa.PostalAddressId
         join GeographicBoundary gb on gb.Id = pa.ComunaId
        
-where f.IsAvailableForInternet = 1 and f.Type = 0
+where f.IsAvailableForInternet = 1 and f.Type = 0 and f.Deleted = 0
   and ii.ProductItemId in (?)
   and f.DomainId = ? group by f.Id;
 
