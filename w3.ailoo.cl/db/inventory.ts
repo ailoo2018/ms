@@ -65,7 +65,7 @@ export const stockAllStores = async function (productItemId, domainId) {
        f.Name as FacilityName,
        f.IsAvailableForInternet,
        f.AllowPickup,
-       ii.Id     InventoryItemId,
+       ii.Id InventoryItemId,
        ii.ProductItemId,
        sum(ifnull(ii.Quantity, 0)) as Quantity,
        pa.Address,

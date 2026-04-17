@@ -31,6 +31,7 @@ async function updateSaleOrderToPending(confirmRs: PaymentValidation, domainId: 
             )
         );
 }
+
 async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
 
     const order: any = await drizzleDb.query.saleOrder.findFirst({
@@ -79,12 +80,10 @@ async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
         logger.error("Unable to notify payment validated to admin: " + e.message)
     }
 
-    await notifySalesPerson(order.id, domainId)
+   // await notifySalesPerson(order.id, domainId)
 
 
 }
-
-
 
 const processingLocks = new Map<string, Promise<void>>();
 
