@@ -58,7 +58,7 @@ export const findOrder = async (orderId, domainId, ) => {
 }
 
 
-async function sendMailToSalesPerson(lead: any, salesPersonName, orderId: any, to: string, type: string, invoiceType?: any) {
+async function sendMailToSalesPerson(lead: any, salesPersonName, orderId: any, to: string, type: string, invoiceType?: any, invoiceId?: number) {
     const leadDate = new Date(lead.created_at * 1000).toLocaleDateString('es-CL', {
         year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit'
@@ -83,6 +83,7 @@ async function sendMailToSalesPerson(lead: any, salesPersonName, orderId: any, t
         leadUrl,
         type,
         invoiceType,
+        invoiceId: invoiceId || 0,
     })
 
     const msg = {
@@ -140,7 +141,8 @@ export async function notifySalesPersonByInvoice(invoiceId: number, domainId: nu
             }
 
             const salesPersonName = ailooUser?.username ?? kommoUser?.name ?? "Vendedor";
-            await sendMailToSalesPerson(lead, salesPersonName, invoice.number, to, "INVOICE", invoice.type === 0 ? "Boleta" : "Factura");
+            await sendMailToSalesPerson(lead, salesPersonName, invoice.number,
+                to, "INVOICE", invoice.type === 0 ? "Boleta" : "Factura", invoiceId);
 
             await insertInvoiceLead(invoiceId, lead.id, ailooUser ? ailooUser.id: 0)
 
