@@ -158,6 +158,7 @@ export async function notifySalesPersonByInvoice(invoiceId: number, domainId: nu
                             lead: {
                                 id: lead.id,
                                 userId: ailooUser ? ailooUser.id : 0,
+                                username: ailooUser?.username || '',
                                 status: 0,
                             }
                         }
