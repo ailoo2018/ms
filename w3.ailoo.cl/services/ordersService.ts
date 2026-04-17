@@ -13,6 +13,7 @@ import {fileURLToPath} from "url";
 import path from "path";
 import {promises as fs} from "fs";
 import ejs from "ejs";
+import {getDocumentsIndexName, getElClient, getIndexName} from "../connections/el.js";
 
 export const findOrder = async (orderId, domainId, ) => {
     const orderDb = await drizzleDb.query.saleOrder.findFirst({
@@ -141,7 +142,28 @@ export async function notifySalesPersonByInvoice(invoiceId: number, domainId: nu
             const salesPersonName = ailooUser?.username ?? kommoUser?.name ?? "Vendedor";
             await sendMailToSalesPerson(lead, salesPersonName, invoice.number, to, "INVOICE", invoice.type === 0 ? "Boleta" : "Factura");
 
-            await insertInvoiceLead(invoiceId, lead.id)
+            await insertInvoiceLead(invoiceId, lead.id, ailooUser ? ailooUser.id: 0)
+
+            // index lead
+            const result = await getElClient().updateByQuery({
+                index: getDocumentsIndexName(domainId),
+                body: {
+                    query: {
+                        term: { id: invoiceId }
+                    },
+                    script: {
+                        source: 'ctx._source.lead = params.lead',
+                        lang: 'painless',
+                        params: {
+                            lead: {
+                                id: lead.id,
+                                userId: ailooUser ? ailooUser.id : 0,
+                                status: 0,
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         return { status: true, lead };

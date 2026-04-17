@@ -39,6 +39,12 @@ export function getCmsIndexName(domainId){
 	}
 	return name + domainId;
 }
+export function getDocumentsIndexName(domainId){
+	if(process.env.NODE_ENV === "test"){
+		return "test-invoices";
+	}
+	return 'invoices';
+}
 
 
 export function getDiscountIndexName(){

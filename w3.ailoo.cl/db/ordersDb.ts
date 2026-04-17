@@ -113,7 +113,7 @@ export const listClientContactMechanismsByInvoice = async (invoiceId: number) : 
 }
 
 
-export async function insertInvoiceLead(invoiceId: number, leadId: number) {
+export async function insertInvoiceLead(invoiceId: number, leadId: number, userId: number) {
 
 
     const connection = await pool.getConnection();
@@ -129,8 +129,8 @@ export async function insertInvoiceLead(invoiceId: number, leadId: number) {
         }
 
         const [result] = await connection.execute(
-            'INSERT INTO invoicelead (InvoiceId, LeadId) VALUES (?, ?)',
-            [invoiceId, leadId]
+            'INSERT INTO invoicelead (InvoiceId, LeadId, LeadUserId) VALUES (?, ?, ?)',
+            [invoiceId, leadId, userId]
         );
 
         return result;
