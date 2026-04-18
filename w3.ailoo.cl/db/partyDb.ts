@@ -1,6 +1,31 @@
 import {pool} from "../connections/mysql.js";
 
 
+export const addPartyTag = async (partyId: number, tagId: number) => {
+  const connection = await pool.getConnection();
+
+  try {
+    await connection.execute(
+        `
+      INSERT INTO PartyTag (PartyId, TagId)
+      SELECT ?, ?
+      FROM DUAL
+      WHERE NOT EXISTS (
+          SELECT 1 
+          FROM PartyTag 
+          WHERE PartyId = ? AND TagId = ?
+      )
+      `,
+        [partyId, tagId, partyId, tagId] // Pass parameters for both the SELECT and the WHERE clause
+    );
+  } catch (error) {
+    console.error("Error adding party tag:", error);
+    throw error; // Re-throwing allows the caller to handle the failure
+  } finally {
+    connection.release();
+  }
+};
+
 export const listPartyPostalAddresses = async partyId => {
 
   const connection = await pool.getConnection();

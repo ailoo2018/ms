@@ -9,6 +9,10 @@ import path from "path";
 import {promises as fs} from "fs";
 import parametersClient from "../../services/parametersClient.js";
 import ejs from "ejs";
+import {addPartyTag} from "../../db/partyDb.js";
+
+
+const NEWSLETTER_TAG_ID = 2380;
 
 router.post('/:domainId/newsletter/subscribe', async (req, res, next) => {
 
@@ -36,16 +40,23 @@ router.post('/:domainId/newsletter/subscribe', async (req, res, next) => {
                         receiveNewsletter: 1
                     })
                     .where(eq(schema.party.id, party.id));
+
+                await addPartyTag(party.id, NEWSLETTER_TAG_ID)
             }else{
                 isNew = true;
 
-                await drizzleDb.insert(schema.party).values({
+                const [result] = await drizzleDb.insert(schema.party).values({
                     name: name,
                     email: email,
                     type: "PERSON",
+                    createDate: new Date(),
                     receiveNewsletter: 1,
                     domainId: domainId
                 })
+
+                //add newsletter tag
+                await addPartyTag( result.insertId, NEWSLETTER_TAG_ID);
+
             }
 
 
