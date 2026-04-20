@@ -116,7 +116,7 @@ export class CartService {
 
       // Brands Check
       if (productRuleDto.brands && productRuleDto.brands.length > 0) {
-        if (!productRuleDto.brands.some(b => b.id === product.BrandId)) {
+        if (!productRuleDto.brands.some(b => b.id === product.brand?.id)) {
           return { applies: false, qty: 0 };
         }
       }

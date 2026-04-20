@@ -1,17 +1,6 @@
-* listar invoices tambien
-* productos en inventario virtual no se pueden pagar
-* product detail when i select color should show product in carrusel
-* no se esta solicitando email de cliente en caja
-* check saleorder.leadId when payment is received and send confirmation
-* fechas que sale en cuenta de usuario en la web no correcta
-* manually add lead to admin
 
 - ventas con factura online no registra email
 - zonas extremas caclulo de dia
-
-
-
-
 - add email check to payment received so that we can enlazar saleorder with leadId
 - update saleorder if lead is enlazado set leadId = komooLeadId 
 
@@ -32,9 +21,3 @@
 
 
 
-
-
-
-
-
-felipemontes@outlook.com cliente quiere saber cuando llega casco SM-10 Flood

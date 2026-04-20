@@ -1,638 +1,700 @@
 {
-  "aside_toggleable": true,
-  "customers_enabled": false,
-  "lang": {
-    "page": {
-      "title": "Communication tools",
-      "buttons": {
-        "connect": "Connect"
-      }
+  "isFromCache": false,
+  "discountRules": [
+    {
+      "id": 1996,
+      "name": "Pack Luz Casco"
     },
-    "title": "Settings",
-    "Free users": "Free users",
-    "Group": "Group",
-    "Activity": "Activity",
-    "users": "user,users,users",
-    "notify": "notify",
-    "Deactivate": "Deactivate",
-    "Fully on": "Active",
-    "Enable": "Enable",
-    "Add action": "Create",
-    "View action": "View",
-    "Edit action": "Edit",
-    "Delete action": "Delete",
-    "Export action": "Export",
-    "New group": "New group",
-    "Add free user": "Add free user",
-    "Edit group": "Edit group",
-    "Save": "Save",
-    "Cancel": "Cancel",
-    "and": "and",
-    "triggers": {
-      "during": {
-        "text": "Custom",
-        "days": "d",
-        "hours": "h",
-        "minutes": "m",
-        "task_days": "day,days",
-        "task_hours": "hour,hours",
-        "task_minutes": "minute,minutes",
-        "task_in": "in",
-        "task_and": "and"
-      }
+    {
+      "id": 1870,
+      "name": "Pack casco más limpia visor"
     },
-    "USER_RIGHTS__PLACEHOLDER_NAME": "Name",
-    "USER_RIGHTS__PLACEHOLDER_PASS": "Password",
-    "SOA_TEMPL_PASS_REENTER": "Confirm password",
-    "USER_RIGHTS__USER_ADD": "Add user",
-    "multiaction_change_responsible_full": "access to multiple actions change responsible",
-    "multiaction_add_task_full": "access to multiple actions add task",
-    "multiaction_change_status_full": "access to multiple actions change stage",
-    "multiaction_custom_fields_values_edit_full": "access to multiple actions change field",
-    "multiaction_delete_full": "access to multiple actions delete",
-    "multiaction_edit_tags_full": "access to multiple actions edit tags",
-    "multiaction_add_mass_message_full": "access to multiple actions send messages to messengers",
-    "multiaction_merge_full": "access to multiple actions merge",
-    "multiaction_open_close_full": "access to multiple actions close tasks",
-    "multiaction_change_task_date_full": "access to multiple actions change due date",
-    "multiaction_change_task_type_full": "access to multiple actions change task type",
-    "ur_disabled_caption": "Disabled users",
-    "ur_disabled_counter": "disabled,disabled",
-    "user_rights_short_pass": "Password must be 6 characters or more",
-    "user_rights_long_pass": "Password must not exceed 72 characters",
-    "placeholder_email": "Email",
-    "PROPERTY_DENIED": "Denied",
-    "PROPERTY_GROUP_ONLY": "Team-wide access",
-    "PROPERTY_IF_RESPONSIBLE": "If responsible",
-    "PROPERTY_ALLOWED": "Allowed",
-    "Shorten links": "Track link clicks",
-    "Shrink your links and track clicks: When enabled, any URLs you send will be replaced with short links.": "Shrink long links and track clicks: When enabled, URLs you send will be replaced with tracking links.",
-    "Once clicked, a note will be added in the contact card.": "Once clicked, an event will be logged in the lead's feed.",
-    "Select which sources use this feature": "Select which sources use this feature",
-    "below (shorten links)": "below",
-    "Error loading settings. Please reload the page.": "Error loading settings. Please reload the page.",
-    "Show sender's name in chats": "Show sender's name in chats",
-    "When enabled, the sender's name from their Kommo profile will be added to the first message they send in a chat. The name will show again after the client replies or when another teammate sends a new message. Select the channels where you want to display the sender's name.": "When enabled, the sender's name from their Kommo profile will be added to the first message they send in a chat. The name will show again after the client replies or when another teammate sends a new message. Select the channels where you want to display the sender's name.",
-    "Choose a template": "Choose a template",
-    "Our partners can set up Salesbot for you.": "Our partners can set up Salesbot for you.",
-    "Get started": "Get started",
-    "{{brand_name.ai}} is your AI assistant that provides response suggestions for agents during chats by utilizing a knowledge base.": "Kommo is your AI assistant that provides response suggestions for agents during chats by utilizing a knowledge base.",
-    "Communication tools": "Communication tools",
-    "Net Promoter Score": "Net Promoter Score",
-    "NPS is Net Promoter Score": "Assess Net Promoter Score (NPS)",
-    "When communicating with a client, the NPS function generates a unique conversation number. After the issue is solved and the conversation is closed, the client is sent a customizable message with a request to evaluate the service they received on a ten-point scale.": "When conversations are marked closed, Salesbot sends a customizable message requesting the customer to evaluate the service they received on a ten-point scale.",
-    "When the issue is marked resolved, send the following message:": "When the issue is marked resolved, send the following message:",
-    "Please rate the service you received from 1 (worst) to 10 (best)": "Please rate the service you received from 1 (worst) to 10 (best)",
-    "Notify": "Notify",
-    "When a client gives a rating less than or equal to": "When a client gives a rating less than or equal to",
-    "Chat templates": "Chat templates",
-    "Salesbot list": "Salesbots",
-    "Marketingbot list": "Marketingbots",
-    "Create a new bot": "Create a new bot",
-    "Create": "Create",
-    "import a new bot": "import a new bot",
-    "Conversion": "Conversion rate",
-    "Total launched": "Total launched",
-    "Total active": "Active sessions",
-    "Copy": "Copy",
-    "Cc": "Cc",
-    "SUCCESS": "Changed successfully!",
-    "You can create bots to use in triggers or edit your existing bots": "You can create bots to use in triggers or edit your existing bots",
-    "Build no-code bots to automate chats and routine tasks. Start from scratch or use a template \u2014 then customize it and add your triggers.": "Build no-code bots to automate chats and routine tasks. Start from scratch or use a template \u2014 then customize it and add your triggers.",
-    "Chat with customers faster by using personalized response templates. They\u2019re available when you chat in the lead card or use the AI power-up below.": "Chat with customers faster by using personalized response templates. They\u2019re available when you chat in the lead card or use the AI power-up below.",
-    "Go to Templates": "Go to Templates",
-    "Approval status": "Approval status",
-    "Name of customer": "Name of customer",
-    "Expected amount": "Expected purchase",
-    "Lead name": "Lead name",
-    "Lead status": "Lead stage",
-    "Add a template": "Add a template",
-    "Template deleted": "Template deleted",
-    "Delete template": "Delete template",
-    "Save draft": "Save draft",
-    "Send for review": "Send for review",
-    "This template can be used by all phone numbers connected to": "This template can be used by all phone numbers connected to",
-    "No header": "No header",
-    "Text": "Text",
-    "Enter a header for your message": "Enter a header for your message",
-    "Header (Optional)": "Header (Optional)",
-    "Image or file": "Image or file",
-    "New template": "New template",
-    "cf_subtype_address_line_1": "Address line 1",
-    "cf_subtype_address_line_2": "Address line 2",
-    "cf_subtype_city": "City",
-    "cf_subtype_state": "State",
-    "cf_subtype_zip": "ZIP",
-    "cf_subtype_country": "Country",
-    "advanced": "advanced",
-    "Upgrade to advanced plan": "Upgrade to Advanced",
-    "Last update": "Last update:",
-    "Detect a client\u2019s intentions based on the keywords they use, and automatically send a chat template or run a salesbot": "Detect a client\u2019s intentions based on the keywords they use, and automatically send a chat template or run a salesbot",
-    "The keyword dataset is automatically updated every hour, or you can manually update it any time": "The keyword dataset is automatically updated every hour, or you can manually update it any time",
-    "Update dataset": "Update dataset",
-    "Times launched": "Times launched",
-    "Intention": "Intention",
-    "Keyword dataset": "Keyword dataset",
-    "Mark messages unread": "Mark messages unread",
-    "Leave message unanswered": "Leave message unanswered",
-    "Action": "Action",
-    "Add document with phrases you can expect from users": "Add document with phrases you can expect from users",
-    "Enrich dataset with synonym base": "Enrich dataset with synonym base",
-    "Upload file & Save": "Upload file & Save",
-    "Assess the quality of service from 1 to 10": "Assess the quality of service from 1 to 10",
-    "Thank you for rating": "Thank you for rating",
-    "Thank you for rating, we will inform the supervisor": "Thank you for your feedback. Have a great day.",
-    "The client rated the quality of service below the established level": "The client rated the quality of service below the established level",
-    "Always create new lead": "Always create new lead",
-    "Link to won": "Link to won",
-    "Link to lost": "Link to lost",
-    "Set up the rules for creating a new conversation": "Select the rules for creating a new conversation",
-    "When client writes a message to the chat, amoCRM looks for an open conversation and adds a message to it. If there is no open conversation, amoCRM creates a new conversation in an open lead or open customers in which the work is in progress": "When a lead sends a chat message, Kommo adds it to the ongoing conversation. If there is no ongoing conversation, Kommo starts a new conversation in the corresponding lead.",
-    "Create event if message response time is exceeded": "Log slow responses",
-    "If there is no reply to a message in a conversation for more than": "If a user does not answer a chat message within",
-    "add a \"Talk response time exceeded\" event to the events list": "add a \"Response time exceeded\" event in the event log",
-    "MINUTE_2": "minutes",
-    "enterprise": "enterprise",
-    "Online chats": "Online chats",
-    "Multiple": "Multiple",
-    "Conversations": "Conversations",
-    "Custom field not found": "Custom field not found",
-    "Online chat": "Live chat",
-    "External ID (short)": "External ID",
-    "One active": "One active",
-    "Embed code": "Embed code",
-    "Add the URLs of the websites where you will install online chat": "Add the URLs of the websites where you will install online chat",
-    "Location address": "Website",
-    "Paste the code in the HTML of your website": "Choose a display option and paste the code into the HTML of your page",
-    "Install the online chat in the code of your website": "Install the online chat in the code of your website",
-    "More options to adjust chat appearance in": "More options to adjust chat appearance in",
-    "You can adjust Online Chat appearance via": "You can adjust Online Chat appearance via",
-    "Create a new online chat": "Create a new online chat",
-    "Before copying, you need to specify the domain where you will place the online chat": "Before copying, you need to specify the domain where you will place the online chat",
-    "selected online chats (genitive)": "selected online chats",
-    "List of online chat connected for all pipelines. Here you can enable multiple conversations to account for customer calls through online chat.": "List of online chat connected for all pipelines. Here you can enable multiple conversations to account for customer calls through online chat.",
-    "If you want to integrate online chat in your product and use your own customer IDs, select the transaction field in which this identifier will be stored.": "If you want to integrate online chat in your product and use your own customer IDs, select the transaction field in which this identifier will be stored.",
-    "Build your bot": "Build your bot",
-    "Set up a trigger": "Set up a trigger",
-    "Easy automations in 3 steps": "Easy automations in 3 steps",
-    "PLUG_TOOLTIP_BUTTON": "Upgrade your plan",
-    "AI Suggested Reply": "AI reply suggestions",
-    "Last changes": "Last changes",
-    "Updated by": "Updated by",
-    "Import your help center URL, FAQ page, terms and conditions, and more to enhance its capabilities.": "Import your help center URL, FAQ page, terms and conditions, and more to enhance its capabilities.",
-    "Add new knowledge source": "Add new knowledge source",
-    "Source name": "Source name",
-    "Language (HelpCenter)": "Language",
-    "Number of pages": "Number of pages",
-    "Update": "Update",
-    "AI_agent": "AI agent",
-    "Configure your AI agent to help communicate with customers, qualify leads, organize them in the funnel, and fill in cards.": "Configure your AI agent to help communicate with customers, qualify leads, organize them in the funnel, and fill in cards.",
-    "support\/kb\/": "support\/kb\/",
-    "multiple_delete_label": "delete",
-    "multiple_copy_label": "Copy",
-    "multiple_stop_bot_label": "Stop session",
-    "multiple_deactivate_bot_label": "Turn off",
-    "multiple_activate_bot_label": "Turn on",
-    "multiple_reset_bot_label": "Reset statistics",
-    "multiple_export_bot_label": "Export bot",
-    "Upgrade to enterprise plan": "Upgrade to Pro",
-    "Upgrade to Pro plan": "Upgrade to Pro"
-  },
-  "params": {
-    "menu": {
-      "widgets": {
-        "label": "Integrations",
-        "link": "\/settings\/widgets\/",
-        "selected": false
-      },
-      "pay": {
-        "label": "Billing",
-        "link": "\/settings\/pay\/",
-        "selected": false
-      },
-      "account": {
-        "label": "General settings",
-        "link": "\/settings\/",
-        "selected": false
-      },
-      "users": {
-        "label": "Users",
-        "link": "\/settings\/users\/",
-        "selected": false
-      },
-      "templates": {
-        "label": "Templates",
-        "link": "\/settings\/templates\/",
-        "selected": false
-      },
-      "communications": {
-        "label": "Communication tools",
-        "link": "\/settings\/communications\/",
-        "selected": true
-      },
-      "AI": {
-        "label": "Kommo AI",
-        "link": "\/settings\/ai\/",
-        "selected": false
-      },
-      "AI_knowledge_sources": {
-        "label": "AI knowledge sources",
-        "link": "\/settings\/ai-knowledge-sources\/",
-        "selected": false
-      }
+    {
+      "id": 1867,
+      "name": "Pack casco más foam fresh"
     },
-    "tech_account": false
-  },
-  "template": {
-    "page": {
-      "section": "communications"
-    },
-    "name": "settings\/communications\/communications.twig"
-  },
-  "entity": "communications",
-  "helpbot_enabled": true,
-  "talk_priority": {
-    "priority": 3
-  },
-  "talk_missed_event": null,
-  "amo_chats_state": "D",
-  "js_params": {
-    "lang": {
-      "page": {
-        "title": "Communication tools",
-        "buttons": {
-          "connect": "Connect"
-        }
-      },
-      "title": "Settings",
-      "Free users": "Free users",
-      "Group": "Group",
-      "Activity": "Activity",
-      "users": "user,users,users",
-      "notify": "notify",
-      "Deactivate": "Deactivate",
-      "Fully on": "Active",
-      "Enable": "Enable",
-      "Add action": "Create",
-      "View action": "View",
-      "Edit action": "Edit",
-      "Delete action": "Delete",
-      "Export action": "Export",
-      "New group": "New group",
-      "Add free user": "Add free user",
-      "Edit group": "Edit group",
-      "Save": "Save",
-      "Cancel": "Cancel",
-      "and": "and",
-      "triggers": {
-        "during": {
-          "text": "Custom",
-          "days": "d",
-          "hours": "h",
-          "minutes": "m",
-          "task_days": "day,days",
-          "task_hours": "hour,hours",
-          "task_minutes": "minute,minutes",
-          "task_in": "in",
-          "task_and": "and"
-        }
-      },
-      "USER_RIGHTS__PLACEHOLDER_NAME": "Name",
-      "USER_RIGHTS__PLACEHOLDER_PASS": "Password",
-      "SOA_TEMPL_PASS_REENTER": "Confirm password",
-      "USER_RIGHTS__USER_ADD": "Add user",
-      "multiaction_change_responsible_full": "access to multiple actions change responsible",
-      "multiaction_add_task_full": "access to multiple actions add task",
-      "multiaction_change_status_full": "access to multiple actions change stage",
-      "multiaction_custom_fields_values_edit_full": "access to multiple actions change field",
-      "multiaction_delete_full": "access to multiple actions delete",
-      "multiaction_edit_tags_full": "access to multiple actions edit tags",
-      "multiaction_add_mass_message_full": "access to multiple actions send messages to messengers",
-      "multiaction_merge_full": "access to multiple actions merge",
-      "multiaction_open_close_full": "access to multiple actions close tasks",
-      "multiaction_change_task_date_full": "access to multiple actions change due date",
-      "multiaction_change_task_type_full": "access to multiple actions change task type",
-      "ur_disabled_caption": "Disabled users",
-      "ur_disabled_counter": "disabled,disabled",
-      "user_rights_short_pass": "Password must be 6 characters or more",
-      "user_rights_long_pass": "Password must not exceed 72 characters",
-      "placeholder_email": "Email",
-      "PROPERTY_DENIED": "Denied",
-      "PROPERTY_GROUP_ONLY": "Team-wide access",
-      "PROPERTY_IF_RESPONSIBLE": "If responsible",
-      "PROPERTY_ALLOWED": "Allowed",
-      "Shorten links": "Track link clicks",
-      "Shrink your links and track clicks: When enabled, any URLs you send will be replaced with short links.": "Shrink long links and track clicks: When enabled, URLs you send will be replaced with tracking links.",
-      "Once clicked, a note will be added in the contact card.": "Once clicked, an event will be logged in the lead's feed.",
-      "Select which sources use this feature": "Select which sources use this feature",
-      "below (shorten links)": "below",
-      "Error loading settings. Please reload the page.": "Error loading settings. Please reload the page.",
-      "Show sender's name in chats": "Show sender's name in chats",
-      "When enabled, the sender's name from their Kommo profile will be added to the first message they send in a chat. The name will show again after the client replies or when another teammate sends a new message. Select the channels where you want to display the sender's name.": "When enabled, the sender's name from their Kommo profile will be added to the first message they send in a chat. The name will show again after the client replies or when another teammate sends a new message. Select the channels where you want to display the sender's name.",
-      "Choose a template": "Choose a template",
-      "Our partners can set up Salesbot for you.": "Our partners can set up Salesbot for you.",
-      "Get started": "Get started",
-      "{{brand_name.ai}} is your AI assistant that provides response suggestions for agents during chats by utilizing a knowledge base.": "Kommo is your AI assistant that provides response suggestions for agents during chats by utilizing a knowledge base.",
-      "Communication tools": "Communication tools",
-      "Net Promoter Score": "Net Promoter Score",
-      "NPS is Net Promoter Score": "Assess Net Promoter Score (NPS)",
-      "When communicating with a client, the NPS function generates a unique conversation number. After the issue is solved and the conversation is closed, the client is sent a customizable message with a request to evaluate the service they received on a ten-point scale.": "When conversations are marked closed, Salesbot sends a customizable message requesting the customer to evaluate the service they received on a ten-point scale.",
-      "When the issue is marked resolved, send the following message:": "When the issue is marked resolved, send the following message:",
-      "Please rate the service you received from 1 (worst) to 10 (best)": "Please rate the service you received from 1 (worst) to 10 (best)",
-      "Notify": "Notify",
-      "When a client gives a rating less than or equal to": "When a client gives a rating less than or equal to",
-      "Chat templates": "Chat templates",
-      "Salesbot list": "Salesbots",
-      "Marketingbot list": "Marketingbots",
-      "Create a new bot": "Create a new bot",
-      "Create": "Create",
-      "import a new bot": "import a new bot",
-      "Conversion": "Conversion rate",
-      "Total launched": "Total launched",
-      "Total active": "Active sessions",
-      "Copy": "Copy",
-      "Cc": "Cc",
-      "SUCCESS": "Changed successfully!",
-      "You can create bots to use in triggers or edit your existing bots": "You can create bots to use in triggers or edit your existing bots",
-      "Build no-code bots to automate chats and routine tasks. Start from scratch or use a template \u2014 then customize it and add your triggers.": "Build no-code bots to automate chats and routine tasks. Start from scratch or use a template \u2014 then customize it and add your triggers.",
-      "Chat with customers faster by using personalized response templates. They\u2019re available when you chat in the lead card or use the AI power-up below.": "Chat with customers faster by using personalized response templates. They\u2019re available when you chat in the lead card or use the AI power-up below.",
-      "Go to Templates": "Go to Templates",
-      "Approval status": "Approval status",
-      "Name of customer": "Name of customer",
-      "Expected amount": "Expected purchase",
-      "Lead name": "Lead name",
-      "Lead status": "Lead stage",
-      "Add a template": "Add a template",
-      "Template deleted": "Template deleted",
-      "Delete template": "Delete template",
-      "Save draft": "Save draft",
-      "Send for review": "Send for review",
-      "This template can be used by all phone numbers connected to": "This template can be used by all phone numbers connected to",
-      "No header": "No header",
-      "Text": "Text",
-      "Enter a header for your message": "Enter a header for your message",
-      "Header (Optional)": "Header (Optional)",
-      "Image or file": "Image or file",
-      "New template": "New template",
-      "cf_subtype_address_line_1": "Address line 1",
-      "cf_subtype_address_line_2": "Address line 2",
-      "cf_subtype_city": "City",
-      "cf_subtype_state": "State",
-      "cf_subtype_zip": "ZIP",
-      "cf_subtype_country": "Country",
-      "advanced": "advanced",
-      "Upgrade to advanced plan": "Upgrade to Advanced",
-      "Last update": "Last update:",
-      "Detect a client\u2019s intentions based on the keywords they use, and automatically send a chat template or run a salesbot": "Detect a client\u2019s intentions based on the keywords they use, and automatically send a chat template or run a salesbot",
-      "The keyword dataset is automatically updated every hour, or you can manually update it any time": "The keyword dataset is automatically updated every hour, or you can manually update it any time",
-      "Update dataset": "Update dataset",
-      "Times launched": "Times launched",
-      "Intention": "Intention",
-      "Keyword dataset": "Keyword dataset",
-      "Mark messages unread": "Mark messages unread",
-      "Leave message unanswered": "Leave message unanswered",
-      "Action": "Action",
-      "Add document with phrases you can expect from users": "Add document with phrases you can expect from users",
-      "Enrich dataset with synonym base": "Enrich dataset with synonym base",
-      "Upload file & Save": "Upload file & Save",
-      "Assess the quality of service from 1 to 10": "Assess the quality of service from 1 to 10",
-      "Thank you for rating": "Thank you for rating",
-      "Thank you for rating, we will inform the supervisor": "Thank you for your feedback. Have a great day.",
-      "The client rated the quality of service below the established level": "The client rated the quality of service below the established level",
-      "Always create new lead": "Always create new lead",
-      "Link to won": "Link to won",
-      "Link to lost": "Link to lost",
-      "Set up the rules for creating a new conversation": "Select the rules for creating a new conversation",
-      "When client writes a message to the chat, amoCRM looks for an open conversation and adds a message to it. If there is no open conversation, amoCRM creates a new conversation in an open lead or open customers in which the work is in progress": "When a lead sends a chat message, Kommo adds it to the ongoing conversation. If there is no ongoing conversation, Kommo starts a new conversation in the corresponding lead.",
-      "Create event if message response time is exceeded": "Log slow responses",
-      "If there is no reply to a message in a conversation for more than": "If a user does not answer a chat message within",
-      "add a \"Talk response time exceeded\" event to the events list": "add a \"Response time exceeded\" event in the event log",
-      "MINUTE_2": "minutes",
-      "enterprise": "enterprise",
-      "Online chats": "Online chats",
-      "Multiple": "Multiple",
-      "Conversations": "Conversations",
-      "Custom field not found": "Custom field not found",
-      "Online chat": "Live chat",
-      "External ID (short)": "External ID",
-      "One active": "One active",
-      "Embed code": "Embed code",
-      "Add the URLs of the websites where you will install online chat": "Add the URLs of the websites where you will install online chat",
-      "Location address": "Website",
-      "Paste the code in the HTML of your website": "Choose a display option and paste the code into the HTML of your page",
-      "Install the online chat in the code of your website": "Install the online chat in the code of your website",
-      "More options to adjust chat appearance in": "More options to adjust chat appearance in",
-      "You can adjust Online Chat appearance via": "You can adjust Online Chat appearance via",
-      "Create a new online chat": "Create a new online chat",
-      "Before copying, you need to specify the domain where you will place the online chat": "Before copying, you need to specify the domain where you will place the online chat",
-      "selected online chats (genitive)": "selected online chats",
-      "List of online chat connected for all pipelines. Here you can enable multiple conversations to account for customer calls through online chat.": "List of online chat connected for all pipelines. Here you can enable multiple conversations to account for customer calls through online chat.",
-      "If you want to integrate online chat in your product and use your own customer IDs, select the transaction field in which this identifier will be stored.": "If you want to integrate online chat in your product and use your own customer IDs, select the transaction field in which this identifier will be stored.",
-      "Build your bot": "Build your bot",
-      "Set up a trigger": "Set up a trigger",
-      "Easy automations in 3 steps": "Easy automations in 3 steps",
-      "PLUG_TOOLTIP_BUTTON": "Upgrade your plan",
-      "AI Suggested Reply": "AI reply suggestions",
-      "Last changes": "Last changes",
-      "Updated by": "Updated by",
-      "Import your help center URL, FAQ page, terms and conditions, and more to enhance its capabilities.": "Import your help center URL, FAQ page, terms and conditions, and more to enhance its capabilities.",
-      "Add new knowledge source": "Add new knowledge source",
-      "Source name": "Source name",
-      "Language (HelpCenter)": "Language",
-      "Number of pages": "Number of pages",
-      "Update": "Update",
-      "AI_agent": "AI agent",
-      "Configure your AI agent to help communicate with customers, qualify leads, organize them in the funnel, and fill in cards.": "Configure your AI agent to help communicate with customers, qualify leads, organize them in the funnel, and fill in cards.",
-      "support\/kb\/": "support\/kb\/",
-      "multiple_delete_label": "delete",
-      "multiple_copy_label": "Copy",
-      "multiple_stop_bot_label": "Stop session",
-      "multiple_deactivate_bot_label": "Turn off",
-      "multiple_activate_bot_label": "Turn on",
-      "multiple_reset_bot_label": "Reset statistics",
-      "multiple_export_bot_label": "Export bot",
-      "Upgrade to enterprise plan": "Upgrade to Pro",
-      "Upgrade to Pro plan": "Upgrade to Pro"
-    },
-    "constants": {
-      "periods": [],
-      "settings_pipeline_template_params": {
-        "catalogs": {
-          "3712": "Productos"
-        },
-        "data": {
-          "create_lead_params": {
-            "price": {
-              "id": "price",
-              "name": "price",
-              "option": "Sales value"
-            },
-            "tags": {
-              "id": "tags",
-              "name": "tags",
-              "option": "Tags"
-            },
-            "contacts": {
-              "id": "contacts",
-              "name": "contacts",
-              "option": "Contacts"
-            },
-            "company": {
-              "id": "company",
-              "name": "company",
-              "option": "Company"
-            },
-            "field_65202": {
-              "id": "field_65202",
-              "name": "field_65202",
-              "option": "utm_content"
-            },
-            "field_65204": {
-              "id": "field_65204",
-              "name": "field_65204",
-              "option": "utm_medium"
-            },
-            "field_65206": {
-              "id": "field_65206",
-              "name": "field_65206",
-              "option": "utm_campaign"
-            },
-            "field_65208": {
-              "id": "field_65208",
-              "name": "field_65208",
-              "option": "utm_source"
-            },
-            "field_65210": {
-              "id": "field_65210",
-              "name": "field_65210",
-              "option": "utm_term"
-            },
-            "field_65212": {
-              "id": "field_65212",
-              "name": "field_65212",
-              "option": "utm_referrer"
-            },
-            "field_65214": {
-              "id": "field_65214",
-              "name": "field_65214",
-              "option": "referrer"
-            },
-            "field_65216": {
-              "id": "field_65216",
-              "name": "field_65216",
-              "option": "gclientid"
-            },
-            "field_65218": {
-              "id": "field_65218",
-              "name": "field_65218",
-              "option": "gclid"
-            },
-            "field_65220": {
-              "id": "field_65220",
-              "name": "field_65220",
-              "option": "fbclid"
-            },
-            "field_1211088": {
-              "id": "field_1211088",
-              "name": "field_1211088",
-              "option": "Solicitudes"
-            },
-            "field_1211108": {
-              "id": "field_1211108",
-              "name": "field_1211108",
-              "option": "Noviembre"
-            },
-            "field_1211114": {
-              "id": "field_1211114",
-              "name": "field_1211114",
-              "option": "Diciembre"
-            },
-            "field_1211116": {
-              "id": "field_1211116",
-              "name": "field_1211116",
-              "option": "Octubre"
-            },
-            "field_1211140": {
-              "id": "field_1211140",
-              "name": "field_1211140",
-              "option": "RUT"
-            },
-            "field_1211146": {
-              "id": "field_1211146",
-              "name": "field_1211146",
-              "option": "Cuidad"
-            },
-            "field_1211150": {
-              "id": "field_1211150",
-              "name": "field_1211150",
-              "option": "Zona"
-            },
-            "field_1211164": {
-              "id": "field_1211164",
-              "name": "field_1211164",
-              "option": "Marcas"
-            },
-            "field_1211330": {
-              "id": "field_1211330",
-              "name": "field_1211330",
-              "option": "EJECUTIVO DISTRIB."
-            },
-            "field_1238484": {
-              "id": "field_1238484",
-              "name": "field_1238484",
-              "option": "ttad_id"
-            },
-            "field_1238486": {
-              "id": "field_1238486",
-              "name": "field_1238486",
-              "option": "ttad_name"
-            },
-            "field_1239070": {
-              "id": "field_1239070",
-              "name": "field_1239070",
-              "option": "Pr\u00f3xima cita"
-            }
-          },
-          "last_sites_settings": [],
-          "salesbot_show_upgrade_tariff_modal": false
-        }
-      },
-      "communication_reply_templates_params": {
-        "table_settings": false
-      }
+    {
+      "id": 2259,
+      "name": "Pack Cascos + Ear Plugs Pinlock"
     }
-  },
-  "nps": {
-    "available": true,
-    "disabled": false,
-    "bot_id": 25422
-  },
-  "inbox": {
-    "is_chats_inbox_enabled": true
-  },
-  "helpbot": {
-    "enabled": null,
-    "silent": null,
-    "train": {
-      "status": 1,
-      "updated_at": null
-    },
-    "silent_time": 300,
-    "lang": "es",
-    "table_settings": false,
-    "payment_required": true
-  },
-  "reply_templates": {
-    "table_settings": false
-  },
-  "onlinechats_list": {
-    "table_settings": false
-  },
-  "talks_auto_close_settings": {
-    "enabled": true,
-    "delay": 2400
-  },
-  "salesbot": {
-    "stats_available": true
-  }
+  ],
+  "packs": [
+
+    {
+      "id": 2259,
+      "name": "Pack Cascos + Ear Plugs Pinlock",
+      "title": "Pack Cascos + Ear Plugs Pinlock",
+      "total": 249800,
+      "savings": null,
+      "mainProduct": {
+        "unitsSold": 26,
+        "rating": 9,
+        "discountAmount": 0,
+        "videos": [
+          {
+            "url": "2FLhHAVFl8Q"
+          }
+        ],
+        "availableInStore": true,
+        "linkName": "2356897-cascos-integrales-agv-k1-s-2023",
+        "features": [
+          {
+            "name": "XS",
+            "orderWeight": 76,
+            "id": 59,
+            "type": 0
+          },
+          {
+            "name": "S",
+            "orderWeight": 77,
+            "id": 1,
+            "type": 0
+          },
+          {
+            "name": "M",
+            "orderWeight": 79,
+            "id": 2,
+            "type": 0
+          },
+          {
+            "name": "L",
+            "orderWeight": 81,
+            "id": 3,
+            "type": 0
+          },
+          {
+            "name": "XL",
+            "orderWeight": 90,
+            "id": 4,
+            "type": 0
+          },
+          {
+            "name": "2XL",
+            "orderWeight": 100,
+            "id": 5,
+            "type": 0
+          },
+          {
+            "name": "Negro Matte",
+            "orderWeight": 0,
+            "id": 424,
+            "type": 1
+          }
+        ],
+        "totalReviews": 21,
+        "tireSpecs": [],
+        "discounts": [
+          {
+            "validThru": "2092-06-09T04:00:00Z",
+            "saleTypes": [
+              {
+                "id": 2
+              }
+            ],
+            "amount": 0,
+            "stores": [],
+            "id": 24,
+            "validFrom": "2021-07-07T00:00:00-04:00",
+            "percent": 30
+          },
+          {
+            "validThru": null,
+            "saleTypes": [
+              {
+                "id": 1
+              }
+            ],
+            "amount": 0,
+            "stores": [
+              {
+                "name": "ARAUCO OUTLET BUENAVENTURA",
+                "description": null,
+                "id": 5700
+              }
+            ],
+            "id": 2247,
+            "validFrom": "2026-03-15T00:00:00Z",
+            "percent": 20
+          }
+        ],
+        "preOrder": false,
+        "model": {
+          "image": "46110af492e248d1999094a5cfc3b2e7.jpg",
+          "name": "K1 S",
+          "videos": [
+            "2FLhHAVFl8Q"
+          ],
+          "id": 10081
+        },
+        "id": 2356897,
+        "motoOrderWeight": 0,
+        "brand": {
+          "featured": true,
+          "isAvailableForInternet": true,
+          "name": "AGV",
+          "logo": "946661483a4f4f0b8ea2db16121f0380.jpg",
+          "id": 136,
+          "linkName": "Cascos AGV",
+          "showNameInWeb": true
+        },
+        "parentCategories": [
+          {
+            "name": "Cascos Integrales",
+            "isDirectCategory": true,
+            "id": 41
+          }
+        ],
+        "image": "caa3c1af6aa5458fb641b0fe42cce480.png",
+        "images": [
+          {
+            "colorTagsIds": [
+              1
+            ],
+            "image": "caa3c1af6aa5458fb641b0fe42cce480.png",
+            "colorName": "Negro Matte",
+            "colorId": 424,
+            "orderWeight": 0,
+            "id": 2184285
+          },
+          {
+            "colorTagsIds": [],
+            "image": "ed513ec7590b40aba61e5fc1123d6293.png",
+            "colorId": 0,
+            "orderWeight": 1,
+            "id": 2184286
+          },
+          {
+            "colorTagsIds": [],
+            "image": "34a950d3aaa2449bbe685681e29761eb.png",
+            "colorId": 0,
+            "orderWeight": 2,
+            "id": 2184287
+          },
+          {
+            "colorTagsIds": [],
+            "image": "08d4f9fadb844967aa4651b8ff668bfd.png",
+            "colorId": 0,
+            "orderWeight": 3,
+            "id": 2184288
+          },
+          {
+            "colorTagsIds": [],
+            "image": "1cf6550b95ca45c4bdbf85423107b3fa.png",
+            "colorId": 0,
+            "orderWeight": 4,
+            "id": 2184289
+          }
+        ],
+        "isAvailableForInternet": true,
+        "salesTaxes": [
+          {
+            "code": 14,
+            "percentage": 19,
+            "name": "I.V.A. 19%",
+            "id": 7833766
+          }
+        ],
+        "isSimpleProduct": false,
+        "isReserved": false,
+        "motorcycles": [],
+        "priceComponents": [
+          {
+            "country": "CL",
+            "amount": 229900,
+            "productId": 2356897,
+            "tagId": 0,
+            "isCalculated": false,
+            "thruQuantity": 0,
+            "productItemId": 0,
+            "fromQuantity": 0,
+            "saleTypeId": 0,
+            "isBasePrice": true,
+            "isDiscount": false,
+            "type": 0,
+            "percent": 0,
+            "packId": 0,
+            "price": {
+              "amount": 229900,
+              "unit": "CLP"
+            },
+            "brandId": 0,
+            "typeId": 0,
+            "currency": "CLP",
+            "id": 10598154,
+            "ruleId": 0,
+            "categoryId": 0
+          }
+        ],
+        "availableSizes": [
+          {
+            "name": "2XL",
+            "orderWeight": 100,
+            "id": "2XL",
+            "key": "2XL|100"
+          },
+          {
+            "name": "M",
+            "orderWeight": 79,
+            "id": "M",
+            "key": "M|79"
+          },
+          {
+            "name": "XL",
+            "orderWeight": 90,
+            "id": "XL",
+            "key": "XL|90"
+          }
+        ],
+        "domainId": 1,
+        "tags": [
+          {
+            "categoryOrderWeight": 0,
+            "useInFilter": true,
+            "filter": "29596|Sport / Racing|True|attribute|0|Estilo Piloto",
+            "name": "Sport / Racing",
+            "id": 29596,
+            "type": "attribute",
+            "categoryName": "Estilo Piloto",
+            "categoryId": 746
+          },
+          {
+            "categoryOrderWeight": 0,
+            "useInFilter": false,
+            "filter": "43165|25% 2026|False|tag|0|Cyber 2026 ",
+            "name": "25% 2026",
+            "id": 43165,
+            "type": "tag",
+            "categoryName": "Cyber 2026 ",
+            "categoryId": 3023
+          },
+          {
+            "categoryOrderWeight": 0,
+            "useInFilter": false,
+            "filter": "45623|Outlet Quilicura 20% |False|tag|0|Outlet Arauco Quilicura",
+            "name": "Outlet Quilicura 20% ",
+            "id": 45623,
+            "type": "tag",
+            "categoryName": "Outlet Arauco Quilicura",
+            "categoryId": 3071
+          }
+        ],
+        "hasColor": true,
+        "hasSize": true,
+        "minPrice": 229900,
+        "name": "K1 S (2023)",
+        "modifiedDate": "2025-08-22T14:29:35",
+        "maxPrice": 229900,
+        "directCategories": [
+          41
+        ],
+        "googleProductCategory": 0,
+        "code": "",
+        "directCategoryisAvailableForInternet": true,
+        "orderWeight": 1,
+        "inventoryControl": 0,
+        "motorbikeVersion": [],
+        "productItems": [
+          {
+            "codes": "8051019575951",
+            "sizeId": 1,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2726671,
+            "barcode2": "",
+            "barcode1": "8051019575951",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8051019575968",
+            "sizeId": 2,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2726672,
+            "barcode2": "",
+            "barcode1": "8051019575968",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8051019575975",
+            "sizeId": 3,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2726673,
+            "barcode2": "",
+            "barcode1": "8051019575975",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 0
+          },
+          {
+            "codes": "8051019575982",
+            "sizeId": 4,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2726674,
+            "barcode2": "",
+            "barcode1": "8051019575982",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 17
+          },
+          {
+            "codes": "8051019575999",
+            "sizeId": 5,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2726675,
+            "barcode2": "",
+            "barcode1": "8051019575999",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 8
+          },
+          {
+            "codes": "8051019575944",
+            "sizeId": 59,
+            "productId": 2356897,
+            "colorId": 424,
+            "id": 2760020,
+            "barcode2": "",
+            "barcode1": "8051019575944",
+            "price": {
+              "price": 229900,
+              "oldPrice": 229900,
+              "discount": 0
+            },
+            "quantityInStock": 0
+          }
+        ],
+        "categories": [
+          {
+            "name": "Cascos Integrales",
+            "isDirectCategory": true,
+            "id": 41
+          },
+          {
+            "name": "Cascos",
+            "isDirectCategory": false,
+            "id": 4
+          },
+          {
+            "name": "Motocicleta",
+            "isDirectCategory": false,
+            "id": 82141
+          }
+        ],
+        "productType": 0,
+        "createDate": "2022-08-25T17:00:52",
+        "requiresFeaturedSelect": false,
+        "quantityInStock": 25,
+        "summary": "",
+        "mercadoLibre": {},
+        "discountPercent": 0,
+        "hasDiscount": false,
+        "isTaxExempt": false,
+        "requiresLot": false,
+        "fullName": "AGV K1 S (2023)",
+        "propertiesMap": {
+          "property_7": "No, preparado para pinlock",
+          "property_12": "Intermedio",
+          "property_6": "Adulto",
+          "property_11": "n/a",
+          "property_9": "1",
+          "property_10": "2",
+          "property_8": "1.500 gr. (en la primera talla de calota)",
+          "property_3": "Resina termoplástica de alta resistencia",
+          "property_2": "0",
+          "property_5": "Si, desmontable",
+          "property_4": "Doble D",
+          "property_1": "ECE 2206"
+        },
+        "isNew": false,
+        "universalQuantity": 25
+      },
+      "products": [
+        {
+          "unitsSold": 67,
+          "rating": 6,
+          "discountAmount": 0,
+          "availableInStore": true,
+          "linkName": "tapones-para-los-oidos-pinlock-ear-plugs",
+          "features": [
+            {
+              "name": "Tamaño Unico",
+              "orderWeight": 0,
+              "id": 781,
+              "type": 0
+            }
+          ],
+          "totalReviews": 4,
+          "tireSpecs": [],
+          "discounts": [
+            {
+              "validThru": null,
+              "saleTypes": [
+                {
+                  "id": 2
+                }
+              ],
+              "amount": 0,
+              "stores": [],
+              "id": 1723,
+              "validFrom": "2024-06-24T04:00:00Z",
+              "percent": 30
+            }
+          ],
+          "preOrder": false,
+          "id": 466494,
+          "motoOrderWeight": 0,
+          "brand": {
+            "featured": false,
+            "isAvailableForInternet": true,
+            "name": "Pinlock",
+            "logo": "4e169315cc1547bab63d8aa8d5032e91.png",
+            "id": 38383,
+            "showNameInWeb": true
+          },
+          "parentCategories": [
+            {
+              "name": "Tapones para los Oídos",
+              "isDirectCategory": true,
+              "id": 41717
+            }
+          ],
+          "image": "5d7563152fab424993814ec244a8aa05.png",
+          "images": [
+            {
+              "colorTagsIds": [],
+              "image": "5d7563152fab424993814ec244a8aa05.png",
+              "colorId": 0,
+              "orderWeight": 0,
+              "id": 2378420
+            },
+            {
+              "colorTagsIds": [],
+              "image": "a8c37f32ec654370933e160d020ac121.jpg",
+              "colorId": 0,
+              "orderWeight": 0,
+              "id": 2378423
+            },
+            {
+              "colorTagsIds": [],
+              "image": "4e4701065dc045ccab0cae597c3d5e1e.jpg",
+              "colorId": 0,
+              "orderWeight": 0,
+              "id": 2378424
+            },
+            {
+              "colorTagsIds": [],
+              "image": "b1db1dce8f9d4f8cba7d0f6ca79de0b9.jpg",
+              "colorId": 0,
+              "orderWeight": 0,
+              "id": 2378425
+            },
+            {
+              "colorTagsIds": [],
+              "image": "251cbf3f53ee41a9ae83a2174dcbf292.jpg",
+              "colorId": 0,
+              "orderWeight": 1,
+              "id": 2378421
+            },
+            {
+              "colorTagsIds": [],
+              "image": "b47cd8cf096446d8843166c49ef53a4e.png",
+              "colorId": 0,
+              "orderWeight": 2,
+              "id": 2378422
+            }
+          ],
+          "isAvailableForInternet": true,
+          "salesTaxes": [
+            {
+              "code": 14,
+              "percentage": 19,
+              "name": "I.V.A. 19%",
+              "id": 8376795
+            }
+          ],
+          "isSimpleProduct": false,
+          "isReserved": false,
+          "motorcycles": [],
+          "priceComponents": [
+            {
+              "country": "CL",
+              "amount": 5000,
+              "productId": 466494,
+              "tagId": 0,
+              "isCalculated": false,
+              "thruQuantity": 0,
+              "productItemId": 0,
+              "fromQuantity": 0,
+              "saleTypeId": 0,
+              "isBasePrice": false,
+              "isDiscount": true,
+              "type": 3,
+              "percent": 0,
+              "packId": 1,
+              "price": {
+                "amount": 5000,
+                "unit": "CLP"
+              },
+              "brandId": 0,
+              "typeId": 3,
+              "currency": "CLP",
+              "id": 1887593,
+              "ruleId": 0,
+              "categoryId": 0
+            },
+            {
+              "country": "CL",
+              "amount": 5000,
+              "productId": 466494,
+              "tagId": 0,
+              "isCalculated": false,
+              "thruQuantity": 0,
+              "productItemId": 0,
+              "fromQuantity": 0,
+              "saleTypeId": 0,
+              "isBasePrice": false,
+              "isDiscount": true,
+              "type": 3,
+              "percent": 0,
+              "packId": 2,
+              "price": {
+                "amount": 5000,
+                "unit": "CLP"
+              },
+              "brandId": 0,
+              "typeId": 3,
+              "currency": "CLP",
+              "id": 1887594,
+              "ruleId": 0,
+              "categoryId": 0
+            },
+            {
+              "country": "CL",
+              "amount": 19900,
+              "productId": 466494,
+              "tagId": 0,
+              "isCalculated": false,
+              "thruQuantity": 0,
+              "productItemId": 0,
+              "fromQuantity": 0,
+              "saleTypeId": 0,
+              "isBasePrice": true,
+              "isDiscount": false,
+              "type": 0,
+              "percent": 0,
+              "packId": 0,
+              "price": {
+                "amount": 19900,
+                "unit": "CLP"
+              },
+              "brandId": 0,
+              "typeId": 0,
+              "currency": "CLP",
+              "id": 11633229,
+              "ruleId": 0,
+              "categoryId": 0
+            }
+          ],
+          "availableSizes": [],
+          "domainId": 1,
+          "tags": [
+            {
+              "categoryOrderWeight": 0,
+              "useInFilter": false,
+              "filter": "8825|Pack cascos|False|tag|0|Packs Online",
+              "name": "Pack cascos",
+              "id": 8825,
+              "type": "tag",
+              "categoryName": "Packs Online",
+              "categoryId": 1292
+            }
+          ],
+          "hasColor": false,
+          "hasSize": true,
+          "minPrice": 19900,
+          "name": "Ear Plugs",
+          "modifiedDate": "2026-03-13T17:07:13",
+          "maxPrice": 19900,
+          "directCategories": [
+            41717
+          ],
+          "googleProductCategory": 0,
+          "code": "",
+          "directCategoryisAvailableForInternet": true,
+          "orderWeight": 3,
+          "inventoryControl": 0,
+          "motorbikeVersion": [],
+          "productItems": [
+            {
+              "codes": "8720812923039",
+              "sizeId": 781,
+              "productId": 466494,
+              "colorId": 0,
+              "id": 702630,
+              "barcode2": "",
+              "barcode1": "8720812923039",
+              "price": {
+                "price": 19900,
+                "oldPrice": 19900,
+                "discount": 0
+              },
+              "quantityInStock": 29
+            }
+          ],
+          "categories": [
+            {
+              "name": "Tapones para los Oídos",
+              "isDirectCategory": true,
+              "id": 41717
+            },
+            {
+              "name": "Accesorios",
+              "isDirectCategory": false,
+              "id": 9
+            },
+            {
+              "name": "Motocicleta",
+              "isDirectCategory": false,
+              "id": 82141
+            }
+          ],
+          "productType": 0,
+          "createDate": "2019-03-15T19:59:08",
+          "requiresFeaturedSelect": false,
+          "quantityInStock": 32,
+          "summary": "",
+          "mercadoLibre": {},
+          "discountPercent": 0,
+          "hasDiscount": false,
+          "isTaxExempt": false,
+          "requiresLot": false,
+          "fullName": "Pinlock Ear Plugs",
+          "isNew": false,
+          "universalQuantity": 32
+        }
+      ]
+    }
+  ]
 }
