@@ -1,6 +1,6 @@
 import {reviewsUpload, validateJWT} from "../../../server.js";
 import {db as drizzleDb} from "../../../db/drizzle.js";
-import {deleteReview, partyPendingReviews, partyReviewed} from "../../../db/reviews.js";
+import {deleteReview, partyPendingReviews, partyPendingReviewsByEmail, partyReviewed} from "../../../db/reviews.js";
 import container from "../../../container/index.js";
 import {uploadImagesAilooCDN} from "../../../services/cdnService.js";
 import {Router} from "express";
@@ -43,9 +43,9 @@ router.get("/:domainId/account/reviews", validateJWT, async (req, res, next) => 
             }
         })
 
-        const rows: any = await partyPendingReviews(userDb.personId, domainId)
+        const rows: any = await partyPendingReviewsByEmail(userDb.id, userDb.username, domainId)
 
-        const reviewsRows: any = await partyReviewed(userDb.personId, domainId)
+        const reviewsRows: any = await partyReviewed(userDb.username, domainId)
 
 
         const pendingProducts = rows.map(r => r.ProductId)

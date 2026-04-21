@@ -39,6 +39,48 @@ group by p.Id
 
 }
 
+export const partyPendingReviewsByEmail = async function (userId, email, domainId) {
+
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+        `
+            select p.*,
+                   i.Id      as InvoiceId,
+                   i.Type    as InvoiceType,
+                   i.Date    as InvoiceDate,
+                   i.ReceivedById,
+                   ii.ProductItemId,
+                   ii.Amount as Price
+            from Invoice i
+                     join Party pty on i.ReceivedById = pty.Id
+                     join InvoiceItem ii on i.Id = ii.InvoiceId
+                     join ProductItem p on p.Id = ii.ProductItemId
+                     join Product prod on prod.Id = p.ProductId
+
+            where i.Deleted = 0
+              and i.SaleTypeId in (1, 3)
+              and i.DomainId = ?
+              and prod.Deleted = 0
+              and i.ReceivedById in
+                  (select pty.Id from Party pty where pty.email in (?) and pty.DomainId = ?)
+
+              and prod.Id not in (select rev.ProductId from Review rev where rev.UserId = ?)
+            group by p.Id;
+`, [domainId, email, domainId, userId]);
+
+
+    return rows;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await connection.release();
+  }
+
+}
+
+
 export const deleteReview = async (reviewId, userId, domainId) => {
 
   const connection = await pool.getConnection();
@@ -58,7 +100,7 @@ export const deleteReview = async (reviewId, userId, domainId) => {
 
 }
 
-export const partyReviewed = async function (partyId, domainId) {
+export const partyReviewed = async function (userId, domainId) {
 
   const connection = await pool.getConnection();
 
@@ -77,12 +119,12 @@ from review r
          join product p on r.ProductId = p.Id
          left outer join invoice i on i.ReceivedById = u.PersonId
          left outer join invoiceitem ii on i.Id = ii.InvoiceId
-where u.PersonId = ?
+where u.Id = ?
   -- and r.State = 2
 group by r.Id
 order by r.Id desc;
 
-`, [partyId]);
+`, [userId]);
 
 
     return rows;
@@ -93,7 +135,6 @@ order by r.Id desc;
   }
 
 }
-
 
 
 

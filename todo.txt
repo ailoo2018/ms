@@ -1,4 +1,5 @@
 
+
 - ventas con factura online no registra email
 - zonas extremas caclulo de dia
 - add email check to payment received so that we can enlazar saleorder with leadId
