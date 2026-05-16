@@ -110,7 +110,7 @@ export const adminClient = {
       logger.error(`Error al llamar PaymentValidation. Status: ${response.status}`);
       logger.error(`Server Response Body: ${errorHtml}`); // This logs the HTML
 
-      throw new Error(`ADMIN Error: ${response.status} ${errorHtml}`);    }
+      throw new Error(`ADMIN Error ${url}: ${response.status} ${errorHtml}`);    }
 
     var res = await response.json();
     console.log("Result PaymentValidation: " + JSON.stringify(res));
