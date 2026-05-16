@@ -1,5 +1,13 @@
 
 
+- product detail mobile}
+- show video
+- notify when available
+- stock por tienda
+- favoritos
+- compartir
+- comparar
+
 - ventas con factura online no registra email
 - zonas extremas caclulo de dia
 - add email check to payment received so that we can enlazar saleorder with leadId
@@ -7,7 +15,7 @@
 
 
 
-
+- spider motoring: Forma y Schuberth
 
 - invite a friend
 
@@ -22,3 +30,8 @@
 
 
 
+- https://mail.google.com/mail/u/0/#inbox/FMfcgzQgLXlDFQqVPWLxMhkGnjCPHHxM kore no aparedce
+- https://mail.google.com/mail/u/0/#inbox/FMfcgzQgLXlDFQqVRjMnFMslzPspPcxL
+
+
+http://localhost:3000/Product/ReviewProduct.rails?pid=789539&h=AB04945AA743F4DF9140849FF761D069&prodId=3213212&invoiceId=28500110

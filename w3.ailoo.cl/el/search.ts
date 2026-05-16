@@ -665,15 +665,19 @@ export async function search(criteria, domainId) {
     }
 
 
+
+
     return {
         totalHits: totalItems,
         query: {
-            description: await getQueryDescription(criteria, filters, domainId)
+            description: await getQueryDescription(criteria, filters, domainId),
+            body: criteria.debug ? query : undefined,
         },
         offset: offset,
         limit: limit,
         filters,
         products,
+
     }
 
 }

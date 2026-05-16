@@ -62,8 +62,10 @@ router.post("/:domainId/products/search", async (req, res, next) => {
       bike: null,
       models: [],
       minDiscount: 0,
-      orderBy: "name:asc"
+      orderBy: "name:asc",
+      debug: rq.debug ? true : false,
     }
+
 
 
     if (rq.categoryId && rq.categoryId.length > 0)
