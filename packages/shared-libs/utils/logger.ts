@@ -20,7 +20,7 @@ const logger = createLogger({
         }),
 
         // 2. OPTIONAL: Local file logging (disabled in production to save resources)
-        ...(!isProduction ? [
+        ...(!isProduction || true ? [
             new DailyRotateFile({
                 filename: 'logs/errors-%DATE%.log',
                 datePattern: 'YYYY-MM-DD',
