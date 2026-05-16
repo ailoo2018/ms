@@ -32,7 +32,8 @@ export function loadConfig() {
         );
     }
 
-    return process.env;
+
+     return process.env;
 }
 
 
