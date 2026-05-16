@@ -158,6 +158,19 @@ function isUniqueConstraintError(e: any): boolean {
     return e?.code === '23505';
 }
 
+router.get("/test/admin", async (req, res, next) => {
+    try{
+        const { orderId, authCode} = req.query;
+
+        var ret = await adminClient.paymentValidated(orderId, authCode, 1)
+        res.json({
+            admin_ret: ret,
+        })
+    }catch(err){
+        next(err)
+    }
+})
+
 
 router.post("/:domainId/checkout/payment-status", async (req, res, next) => {
 
