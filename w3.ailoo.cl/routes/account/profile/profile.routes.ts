@@ -6,6 +6,7 @@ import {db as drizzleDb} from "../../../db/drizzle.js";
 import schema from "../../../db/schema.js";
 import {and, asc, desc, eq, ne} from "drizzle-orm";
 import crypto from "crypto";
+import {getCustomerPointsAccountBalance} from "../../../db/partyDb.js";
 
 const router = Router();
 const upload = multer({
@@ -198,10 +199,20 @@ router.get("/:domainId/account/user", validateJWT, async (req, res, next) => {
 
         }
 
+        // points
+        let points = 0;
+        if(party) {
+            const pointsRow = await getCustomerPointsAccountBalance(party.id)
+            if(pointsRow)
+                points = pointsRow.Balance;
+        }
+
+
         res.json({
             id: user.id,
             username: user.username,
             avatar: user.avatar,
+            points: points,
             lastLogin: user.lastLogin,
             person: party,
         })
