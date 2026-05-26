@@ -146,7 +146,7 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
         let availableIn2Hours = true;
         if (stocks?.length > 0) {
-            availableIn2Hours = stocks.some(s => parseInt(s.Quantity) >= 1)
+            availableIn2Hours = stocks.all(s => parseInt(s.Quantity) >= 1)
         }else{
             availableIn2Hours = false;
         }
