@@ -144,9 +144,11 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
         const stocks: any = await stockByStore(facilityId, pitIds, domainId);
 
-        let availableIn2Hours = false;
+        let availableIn2Hours = true;
         if (stocks?.length > 0) {
             availableIn2Hours = stocks.some(s => parseInt(s.Quantity) >= 1)
+        }else{
+            availableIn2Hours = false;
         }
 
 
