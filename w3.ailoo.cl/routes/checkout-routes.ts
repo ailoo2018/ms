@@ -144,12 +144,9 @@ router.get("/:domainId/checkout/pickup-date", async (req, res, next) => {
 
         const stocks: any = await stockByStore(facilityId, pitIds, domainId);
 
-        let availableIn2Hours = true;
-        if (stocks?.length > 0) {
-            availableIn2Hours = stocks.every(s => parseInt(s.Quantity) >= 1)
-        }else{
-            availableIn2Hours = false;
-        }
+        let availableIn2Hours = !!stocks && stocks.length === pitIds.length &&
+            // Ensure every single returned item has a quantity of 1 or more
+            stocks.every(s => Number(s.Quantity) >= 1);
 
 
         var avlDate = addBusinessDays(new Date(), 2);
