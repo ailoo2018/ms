@@ -56,7 +56,8 @@ async function paySaleOrder(confirmRs: PaymentValidation, domainId: number) {
             .update(saleOrder)
             .set({
                 authCode: confirmRs.authorizationCode, // Ensure property name matches your req
-                state: OrderState.Pagado, // Ensure property name matches your req
+                // NOTE: the state is set in adminClient.paymentValidated !!!!!
+          //      state: OrderState.Pagado, // Ensure property name matches your req
             })
             .where(
                 and(
