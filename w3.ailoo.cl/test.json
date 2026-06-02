@@ -1,698 +1,742 @@
 {
-  "isFromCache": false,
-  "discountRules": [
+  "order": {
+    "id": 28685291,
+    "number": "90",
+    "date": "2026-04-08T04:00:00.000Z",
+    "type": 16,
+    "items": [
+      {
+        "invoiceItemId": 150187230,
+        "productId": 3507900,
+        "productName": "Cardo 4X-S para SHOEI Gen. 3",
+        "productItemId": 4054856,
+        "quantity": 24,
+        "quantityShipped": 24,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/b/e7/be7814bdfa1a4ccc8e331aa0dc01296a_50.jpg",
+        "unitPrice": {
+          "amount": 112.73,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187231,
+        "productId": 3507901,
+        "productName": "Cardo Packtalk-S para SHOEI Gen. 3",
+        "productItemId": 4054858,
+        "quantity": 24,
+        "quantityShipped": 24,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/e/cf/ecf4f63d20c54ce8b7598f6da43de0f7_50.jpg",
+        "unitPrice": {
+          "amount": 155.78,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187232,
+        "productId": 2136138,
+        "productName": "Cardo Spirit",
+        "productItemId": 2476383,
+        "quantity": 72,
+        "quantityShipped": 72,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/b/d4/bd4771efd5d842939136c11ee149a40f_50.jpg",
+        "unitPrice": {
+          "amount": 49.85,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187233,
+        "productId": 2136140,
+        "productName": "Cardo Spirit HD",
+        "productItemId": 2476385,
+        "quantity": 72,
+        "quantityShipped": 72,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/4/78/478d873e7ac241f09af2a4f8cfcbc912_50.jpg",
+        "unitPrice": {
+          "amount": 76.7,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187234,
+        "productId": 2136141,
+        "productName": "Cardo Spirit HD Duo",
+        "productItemId": 2476386,
+        "quantity": 48,
+        "quantityShipped": 48,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/b/f9/bf9d8d7aadc34b16b9964c92a0d3741f_50.jpg",
+        "unitPrice": {
+          "amount": 144.13,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187235,
+        "productId": 2136139,
+        "productName": "Cardo Spirit Duo",
+        "productItemId": 2476384,
+        "quantity": 48,
+        "quantityShipped": 48,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/6/c5/6c55bfd4415e4f9489ac4e64be51089c_50.jpg",
+        "unitPrice": {
+          "amount": 93.98,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187236,
+        "productId": 2795759,
+        "productName": "Cardo Packtalk Pro",
+        "productItemId": 3248554,
+        "quantity": 24,
+        "quantityShipped": 24,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/7/2e/72e841688cf7458389f3b2348f61938f_50.jpg",
+        "unitPrice": {
+          "amount": 188.58,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187237,
+        "productId": 2303214,
+        "productName": "Cardo Packtalk Edge",
+        "productItemId": 2666198,
+        "quantity": 24,
+        "quantityShipped": 24,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/4/0a/40ac14a1cbcf499fb6c753a2e97b1aff_50.jpg",
+        "unitPrice": {
+          "amount": 163.98,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187238,
+        "productId": 3272819,
+        "productName": "Cardo Kit para 2º Casco para Freecom/Spirit JBL",
+        "productItemId": 3785987,
+        "quantity": 20,
+        "quantityShipped": 20,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 184676,
+          "name": "Tamaño único"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/4/9b/49bcef354af74448907396600802f23e_50.jpg",
+        "unitPrice": {
+          "amount": 62.38,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187239,
+        "productId": 2136145,
+        "productName": "Cardo Freecom 4X",
+        "productItemId": 2476390,
+        "quantity": 48,
+        "quantityShipped": 48,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/2/ca/2ca4ef92ba2e48e4ad8b65b4710341c4_50.jpg",
+        "unitPrice": {
+          "amount": 118.88,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187240,
+        "productId": 2136146,
+        "productName": "Cardo Freecom 4X Duo",
+        "productItemId": 2476391,
+        "quantity": 32,
+        "quantityShipped": 32,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/c/9d/c9d220aeb5c94b3f971d3423458449ad_50.jpg",
+        "unitPrice": {
+          "amount": 217.28,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187241,
+        "productId": 2136142,
+        "productName": "Cardo Freecom 2X",
+        "productItemId": 2476387,
+        "quantity": 48,
+        "quantityShipped": 48,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/e/1d/e1dd8f55329943ad942d50f7f2c54d8e_50.jpg",
+        "unitPrice": {
+          "amount": 96.33,
+          "currency": "USD"
+        }
+      },
+      {
+        "invoiceItemId": 150187242,
+        "productId": 2136144,
+        "productName": "Cardo Freecom 2X Duo",
+        "productItemId": 2476389,
+        "quantity": 32,
+        "quantityShipped": 32,
+        "quantityCanceled": 0,
+        "quantityBackorder": 0,
+        "color": {
+          "id": 0,
+          "name": "Sin Tamaño"
+        },
+        "size": {
+          "id": 8,
+          "name": "Tamaño Unico"
+        },
+        "image": "https://cdn.motomundi.cl/Content/products/1431/e/18/e1856025e8994454b159b2afdfb87894_50.jpg",
+        "unitPrice": {
+          "amount": 180.38,
+          "currency": "USD"
+        }
+      }
+    ]
+  },
+  "shipments": [
     {
-      "id": 1996,
-      "name": "Pack Luz Casco"
-    },
-    {
-      "id": 1870,
-      "name": "Pack casco más limpia visor"
-    },
-    {
-      "id": 1867,
-      "name": "Pack casco más foam fresh"
-    },
-    {
-      "id": 2259,
-      "name": "Pack Cascos + Ear Plugs Pinlock"
+      "id": 75585,
+      "eta": "2026-04-27T04:00:00.000Z",
+      "trackingId": "IMP-716",
+      "items": [
+        {
+          "shipmentItemId": 164290,
+          "shipmentId": 75585,
+          "productId": 3507900,
+          "productName": "Cardo 4X-S para SHOEI Gen. 3",
+          "productItemId": 4054856,
+          "quantity": 24,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/b/e7/be7814bdfa1a4ccc8e331aa0dc01296a_50.jpg"
+        },
+        {
+          "shipmentItemId": 164291,
+          "shipmentId": 75585,
+          "productId": 3507901,
+          "productName": "Cardo Packtalk-S para SHOEI Gen. 3",
+          "productItemId": 4054858,
+          "quantity": 24,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/e/cf/ecf4f63d20c54ce8b7598f6da43de0f7_50.jpg"
+        },
+        {
+          "shipmentItemId": 164292,
+          "shipmentId": 75585,
+          "productId": 2136138,
+          "productName": "Cardo Spirit",
+          "productItemId": 2476383,
+          "quantity": 72,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/b/d4/bd4771efd5d842939136c11ee149a40f_50.jpg"
+        },
+        {
+          "shipmentItemId": 164293,
+          "shipmentId": 75585,
+          "productId": 2136140,
+          "productName": "Cardo Spirit HD",
+          "productItemId": 2476385,
+          "quantity": 72,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/78/478d873e7ac241f09af2a4f8cfcbc912_50.jpg"
+        },
+        {
+          "shipmentItemId": 164294,
+          "shipmentId": 75585,
+          "productId": 2136141,
+          "productName": "Cardo Spirit HD Duo",
+          "productItemId": 2476386,
+          "quantity": 48,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/b/f9/bf9d8d7aadc34b16b9964c92a0d3741f_50.jpg"
+        },
+        {
+          "shipmentItemId": 164295,
+          "shipmentId": 75585,
+          "productId": 2136139,
+          "productName": "Cardo Spirit Duo",
+          "productItemId": 2476384,
+          "quantity": 48,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/6/c5/6c55bfd4415e4f9489ac4e64be51089c_50.jpg"
+        },
+        {
+          "shipmentItemId": 164296,
+          "shipmentId": 75585,
+          "productId": 2795759,
+          "productName": "Cardo Packtalk Pro",
+          "productItemId": 3248554,
+          "quantity": 24,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/7/2e/72e841688cf7458389f3b2348f61938f_50.jpg"
+        },
+        {
+          "shipmentItemId": 164297,
+          "shipmentId": 75585,
+          "productId": 2303214,
+          "productName": "Cardo Packtalk Edge",
+          "productItemId": 2666198,
+          "quantity": 24,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/0a/40ac14a1cbcf499fb6c753a2e97b1aff_50.jpg"
+        },
+        {
+          "shipmentItemId": 164298,
+          "shipmentId": 75585,
+          "productId": 3272819,
+          "productName": "Cardo Kit para 2º Casco para Freecom/Spirit JBL",
+          "productItemId": 3785987,
+          "quantity": 20,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/9b/49bcef354af74448907396600802f23e_50.jpg"
+        },
+        {
+          "shipmentItemId": 164299,
+          "shipmentId": 75585,
+          "productId": 2136145,
+          "productName": "Cardo Freecom 4X",
+          "productItemId": 2476390,
+          "quantity": 48,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/2/ca/2ca4ef92ba2e48e4ad8b65b4710341c4_50.jpg"
+        },
+        {
+          "shipmentItemId": 164300,
+          "shipmentId": 75585,
+          "productId": 2136146,
+          "productName": "Cardo Freecom 4X Duo",
+          "productItemId": 2476391,
+          "quantity": 32,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/c/9d/c9d220aeb5c94b3f971d3423458449ad_50.jpg"
+        },
+        {
+          "shipmentItemId": 164301,
+          "shipmentId": 75585,
+          "productId": 2136142,
+          "productName": "Cardo Freecom 2X",
+          "productItemId": 2476387,
+          "quantity": 48,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/e/1d/e1dd8f55329943ad942d50f7f2c54d8e_50.jpg"
+        },
+        {
+          "shipmentItemId": 164302,
+          "shipmentId": 75585,
+          "productId": 2136144,
+          "productName": "Cardo Freecom 2X Duo",
+          "productItemId": 2476389,
+          "quantity": 32,
+          "image": "https://cdn.motomundi.cl/Content/products/1431/e/18/e1856025e8994454b159b2afdfb87894_50.jpg"
+        }
+      ]
     }
   ],
-  "packs": [
-
+  "invoices": [
     {
-      "id": 2259,
-      "name": "Pack Cascos + Ear Plugs Pinlock",
-      "title": "Pack Cascos + Ear Plugs Pinlock",
-      "total": 249800,
-      "savings": null,
-      "mainProduct": {
-        "unitsSold": 26,
-        "rating": 9,
-        "discountAmount": 0,
-        "videos": [
-          {
-            "url": "2FLhHAVFl8Q"
-          }
-        ],
-        "availableInStore": true,
-        "linkName": "2356897-cascos-integrales-agv-k1-s-2023",
-        "features": [
-          {
-            "name": "XS",
-            "orderWeight": 76,
-            "id": 59,
-            "type": 0
-          },
-          {
-            "name": "S",
-            "orderWeight": 77,
-            "id": 1,
-            "type": 0
-          },
-          {
-            "name": "M",
-            "orderWeight": 79,
-            "id": 2,
-            "type": 0
-          },
-          {
-            "name": "L",
-            "orderWeight": 81,
-            "id": 3,
-            "type": 0
-          },
-          {
-            "name": "XL",
-            "orderWeight": 90,
-            "id": 4,
-            "type": 0
-          },
-          {
-            "name": "2XL",
-            "orderWeight": 100,
-            "id": 5,
-            "type": 0
-          },
-          {
-            "name": "Negro Matte",
-            "orderWeight": 0,
-            "id": 424,
-            "type": 1
-          }
-        ],
-        "totalReviews": 21,
-        "tireSpecs": [],
-        "discounts": [
-          {
-            "validThru": "2092-06-09T04:00:00Z",
-            "saleTypes": [
-              {
-                "id": 2
-              }
-            ],
-            "amount": 0,
-            "stores": [],
-            "id": 24,
-            "validFrom": "2021-07-07T00:00:00-04:00",
-            "percent": 30
-          },
-          {
-            "validThru": null,
-            "saleTypes": [
-              {
-                "id": 1
-              }
-            ],
-            "amount": 0,
-            "stores": [
-              {
-                "name": "ARAUCO OUTLET BUENAVENTURA",
-                "description": null,
-                "id": 5700
-              }
-            ],
-            "id": 2247,
-            "validFrom": "2026-03-15T00:00:00Z",
-            "percent": 20
-          }
-        ],
-        "preOrder": false,
-        "model": {
-          "image": "46110af492e248d1999094a5cfc3b2e7.jpg",
-          "name": "K1 S",
-          "videos": [
-            "2FLhHAVFl8Q"
-          ],
-          "id": 10081
-        },
-        "id": 2356897,
-        "motoOrderWeight": 0,
-        "brand": {
-          "featured": true,
-          "isAvailableForInternet": true,
-          "name": "AGV",
-          "logo": "946661483a4f4f0b8ea2db16121f0380.jpg",
-          "id": 136,
-          "linkName": "Cascos AGV",
-          "showNameInWeb": true
-        },
-        "parentCategories": [
-          {
-            "name": "Cascos Integrales",
-            "isDirectCategory": true,
-            "id": 41
-          }
-        ],
-        "image": "caa3c1af6aa5458fb641b0fe42cce480.png",
-        "images": [
-          {
-            "colorTagsIds": [
-              1
-            ],
-            "image": "caa3c1af6aa5458fb641b0fe42cce480.png",
-            "colorName": "Negro Matte",
-            "colorId": 424,
-            "orderWeight": 0,
-            "id": 2184285
-          },
-          {
-            "colorTagsIds": [],
-            "image": "ed513ec7590b40aba61e5fc1123d6293.png",
-            "colorId": 0,
-            "orderWeight": 1,
-            "id": 2184286
-          },
-          {
-            "colorTagsIds": [],
-            "image": "34a950d3aaa2449bbe685681e29761eb.png",
-            "colorId": 0,
-            "orderWeight": 2,
-            "id": 2184287
-          },
-          {
-            "colorTagsIds": [],
-            "image": "08d4f9fadb844967aa4651b8ff668bfd.png",
-            "colorId": 0,
-            "orderWeight": 3,
-            "id": 2184288
-          },
-          {
-            "colorTagsIds": [],
-            "image": "1cf6550b95ca45c4bdbf85423107b3fa.png",
-            "colorId": 0,
-            "orderWeight": 4,
-            "id": 2184289
-          }
-        ],
-        "isAvailableForInternet": true,
-        "salesTaxes": [
-          {
-            "code": 14,
-            "percentage": 19,
-            "name": "I.V.A. 19%",
-            "id": 7833766
-          }
-        ],
-        "isSimpleProduct": false,
-        "isReserved": false,
-        "motorcycles": [],
-        "priceComponents": [
-          {
-            "country": "CL",
-            "amount": 229900,
-            "productId": 2356897,
-            "tagId": 0,
-            "isCalculated": false,
-            "thruQuantity": 0,
-            "productItemId": 0,
-            "fromQuantity": 0,
-            "saleTypeId": 0,
-            "isBasePrice": true,
-            "isDiscount": false,
-            "type": 0,
-            "percent": 0,
-            "packId": 0,
-            "price": {
-              "amount": 229900,
-              "unit": "CLP"
-            },
-            "brandId": 0,
-            "typeId": 0,
-            "currency": "CLP",
-            "id": 10598154,
-            "ruleId": 0,
-            "categoryId": 0
-          }
-        ],
-        "availableSizes": [
-          {
-            "name": "2XL",
-            "orderWeight": 100,
-            "id": "2XL",
-            "key": "2XL|100"
-          },
-          {
-            "name": "M",
-            "orderWeight": 79,
-            "id": "M",
-            "key": "M|79"
-          },
-          {
-            "name": "XL",
-            "orderWeight": 90,
-            "id": "XL",
-            "key": "XL|90"
-          }
-        ],
-        "domainId": 1,
-        "tags": [
-          {
-            "categoryOrderWeight": 0,
-            "useInFilter": true,
-            "filter": "29596|Sport / Racing|True|attribute|0|Estilo Piloto",
-            "name": "Sport / Racing",
-            "id": 29596,
-            "type": "attribute",
-            "categoryName": "Estilo Piloto",
-            "categoryId": 746
-          },
-          {
-            "categoryOrderWeight": 0,
-            "useInFilter": false,
-            "filter": "43165|25% 2026|False|tag|0|Cyber 2026 ",
-            "name": "25% 2026",
-            "id": 43165,
-            "type": "tag",
-            "categoryName": "Cyber 2026 ",
-            "categoryId": 3023
-          },
-          {
-            "categoryOrderWeight": 0,
-            "useInFilter": false,
-            "filter": "45623|Outlet Quilicura 20% |False|tag|0|Outlet Arauco Quilicura",
-            "name": "Outlet Quilicura 20% ",
-            "id": 45623,
-            "type": "tag",
-            "categoryName": "Outlet Arauco Quilicura",
-            "categoryId": 3071
-          }
-        ],
-        "hasColor": true,
-        "hasSize": true,
-        "minPrice": 229900,
-        "name": "K1 S (2023)",
-        "modifiedDate": "2025-08-22T14:29:35",
-        "maxPrice": 229900,
-        "directCategories": [
-          41
-        ],
-        "googleProductCategory": 0,
-        "code": "",
-        "directCategoryisAvailableForInternet": true,
-        "orderWeight": 1,
-        "inventoryControl": 0,
-        "motorbikeVersion": [],
-        "productItems": [
-          {
-            "codes": "8051019575951",
-            "sizeId": 1,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2726671,
-            "barcode2": "",
-            "barcode1": "8051019575951",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 0
-          },
-          {
-            "codes": "8051019575968",
-            "sizeId": 2,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2726672,
-            "barcode2": "",
-            "barcode1": "8051019575968",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 0
-          },
-          {
-            "codes": "8051019575975",
-            "sizeId": 3,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2726673,
-            "barcode2": "",
-            "barcode1": "8051019575975",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 0
-          },
-          {
-            "codes": "8051019575982",
-            "sizeId": 4,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2726674,
-            "barcode2": "",
-            "barcode1": "8051019575982",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 17
-          },
-          {
-            "codes": "8051019575999",
-            "sizeId": 5,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2726675,
-            "barcode2": "",
-            "barcode1": "8051019575999",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 8
-          },
-          {
-            "codes": "8051019575944",
-            "sizeId": 59,
-            "productId": 2356897,
-            "colorId": 424,
-            "id": 2760020,
-            "barcode2": "",
-            "barcode1": "8051019575944",
-            "price": {
-              "price": 229900,
-              "oldPrice": 229900,
-              "discount": 0
-            },
-            "quantityInStock": 0
-          }
-        ],
-        "categories": [
-          {
-            "name": "Cascos Integrales",
-            "isDirectCategory": true,
-            "id": 41
-          },
-          {
-            "name": "Cascos",
-            "isDirectCategory": false,
-            "id": 4
-          },
-          {
-            "name": "Motocicleta",
-            "isDirectCategory": false,
-            "id": 82141
-          }
-        ],
-        "productType": 0,
-        "createDate": "2022-08-25T17:00:52",
-        "requiresFeaturedSelect": false,
-        "quantityInStock": 25,
-        "summary": "",
-        "mercadoLibre": {},
-        "discountPercent": 0,
-        "hasDiscount": false,
-        "isTaxExempt": false,
-        "requiresLot": false,
-        "fullName": "AGV K1 S (2023)",
-        "propertiesMap": {
-          "property_7": "No, preparado para pinlock",
-          "property_12": "Intermedio",
-          "property_6": "Adulto",
-          "property_11": "n/a",
-          "property_9": "1",
-          "property_10": "2",
-          "property_8": "1.500 gr. (en la primera talla de calota)",
-          "property_3": "Resina termoplástica de alta resistencia",
-          "property_2": "0",
-          "property_5": "Si, desmontable",
-          "property_4": "Doble D",
-          "property_1": "ECE 2206"
-        },
-        "isNew": false,
-        "universalQuantity": 25
-      },
-      "products": [
+      "id": 28821115,
+      "number": "T163",
+      "date": "2026-04-09T04:00:00.000Z",
+      "type": 20,
+      "items": [
         {
-          "unitsSold": 67,
-          "rating": 6,
-          "discountAmount": 0,
-          "availableInStore": true,
-          "linkName": "tapones-para-los-oidos-pinlock-ear-plugs",
-          "features": [
-            {
-              "name": "Tamaño Unico",
-              "orderWeight": 0,
-              "id": 781,
-              "type": 0
-            }
-          ],
-          "totalReviews": 4,
-          "tireSpecs": [],
-          "discounts": [
-            {
-              "validThru": null,
-              "saleTypes": [
-                {
-                  "id": 2
-                }
-              ],
-              "amount": 0,
-              "stores": [],
-              "id": 1723,
-              "validFrom": "2024-06-24T04:00:00Z",
-              "percent": 30
-            }
-          ],
-          "preOrder": false,
-          "id": 466494,
-          "motoOrderWeight": 0,
-          "brand": {
-            "featured": false,
-            "isAvailableForInternet": true,
-            "name": "Pinlock",
-            "logo": "4e169315cc1547bab63d8aa8d5032e91.png",
-            "id": 38383,
-            "showNameInWeb": true
+          "invoiceItemId": 149072378,
+          "productId": 2136138,
+          "productName": "Cardo Spirit",
+          "productItemId": 2476383,
+          "quantity": 72,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 72,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
           },
-          "parentCategories": [
-            {
-              "name": "Tapones para los Oídos",
-              "isDirectCategory": true,
-              "id": 41717
-            }
-          ],
-          "image": "5d7563152fab424993814ec244a8aa05.png",
-          "images": [
-            {
-              "colorTagsIds": [],
-              "image": "5d7563152fab424993814ec244a8aa05.png",
-              "colorId": 0,
-              "orderWeight": 0,
-              "id": 2378420
-            },
-            {
-              "colorTagsIds": [],
-              "image": "a8c37f32ec654370933e160d020ac121.jpg",
-              "colorId": 0,
-              "orderWeight": 0,
-              "id": 2378423
-            },
-            {
-              "colorTagsIds": [],
-              "image": "4e4701065dc045ccab0cae597c3d5e1e.jpg",
-              "colorId": 0,
-              "orderWeight": 0,
-              "id": 2378424
-            },
-            {
-              "colorTagsIds": [],
-              "image": "b1db1dce8f9d4f8cba7d0f6ca79de0b9.jpg",
-              "colorId": 0,
-              "orderWeight": 0,
-              "id": 2378425
-            },
-            {
-              "colorTagsIds": [],
-              "image": "251cbf3f53ee41a9ae83a2174dcbf292.jpg",
-              "colorId": 0,
-              "orderWeight": 1,
-              "id": 2378421
-            },
-            {
-              "colorTagsIds": [],
-              "image": "b47cd8cf096446d8843166c49ef53a4e.png",
-              "colorId": 0,
-              "orderWeight": 2,
-              "id": 2378422
-            }
-          ],
-          "isAvailableForInternet": true,
-          "salesTaxes": [
-            {
-              "code": 14,
-              "percentage": 19,
-              "name": "I.V.A. 19%",
-              "id": 8376795
-            }
-          ],
-          "isSimpleProduct": false,
-          "isReserved": false,
-          "motorcycles": [],
-          "priceComponents": [
-            {
-              "country": "CL",
-              "amount": 5000,
-              "productId": 466494,
-              "tagId": 0,
-              "isCalculated": false,
-              "thruQuantity": 0,
-              "productItemId": 0,
-              "fromQuantity": 0,
-              "saleTypeId": 0,
-              "isBasePrice": false,
-              "isDiscount": true,
-              "type": 3,
-              "percent": 0,
-              "packId": 1,
-              "price": {
-                "amount": 5000,
-                "unit": "CLP"
-              },
-              "brandId": 0,
-              "typeId": 3,
-              "currency": "CLP",
-              "id": 1887593,
-              "ruleId": 0,
-              "categoryId": 0
-            },
-            {
-              "country": "CL",
-              "amount": 5000,
-              "productId": 466494,
-              "tagId": 0,
-              "isCalculated": false,
-              "thruQuantity": 0,
-              "productItemId": 0,
-              "fromQuantity": 0,
-              "saleTypeId": 0,
-              "isBasePrice": false,
-              "isDiscount": true,
-              "type": 3,
-              "percent": 0,
-              "packId": 2,
-              "price": {
-                "amount": 5000,
-                "unit": "CLP"
-              },
-              "brandId": 0,
-              "typeId": 3,
-              "currency": "CLP",
-              "id": 1887594,
-              "ruleId": 0,
-              "categoryId": 0
-            },
-            {
-              "country": "CL",
-              "amount": 19900,
-              "productId": 466494,
-              "tagId": 0,
-              "isCalculated": false,
-              "thruQuantity": 0,
-              "productItemId": 0,
-              "fromQuantity": 0,
-              "saleTypeId": 0,
-              "isBasePrice": true,
-              "isDiscount": false,
-              "type": 0,
-              "percent": 0,
-              "packId": 0,
-              "price": {
-                "amount": 19900,
-                "unit": "CLP"
-              },
-              "brandId": 0,
-              "typeId": 0,
-              "currency": "CLP",
-              "id": 11633229,
-              "ruleId": 0,
-              "categoryId": 0
-            }
-          ],
-          "availableSizes": [],
-          "domainId": 1,
-          "tags": [
-            {
-              "categoryOrderWeight": 0,
-              "useInFilter": false,
-              "filter": "8825|Pack cascos|False|tag|0|Packs Online",
-              "name": "Pack cascos",
-              "id": 8825,
-              "type": "tag",
-              "categoryName": "Packs Online",
-              "categoryId": 1292
-            }
-          ],
-          "hasColor": false,
-          "hasSize": true,
-          "minPrice": 19900,
-          "name": "Ear Plugs",
-          "modifiedDate": "2026-03-13T17:07:13",
-          "maxPrice": 19900,
-          "directCategories": [
-            41717
-          ],
-          "googleProductCategory": 0,
-          "code": "",
-          "directCategoryisAvailableForInternet": true,
-          "orderWeight": 3,
-          "inventoryControl": 0,
-          "motorbikeVersion": [],
-          "productItems": [
-            {
-              "codes": "8720812923039",
-              "sizeId": 781,
-              "productId": 466494,
-              "colorId": 0,
-              "id": 702630,
-              "barcode2": "",
-              "barcode1": "8720812923039",
-              "price": {
-                "price": 19900,
-                "oldPrice": 19900,
-                "discount": 0
-              },
-              "quantityInStock": 29
-            }
-          ],
-          "categories": [
-            {
-              "name": "Tapones para los Oídos",
-              "isDirectCategory": true,
-              "id": 41717
-            },
-            {
-              "name": "Accesorios",
-              "isDirectCategory": false,
-              "id": 9
-            },
-            {
-              "name": "Motocicleta",
-              "isDirectCategory": false,
-              "id": 82141
-            }
-          ],
-          "productType": 0,
-          "createDate": "2019-03-15T19:59:08",
-          "requiresFeaturedSelect": false,
-          "quantityInStock": 32,
-          "summary": "",
-          "mercadoLibre": {},
-          "discountPercent": 0,
-          "hasDiscount": false,
-          "isTaxExempt": false,
-          "requiresLot": false,
-          "fullName": "Pinlock Ear Plugs",
-          "isNew": false,
-          "universalQuantity": 32
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/b/d4/bd4771efd5d842939136c11ee149a40f_50.jpg",
+          "unitPrice": {
+            "amount": 49.85,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072379,
+          "productId": 2136140,
+          "productName": "Cardo Spirit HD",
+          "productItemId": 2476385,
+          "quantity": 72,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 72,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/78/478d873e7ac241f09af2a4f8cfcbc912_50.jpg",
+          "unitPrice": {
+            "amount": 76.7,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072380,
+          "productId": 2136141,
+          "productName": "Cardo Spirit HD Duo",
+          "productItemId": 2476386,
+          "quantity": 48,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 48,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/b/f9/bf9d8d7aadc34b16b9964c92a0d3741f_50.jpg",
+          "unitPrice": {
+            "amount": 144.13,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072381,
+          "productId": 2136139,
+          "productName": "Cardo Spirit Duo",
+          "productItemId": 2476384,
+          "quantity": 48,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 48,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/6/c5/6c55bfd4415e4f9489ac4e64be51089c_50.jpg",
+          "unitPrice": {
+            "amount": 93.98,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072382,
+          "productId": 3507901,
+          "productName": "Cardo Packtalk-S para SHOEI Gen. 3",
+          "productItemId": 4048162,
+          "quantity": 24,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 24,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 184676,
+            "name": "Tamaño único"
+          },
+          "image": null,
+          "unitPrice": {
+            "amount": 155.78,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072383,
+          "productId": 2795759,
+          "productName": "Cardo Packtalk Pro",
+          "productItemId": 3248554,
+          "quantity": 24,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 24,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/7/2e/72e841688cf7458389f3b2348f61938f_50.jpg",
+          "unitPrice": {
+            "amount": 188.58,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072384,
+          "productId": 2303214,
+          "productName": "Cardo Packtalk Edge",
+          "productItemId": 2666198,
+          "quantity": 24,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 24,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/0a/40ac14a1cbcf499fb6c753a2e97b1aff_50.jpg",
+          "unitPrice": {
+            "amount": 163.98,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072385,
+          "productId": 3272819,
+          "productName": "Cardo Kit para 2º Casco para Freecom/Spirit JBL",
+          "productItemId": 3785987,
+          "quantity": 20,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 20,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 184676,
+            "name": "Tamaño único"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/4/9b/49bcef354af74448907396600802f23e_50.jpg",
+          "unitPrice": {
+            "amount": 62.38,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072386,
+          "productId": 2136145,
+          "productName": "Cardo Freecom 4X",
+          "productItemId": 2476390,
+          "quantity": 48,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 48,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/2/ca/2ca4ef92ba2e48e4ad8b65b4710341c4_50.jpg",
+          "unitPrice": {
+            "amount": 118.88,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072387,
+          "productId": 2136146,
+          "productName": "Cardo Freecom 4X Duo",
+          "productItemId": 2476391,
+          "quantity": 32,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 32,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/c/9d/c9d220aeb5c94b3f971d3423458449ad_50.jpg",
+          "unitPrice": {
+            "amount": 217.28,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072388,
+          "productId": 2136142,
+          "productName": "Cardo Freecom 2X",
+          "productItemId": 2476387,
+          "quantity": 48,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 48,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/e/1d/e1dd8f55329943ad942d50f7f2c54d8e_50.jpg",
+          "unitPrice": {
+            "amount": 96.33,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072389,
+          "productId": 2136144,
+          "productName": "Cardo Freecom 2X Duo",
+          "productItemId": 2476389,
+          "quantity": 32,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 32,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 8,
+            "name": "Tamaño Unico"
+          },
+          "image": "https://cdn.motomundi.cl/Content/products/1431/e/18/e1856025e8994454b159b2afdfb87894_50.jpg",
+          "unitPrice": {
+            "amount": 180.38,
+            "currency": "USD"
+          }
+        },
+        {
+          "invoiceItemId": 149072390,
+          "productId": 3507900,
+          "productName": "Cardo 4X-S para SHOEI Gen. 3",
+          "productItemId": 4048161,
+          "quantity": 24,
+          "quantityShipped": 0,
+          "quantityCanceled": 0,
+          "quantityBackorder": 24,
+          "color": {
+            "id": 0,
+            "name": "Sin Tamaño"
+          },
+          "size": {
+            "id": 184676,
+            "name": "Tamaño único"
+          },
+          "image": null,
+          "unitPrice": {
+            "amount": 112.73,
+            "currency": "USD"
+          }
         }
       ]
     }

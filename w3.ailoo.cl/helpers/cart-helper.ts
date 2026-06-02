@@ -124,7 +124,7 @@ export async function applyCoupon(code: string, cart: Partial<Cart>, domainId: n
         throw new Error( "Cupón ya fue utilizado");
 
 
-    const couponConfig : CouponConfig = JSON.parse(coupon.config);
+    const couponConfig : CouponConfig = coupon.config ? JSON.parse(coupon.config) : { Rules: [] };
     const context = await cartHelper.createCouponContext(cart, domainId)
 
     if (user && user.person && user.person.partyTags != null) {

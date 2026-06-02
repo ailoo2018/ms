@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 export function loadConfig() {
-    const nodeEnv = process.env.NODE_ENV ?? "development";
+    const nodeEnv = process.env.NODE_ENV ?? "develper";
     const envFile = `.env.${nodeEnv}`;
 
     // If explicitly set, use that path directly

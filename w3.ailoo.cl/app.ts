@@ -104,15 +104,8 @@ app.get('/', (req, res) => {
   logger.info("info: Called /: " );
   logger.error("error: Called /: " );
   res.json({
-    msg: "Version 2.0.1",
-    KOMMO_ACCESS_TOKEN: process.env.KOMMO_ACCESS_TOKEN || null,
-    DLOCAL_GO_BASE_URL: process.env.DLOCAL_GO_BASE_URL || null,
-    DLOCAL_GO_API_KEY: process.env.DLOCAL_GO_API_KEY || null,
-    CMS_URL: process.env.CMS_URL || null,
-    MERCADO_PAGO_ACCESS_TOKEN: process.env.MERCADO_PAGO_ACCESS_TOKEN || null,
-    WEBPAY_COMMERCE_CODE: process.env.WEBPAY_COMMERCE_CODE || null,
-    //  AILOO_TOKEN: process.env.AILOO_ACCESS_TOKEN,
-    ADMIN_URL: process.env.ADMIN_URL || null,
+    msg: "Version 2.0.101",
+
   });
 });
 
