@@ -547,7 +547,7 @@ router.get("/:domainId/checkout/payment-methods", async (req, res, next) => {
         const rs = {gateways: []}
         if (country !== "CL") {
 
-            if (country === "ES" || country === "US") {
+            if (country === "ES" || country === "US" || country === "BO") {
                 rs.gateways.push({
                     "id": 10,
                     "driver": "paypal",
