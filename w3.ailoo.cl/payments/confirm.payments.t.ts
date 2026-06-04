@@ -8,11 +8,17 @@ import container from "../container/index.js";
 import schema from "../db/schema.js"
 import {adminClient} from "../clients/adminClient.js";
 import logger from "@ailoo/shared-libs/logger";
+import {convert} from "../services/exchangeService.js";
 
 const { invoice, payment, paymentApplication } = schema;
 
 
-export async function validateInvoice(referenceId: string, transactionAmount: number, paymentMethodType: number, domainId : number) {
+export async function validateInvoice(
+    referenceId: string,
+    transactionAmount: number,
+    currency: string,
+    paymentMethodType: number,
+    domainId : number) {
     const invoice = await drizzleDb.query.invoice.findFirst({
         where: (invoice, { eq }) =>
             and(
@@ -30,7 +36,13 @@ export async function validateInvoice(referenceId: string, transactionAmount: nu
         return { success: false, message: `Invoice no encontrada` }
     }
     const invoiceTotal = invoiceHelper.getTotal(invoice)
-    if(Math.abs(transactionAmount - invoiceTotal) > 1){
+    let invoiceTotalInPaymentCurrency = invoiceTotal;
+    let invoiceCurrency = invoice.currency ? invoice.currency : "CLP";
+    if(currency != invoiceCurrency)
+        invoiceTotalInPaymentCurrency = await convert(invoiceTotal, invoice.currency, currency)
+
+
+    if(Math.abs(transactionAmount - invoiceTotalInPaymentCurrency) > 1.9){
         throw new Error(`Montos no coinciden: ${transactionAmount} vs ${invoiceTotal}`)
     }
 
@@ -95,7 +107,7 @@ export async function confirmPayment(authId: string, paymentMethodType: number, 
     }
 
     if(response.referenceType === "invoice") {
-        await validateInvoice(response.referenceId, response.transactionAmount, paymentMethodType, domainId)
+        await validateInvoice(response.referenceId, response.transactionAmount, response.currency, paymentMethodType, domainId)
     }else{
         await validateOrder(response.referenceId, response.transactionAmount, response.currency, paymentMethodType, domainId)
     }
