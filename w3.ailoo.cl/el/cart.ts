@@ -85,6 +85,10 @@ export async function findCartByWuid(wuid) {
     }
   }
 
+    if(cart?.items?.length > 0){
+    cart.items = cart.items.filter(i => i.type !== 2);
+  }
+
   return cart;
 }
 

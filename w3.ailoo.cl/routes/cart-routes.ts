@@ -5,14 +5,16 @@ import container from "../container/index.js";
 import {getProductImage, getProductItemDescription} from "../helpers/product-helper.js";
 import {Cart, CartItemType} from "../models/cart-models.js";
 import {addCart, findCartByWuid, updateCart} from "../el/cart.js";
-import {ProductType} from "../models/domain.js";
+import {ProductType, SaleType} from "../models/domain.js";
+import {CartService} from "@ailoo/shared-libs/CartService";
+import {ShoppingCart} from "@ailoo/shared-libs/cart.types";
 
 const router = Router(); // Create a router instead of using 'app'
 
 
 
 const productService = container.resolve('productsService');
-const cartService = container.resolve('cartService');
+const cartService: CartService = container.resolve('cartService');
 
 router.post("/:domainId/cart/set-user", async(req, res, next) => {
   try{
@@ -176,6 +178,7 @@ router.post('/:domainId/cart/add', async (req, res, next) => {
             packId: 0,
             name: getProductItemDescription(product, productItem),
             product: {
+              productId: product.id,
               productItemId: productItem.id,
               image: prodImage ? prodImage.image : null,
               name: getProductItemDescription(product, productItem),
@@ -287,30 +290,44 @@ router.get("/:domainId/cart/find", async (req, res, next) => {
   }
 })
 
+router.get("/:domainId/cart/:wuid/analyze", async (req, res, next) => {
+
+  try{
+    const domainId = parseInt(req.params.domainId);
+    const wuid = req.params.wuid;
+
+
+    let cart : ShoppingCart = await findCart(wuid, domainId);
+    const result = await cartService.analyzeSale(cart, domainId);
+
+    res.json(result);
+  }catch(e){
+    next(e)
+  }
+
+});
+
 router.get("/:domainId/cart/:wuid", async (req, res, next) => {
   try {
     const domainId = parseInt(req.params.domainId);
     const wuid = req.params.wuid;
     let cart = await findCart(wuid, domainId);
-    if(!cart) {
-      const newCart = {
-        "id": null,
-        "wuid": wuid,
-        "notificationsCount": 0,
-        "lastNotified": "0001-01-01T00:00:00",
-        "webSiteId": 0,
-        "createDate": new Date(),
-        "modifiedDate": new Date(),
-        "currency":  "CLP",
-        "userId": 0,
-        "domainId": domainId,
-        items: []
-      };
+    if(cart?.items?.length > 0) {
+      const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
 
-      const newCartId = await addCart(newCart)
-      newCart.id = newCartId;
-      cart = newCart;
+      if (analyzeRs?.discounts) {
+        for (var dct of analyzeRs.discounts.items) {
+          cart.items.push({
+            name: dct.name,
+            quantity: 1,
+            type: 2, // discount
+            price: dct.price,
+            dct,
+          });
+        }
+      }
     }
+
 
     res.json(cart)
   } catch (err) {

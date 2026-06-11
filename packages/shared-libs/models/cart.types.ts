@@ -1,7 +1,8 @@
 // Enums for type safety
 export enum ProductType {
     Simple = 0,
-    Pack = 1
+    Pack = 1,
+    Discount = 2,
 }
 
 export enum AttributeType {
@@ -12,6 +13,7 @@ export enum AttributeType {
 // Base interfaces
 export interface ProductReference {
     image?: string;
+    productId: number;
     productItemId: number;
     name: string;
     type: ProductType;

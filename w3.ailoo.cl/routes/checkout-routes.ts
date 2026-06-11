@@ -315,6 +315,21 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                 logger.info("drizzleDb.transaction 6")
                 let postalAddressId = null;
                 const cart = await findCart(rq.wuid, domainId)
+                if (cart?.items?.length > 0)  {
+                    const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
+
+                    if (analyzeRs?.discounts) {
+                        for (var dct of analyzeRs.discounts.items) {
+                            cart.items.push({
+                                name: dct.name,
+                                quantity: 1,
+                                type: 2, // discount
+                                price: dct.price,
+                                dct,
+                            });
+                        }
+                    }
+                }
 
                 let appliedCoupon = null
                 if (rq.coupon?.id > 0) {
@@ -459,7 +474,21 @@ router.post("/:domainId/checkout/create-order", async (req, res, next) => {
                         }
 
                         orderTotal += item.quantity * item.price
-                    } else if (item.type === CartItemType.Pack) {
+                    }
+                    else if(item.type === CartItemType.Discount) {
+
+                        await tx.insert(saleOrderItem).values({
+                            orderId: newOrderId,
+                            quantity: "1",
+                            unitPrice: item.price,
+                            unitCurrency: "CLP",
+                            type: OrderItemType.Discount,
+                            comment: item.name,
+                        });
+
+                        orderTotal += item.quantity * item.price
+                    }
+                    else if (item.type === CartItemType.Pack) {
 
                         // validate price
                         validateRequestPrice(item, rq)
