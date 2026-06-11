@@ -1,6 +1,6 @@
 import logger from "@ailoo/shared-libs/logger";
 
-const ADMIN_URL =  "http://admin" // process.env.ADMIN_URL
+const ADMIN_URL =  process.env.ADMIN_URL
 const AILOO_ACCESS_TOKEN = process.env.AILOO_ACCESS_TOKEN
 
 export const adminClient = {

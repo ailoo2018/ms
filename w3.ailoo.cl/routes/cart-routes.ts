@@ -8,6 +8,7 @@ import {addCart, findCartByWuid, updateCart} from "../el/cart.js";
 import {ProductType, SaleType} from "../models/domain.js";
 import {CartService} from "@ailoo/shared-libs/CartService";
 import {ShoppingCart} from "@ailoo/shared-libs/cart.types";
+import logger from "../utils/logger.js";
 
 const router = Router(); // Create a router instead of using 'app'
 
@@ -313,18 +314,22 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
     const wuid = req.params.wuid;
     let cart = await findCart(wuid, domainId);
     if(cart?.items?.length > 0) {
-      const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
+      try {
+        const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
 
-      if (analyzeRs?.discounts) {
-        for (var dct of analyzeRs.discounts.items) {
-          cart.items.push({
-            name: dct.name,
-            quantity: 1,
-            type: 2, // discount
-            price: dct.price,
-            dct,
-          });
+        if (analyzeRs?.discounts) {
+          for (var dct of analyzeRs.discounts.items) {
+            cart.items.push({
+              name: dct.name,
+              quantity: 1,
+              type: 2, // discount
+              price: dct.price,
+              dct,
+            });
+          }
         }
+      }catch(e){
+        logger.error(e);
       }
     }
 
