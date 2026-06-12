@@ -13,361 +13,410 @@ import logger from "../utils/logger.js";
 const router = Router(); // Create a router instead of using 'app'
 
 
-
 const productService = container.resolve('productsService');
 const cartService: CartService = container.resolve('cartService');
 
-router.post("/:domainId/cart/set-user", async(req, res, next) => {
-  try{
-    const domainId = parseInt(req.params.domainId);
-    const { userId, wuid } = req.body;
+router.post("/:domainId/cart/set-user", async (req, res, next) => {
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const {userId, wuid} = req.body;
 
-    const cart : Partial<Cart> = await findCart(wuid, domainId);
-    if(!cart){
+        const cart: Partial<Cart> = await findCart(wuid, domainId);
+        if (!cart) {
 
-      const newCart = {
-        "id": null,
-        "wuid": wuid,
-        "notificationsCount": 0,
-        "lastNotified": "0001-01-01T00:00:00",
-        "webSiteId": 0,
-        "createDate": new Date(),
-        "modifiedDate": new Date(),
-        "currency":  "CLP",
-        "userId": 0,
-        "domainId": domainId,
-        items: []
-      };
+            const newCart = {
+                "id": null,
+                "wuid": wuid,
+                "notificationsCount": 0,
+                "lastNotified": "0001-01-01T00:00:00",
+                "webSiteId": 0,
+                "createDate": new Date(),
+                "modifiedDate": new Date(),
+                "currency": "CLP",
+                "userId": 0,
+                "domainId": domainId,
+                items: []
+            };
 
-      newCart.id = await addCart(newCart);
+            newCart.id = await addCart(newCart);
 
-      res.json(newCart)
-    }else {
-      if (cart.userId > 0 && userId !== cart.userId)
-        throw new Error("Carro de compra ya tiene usuario");
+            res.json(newCart)
+        } else {
+            if (cart.userId > 0 && userId !== cart.userId)
+                throw new Error("Carro de compra ya tiene usuario");
 
-      cart.userId = userId
+            cart.userId = userId
 
-      await updateCart(cart)
+            await updateCart(cart)
 
-      res.json(cart)
+            res.json(cart)
+        }
+    } catch (e) {
+        next(e)
     }
-  }catch(e){
-    next(e)
-  }
 })
 
 router.get("/:domainId/cart/comuna", async (req, res, next) => {
 
-  try{
-    const domainId = parseInt(req.params.domainId);
-    const wuid = req.query.wuid;
-    const comunaId = req.params.comunaId;
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const wuid = req.query.wuid;
+        const comunaId = req.params.comunaId;
 
-    const cart = await findCart(wuid, domainId)
-    cart.destination = { comunaId: comunaId };
+        const cart = await findCart(wuid, domainId)
+        cart.destination = {comunaId: comunaId};
 
-    await cartService.update(cart);
+        await cartService.update(cart);
 
-    res.json({})
+        res.json({})
 
-  }catch(e){
-    next(e)
-  }
+    } catch (e) {
+        next(e)
+    }
 })
 
 router.get("/:domainId/cart/remove-item", async (req, res, next) => {
 
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const {wuid, itemId, type} = req.query
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const {wuid, itemId, type} = req.query
 
-      const cart = await findCartByWuid(wuid)
-    cart.items = cart.items.filter(ite => ite).filter(item => item.id !== itemId   && item.type !== type)
+        const cart = await findCartByWuid(wuid)
+        cart.items = cart.items.filter(ite => ite).filter(item => item.id !== itemId && item.type !== type)
 
-    await updateCart(cart)
+        await updateCart(cart)
 
-    const newCart = await findCart(wuid, domainId);
-    res.json(newCart)
+        const newCart = await findCart(wuid, domainId);
+        res.json(newCart)
 
 
-  } catch (err) {
-    next(err);
-  }
+    } catch (err) {
+        next(err);
+    }
 
 })
 
 router.get("/:domainId/cart/empty", async (req, res, next) => {
 
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const {wuid} = req.query
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const {wuid} = req.query
 
-    const cart = await findCartByWuid(wuid)
-    cart.items = []
+        const cart = await findCartByWuid(wuid)
+        cart.items = []
 
-    await updateCart(cart)
+        await updateCart(cart)
 
-    const newCart = await findCart(wuid, domainId);
-    res.json(newCart)
+        const newCart = await findCart(wuid, domainId);
+        res.json(newCart)
 
 
-  } catch (err) {
-    next(err);
-  }
+    } catch (err) {
+        next(err);
+    }
 
 })
 
 router.post('/:domainId/cart/add', async (req, res, next) => {
 
-  const rq = req.body;
+    const rq = req.body;
 
-  try {
+    try {
 
-    const domainId = parseInt(req.params.domainId);
+        const domainId = parseInt(req.params.domainId);
 
-    let cart = null;
+        let cart = null;
 
-    const existingCart = await findCartByWuid(rq.wuid)
-    if (existingCart) {
-      if (!existingCart.items)
-        existingCart.items = []
-      cart = existingCart;
-    } else {
+        const existingCart = await findCartByWuid(rq.wuid)
+        if (existingCart) {
+            if (!existingCart.items)
+                existingCart.items = []
+            cart = existingCart;
+        } else {
 
-      const newCart = {
-        "id": null,
-        "wuid": rq.wuid,
-        "notificationsCount": 0,
-        "lastNotified": "0001-01-01T00:00:00",
-        "webSiteId": 0,
-        "createDate": new Date(),
-        "modifiedDate": new Date(),
-        "currency": rq.currency ? rq.currency : "CLP",
-        "userId": rq.userId ? rq.userId : 0,
-        "domainId": domainId,
-        items: []
-      };
+            const newCart = {
+                "id": null,
+                "wuid": rq.wuid,
+                "notificationsCount": 0,
+                "lastNotified": "0001-01-01T00:00:00",
+                "webSiteId": 0,
+                "createDate": new Date(),
+                "modifiedDate": new Date(),
+                "currency": rq.currency ? rq.currency : "CLP",
+                "userId": rq.userId ? rq.userId : 0,
+                "domainId": domainId,
+                items: []
+            };
 
-      const newCartId = await addCart(newCart)
-      newCart.id = newCartId;
-      cart = newCart;
-    }
-
-
-    let cartItem
-    if (rq.type === CartItemType.Product) {
-
-      let product = await productService.findProductByProductItem(rq.productItemId, domainId)
-
-      if (!product) {
-        return res.status(404).json({error: 'Product not found'});
-      }
-
-      const productItem = product.productItems.find(pit => pit.id = rq.productItemId)
-      const prodImage = getProductImage(product, productItem)
-
-      if (product.productType === ProductType.Simple) {
-
-        var existingCartItem = cart.items.find(ci => ci.product && ci.product.productItemId === productItem.id)
-
-        if(existingCartItem){
-          existingCartItem.quantity++
-        }else {
-          cartItem = {
-            id: uuidv4(),
-            packId: 0,
-            name: getProductItemDescription(product, productItem),
-            product: {
-              productId: product.id,
-              productItemId: productItem.id,
-              image: prodImage ? prodImage.image : null,
-              name: getProductItemDescription(product, productItem),
-              type: product.productType,
-            },
-            quantity: rq.quantity,
-            type: CartItemType.Product,
-          }
-
-          cart.items.push(cartItem)
+            const newCartId = await addCart(newCart)
+            newCart.id = newCartId;
+            cart = newCart;
         }
 
-      } else {
 
-        cartItem = {
-          id: uuidv4(),
-          packId: 0,
-          name: getProductItemDescription(product, productItem),
-          product: {
-            productItemId: productItem.id,
-            image: prodImage ? prodImage.image : null,
-            name: getProductItemDescription(product, productItem),
-            type: product.productType,
-          },
-          quantity: rq.quantity,
-          type: CartItemType.Product,
-          packContents: []
-        }
+        let cartItem
+        if (rq.type === CartItemType.Product) {
 
-        for (var packItem of rq.packContents) {
+            let product = await productService.findProductByProductItem(rq.productItemId, domainId)
 
-          var packProduct = await productService.findProductByProductItem(packItem.productItemId, domainId)
-          const packPit = packProduct.productItems.find(pit => pit.id = packItem.productItemId)
-          if (packPit == null) {
-            return res.status(404).json({error: 'ProductItem not found: ' + packItem.productItemId});
-          }
-
-          const packItemImage = getProductImage(packProduct, packPit)
-
-          cartItem.packContents.push({
-            "packId": 0,
-            "product": {
-              "productItemId": packPit.id,
-              "image": packItemImage ? packItemImage.image : null,
-              "name": packProduct.name,
-              "id": packProduct.id,
-            },
-            "quantity": 1,
-            "name": packProduct.fullName,
-            "id": packPit.id,
-            "type": 0
-          })
-        }
-
-        cart.items.push(cartItem)
-      }
-
-
-    } else if (rq.type === CartItemType.Pack) {
-      cartItem = {
-        id: uuidv4(),
-        packId: rq.packId,
-        type: CartItemType.Pack,
-        name: rq.name,
-        product: null,
-        packContents: rq.packContents.map(pc => {
-          return {
-            quantity: pc.quantity,
-            product: {
-              id: pc.productId,
-              productItemId: pc.productItemId,
+            if (!product) {
+                return res.status(404).json({error: 'Product not found'});
             }
-          }
-        })
-      }
 
-      cart.items.push(cartItem)
-    } else {
-      res.status(404).json({error: 'Cart Item type not found: ' + rq.type});
+            const productItem = product.productItems.find(pit => pit.id = rq.productItemId)
+            const prodImage = getProductImage(product, productItem)
+
+            if (product.productType === ProductType.Simple) {
+
+                var existingCartItem = cart.items.find(ci => ci.product && ci.product.productItemId === productItem.id)
+
+                if (existingCartItem) {
+                    existingCartItem.quantity++
+                } else {
+                    cartItem = {
+                        id: uuidv4(),
+                        packId: 0,
+                        name: getProductItemDescription(product, productItem),
+                        product: {
+                            productId: product.id,
+                            productItemId: productItem.id,
+                            image: prodImage ? prodImage.image : null,
+                            name: getProductItemDescription(product, productItem),
+                            type: product.productType,
+                        },
+                        quantity: rq.quantity,
+                        type: CartItemType.Product,
+                    }
+
+                    cart.items.push(cartItem)
+                }
+
+            } else {
+
+                cartItem = {
+                    id: uuidv4(),
+                    packId: 0,
+                    name: getProductItemDescription(product, productItem),
+                    product: {
+                        productItemId: productItem.id,
+                        image: prodImage ? prodImage.image : null,
+                        name: getProductItemDescription(product, productItem),
+                        type: product.productType,
+                    },
+                    quantity: rq.quantity,
+                    type: CartItemType.Product,
+                    packContents: []
+                }
+
+                for (var packItem of rq.packContents) {
+
+                    var packProduct = await productService.findProductByProductItem(packItem.productItemId, domainId)
+                    const packPit = packProduct.productItems.find(pit => pit.id = packItem.productItemId)
+                    if (packPit == null) {
+                        return res.status(404).json({error: 'ProductItem not found: ' + packItem.productItemId});
+                    }
+
+                    const packItemImage = getProductImage(packProduct, packPit)
+
+                    cartItem.packContents.push({
+                        "packId": 0,
+                        "product": {
+                            "productItemId": packPit.id,
+                            "image": packItemImage ? packItemImage.image : null,
+                            "name": packProduct.name,
+                            "id": packProduct.id,
+                        },
+                        "quantity": 1,
+                        "name": packProduct.fullName,
+                        "id": packPit.id,
+                        "type": 0
+                    })
+                }
+
+                cart.items.push(cartItem)
+            }
+
+
+        } else if (rq.type === CartItemType.Pack) {
+            cartItem = {
+                id: uuidv4(),
+                packId: rq.packId,
+                type: CartItemType.Pack,
+                name: rq.name,
+                product: null,
+                packContents: rq.packContents.map(pc => {
+                    return {
+                        quantity: pc.quantity,
+                        product: {
+                            id: pc.productId,
+                            productItemId: pc.productItemId,
+                        }
+                    }
+                })
+            }
+
+            cart.items.push(cartItem)
+        } else {
+            res.status(404).json({error: 'Cart Item type not found: ' + rq.type});
+        }
+
+
+        await updateCart(cart);
+
+
+        res.json(cart)
+
+    } catch (err) {
+        next(err);
     }
-
-
-
-
-
-    await updateCart(cart);
-
-
-    res.json(cart)
-
-  } catch (err) {
-    next(err);
-  }
 });
 
 router.get("/:domainId/cart/find", async (req, res, next) => {
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const id = req.query.id;
-    let cart = await findCartById(id, domainId);
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const id = req.query.id;
+        let cart = await findCartById(id, domainId);
 
-    if(!cart){
-      return res.status(404).json({error: 'Cart not found'});
+        if (!cart) {
+            return res.status(404).json({error: 'Cart not found'});
+        }
+
+        res.json(cart)
+    } catch (err) {
+        next(err);
     }
-
-    res.json(cart)
-  } catch (err) {
-    next(err);
-  }
 })
 
 router.get("/:domainId/cart/:wuid/analyze", async (req, res, next) => {
 
-  try{
-    const domainId = parseInt(req.params.domainId);
-    const wuid = req.params.wuid;
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const wuid = req.params.wuid;
 
 
-    let cart : ShoppingCart = await findCart(wuid, domainId);
-    const result = await cartService.analyzeSale(cart, domainId);
+        let cart: ShoppingCart = await findCart(wuid, domainId);
+        const result = await cartService.analyzeSale(cart, domainId);
 
-    res.json(result);
-  }catch(e){
-    next(e)
-  }
+        res.json(result);
+    } catch (e) {
+        next(e)
+    }
 
 });
 
 router.get("/:domainId/cart/:wuid", async (req, res, next) => {
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const wuid = req.params.wuid;
-    let cart = await findCart(wuid, domainId);
-    if(cart?.items?.length > 0) {
-      try {
-        const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const wuid = req.params.wuid;
+        let cart = await findCart(wuid, domainId);
 
-        if (analyzeRs?.discounts) {
-          for (var dct of analyzeRs.discounts.items) {
-            cart.items.push({
-              name: dct.name,
-              quantity: 1,
-              type: 2, // discount
-              price: dct.price,
-              dct,
-            });
-          }
+        const promos = [
+            {productId: 2743063, productItemId: 3170096},
+            {productId: 2743063, productItemId: 3170095},
+            {productId: 2743063, productItemId: 3170093},
+            {productId: 2743063, productItemId: 3170094},
+        ];
+
+
+        if (cart.total >= 200000) {
+
+            const randomIndex = Math.floor(Math.random() * promos.length);
+            const randomPromo = promos[randomIndex];
+
+            let product = await productService.findProductByProductItem(randomPromo.productItemId, domainId)
+
+            if (product) {
+
+                const productItem = product.productItems.find(pit => pit.id = randomPromo.productItemId)
+                const prodImage = getProductImage(product, productItem)
+
+
+                if (!cart.items.some(i => i.product.productId === randomPromo.productId)) {
+
+                    var cartItem = {
+                        id: uuidv4(),
+                        packId: 0,
+                        name: getProductItemDescription(product, productItem),
+                        product: {
+                            productId: product.id,
+                            productItemId: productItem.id,
+                            image: prodImage ? prodImage.image : null,
+                            name: getProductItemDescription(product, productItem),
+                            type: product.productType,
+                        },
+                        quantity: 1,
+                        type: CartItemType.Product,
+                    }
+
+                    cart.items.push(cartItem)
+
+                    await updateCart(cart);
+                    cart = await findCart(wuid, domainId);
+                }
+
+
+
+            }
+
         }
-      }catch(e){
-        logger.error(e);
-      }
+
+        if (cart?.items?.length > 0) {
+            try {
+
+
+                const analyzeRs: any = await cartService.analyzeSale(cart, domainId);
+
+                if (analyzeRs?.discounts) {
+                    for (var dct of analyzeRs.discounts.items) {
+                        cart.items.push({
+                            name: dct.name,
+                            quantity: 1,
+                            type: 2, // discount
+                            price: dct.price,
+                            dct,
+                        });
+                    }
+                }
+            } catch (e) {
+                logger.error(e);
+            }
+        }
+
+
+        res.json(cart)
+    } catch (err) {
+        next(err);
     }
-
-
-    res.json(cart)
-  } catch (err) {
-    next(err);
-  }
 })
 
 router.post("/:domainId/cart/update-quantity", async (req, res, next) => {
-  try {
-    const domainId = parseInt(req.params.domainId);
-    const wuid = req.body.wuid;
-    const itemId = req.body.itemId;
-    const quantity = req.body.quantity;
-    const cart = await findCart(wuid, domainId);
+    try {
+        const domainId = parseInt(req.params.domainId);
+        const wuid = req.body.wuid;
+        const itemId = req.body.itemId;
+        const quantity = req.body.quantity;
+        const cart = await findCart(wuid, domainId);
 
 
-    if(!cart) {
-      res.status(404).json({
-        message: "Cart not found",
-        error: 'cart not found',
-      });
+        if (!cart) {
+            res.status(404).json({
+                message: "Cart not found",
+                error: 'cart not found',
+            });
+        }
+
+        let cartItem = cart.items.find(item => item.id === itemId)
+        if (cartItem) {
+            cartItem.quantity = parseInt(quantity);
+        }
+
+        await updateCart(cart)
+
+
+        res.json(cart)
+    } catch (err) {
+        next(err);
     }
-
-    let cartItem = cart.items.find(item => item.id === itemId)
-    if(cartItem){
-      cartItem.quantity = parseInt(quantity);
-    }
-
-    await updateCart(cart)
-
-
-    res.json(cart)
-  } catch (err) {
-    next(err);
-  }
 })
 
 export default router
