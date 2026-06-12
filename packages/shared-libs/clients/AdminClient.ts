@@ -8,7 +8,7 @@ export const adminClient = {
     analyzeSale: async (context: any, domainId: number) => {
         const url = `${ADMIN_URL}/Pos/AnalyzeSale.rails`;
 
-
+        logger.error("Calling admin url: " + url);
 
         const response = await fetch(url, {
             method: 'POST',
