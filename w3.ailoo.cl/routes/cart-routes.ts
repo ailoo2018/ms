@@ -318,7 +318,7 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
         ];
 
 
-        if (cart.total >= 200000) {
+        if (false && cart.total >= 200000) {
 
             const randomIndex = Math.floor(Math.random() * promos.length);
             const randomPromo = promos[randomIndex];
