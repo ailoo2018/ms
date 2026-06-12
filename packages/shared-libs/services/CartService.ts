@@ -299,7 +299,7 @@ export class CartService {
     async analyzeSale(cart: any, domainId: number) : Promise<any> {
 
         let ctx = {
-            saleTypeId: SaleType.Store, // todo change internet
+            saleTypeId: SaleType.Internet, // todo change internet
             items: cart.items.filter((it:any) => it.product?.productId > 0).map((i: any) => {
                 return {
                     productId: i.product.productId,
