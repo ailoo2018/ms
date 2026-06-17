@@ -184,7 +184,7 @@ router.get("/:domainId/account/latest-orders", validateJWT, async (req : any, re
                         continue
 
                     var image = getProductImage(product, productItem)
-                    total = parseInt(oi.quantity) * oi.unitPrice
+                    total += parseInt(oi.quantity) * oi.unitPrice
 
                     orderProducts.push({
                         id: product.id,
