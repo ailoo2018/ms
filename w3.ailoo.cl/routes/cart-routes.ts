@@ -310,6 +310,7 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
         const wuid = req.params.wuid;
         let cart = await findCart(wuid, domainId);
 
+        // TODO remove after fathers day
         const promos = [
             {productId: 2743063, productItemId: 3170096},
             {productId: 2743063, productItemId: 3170095},
@@ -318,7 +319,8 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
         ];
 
 
-        if (cart.total >= 200000) {
+        // TODO remove after fathers day
+        if ((!cart.currency || cart.currency === "CLP") && cart.total >= 200000) {
 
             const randomIndex = Math.floor(Math.random() * promos.length);
             const randomPromo = promos[randomIndex];
@@ -360,7 +362,7 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
         }
 
-        if (cart?.items?.length > 0) {
+        if ((!cart.currency || cart.currency === "CLP") && cart?.items?.length > 0) {
             try {
 
 

@@ -1,12 +1,57 @@
+* eliminar bounced email from constant contact
+* volver a habilitar whatsapp
+* agregar opcion de tienda en descuento. hay que usar beta
+* no se puede asignar video a modelo de casco
+* product detail mobile}
+* show video
+* notify when available
+* stock por tienda
+* favoritos
+* blog
+* mover mm.cl a servidor spidi
+* products con más de InventoryItem, pq?
+* comparar (diferencias) Factura y OC
+* al comprar sale retiro 2 horas productos que no aplican
+* mostrar cuenta bancaria en biggy
+* al guarde OC, si se modifico backorder se pierde registros
+* subida de TC 
+* cliente puede comprar producto sin stock en iphone
+* problema con specialized monkey web no permite comprar
+* enable sendmail with new apikey
+* reporte de inventario con tags. Eje estilo piloto Café Racer.
+* subir tarjeta nacional 1440
+* remove bolivia from dlocal
+* problema con dlocal en boton de pago
+* b2b proshop
+* one size añadir al carrito no funciona
+* revisar stock de OXS
+* quitar dlocal de la pagina bolivia
+* email oc no muestra nombre: https://mail.google.com/mail/u/0/#inbox/FMfcgzQgMMClKlWhtCTxTxgjSjPGWtTn
+* no se guradan direcciones en el admin
+* detalla de producto dices "cascos integrales" esta en duro
 
 
-- product detail mobile}
-- show video
-- notify when available
-- stock por tienda
-- favoritos
+- guia de tallas no funciona en la web
+- no puedo ver compra de bolivia
+- comprar pack cuando producto no esta Edson en chat
+- mostrar stock de Motyba para retiro en tienda
+- OC en pagina no sale el total correcto (whatsapp ventas online edson)
+- referencias cruzadas Patrick
+- review fotos gallery
+
+
+
+
+
+- al buscar OC por # no sale pagado (mejor usar list)
+- encuestas tienda
+
+
+- check stock in carro de compra
 - compartir
 - comparar
+
+
 
 - ventas con factura online no registra email
 - zonas extremas caclulo de dia
@@ -35,3 +80,5 @@
 
 
 http://localhost:3000/Product/ReviewProduct.rails?pid=789539&h=AB04945AA743F4DF9140849FF761D069&prodId=3213212&invoiceId=28500110
+
+
