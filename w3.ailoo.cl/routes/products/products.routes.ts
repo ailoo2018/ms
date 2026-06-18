@@ -318,7 +318,7 @@ router.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
 
     if (!product.productItems.some(pit => pit.quantityInStock > 0)) {
-      return res.json({packas: []})
+      return res.json({packs: [], msg: "not in stock"})
     }
 
     packRules.sort(() => Math.random() - 0.5);
@@ -410,6 +410,7 @@ router.get("/:domainId/products/packs/:productId", async (req, res, next) => {
 
     const result = {
       isFromCache: false,
+      returnedDate: new Date(),
       discountRules: packRules.map(p => {
         return {id: p.id, name: p.name}
       }),
