@@ -320,7 +320,7 @@ router.get("/:domainId/cart/:wuid", async (req, res, next) => {
 
 
         // TODO remove after fathers day
-        if ((!cart.currency || cart.currency === "CLP") && cart.total >= 200000) {
+        if (false && (!cart.currency || cart.currency === "CLP") && cart.total >= 200000) {
 
             const randomIndex = Math.floor(Math.random() * promos.length);
             const randomPromo = promos[randomIndex];
