@@ -29,20 +29,19 @@
 * email oc no muestra nombre: https://mail.google.com/mail/u/0/#inbox/FMfcgzQgMMClKlWhtCTxTxgjSjPGWtTn
 * no se guradan direcciones en el admin
 * detalla de producto dices "cascos integrales" esta en duro
+* guia de tallas no funciona en la web
+* no puedo ver compra de bolivia: problema pack promocion
+* referencias cruzadas Patrick
+* OC en pagina no sale el total correcto (whatsapp ventas online edson)
+* mostrar stock de Motyba para retiro en tienda
+* comprar pack cuando producto no esta Edson en chat
 
 
-- guia de tallas no funciona en la web
-- no puedo ver compra de bolivia
-- comprar pack cuando producto no esta Edson en chat
-- mostrar stock de Motyba para retiro en tienda
-- OC en pagina no sale el total correcto (whatsapp ventas online edson)
-- referencias cruzadas Patrick
+
+- SR-7 hero section
+
+- paypal dio error
 - review fotos gallery
-
-
-
-
-
 - al buscar OC por # no sale pagado (mejor usar list)
 - encuestas tienda
 

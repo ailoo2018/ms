@@ -12,7 +12,7 @@ const cmsClient = {
       }
     });
 
-    if (!response.ok) throw new Error(`CMS Error: ${response.status}`);
+    if (!response.ok) throw new Error(`CMS Error: ${url} ${response.status}`);
     return response.json();
   },
   findBlogEntriesByProduct: async (productId : number, domainId: number) => {
