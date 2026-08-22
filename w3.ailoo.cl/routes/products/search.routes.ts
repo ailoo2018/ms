@@ -88,11 +88,15 @@ router.post("/:domainId/products/search", async (req, res, next) => {
       criteria.models = rq.models;
     if (rq.colors)
       criteria.colors = rq.colors;
-    if (rq.bike)
+    if (rq.bike) {
       criteria.bike = rq.bike;
+      criteria.orderBy = "motoOrderWeight";
+    }
 
     if(rq.orderBy)
       criteria.orderBy = rq.orderBy
+
+
 
 
     const sRs : any = await search(criteria, domainId)

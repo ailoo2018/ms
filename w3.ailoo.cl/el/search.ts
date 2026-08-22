@@ -271,9 +271,9 @@ function buildQueryByCriteria(criteria, domainId) {
                     query: {
                         bool: {
                             must: [
-                                {terms: {"motorcycles.manufacturerId": [criteria.bike.manufacturer, 0]}},
-                                {terms: {"motorcycles.modelId": [criteria.bike.model, 0]}},
-                                {terms: {"motorcycles.from": [criteria.bike.year, 0]}},
+                                {terms: {"motorcycles.manufacturerId": [ parseInt( criteria.bike.manufacturer ), 0]}},
+                                {terms: {"motorcycles.modelId": [ parseInt( criteria.bike.model), 0]}},
+                                {terms: {"motorcycles.from": [ parseInt(criteria.bike.year), 0]}},
                             ]
                         }
                     }
@@ -541,13 +541,15 @@ export async function search(criteria, domainId) {
         }
         else if (criteria.orderBy.includes("price")) {
             sort.push({"minPrice": criteria.orderBy.includes("desc") ? "desc": "asc" })
-        }else{
+        }else if (criteria.orderBy.includes("motoOrderWeight")) {
+            sort.push({ "motoOrderWeight": "desc"  })
+        }
+        else{
             sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
         }
 
     }else{
-        sort.push( {"brand.name.keyword": "asc"}, {'name.keyword': 'asc'})
-        sort.push({ orderWeight: "desc" })
+
     }
 
 
@@ -578,7 +580,7 @@ export async function search(criteria, domainId) {
         query: query,
         from: offset,
         size: limit,
-        sort: sort,
+        sort: sort && sort.length > 0 ? sort : undefined,
         _source: {
             excludes: [
                 "categories",

@@ -1,4 +1,6 @@
-const BIKE_BASE_URL = "https://motorbike.ailoo.cl"; // process.env.CMS_URL;
+const BIKE_BASE_URL = process.env.MOTORBIKE_URL; //  "http://locahost:3039"; //
+
+console.log(`BIKE_BASE_URL: ${BIKE_BASE_URL}`);
 
 export const bikeClient = {
 
