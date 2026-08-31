@@ -190,7 +190,7 @@ function buildQueryByCriteria(criteria, domainId) {
                 {
                     "range": {
                         "orderWeight": {
-                            "gte": -1
+                            "gte": -10000
                         }
                     }
                 }
@@ -574,7 +574,7 @@ export async function search(criteria, domainId) {
     let offset = criteria.offset ? parseInt(criteria.offset) : 0;
 
 
-    const response = await getElClient().search({
+    var bodyRq = {
         index: getIndexName(domainId),
         aggs: aggs,
         query: query,
@@ -603,7 +603,9 @@ export async function search(criteria, domainId) {
             ]
         }
 
-    })
+    };
+
+    const response = await getElClient().search(bodyRq)
 
     var imgHelper = new ProductImageHelper()
     const products = response.hits.hits.map(h => {
