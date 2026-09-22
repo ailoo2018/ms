@@ -642,6 +642,9 @@ export async function search(criteria, domainId) {
                 isAvailable: isAvl,
             });
         }
+        p.features = undefined;
+        p.availableSizes = undefined;
+
 
         return p
     })
