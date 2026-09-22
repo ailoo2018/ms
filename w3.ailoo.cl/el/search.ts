@@ -585,7 +585,7 @@ export async function search(criteria, domainId) {
             excludes: [
                 "categories",
                 "parentCategories",
-                "features",
+      //          "features",
                 "sword",
                 "properties",
                 "propertiesMap",
@@ -628,6 +628,20 @@ export async function search(criteria, domainId) {
             p.imageUrl = imgHelper.getUrl(p.image, 300, domainId)
         }
 
+        p.sizes = [];
+        var sizes = p.features.filter( f => f.type === 0)
+
+
+
+        for(var size of sizes){
+
+            var isAvl = p.availableSizes.some(avl => avl.name === size.name)
+            p.sizes.push({
+                id: size.id,
+                name: size.name,
+                isAvailable: isAvl,
+            });
+        }
 
         return p
     })
