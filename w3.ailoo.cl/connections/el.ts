@@ -4,6 +4,7 @@ import {Client} from "@elastic/elasticsearch";
 // Singleton instance
 let client = null;
 
+/// accept self signed
 export function getElClient() {
 	if (!client) {
 		client = new Client({
@@ -14,8 +15,6 @@ export function getElClient() {
 
 	return client;
 }
-
-
 
 export function getProductCollectionsIndexName(domainId){
 
