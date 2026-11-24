@@ -8,6 +8,7 @@ export function getElClient() {
 	if (!client) {
 		client = new Client({
 			node: process.env.ELASTICSEARCH,
+			tls: { rejectUnauthorized: false }
 		});
 	}
 		return client;

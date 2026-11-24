@@ -105,6 +105,7 @@ app.get('/', (req, res) => {
   logger.error("error: Called /: " );
   res.json({
     msg: "Version 2.0.101",
+    aaa: "aaa",
 
   });
 });

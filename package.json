@@ -8,6 +8,8 @@
   "dependencies": {
     "@ailoo/shared-libs": "^1.0.0",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
   }
-
 }
