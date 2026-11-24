@@ -15,6 +15,8 @@ export function getElClient() {
 	return client;
 }
 
+
+
 export function getProductCollectionsIndexName(domainId){
 
 	if(process.env.NODE_ENV === 'test'){
