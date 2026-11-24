@@ -11,7 +11,8 @@ export function getElClient() {
 			tls: { rejectUnauthorized: false }
 		});
 	}
-		return client;
+
+	return client;
 }
 
 export function getProductCollectionsIndexName(domainId){
